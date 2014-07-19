@@ -1,0 +1,62 @@
+#Archimedes' Ships language file ru_RU
+
+tile.archimedes.marker.name=Корабельный штурвал
+tile.archimedes.floater.name=Плот
+tile.archimedes.balloon.name=Воздушный шар
+tile.archimedes.balloon.black.name=Чёрный воздушный шар
+tile.archimedes.balloon.red.name=Красный воздушный шар
+tile.archimedes.balloon.green.name=Зелёный воздушный шар
+tile.archimedes.balloon.brown.name=Коричневый воздушный шар
+tile.archimedes.balloon.blue.name=Синий воздушный шар
+tile.archimedes.balloon.purple.name=Фиолетовый воздушный шар
+tile.archimedes.balloon.cyan.name=Бирюзовый воздушный шар
+tile.archimedes.balloon.silver.name=Серебряный воздушный шар
+tile.archimedes.balloon.gray.name=Серый воздушный шар
+tile.archimedes.balloon.pink.name=Розовый воздушный шар
+tile.archimedes.balloon.lime.name=Лаймовый воздушный шар
+tile.archimedes.balloon.yellow.name=Жёлтый воздушный шар
+tile.archimedes.balloon.light_blue.name=Светло-синий воздушный шар
+tile.archimedes.balloon.magenta.name=Сиреневый воздушный шар
+tile.archimedes.balloon.orange.name=Оранжевый воздушный шар
+tile.archimedes.balloon.white.name=Воздушный шар
+tile.archimedes.gauge.name=Приборы для измерения
+tile.archimedes.seat.name=Место для пассажира
+tile.archimedes.buffer.name=Береговой буфер
+tile.archimedes.engine.name=Двигатель
+
+key.archimedes.up=Подъём
+key.archimedes.down=Снижение
+key.archimedes.brake=Тормоз
+key.archimedes.align=Выровнять
+key.archimedes.decompile=Разобрать
+key.archimedes.shipinv=Инвентарь корабля
+
+gui.shipstatus.title=Статус корабля
+gui.shipstatus.rename=Переименовать
+gui.shipstatus.done=Закончить переименование
+gui.shipstatus.compile=Создать корабль
+gui.shipstatus.undo=Отмена
+gui.shipstatus.mount=Управлять кораблём
+gui.shipstatus.name=Имя
+gui.shipstatus.shiptype=Тип
+gui.shipstatus.type.unknown=Неизвестный тип
+gui.shipstatus.type.airship=Воздушный корабль
+gui.shipstatus.type.boat=Корабль
+gui.shipstatus.compilerresult=Статус
+gui.shipstatus.count.block=Блоков
+gui.shipstatus.count.balloon=Воздушных шаров
+gui.shipstatus.count.tileentity=Tile Entities
+
+gui.shipstatus.result.none=Не создан
+gui.shipstatus.result.ok=ОК
+gui.shipstatus.result.missingmarker=Отсутствует штурвал
+gui.shipstatus.result.overflow=Переполнение
+gui.shipstatus.result.error=Ошибка
+gui.shipstatus.result.busy=Создание...
+gui.shipstatus.result.inconsistent=Неустойчивый
+
+gui.shipinv.title=Инвентарь корабля
+gui.shipinv.decompile=Разобрать
+gui.shipinv.align=Выровнять
+
+entity.ArchimedesShips.shipmod.name=Корабль

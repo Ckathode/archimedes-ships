@@ -1,0 +1,68 @@
+#Archimedes' Ships language file en_US
+
+entity.ArchimedesShips.shipmod.name=Archimedes' Ships
+
+tile.archimedes.marker.name=Scheepsroer
+tile.archimedes.floater.name=Drijver
+tile.archimedes.balloon.name=Luchtballon
+tile.archimedes.balloon.black.name=Zwarte luchtballon
+tile.archimedes.balloon.red.name=Rode luchtballon
+tile.archimedes.balloon.green.name=Groene luchtballon
+tile.archimedes.balloon.brown.name=Bruine luchtballon
+tile.archimedes.balloon.blue.name=Blauwe luchtballon
+tile.archimedes.balloon.purple.name=Paarse luchtballon
+tile.archimedes.balloon.cyan.name=Turquoise luchtballon
+tile.archimedes.balloon.silver.name=Zilvere luchtballon
+tile.archimedes.balloon.gray.name=Grijze luchtballon
+tile.archimedes.balloon.pink.name=Roze luchtballon
+tile.archimedes.balloon.lime.name=Licht groene luchtballon
+tile.archimedes.balloon.yellow.name=Gele luchtballon
+tile.archimedes.balloon.light_blue.name=Light blauwe luchtballon
+tile.archimedes.balloon.magenta.name=Magenta luchtballon
+tile.archimedes.balloon.orange.name=Oranje luchtballon
+tile.archimedes.balloon.white.name=Luchtballon
+tile.archimedes.gauge.name=Meetinstrumenten
+tile.archimedes.seat.name=Passagiersstoel
+tile.archimedes.buffer.name=Schokdemper
+tile.archimedes.engine.name=Stoommachine
+tile.archimedes.crate_wood.name=Houten krat
+
+key.archimedes.up=Stijg
+key.archimedes.down=Daal
+key.archimedes.brake=Rem
+key.archimedes.align=Lijn uit
+key.archimedes.decompile=Demonteren
+key.archimedes.shipinv=Schip inventaris
+
+gui.shipstatus.title=Schip status
+gui.shipstatus.rename=Hernoem
+gui.shipstatus.done=Klaar met hernoemen
+gui.shipstatus.compile=Stel schip samen
+gui.shipstatus.undo=Ongedaan maken
+gui.shipstatus.mount=Boord het schip
+gui.shipstatus.name=Naam
+gui.shipstatus.shiptype=Type
+gui.shipstatus.type.unknown=Onbekend type
+gui.shipstatus.type.airship=Luchtschip
+gui.shipstatus.type.boat=Schip
+gui.shipstatus.compilerresult=Status
+gui.shipstatus.count.block=Blocks
+gui.shipstatus.count.balloon=Luchtballonnen
+gui.shipstatus.count.tileentity=Tile Entities
+gui.shipstatus.mass=Massa
+gui.shipstatus.massunit=kg
+
+gui.shipstatus.result.none=Niet geassembleerd
+gui.shipstatus.result.ok=OK
+gui.shipstatus.result.okwarn=Veranderingen gedetecteerd
+gui.shipstatus.result.missingmarker=Missend roer
+gui.shipstatus.result.overflow=Overflow
+gui.shipstatus.result.error=Fout
+gui.shipstatus.result.busy=Samenstellen...
+gui.shipstatus.result.inconsistent=Inconsistent
+
+gui.shipinv.title=Schip inventaris
+gui.shipinv.decompile=Demonteren
+gui.shipinv.align=Lijn uit
+
+gui.engine.title=Stoommachine brandstof

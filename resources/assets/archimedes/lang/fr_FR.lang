@@ -1,0 +1,66 @@
+#Archimedes' Ships language file fr_FR by Linyor
+
+entity.ArchimedesShips.shipmod.name=Les vaisseaux d'Archimède
+
+tile.archimedes.marker.name=Barre de vaisseau
+tile.archimedes.floater.name=Flotteur
+tile.archimedes.balloon.name=Montgolfière
+tile.archimedes.balloon.black.name=Montgolfière noire
+tile.archimedes.balloon.red.name=Montgolfière rouge
+tile.archimedes.balloon.green.name=Montgolfière verte
+tile.archimedes.balloon.brown.name=Montgolfière marron
+tile.archimedes.balloon.blue.name=Montgolfière bleu
+tile.archimedes.balloon.purple.name=Montgolfière violette
+tile.archimedes.balloon.cyan.name=Montgolfière cyan
+tile.archimedes.balloon.silver.name=Montgolfière argentée
+tile.archimedes.balloon.gray.name=Montgolfière grise
+tile.archimedes.balloon.pink.name=Montgolfière rose
+tile.archimedes.balloon.lime.name=Montgolfière vert clair
+tile.archimedes.balloon.yellow.name=Montgolfière jaune
+tile.archimedes.balloon.light_blue.name=Montgolfière bleu clair
+tile.archimedes.balloon.magenta.name=Montgolfière magenta
+tile.archimedes.balloon.orange.name=Montgolfière orange
+tile.archimedes.balloon.white.name=Montgolfière blanche
+tile.archimedes.gauge.name=Jauges de mesure
+tile.archimedes.seat.name=Siège de passager
+tile.archimedes.buffer.name=Bord tampon
+tile.archimedes.engine.name=Moteur à vapeur
+tile.archimedes.crate_wood.name=Caisse en bois
+
+key.archimedes.up=Monter
+key.archimedes.down=Descendre
+key.archimedes.brake=Freiner
+key.archimedes.align=S'aligner
+key.archimedes.decompile=Désassembler
+key.archimedes.shipinv=Inventaire de vaisseau
+
+gui.shipstatus.title=Statut du vaisseau
+gui.shipstatus.rename=Rebaptiser
+gui.shipstatus.done=Rebaptisation terminée
+gui.shipstatus.compile=Assemblez le vaisseau
+gui.shipstatus.undo=Annuler
+gui.shipstatus.mount=Monter sur le vaisseau
+gui.shipstatus.name=Nom
+gui.shipstatus.shiptype=Type
+gui.shipstatus.type.unknown=Type inconnu
+gui.shipstatus.type.airship=Ballon dirigeable
+gui.shipstatus.type.boat=Navire
+gui.shipstatus.compilerresult=Statut
+gui.shipstatus.count.block=Blocs
+gui.shipstatus.count.balloon=Montgolfière
+gui.shipstatus.count.tileentity=Entités de tuile
+
+gui.shipstatus.result.none=Non assemblé
+gui.shipstatus.result.ok=OK
+gui.shipstatus.result.okwarn=Changements détectés
+gui.shipstatus.result.missingmarker=Barre manquante
+gui.shipstatus.result.overflow=Surplus
+gui.shipstatus.result.error=Erreur
+gui.shipstatus.result.busy=Assemblage en cours...
+gui.shipstatus.result.inconsistent=Incompatible
+
+gui.shipinv.title=Inventaire de vaisseau
+gui.shipinv.decompile=Désassembler
+gui.shipinv.align=Aligner
+
+gui.engine.title=Carburant du moteur à vapeur

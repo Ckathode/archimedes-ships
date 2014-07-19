@@ -1,0 +1,68 @@
+#Archimedes' Ships language file en_US
+
+entity.ArchimedesShips.shipmod.name=Archimedes' Ships
+
+tile.archimedes.marker.name=Ship's Helm
+tile.archimedes.floater.name=Floater
+tile.archimedes.balloon.name=Air Balloon
+tile.archimedes.balloon.black.name=Black Air Balloon
+tile.archimedes.balloon.red.name=Red Air Balloon
+tile.archimedes.balloon.green.name=Green Air Balloon
+tile.archimedes.balloon.brown.name=Brown Air Balloon
+tile.archimedes.balloon.blue.name=Blue Air Balloon
+tile.archimedes.balloon.purple.name=Purple Air Balloon
+tile.archimedes.balloon.cyan.name=Cyan Air Balloon
+tile.archimedes.balloon.silver.name=Silver Air Balloon
+tile.archimedes.balloon.gray.name=Gray Air Balloon
+tile.archimedes.balloon.pink.name=Pink Air Balloon
+tile.archimedes.balloon.lime.name=Lime Air Balloon
+tile.archimedes.balloon.yellow.name=Yellow Air Balloon
+tile.archimedes.balloon.light_blue.name=Light Blue Air Balloon
+tile.archimedes.balloon.magenta.name=Magenta Air Balloon
+tile.archimedes.balloon.orange.name=Orange Air Balloon
+tile.archimedes.balloon.white.name=Air Balloon
+tile.archimedes.gauge.name=Measurement Gauges
+tile.archimedes.seat.name=Passenger Seat
+tile.archimedes.buffer.name=Shore Buffer
+tile.archimedes.engine.name=Steam Engine
+tile.archimedes.crate_wood.name=Wooden Crate
+
+key.archimedes.up=Ascent
+key.archimedes.down=Descent
+key.archimedes.brake=Brake
+key.archimedes.align=Align
+key.archimedes.decompile=Disassemble
+key.archimedes.shipinv=Ship Inventory
+
+gui.shipstatus.title=Ship Status
+gui.shipstatus.rename=Rename
+gui.shipstatus.done=Done Renaming
+gui.shipstatus.compile=Assemble Ship
+gui.shipstatus.undo=Undo
+gui.shipstatus.mount=Mount Ship
+gui.shipstatus.name=Name
+gui.shipstatus.shiptype=Type
+gui.shipstatus.type.unknown=Unknown Type
+gui.shipstatus.type.airship=Airship
+gui.shipstatus.type.boat=Ship
+gui.shipstatus.compilerresult=Status
+gui.shipstatus.count.block=Blocks
+gui.shipstatus.count.balloon=Air Balloons
+gui.shipstatus.count.tileentity=Tile Entities
+gui.shipstatus.mass=Mass
+gui.shipstatus.massunit=kg
+
+gui.shipstatus.result.none=Not Assembled
+gui.shipstatus.result.ok=OK
+gui.shipstatus.result.okwarn=Changes detected
+gui.shipstatus.result.missingmarker=Missing Helm
+gui.shipstatus.result.overflow=Overflow
+gui.shipstatus.result.error=Error
+gui.shipstatus.result.busy=Assembling...
+gui.shipstatus.result.inconsistent=Inconsistent
+
+gui.shipinv.title=Ship Inventory
+gui.shipinv.decompile=Disassemble
+gui.shipinv.align=Align
+
+gui.engine.title=Steam Engine Fuel
