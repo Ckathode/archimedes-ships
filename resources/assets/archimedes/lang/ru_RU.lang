@@ -1,4 +1,4 @@
-#Archimedes' Ships language file ru_RU
+entity.ArchimedesShips.shipmod.name=Корабль Архимеда
 
 tile.archimedes.marker.name=Корабельный штурвал
 tile.archimedes.floater.name=Плот
@@ -22,7 +22,8 @@ tile.archimedes.balloon.white.name=Воздушный шар
 tile.archimedes.gauge.name=Приборы для измерения
 tile.archimedes.seat.name=Место для пассажира
 tile.archimedes.buffer.name=Береговой буфер
-tile.archimedes.engine.name=Двигатель
+tile.archimedes.engine.name=Паровой двигатель
+tile.archimedes.crate_wood.name=Деревянный ящик
 
 key.archimedes.up=Подъём
 key.archimedes.down=Снижение
@@ -46,9 +47,12 @@ gui.shipstatus.compilerresult=Статус
 gui.shipstatus.count.block=Блоков
 gui.shipstatus.count.balloon=Воздушных шаров
 gui.shipstatus.count.tileentity=Tile Entities
+gui.shipstatus.mass=Масса
+gui.shipstatus.massunit=кг
 
 gui.shipstatus.result.none=Не создан
 gui.shipstatus.result.ok=ОК
+gui.shipstatus.result.okwarn=Изменения обнаружены
 gui.shipstatus.result.missingmarker=Отсутствует штурвал
 gui.shipstatus.result.overflow=Переполнение
 gui.shipstatus.result.error=Ошибка
@@ -59,4 +63,4 @@ gui.shipinv.title=Инвентарь корабля
 gui.shipinv.decompile=Разобрать
 gui.shipinv.align=Выровнять
 
-entity.ArchimedesShips.shipmod.name=Корабль
+gui.engine.title=Топливо парового двигателя</pre></body></html>
