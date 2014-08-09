@@ -9,6 +9,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 import ckathode.archimedes.ArchimedesShipMod;
 import ckathode.archimedes.blockitem.TileEntityHelm;
@@ -141,7 +142,11 @@ public class ChunkDisassembler
 						{
 							((IShipTileEntity) tileentity).setParentShip(null, i, j, k);
 						}
-						world.setTileEntity(ix, iy, iz, tileentity);
+                        NBTTagCompound comp = new NBTTagCompound();
+                        tileentity.writeToNBT(comp);
+                        TileEntity temp = new TileEntity();
+                        world.setTileEntity(ix, iy, iz, temp.createAndLoadEntity(comp));
+                        tileentity.readFromNBT(comp);
 						tileentity.blockMetadata = meta;
 					}
 					
