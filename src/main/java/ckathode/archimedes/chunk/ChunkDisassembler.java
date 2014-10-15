@@ -36,8 +36,7 @@ public class ChunkDisassembler
 		}
 		World world = ship.worldObj;
 		MobileChunk chunk = ship.getShipChunk();
-		float yaw = Math.round(ship.rotationYaw / 90F) * 90F;
-		yaw = (float) Math.toRadians(ship.rotationYaw);
+		float yaw = (float) Math.toRadians(ship.rotationYaw);
 		
 		float ox = -chunk.getCenterX();
 		float oy = -chunk.minY(); //Created the normal way, through a VehicleFiller, this value will always be 0.
