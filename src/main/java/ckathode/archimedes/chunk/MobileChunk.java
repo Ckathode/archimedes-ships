@@ -191,7 +191,6 @@ public class MobileChunk implements IBlockAccess
 			
 			if (tileentity == null)
 			{
-				tileentity = block.createTileEntity(worldObj, meta);
 				setTileEntity(x, y, z, tileentity);
 			}
 			
@@ -268,13 +267,7 @@ public class MobileChunk implements IBlockAccess
 	{
 		ChunkPosition chunkposition = new ChunkPosition(x, y, z);
 		TileEntity tileentity = chunkTileEntityMap.get(chunkposition);
-		
-		if (tileentity != null && tileentity.isInvalid())
-		{
-			chunkTileEntityMap.remove(chunkposition);
-			tileentity = null;
-		}
-		
+				
 		if (tileentity == null)
 		{
 			Block block = getBlock(x, y, z);
@@ -296,7 +289,7 @@ public class MobileChunk implements IBlockAccess
 	
 	public void setTileEntity(int x, int y, int z, TileEntity tileentity)
 	{
-		if (tileentity == null || tileentity.isInvalid())
+		if (tileentity == null)
 		{
 			return;
 		}
@@ -321,23 +314,13 @@ public class MobileChunk implements IBlockAccess
 		Block block = getBlock(x, y, z);
 		if (block != null && block.hasTileEntity(getBlockMetadata(x, y, z)))
 		{
-			if (chunkTileEntityMap.containsKey(chunkposition))
-			{
-				chunkTileEntityMap.get(chunkposition).invalidate();
-			}
-			
 			tileentity.blockMetadata = getBlockMetadata(x, y, z);
-			tileentity.validate();
+			tileentity.invalidate();
 			chunkTileEntityMap.put(chunkposition, tileentity);
 			
 			if (tileentity instanceof IShipTileEntity)
 			{
 				((IShipTileEntity) tileentity).setParentShip(entityShip, ox, oy, oz);
-			}
-			
-			if (isChunkLoaded)
-			{
-				worldObj.addTileEntity(tileentity);
 			}
 		}
 	}

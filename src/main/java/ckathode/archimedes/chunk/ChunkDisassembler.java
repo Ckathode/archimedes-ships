@@ -142,12 +142,8 @@ public class ChunkDisassembler
 						{
 							((IShipTileEntity) tileentity).setParentShip(null, i, j, k);
 						}
-                        NBTTagCompound comp = new NBTTagCompound();
-                        tileentity.writeToNBT(comp);
-                        TileEntity temp = new TileEntity();
-                        world.setTileEntity(ix, iy, iz, temp.createAndLoadEntity(comp));
-                        tileentity.readFromNBT(comp);
-						tileentity.blockMetadata = meta;
+						tileentity.validate();
+                        world.setTileEntity(ix, iy, iz, tileentity);
 					}
 					
 					if (!ArchimedesShipMod.instance.metaRotations.hasBlock(block))

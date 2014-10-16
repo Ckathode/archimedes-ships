@@ -121,11 +121,7 @@ public class AssembleResult
 				tileentity = lb.tileEntity;
 				if (tileentity != null || lb.block.hasTileEntity(lb.blockMeta) && (tileentity = world.getTileEntity(lb.coords.chunkPosX, lb.coords.chunkPosY, lb.coords.chunkPosZ)) != null)
 				{
-					world.removeTileEntity(lb.coords.chunkPosX, lb.coords.chunkPosY, lb.coords.chunkPosZ);
 					tileentity.validate();
-					tileentity.updateContainingBlockInfo();
-					tileentity.blockType = lb.block;
-					tileentity.blockMetadata = lb.blockMeta;
 				}
 				if (entity.getShipChunk().setBlockIDWithMetadata(ix, iy, iz, lb.block, lb.blockMeta))
 				{
