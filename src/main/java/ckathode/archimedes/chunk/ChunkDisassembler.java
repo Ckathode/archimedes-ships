@@ -9,7 +9,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 import ckathode.archimedes.ArchimedesShipMod;
 import ckathode.archimedes.blockitem.TileEntityHelm;
@@ -37,7 +36,7 @@ public class ChunkDisassembler
 		World world = ship.worldObj;
 		MobileChunk chunk = ship.getShipChunk();
 		float yaw = Math.round(ship.rotationYaw / 90F) * 90F;
-		yaw = (float) Math.toRadians(ship.rotationYaw);
+		yaw = (float) Math.toRadians(yaw);
 		
 		float ox = -chunk.getCenterX();
 		float oy = -chunk.minY(); //Created the normal way, through a VehicleFiller, this value will always be 0.
@@ -143,7 +142,7 @@ public class ChunkDisassembler
 							((IShipTileEntity) tileentity).setParentShip(null, i, j, k);
 						}
 						tileentity.validate();
-                        world.setTileEntity(ix, iy, iz, tileentity);
+						world.setTileEntity(ix, iy, iz, tileentity);
 					}
 					
 					if (!ArchimedesShipMod.instance.metaRotations.hasBlock(block))
