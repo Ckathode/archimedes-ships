@@ -1,3 +1,5 @@
+#Archimedes' Ships language file ru_RU
+
 entity.ArchimedesShips.shipmod.name=Корабль Архимеда
 
 tile.archimedes.marker.name=Корабельный штурвал
@@ -63,4 +65,4 @@ gui.shipinv.title=Инвентарь корабля
 gui.shipinv.decompile=Разобрать
 gui.shipinv.align=Выровнять
 
-gui.engine.title=Топливо парового двигателя</pre></body></html>
+gui.engine.title=Топливо парового двигателя
