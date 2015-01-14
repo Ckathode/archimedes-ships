@@ -1,0 +1,68 @@
+#Archimedes' Ships (Barcos de Arquimedes) arquivo de linguagem: pt_BR
+
+entity.ArchimedesShips.shipmod.name=Archimedes' Ships
+
+tile.archimedes.marker.name=Leme do Barco
+tile.archimedes.floater.name=Flutuador
+tile.archimedes.balloon.name=Balão de Ar
+tile.archimedes.balloon.black.name=Balão de Ar Preto
+tile.archimedes.balloon.red.name=Balão de Ar Vermelho
+tile.archimedes.balloon.green.name=Balão de Ar Verde
+tile.archimedes.balloon.brown.name=Balão de Ar Marrom
+tile.archimedes.balloon.blue.name=Balão de Ar Azul
+tile.archimedes.balloon.purple.name=Balão de Ar Lilás
+tile.archimedes.balloon.cyan.name=Balão de Ar Ciano
+tile.archimedes.balloon.silver.name=Balão de Ar Cinza Claro
+tile.archimedes.balloon.gray.name=Balão de Ar Cinza
+tile.archimedes.balloon.pink.name=Balão de Ar Rosa
+tile.archimedes.balloon.lime.name=Balão de Ar Verde Limão
+tile.archimedes.balloon.yellow.name=Balão de Ar Amarelo
+tile.archimedes.balloon.light_blue.name=Balão de Ar Azul Claro
+tile.archimedes.balloon.magenta.name=Balão de Ar Magenta
+tile.archimedes.balloon.orange.name=Balão de Ar Laranja
+tile.archimedes.balloon.white.name=Balão de Ar
+tile.archimedes.gauge.name=Instrumentos de Medição
+tile.archimedes.seat.name=Banco do Passageiro
+tile.archimedes.buffer.name=Lastro de Sustentação
+tile.archimedes.engine.name=Motor a Vapor
+tile.archimedes.crate_wood.name=Caixa de Madeira
+
+key.archimedes.up=Subir
+key.archimedes.down=Descer
+key.archimedes.brake=Parar
+key.archimedes.align=Alinhar
+key.archimedes.decompile=Desmontar
+key.archimedes.shipinv=Inventário do Barco
+
+gui.shipstatus.title=Estado do Barco
+gui.shipstatus.rename=Rebatizar
+gui.shipstatus.done=Rebatismo Concluído
+gui.shipstatus.compile=Montar o Barco
+gui.shipstatus.undo=Desfazer
+gui.shipstatus.mount=Subir no Barco
+gui.shipstatus.name=Nome
+gui.shipstatus.shiptype=Tipo
+gui.shipstatus.type.unknown=Tipo Desconhecido
+gui.shipstatus.type.airship=Dirigível
+gui.shipstatus.type.boat=Barco
+gui.shipstatus.compilerresult=Estado
+gui.shipstatus.count.block=Blocos
+gui.shipstatus.count.balloon=Balões de Ar
+gui.shipstatus.count.tileentity=Partes da Entidade
+gui.shipstatus.mass=Massa
+gui.shipstatus.massunit=kg
+
+gui.shipstatus.result.none=Não Montado
+gui.shipstatus.result.ok=OK
+gui.shipstatus.result.okwarn=Alterações Detectadas
+gui.shipstatus.result.missingmarker=Faltando Leme
+gui.shipstatus.result.overflow=Sobrecarga
+gui.shipstatus.result.error=Erro
+gui.shipstatus.result.busy=Montando...
+gui.shipstatus.result.inconsistent=Inconsistente
+
+gui.shipinv.title=Inventário do Barco
+gui.shipinv.decompile=Desmontar
+gui.shipinv.align=Alinhar
+
+gui.engine.title=Combustível do Motor a Vapor
