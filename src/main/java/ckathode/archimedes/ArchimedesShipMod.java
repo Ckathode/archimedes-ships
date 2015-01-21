@@ -57,6 +57,9 @@ public class ArchimedesShipMod
 	public static final String		MOD_VERSION	= "1.7.10 v1.7.1";
 	public static final String		MOD_NAME	= "Archimedes' Ships";
 	
+	// Pointer to assets folder
+	public static final String		ASSETS		= "archimedes";
+	
 	@Instance(MOD_ID)
 	public static ArchimedesShipMod	instance;
 	
