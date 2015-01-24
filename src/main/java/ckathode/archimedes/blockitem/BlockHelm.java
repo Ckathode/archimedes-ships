@@ -75,7 +75,15 @@ public class BlockHelm extends BlockDirectional implements IEntitySelector, ITil
 	{
 		return false;
 	}
-	// ------------------------------
+
+    /**
+     * If this block doesn't render as an ordinary block it will return False (examples: signs, buttons, stairs, etc)
+     */
+    public boolean renderAsNormalBlock()
+    {
+        return false;
+    }
+    // ------------------------------
 	
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityliving, ItemStack itemstack)
