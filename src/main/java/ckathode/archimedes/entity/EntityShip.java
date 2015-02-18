@@ -1,5 +1,6 @@
 package ckathode.archimedes.entity;
 
+import ckathode.archimedes.blockitem.TileEntityAnchorPoint;
 import io.netty.buffer.ByteBuf;
 
 import java.io.ByteArrayInputStream;
@@ -100,7 +101,8 @@ public class EntityShip extends EntityBoat implements IEntityAdditionalSpawnData
 	private ShipInfo				info;
 	
 	private ChunkDisassembler		disassembler;
-	
+    public TileEntityAnchorPoint[] anchorPoints;
+
 	public float					motionYaw;
 	
 	public int						frontDirection;
@@ -935,6 +937,14 @@ public class EntityShip extends EntityBoat implements IEntityAdditionalSpawnData
 		
 		motionX = motionY = motionZ = 0D;
 	}
+
+    public boolean alignToAnchor(){
+        alignToGrid();
+
+
+
+        return false;
+    }
 	
 	public boolean disassemble(boolean overwrite)
 	{

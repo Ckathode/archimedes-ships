@@ -1,5 +1,7 @@
 package ckathode.archimedes.blockitem;
 
+import ckathode.archimedes.chunk.LocatedBlock;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -83,6 +85,8 @@ public class TileEntityHelm extends TileEntity implements IShipTileEntity
 	
 	public boolean assembleShip(EntityPlayer player)
 	{
+        boolean returnVal = false;
+
 		if (!worldObj.isRemote)
 		{
 			prevResult = assembleResult;
@@ -97,7 +101,7 @@ public class TileEntityHelm extends TileEntity implements IShipTileEntity
 			{
 			case AssembleResult.RESULT_OK:
 			case AssembleResult.RESULT_OK_WITH_WARNINGS:
-				return true;
+				returnVal = true;
 			case AssembleResult.RESULT_BLOCK_OVERFLOW:
 				c = new ChatComponentText("Cannot create ship with more than " + ArchimedesShipMod.instance.modConfig.maxShipChunkBlocks + " blocks");
 				player.addChatMessage(c);
@@ -117,7 +121,7 @@ public class TileEntityHelm extends TileEntity implements IShipTileEntity
 			default:
 			}
 		}
-		return false;
+		return returnVal;
 	}
 	
 	public boolean mountShip(EntityPlayer player)
