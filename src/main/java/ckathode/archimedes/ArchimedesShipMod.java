@@ -158,9 +158,9 @@ public class ArchimedesShipMod {
         blockCrateWood.setStepSound(Block.soundTypeWood);
         registerBlock("crate_wood", blockCrateWood);
 
-        blockAnchorPoint = new BlockAnchorPoint(Material.wood).setHardness(1f).setResistance(1F).setCreativeTab(CreativeTabs.tabTransport);
+        blockAnchorPoint = new BlockAnchorPoint(Material.wood).setHardness(1f).setResistance(1F).setCreativeTab(CreativeTabs.tabTransport).setBlockTextureName("archimedes:anchorPoint");
         blockAnchorPoint.setStepSound(Block.soundTypePiston);
-        registerBlock("blockAnchorPoint", blockAnchorPoint);
+        registerBlock("anchorPoint", blockAnchorPoint);
     }
 
     private void registerBlocksAndItems() {
@@ -209,7 +209,7 @@ public class ArchimedesShipMod {
 
         //In g/cm^3
         /*MaterialDensity.addDensity(Material.air, 0F);
-		//MaterialDensity.addDensity(Material.wood, 0.700F);
+        //MaterialDensity.addDensity(Material.wood, 0.700F);
 		MaterialDensity.addDensity(Material.wood, 0.500F);
 		MaterialDensity.addDensity(Material.rock, 2.500F);
 		MaterialDensity.addDensity(Material.water, 1.000F);

@@ -818,18 +818,10 @@ public class EntityShip extends EntityBoat implements IEntityAdditionalSpawnData
         alignToGrid();
 
         for (int amountToIgnore = 0; amountToIgnore < 100; amountToIgnore++) {
-            System.out.println("amount to ignore incremented. " + amountToIgnore);
-            if (findClosestAnchor(amountToIgnore) != null) {
+            if (findClosestValidAnchor() != null) {
                 System.out.println("Found anchor.");
-                TileEntityAnchorPoint anchorPoint = findClosestAnchor(amountToIgnore);
-                for (TileEntityAnchorPoint shipAnchor : anchorPoints) {
-                    if (anchorPoint.xCoord == shipAnchor.xCoord && anchorPoint.yCoord == shipAnchor.yCoord && anchorPoint.zCoord == shipAnchor.zCoord) {
-                        // Anchor is linked to this ship. Move to it's position.
-                        //if (canShipMoveTo(anchorPoint.xCoord, anchorPoint.yCoord, anchorPoint.zCoord)){
-                        setPosition(anchorPoint.xCoord, anchorPoint.yCoord, anchorPoint.zCoord);//}
-                        System.out.println("Moved to anchor.");
-                    }
-                }
+                TileEntityAnchorPoint anchorPoint = findClosestValidAnchor();
+                setPosition(anchorPoint.xCoord, anchorPoint.yCoord + 1, anchorPoint.zCoord);
             } else {
                 return false;
             }
@@ -838,35 +830,59 @@ public class EntityShip extends EntityBoat implements IEntityAdditionalSpawnData
         return false;
     }
 
-    TileEntityAnchorPoint findClosestAnchor(int amountToIgnore) {
-        //Check all the axis for an anchor.
-        int ignored = 0;
-        for (int x = 0; x < 11; x++) {
-            for (int y = 0; y < 11; y++) {
-                for (int z = 0; z < 11; z++) {
+    /**
+     * THIS IS WAY MORE COMPLICATED THAN NEEDED! Just check if the valid anchors are within a range of the ship. If so, teleport to the closest. You don't need to scan every coordinate around the ship -.-
+     * <p/>
+     * TODO: Make this not crap.
+     *
+     * @return
+     */
+    TileEntityAnchorPoint findClosestValidAnchor() {
+        for (int x = 0; x < 6; x++) {
+            for (int y = 0; y < 6; y++) {
+                for (int z = 0; z < 6; z++) {
                     if (worldObj != null && !worldObj.isRemote) {
-                        if (worldObj.getBlock(x, y, z) != null && worldObj.getBlock(x, y, z) instanceof BlockAnchorPoint) {
-                            if (worldObj.getTileEntity(x, y, z) != null && worldObj.getTileEntity(x, y, z) instanceof TileEntityAnchorPoint && !((TileEntityAnchorPoint) worldObj.getTileEntity(x, y, z)).forShip) {
-                                if (ignored == amountToIgnore) {
-                                    return ((TileEntityAnchorPoint) worldObj.getTileEntity(x, y, z));
+                        int blockPosX = (int) posX;
+                        int blockPosY = (int) posY;
+                        int blockPosZ = (int) posZ;
+                        blockPosX = blockPosX - x;
+                        blockPosY = blockPosY - y;
+                        blockPosZ = blockPosZ - z;
+                        System.out.println("Coords: " + blockPosX + " " + blockPosY + " " + blockPosZ);
+                        if (worldObj.getBlock(blockPosX, blockPosY, blockPosZ) != null && worldObj.getBlock(blockPosX, blockPosY, blockPosZ) instanceof BlockAnchorPoint) {
+                            System.out.println("Anchor");
+                            if (worldObj.getTileEntity(blockPosX, blockPosY, blockPosZ) != null && worldObj.getTileEntity(blockPosX, blockPosY, blockPosZ) instanceof TileEntityAnchorPoint && !((TileEntityAnchorPoint) worldObj.getTileEntity(blockPosX, blockPosY, blockPosZ)).forShip) {
+                                System.out.println("Anchor Tile");
+                                for (TileEntityAnchorPoint anchorPoint : anchorPoints) {
+                                    if (blockPosX == anchorPoint.linkX && blockPosY == anchorPoint.linkY && blockPosZ == anchorPoint.linkZ) {
+                                        return ((TileEntityAnchorPoint) worldObj.getTileEntity(blockPosX, blockPosY, blockPosZ));
+                                    }
                                 }
-                                ignored++;
                             }
                         }
                     }
                 }
             }
         }
-        for (int x = 0; x < 11; x--) {
-            for (int y = 0; y < 11; y--) {
-                for (int z = 0; z < 11; z--) {
+        for (int x = 0; x < 6; x++) {
+            for (int y = 0; y < 6; y++) {
+                for (int z = 0; z < 6; z++) {
                     if (worldObj != null && !worldObj.isRemote) {
-                        if (worldObj.getBlock(x, y, z) != null && worldObj.getBlock(x, y, z) instanceof BlockAnchorPoint) {
-                            if (worldObj.getTileEntity(x, y, z) != null && worldObj.getTileEntity(x, y, z) instanceof TileEntityAnchorPoint && !((TileEntityAnchorPoint) worldObj.getTileEntity(x, y, z)).forShip) {
-                                if (ignored == amountToIgnore) {
-                                    return ((TileEntityAnchorPoint) worldObj.getTileEntity(x, y, z));
+                        int blockPosX = (int) posX;
+                        int blockPosY = (int) posY;
+                        int blockPosZ = (int) posZ;
+                        blockPosX = blockPosX - x;
+                        blockPosY = blockPosY - y;
+                        blockPosZ = blockPosZ - z;
+                        if (worldObj.getBlock(blockPosX, blockPosY, blockPosZ) != null && worldObj.getBlock(blockPosX, blockPosY, blockPosZ) instanceof BlockAnchorPoint) {
+                            System.out.println("Anchor");
+                            if (worldObj.getTileEntity(blockPosX, blockPosY, blockPosZ) != null && worldObj.getTileEntity(blockPosX, blockPosY, blockPosZ) instanceof TileEntityAnchorPoint && !((TileEntityAnchorPoint) worldObj.getTileEntity(blockPosX, blockPosY, blockPosZ)).forShip) {
+                                System.out.println("Anchor Tile");
+                                for (TileEntityAnchorPoint anchorPoint : anchorPoints) {
+                                    if (blockPosX == anchorPoint.linkX && blockPosY == anchorPoint.linkY && blockPosZ == anchorPoint.linkZ) {
+                                        return ((TileEntityAnchorPoint) worldObj.getTileEntity(blockPosX, blockPosY, blockPosZ));
+                                    }
                                 }
-                                ignored++;
                             }
                         }
                     }
