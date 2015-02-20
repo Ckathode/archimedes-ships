@@ -93,6 +93,7 @@ public class AssembleResult {
         EntityShip entity = new EntityShip(world);
         entity.anchorPoints = null;
         ArrayList<TileEntityAnchorPoint> anchorPointsToAdd = new ArrayList<TileEntityAnchorPoint>();
+        int anchorPointsArraySize = 0;
         entity.setPilotSeat(shipMarkingBlock.blockMeta & 3, shipMarkingBlock.coords.chunkPosX - xOffset, shipMarkingBlock.coords.chunkPosY - yOffset, shipMarkingBlock.coords.chunkPosZ - zOffset);
         entity.getShipChunk().setCreationSpotBiomeGen(world.getBiomeGenForCoords(shipMarkingBlock.coords.chunkPosX, shipMarkingBlock.coords.chunkPosZ));
 
@@ -111,6 +112,7 @@ public class AssembleResult {
                     tileentity.validate();
                     if (tileentity instanceof TileEntityAnchorPoint && ((TileEntityAnchorPoint) tileentity).forShip) {
                         anchorPointsToAdd.add((TileEntityAnchorPoint) tileentity);
+                        anchorPointsArraySize++;
                     }
                 }
                 if (entity.getShipChunk().setBlockIDWithMetadata(ix, iy, iz, lb.block, lb.blockMeta)) {
@@ -118,7 +120,10 @@ public class AssembleResult {
                     world.setBlock(lb.coords.chunkPosX, lb.coords.chunkPosY, lb.coords.chunkPosZ, Blocks.air, 1, 2); //0b10
                 }
             }
-            entity.anchorPoints = (TileEntityAnchorPoint[]) anchorPointsToAdd.toArray();
+            entity.anchorPoints = new TileEntityAnchorPoint[anchorPointsArraySize];
+            for (int i = 0; i < anchorPointsToAdd.size(); i++) {
+                entity.anchorPoints[i] = anchorPointsToAdd.get(i);
+            }
             for (LocatedBlock block : assembledBlocks) {
                 world.setBlockToAir(block.coords.chunkPosX, block.coords.chunkPosY, block.coords.chunkPosZ);
             }

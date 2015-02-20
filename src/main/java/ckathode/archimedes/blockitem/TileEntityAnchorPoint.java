@@ -14,7 +14,7 @@ public class TileEntityAnchorPoint extends TileEntity {
     @Override
     public void updateEntity() {
         if (worldObj != null && !worldObj.isRemote) {
-            if (worldObj.getBlock(linkX, linkY, linkZ) != null) {
+            if (worldObj.getBlock(linkX, linkY, linkZ) != null && worldObj.getBlock(linkX, linkY, linkZ) instanceof BlockAnchorPoint) {
                 anchorPoint = (BlockAnchorPoint) worldObj.getBlock(linkX, linkY, linkZ);
             } else {
                 anchorPoint = null;
