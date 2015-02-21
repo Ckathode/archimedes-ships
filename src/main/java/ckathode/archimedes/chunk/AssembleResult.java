@@ -92,7 +92,7 @@ public class AssembleResult {
 
         EntityShip entity = new EntityShip(world);
         entity.anchorPoints = null;
-        ArrayList<TileEntityAnchorPoint> anchorPointsToAdd = new ArrayList<TileEntityAnchorPoint>();
+        ArrayList<TileEntityAnchorPoint.AnchorPointInfo> anchorPointsToAdd = new ArrayList<TileEntityAnchorPoint.AnchorPointInfo>();
         int anchorPointsArraySize = 0;
         entity.setPilotSeat(shipMarkingBlock.blockMeta & 3, shipMarkingBlock.coords.chunkPosX - xOffset, shipMarkingBlock.coords.chunkPosY - yOffset, shipMarkingBlock.coords.chunkPosZ - zOffset);
         entity.getShipChunk().setCreationSpotBiomeGen(world.getBiomeGenForCoords(shipMarkingBlock.coords.chunkPosX, shipMarkingBlock.coords.chunkPosZ));
@@ -110,17 +110,17 @@ public class AssembleResult {
                 tileentity = lb.tileEntity;
                 if (tileentity != null || lb.block.hasTileEntity(lb.blockMeta) && (tileentity = world.getTileEntity(lb.coords.chunkPosX, lb.coords.chunkPosY, lb.coords.chunkPosZ)) != null) {
                     tileentity.validate();
-                    if (tileentity instanceof TileEntityAnchorPoint && ((TileEntityAnchorPoint) tileentity).forShip) {
-                        anchorPointsToAdd.add((TileEntityAnchorPoint) tileentity);
+                    if (tileentity instanceof TileEntityAnchorPoint && ((TileEntityAnchorPoint) tileentity).anchorPointInfo.forShip) {
+                        anchorPointsToAdd.add(((TileEntityAnchorPoint) tileentity).anchorPointInfo.clone());
                         anchorPointsArraySize++;
                     }
                 }
                 if (entity.getShipChunk().setBlockIDWithMetadata(ix, iy, iz, lb.block, lb.blockMeta)) {
                     entity.getShipChunk().setTileEntity(ix, iy, iz, tileentity);
-                    world.setBlock(lb.coords.chunkPosX, lb.coords.chunkPosY, lb.coords.chunkPosZ, Blocks.air, 1, 2); //0b10
+                    world.setBlock(lb.coords.chunkPosX, lb.coords.chunkPosY, lb.coords.chunkPosZ, Blocks.air, 1, 2);
                 }
             }
-            entity.anchorPoints = new TileEntityAnchorPoint[anchorPointsArraySize];
+            entity.anchorPoints = new TileEntityAnchorPoint.AnchorPointInfo[anchorPointsArraySize];
             for (int i = 0; i < anchorPointsToAdd.size(); i++) {
                 entity.anchorPoints[i] = anchorPointsToAdd.get(i);
             }

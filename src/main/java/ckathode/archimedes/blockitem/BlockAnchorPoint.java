@@ -16,20 +16,20 @@ public class BlockAnchorPoint extends BlockContainer {
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int p6, float p7, float p8, float p9) {
         if (world != null && player != null && !world.isRemote) {
-            if (world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileEntityAnchorPoint) {
+            if (world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileEntityAnchorPoint && ((TileEntityAnchorPoint)world.getTileEntity(x,y,z)).anchorPointInfo != null) {
                 TileEntityAnchorPoint tile = (TileEntityAnchorPoint) world.getTileEntity(x, y, z);
                 if (player.isSneaking()) {
-                    tile.forShip = !tile.forShip;
-                    player.addChatComponentMessage(new ChatComponentText("This anchor is now set for use with " + (tile.forShip ? "ships" : "the ground")));
+                    tile.anchorPointInfo.forShip = !tile.anchorPointInfo.forShip;
+                    player.addChatComponentMessage(new ChatComponentText("This anchor is now set for use with " + (tile.anchorPointInfo.forShip ? "ships" : "the ground")));
                 } else {
-                    if (tile.forShip) {
+                    if (tile.anchorPointInfo.forShip) {
                         if (player.getEntityData().getBoolean("HasShipData")) {
                             int shipDataX = player.getEntityData().getInteger("ShipDataX");
                             int shipDataY = player.getEntityData().getInteger("ShipDataY");
                             int shipDataZ = player.getEntityData().getInteger("ShipDataZ");
-                            tile.linkX = shipDataX;
-                            tile.linkY = shipDataY;
-                            tile.linkZ = shipDataZ;
+                            tile.anchorPointInfo.linkX = shipDataX;
+                            tile.anchorPointInfo.linkY = shipDataY;
+                            tile.anchorPointInfo.linkZ = shipDataZ;
                             player.addChatComponentMessage(new ChatComponentText("Linked with anchor at X: " + shipDataX + " Y: " + shipDataY + " Z: " + shipDataZ));
                         } else {
                             player.addChatComponentMessage(new ChatComponentText("You need to activate a ground anchor to link with this ship anchor!"));

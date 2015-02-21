@@ -3,7 +3,6 @@ package ckathode.archimedes.entity;
 import ckathode.archimedes.ArchimedesConfig;
 import ckathode.archimedes.ArchimedesShipMod;
 import ckathode.archimedes.MaterialDensity;
-import ckathode.archimedes.blockitem.BlockAnchorPoint;
 import ckathode.archimedes.blockitem.TileEntityAnchorPoint;
 import ckathode.archimedes.blockitem.TileEntityEngine;
 import ckathode.archimedes.blockitem.TileEntityHelm;
@@ -79,7 +78,7 @@ public class EntityShip extends EntityBoat implements IEntityAdditionalSpawnData
     private ShipInfo info;
 
     private ChunkDisassembler disassembler;
-    public TileEntityAnchorPoint[] anchorPoints;
+    public TileEntityAnchorPoint.AnchorPointInfo[] anchorPoints;
 
     public float motionYaw;
 
@@ -814,76 +813,69 @@ public class EntityShip extends EntityBoat implements IEntityAdditionalSpawnData
      * @return
      */
     public boolean alignToAnchor() {
-        // Get on the grid. This rotates us to a desired position.
-        alignToGrid();
-
         for (int amountToIgnore = 0; amountToIgnore < 100; amountToIgnore++) {
             if (findClosestValidAnchor() != null) {
-                System.out.println("Found anchor.");
                 TileEntityAnchorPoint anchorPoint = findClosestValidAnchor();
-                setPosition(anchorPoint.xCoord, anchorPoint.yCoord + 1, anchorPoint.zCoord);
+                setPosition(anchorPoint.xCoord - 0, anchorPoint.yCoord + 2, anchorPoint.zCoord - 0);
             } else {
+                alignToGrid();
                 return false;
             }
         }
 
+        alignToGrid();
+
         return false;
     }
 
-    /**
-     * THIS IS WAY MORE COMPLICATED THAN NEEDED! Just check if the valid anchors are within a range of the ship. If so, teleport to the closest. You don't need to scan every coordinate around the ship -.-
-     * <p/>
-     * TODO: Make this not crap.
-     *
-     * @return
-     */
     TileEntityAnchorPoint findClosestValidAnchor() {
-        for (int x = 0; x < 6; x++) {
-            for (int y = 0; y < 6; y++) {
-                for (int z = 0; z < 6; z++) {
-                    if (worldObj != null && !worldObj.isRemote) {
-                        int blockPosX = (int) posX;
-                        int blockPosY = (int) posY;
-                        int blockPosZ = (int) posZ;
-                        blockPosX = blockPosX - x;
-                        blockPosY = blockPosY - y;
-                        blockPosZ = blockPosZ - z;
-                        System.out.println("Coords: " + blockPosX + " " + blockPosY + " " + blockPosZ);
-                        if (worldObj.getBlock(blockPosX, blockPosY, blockPosZ) != null && worldObj.getBlock(blockPosX, blockPosY, blockPosZ) instanceof BlockAnchorPoint) {
-                            System.out.println("Anchor");
-                            if (worldObj.getTileEntity(blockPosX, blockPosY, blockPosZ) != null && worldObj.getTileEntity(blockPosX, blockPosY, blockPosZ) instanceof TileEntityAnchorPoint && !((TileEntityAnchorPoint) worldObj.getTileEntity(blockPosX, blockPosY, blockPosZ)).forShip) {
-                                System.out.println("Anchor Tile");
-                                for (TileEntityAnchorPoint anchorPoint : anchorPoints) {
-                                    if (blockPosX == anchorPoint.linkX && blockPosY == anchorPoint.linkY && blockPosZ == anchorPoint.linkZ) {
-                                        return ((TileEntityAnchorPoint) worldObj.getTileEntity(blockPosX, blockPosY, blockPosZ));
-                                    }
-                                }
-                            }
+        if (worldObj != null && !worldObj.isRemote) {
+            if (anchorPoints != null) {
+                for (TileEntityAnchorPoint.AnchorPointInfo anchorPointInfo : anchorPoints) {
+                    boolean validXDistance = false;
+                    boolean validYDistance = false;
+                    boolean validZDistance = false;
+                    boolean validDistance = false;
+
+                    if (anchorPointInfo.linkX > posX) {
+                        if (posX + 25 >= anchorPointInfo.linkX) {
+                            validXDistance = true;
+                        }
+                    } else {
+                        if (anchorPointInfo.linkX + 25 >= posX) {
+                            validXDistance = true;
                         }
                     }
-                }
-            }
-        }
-        for (int x = 0; x < 6; x++) {
-            for (int y = 0; y < 6; y++) {
-                for (int z = 0; z < 6; z++) {
-                    if (worldObj != null && !worldObj.isRemote) {
-                        int blockPosX = (int) posX;
-                        int blockPosY = (int) posY;
-                        int blockPosZ = (int) posZ;
-                        blockPosX = blockPosX - x;
-                        blockPosY = blockPosY - y;
-                        blockPosZ = blockPosZ - z;
-                        if (worldObj.getBlock(blockPosX, blockPosY, blockPosZ) != null && worldObj.getBlock(blockPosX, blockPosY, blockPosZ) instanceof BlockAnchorPoint) {
-                            System.out.println("Anchor");
-                            if (worldObj.getTileEntity(blockPosX, blockPosY, blockPosZ) != null && worldObj.getTileEntity(blockPosX, blockPosY, blockPosZ) instanceof TileEntityAnchorPoint && !((TileEntityAnchorPoint) worldObj.getTileEntity(blockPosX, blockPosY, blockPosZ)).forShip) {
-                                System.out.println("Anchor Tile");
-                                for (TileEntityAnchorPoint anchorPoint : anchorPoints) {
-                                    if (blockPosX == anchorPoint.linkX && blockPosY == anchorPoint.linkY && blockPosZ == anchorPoint.linkZ) {
-                                        return ((TileEntityAnchorPoint) worldObj.getTileEntity(blockPosX, blockPosY, blockPosZ));
-                                    }
-                                }
-                            }
+
+                    if (anchorPointInfo.linkY > posY) {
+                        if (posY + 25 >= anchorPointInfo.linkY) {
+                            validYDistance = true;
+                        }
+                    } else {
+                        if (anchorPointInfo.linkY + 25 >= posY) {
+                            validYDistance = true;
+                        }
+                    }
+
+                    if (anchorPointInfo.linkZ > posZ) {
+                        if (posZ + 25 >= anchorPointInfo.linkZ) {
+                            validZDistance = true;
+                        }
+                    } else {
+                        if (anchorPointInfo.linkZ + 25 >= posZ) {
+                            validZDistance = true;
+                        }
+                    }
+
+
+                    validDistance = validXDistance && validYDistance && validZDistance;
+
+                    if (validDistance && worldObj.getTileEntity(anchorPointInfo.linkX, anchorPointInfo.linkY, anchorPointInfo.linkZ) != null
+                            && worldObj.getTileEntity(anchorPointInfo.linkX, anchorPointInfo.linkY, anchorPointInfo.linkZ) instanceof TileEntityAnchorPoint) {
+                        if (!((TileEntityAnchorPoint) worldObj.getTileEntity(anchorPointInfo.linkX, anchorPointInfo.linkY, anchorPointInfo.linkZ)).anchorPointInfo.forShip) {
+                            return (TileEntityAnchorPoint) worldObj.getTileEntity(anchorPointInfo.linkX, anchorPointInfo.linkY, anchorPointInfo.linkZ);
+                        } else {
+                            return null;
                         }
                     }
                 }
@@ -1028,7 +1020,8 @@ public class EntityShip extends EntityBoat implements IEntityAdditionalSpawnData
             for (int i = 0; i < tileentities.tagCount(); i++) {
                 NBTTagCompound comp = tileentities.getCompoundTagAt(i);
                 TileEntity tileentity = TileEntity.createAndLoadEntity(comp);
-                shipChunk.setTileEntity(tileentity.xCoord, tileentity.yCoord, tileentity.zCoord, tileentity);
+                if (tileentity != null)
+                    shipChunk.setTileEntity(tileentity.xCoord, tileentity.yCoord, tileentity.zCoord, tileentity);
             }
         }
 
