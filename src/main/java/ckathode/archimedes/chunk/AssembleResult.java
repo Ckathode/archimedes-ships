@@ -4,6 +4,7 @@ import ckathode.archimedes.ArchimedesShipMod;
 import ckathode.archimedes.MaterialDensity;
 import ckathode.archimedes.blockitem.TileEntityAnchorPoint;
 import ckathode.archimedes.entity.EntityShip;
+import ckathode.archimedes.event.AssembleBlockEvent;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -11,6 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,6 +107,8 @@ public class AssembleResult {
             TileEntity tileentity;
             int ix, iy, iz;
             for (LocatedBlock lb : assembledBlocks) {
+                AssembleBlockEvent event = new AssembleBlockEvent(lb);
+                MinecraftForge.EVENT_BUS.post(event);
                 ix = lb.coords.chunkPosX - xOffset;
                 iy = lb.coords.chunkPosY - yOffset;
                 iz = lb.coords.chunkPosZ - zOffset;

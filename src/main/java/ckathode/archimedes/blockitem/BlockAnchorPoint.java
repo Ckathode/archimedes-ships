@@ -21,7 +21,6 @@ public class BlockAnchorPoint extends BlockContainer {
                 if (tile.anchorPointInfo == null)
                     return false;
                 if (player.isSneaking()) {
-                    //Switch Mode from Ship/Ground to Ground/Ship.
                     tile.anchorPointInfo.forShip = !tile.anchorPointInfo.forShip;
                     player.addChatComponentMessage(new ChatComponentText("This Anchor is now set for use on " + (tile.anchorPointInfo.forShip ? "ships" : "the ground.")));
                 } else {

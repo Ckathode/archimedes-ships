@@ -9,6 +9,7 @@ import ckathode.archimedes.entity.EntityEntityAttachment;
 import ckathode.archimedes.entity.EntityParachute;
 import ckathode.archimedes.entity.EntitySeat;
 import ckathode.archimedes.entity.EntityShip;
+import ckathode.archimedes.event.AssembleBlockEvent;
 import ckathode.archimedes.mrot.MetaRotations;
 import ckathode.archimedes.network.ASMessagePipeline;
 import cpw.mods.fml.common.Mod;
@@ -19,6 +20,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
@@ -33,6 +35,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemCloth;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.Logger;
 
@@ -75,6 +78,7 @@ public class ArchimedesShipMod {
     @EventHandler
     public void preInitMod(FMLPreInitializationEvent event) {
         modLog = event.getModLog();
+        MinecraftForge.EVENT_BUS.register(this);
 
 		/*MaterialMap.registerMaterial("air", Material.air);
         MaterialMap.registerMaterial("anvil", Material.anvil);
@@ -273,4 +277,5 @@ public class ArchimedesShipMod {
         block.setBlockTextureName("archimedes:" + id);
         GameRegistry.registerBlock(block, itemblockclass, id);
     }
+
 }

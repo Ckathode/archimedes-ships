@@ -40,32 +40,39 @@ public class TileEntityAnchorPoint extends TileEntity {
 
     }
 
+    int time;
+
     @Override
     public void updateEntity() {
-        if (worldObj != null && !worldObj.isRemote) {
-            if (anchorPointInfo == null) {
-                anchorPointInfo = new AnchorPointInfo();
-            } else {
-                if (anchorPointInfo.forShip) {
-                    if (worldObj.getTileEntity(anchorPointInfo.linkX, anchorPointInfo.linkY, anchorPointInfo.linkZ) == null || (worldObj.getTileEntity(anchorPointInfo.linkX, anchorPointInfo.linkY, anchorPointInfo.linkZ) != null && worldObj.getTileEntity(anchorPointInfo.linkX, anchorPointInfo.linkY, anchorPointInfo.linkZ) instanceof TileEntityAnchorPoint == false)) {
-                        anchorPointInfo.linkX = anchorPointInfo.linkY = anchorPointInfo.linkZ = 0;
-                    }
+        super.updateEntity();
+        if (time > 20) {
+            if (worldObj != null && !worldObj.isRemote) {
+                if (anchorPointInfo == null) {
+                    anchorPointInfo = new AnchorPointInfo();
                 } else {
-                    anchorPointInfo.linkX = 0;
-                    anchorPointInfo.linkY = 0;
-                    anchorPointInfo.linkZ = 0;
+                    if (anchorPointInfo.forShip) {
+                        if (worldObj.getTileEntity(anchorPointInfo.linkX, anchorPointInfo.linkY, anchorPointInfo.linkZ) == null || (worldObj.getTileEntity(anchorPointInfo.linkX, anchorPointInfo.linkY, anchorPointInfo.linkZ) != null && worldObj.getTileEntity(anchorPointInfo.linkX, anchorPointInfo.linkY, anchorPointInfo.linkZ) instanceof TileEntityAnchorPoint == false)) {
+                            anchorPointInfo.linkX = anchorPointInfo.linkY = anchorPointInfo.linkZ = 0;
+                        }
+                    } else {
+                        anchorPointInfo.linkX = 0;
+                        anchorPointInfo.linkY = 0;
+                        anchorPointInfo.linkZ = 0;
+                    }
                 }
             }
-        }
+        } else time++;
     }
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
+        super.readFromNBT(tag);
         anchorPointInfo = new AnchorPointInfo(tag.getInteger("linkX"), tag.getInteger("linkY"), tag.getInteger("linkZ"), tag.getBoolean("forShip"));
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
+        super.writeToNBT(tag);
         tag.setInteger("linkX", anchorPointInfo.linkX);
         tag.setInteger("linkY", anchorPointInfo.linkY);
         tag.setInteger("linkZ", anchorPointInfo.linkZ);
