@@ -33,6 +33,7 @@ import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -78,7 +79,8 @@ public class EntityShip extends EntityBoat implements IEntityAdditionalSpawnData
     private ShipInfo info;
 
     private ChunkDisassembler disassembler;
-    public TileEntityAnchorPoint.AnchorPointInfo[] anchorPoints;
+
+    public ArrayList<TileEntityAnchorPoint.AnchorPointInfo> anchorPoints;
 
     public float motionYaw;
 
@@ -831,54 +833,90 @@ public class EntityShip extends EntityBoat implements IEntityAdditionalSpawnData
     TileEntityAnchorPoint findClosestValidAnchor() {
         if (worldObj != null && !worldObj.isRemote) {
             if (anchorPoints != null) {
+
+                List<TileEntityAnchorPoint> validAnchorPoints = new ArrayList<TileEntityAnchorPoint>();
+                List<Integer> validAnchorPointsDistance = new ArrayList<Integer>();
                 for (TileEntityAnchorPoint.AnchorPointInfo anchorPointInfo : anchorPoints) {
+                    int differenceX = 0;
+                    int differenceY = 0;
+                    int differenceZ = 0;
+
                     boolean validXDistance = false;
                     boolean validYDistance = false;
                     boolean validZDistance = false;
                     boolean validDistance = false;
 
                     if (anchorPointInfo.linkX > posX) {
-                        if (posX + 25 >= anchorPointInfo.linkX) {
-                            validXDistance = true;
+                        for (int i = 1; i < 26; i++) {
+                            if (posX + i >= anchorPointInfo.linkX) {
+                                validXDistance = true;
+                                differenceX = i;
+                            }
                         }
                     } else {
-                        if (anchorPointInfo.linkX + 25 >= posX) {
-                            validXDistance = true;
+                        for (int i = 1; i < 26; i++) {
+                            if (anchorPointInfo.linkX + i >= posX) {
+                                validXDistance = true;
+                                differenceX = i;
+                            }
                         }
                     }
 
                     if (anchorPointInfo.linkY > posY) {
-                        if (posY + 25 >= anchorPointInfo.linkY) {
-                            validYDistance = true;
+                        for (int i = 1; i < 26; i++) {
+                            if (posY + i >= anchorPointInfo.linkY) {
+                                validYDistance = true;
+                                differenceY = i;
+                            }
                         }
                     } else {
-                        if (anchorPointInfo.linkY + 25 >= posY) {
-                            validYDistance = true;
+                        for (int i = 1; i < 26; i++) {
+                            if (anchorPointInfo.linkY + i >= posY) {
+                                validYDistance = true;
+                                differenceY = i;
+                            }
                         }
                     }
 
                     if (anchorPointInfo.linkZ > posZ) {
-                        if (posZ + 25 >= anchorPointInfo.linkZ) {
-                            validZDistance = true;
+                        for (int i = 1; i < 26; i++) {
+                            if (posZ + i >= anchorPointInfo.linkZ) {
+                                validZDistance = true;
+                                differenceZ = i;
+                            }
                         }
                     } else {
-                        if (anchorPointInfo.linkZ + 25 >= posZ) {
-                            validZDistance = true;
+                        for (int i = 1; i < 26; i++) {
+                            if (anchorPointInfo.linkZ + i >= posZ) {
+                                validZDistance = true;
+                                differenceZ = i;
+                            }
                         }
                     }
-
 
                     validDistance = validXDistance && validYDistance && validZDistance;
 
                     if (validDistance && worldObj.getTileEntity(anchorPointInfo.linkX, anchorPointInfo.linkY, anchorPointInfo.linkZ) != null
                             && worldObj.getTileEntity(anchorPointInfo.linkX, anchorPointInfo.linkY, anchorPointInfo.linkZ) instanceof TileEntityAnchorPoint) {
                         if (!((TileEntityAnchorPoint) worldObj.getTileEntity(anchorPointInfo.linkX, anchorPointInfo.linkY, anchorPointInfo.linkZ)).anchorPointInfo.forShip) {
-                            return (TileEntityAnchorPoint) worldObj.getTileEntity(anchorPointInfo.linkX, anchorPointInfo.linkY, anchorPointInfo.linkZ);
-                        } else {
-                            return null;
+                            validAnchorPoints.add((TileEntityAnchorPoint) worldObj.getTileEntity(anchorPointInfo.linkX, anchorPointInfo.linkY, anchorPointInfo.linkZ));
+                            validAnchorPointsDistance.add(differenceX + differenceY + differenceZ);
                         }
                     }
                 }
+                TileEntityAnchorPoint shortestAnchor = null;
+
+                if (validAnchorPoints != null && !validAnchorPoints.isEmpty()) {
+                    int shortestIndex = 0;
+                    for (int index = 0; index < validAnchorPoints.size(); index++) {
+                        if (validAnchorPointsDistance.get(index) < validAnchorPointsDistance.get(shortestIndex)) {
+                            shortestIndex = index;
+                        }
+                    }
+                    shortestAnchor = validAnchorPoints.get(shortestIndex);
+                }
+
+                return shortestAnchor;
             }
         }
         return null;
@@ -1020,8 +1058,7 @@ public class EntityShip extends EntityBoat implements IEntityAdditionalSpawnData
             for (int i = 0; i < tileentities.tagCount(); i++) {
                 NBTTagCompound comp = tileentities.getCompoundTagAt(i);
                 TileEntity tileentity = TileEntity.createAndLoadEntity(comp);
-                if (tileentity != null)
-                    shipChunk.setTileEntity(tileentity.xCoord, tileentity.yCoord, tileentity.zCoord, tileentity);
+                shipChunk.setTileEntity(tileentity.xCoord, tileentity.yCoord, tileentity.zCoord, tileentity);
             }
         }
 

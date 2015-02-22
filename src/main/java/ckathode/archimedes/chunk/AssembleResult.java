@@ -91,11 +91,12 @@ public class AssembleResult {
         if (!isOK()) return null;
 
         EntityShip entity = new EntityShip(world);
-        entity.anchorPoints = null;
-        ArrayList<TileEntityAnchorPoint.AnchorPointInfo> anchorPointsToAdd = new ArrayList<TileEntityAnchorPoint.AnchorPointInfo>();
-        int anchorPointsArraySize = 0;
+
         entity.setPilotSeat(shipMarkingBlock.blockMeta & 3, shipMarkingBlock.coords.chunkPosX - xOffset, shipMarkingBlock.coords.chunkPosY - yOffset, shipMarkingBlock.coords.chunkPosZ - zOffset);
         entity.getShipChunk().setCreationSpotBiomeGen(world.getBiomeGenForCoords(shipMarkingBlock.coords.chunkPosX, shipMarkingBlock.coords.chunkPosZ));
+
+        entity.anchorPoints = null;
+        ArrayList<TileEntityAnchorPoint.AnchorPointInfo> anchorPointsToAdd = new ArrayList<TileEntityAnchorPoint.AnchorPointInfo>();
 
         boolean flag = world.getGameRules().getGameRuleBooleanValue("doTileDrops");
         world.getGameRules().setOrCreateGameRule("doTileDrops", "false");
@@ -109,21 +110,19 @@ public class AssembleResult {
                 iz = lb.coords.chunkPosZ - zOffset;
                 tileentity = lb.tileEntity;
                 if (tileentity != null || lb.block.hasTileEntity(lb.blockMeta) && (tileentity = world.getTileEntity(lb.coords.chunkPosX, lb.coords.chunkPosY, lb.coords.chunkPosZ)) != null) {
-                    tileentity.validate();
                     if (tileentity instanceof TileEntityAnchorPoint && ((TileEntityAnchorPoint) tileentity).anchorPointInfo.forShip) {
                         anchorPointsToAdd.add(((TileEntityAnchorPoint) tileentity).anchorPointInfo.clone());
-                        anchorPointsArraySize++;
                     }
+                    tileentity.validate();
                 }
                 if (entity.getShipChunk().setBlockIDWithMetadata(ix, iy, iz, lb.block, lb.blockMeta)) {
                     entity.getShipChunk().setTileEntity(ix, iy, iz, tileentity);
                     world.setBlock(lb.coords.chunkPosX, lb.coords.chunkPosY, lb.coords.chunkPosZ, Blocks.air, 1, 2);
                 }
             }
-            entity.anchorPoints = new TileEntityAnchorPoint.AnchorPointInfo[anchorPointsArraySize];
-            for (int i = 0; i < anchorPointsToAdd.size(); i++) {
-                entity.anchorPoints[i] = anchorPointsToAdd.get(i);
-            }
+
+            entity.anchorPoints = anchorPointsToAdd;
+
             for (LocatedBlock block : assembledBlocks) {
                 world.setBlockToAir(block.coords.chunkPosX, block.coords.chunkPosY, block.coords.chunkPosZ);
             }
