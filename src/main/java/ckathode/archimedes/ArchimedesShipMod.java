@@ -198,7 +198,7 @@ public class ArchimedesShipMod {
         GameRegistry.addRecipe(new ItemStack(blockEngine, 1), "#O#", "#X#", "###", Character.valueOf('#'), Items.iron_ingot, Character.valueOf('O'), Items.water_bucket, Character.valueOf('X'), Blocks.furnace);
         GameRegistry.registerTileEntity(TileEntityEngine.class, "archiEngine");
 
-        GameRegistry.addRecipe(new ItemStack(blockAnchorPoint, 1), "XYX", "XXX", "ZZZ", Character.valueOf('X'), Blocks.wooden_pressure_plate, Character.valueOf('Y'), Items.redstone, Character.valueOf('Z'), Blocks.wool);
+        GameRegistry.addRecipe(new ItemStack(blockAnchorPoint, 1), "XYX", "XXX", "ZZZ", Character.valueOf('X'), Blocks.planks, Character.valueOf('Y'), Blocks.redstone_torch, Character.valueOf('Z'), Items.redstone);
         GameRegistry.registerTileEntity(TileEntityAnchorPoint.class, "archiAnchor");
     }
 
