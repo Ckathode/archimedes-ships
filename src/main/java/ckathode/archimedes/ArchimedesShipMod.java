@@ -43,9 +43,9 @@ import java.util.Collections;
 
 @Mod(modid = ArchimedesShipMod.MOD_ID, name = ArchimedesShipMod.MOD_NAME, version = ArchimedesShipMod.MOD_VERSION)
 public class ArchimedesShipMod {
-    public static final String MOD_ID = "ArchimedesShips";
-    public static final String MOD_VERSION = "1.7.10 v1.7.1";
-    public static final String MOD_NAME = "Archimedes' Ships";
+    public static final String MOD_ID = "ArchimedesShipsPlus";
+    public static final String MOD_VERSION = "1.7.10-V1.8.0";
+    public static final String MOD_NAME = "Archimedes' Ships Plus";
 
     @Instance(MOD_ID)
     public static ArchimedesShipMod instance;
