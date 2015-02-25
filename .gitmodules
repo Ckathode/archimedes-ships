@@ -1,0 +1,3 @@
+[submodule "MovingWorld"]
+	path = MovingWorld
+	url = https://www.github.com/darkevilmac/MovingWorld.git
