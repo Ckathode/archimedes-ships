@@ -41,14 +41,14 @@ public class TileEntityCrate extends TileEntity implements IShipTileEntity {
         refreshTime = 60;
     }
 
+    public Entity getContainedEntity() {
+        return containedEntity;
+    }
+
     public void setContainedEntity(Entity entity) {
         containedEntity = entity;
         containedEntityId = containedEntity == null ? 0 : containedEntity.getEntityId();
         refreshTime = 0;
-    }
-
-    public Entity getContainedEntity() {
-        return containedEntity;
     }
 
     @Override

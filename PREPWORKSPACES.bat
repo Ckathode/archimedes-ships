@@ -1,0 +1,3 @@
+start SetupFloobitsWorkspace.bat
+cd MovingWorld
+start SetupFloobitsWorkspace.bat

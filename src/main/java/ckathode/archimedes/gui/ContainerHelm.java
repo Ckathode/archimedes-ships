@@ -17,7 +17,7 @@ public class ContainerHelm extends Container {
         player = entityplayer;
 
 		/*for (int i = 0; i < 3; i++)
-		{
+        {
 			for (int j = 0; j < 3; j++)
 			{
 				addSlotToContainer(new Slot(tileEntity, j + i * 3, 62 + j * 18, 17 + i * 18));

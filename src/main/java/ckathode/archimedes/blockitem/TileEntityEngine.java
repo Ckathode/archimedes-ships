@@ -12,12 +12,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 
 public class TileEntityEngine extends TileEntity implements IInventory {
+    public float enginePower;
+    public int engineFuelConsumption;
     ItemStack[] itemstacks;
     private int burnTime;
     private boolean running;
-
-    public float enginePower;
-    public int engineFuelConsumption;
 
     public TileEntityEngine() {
         itemstacks = new ItemStack[getSizeInventory()];

@@ -12,7 +12,7 @@
  *
  * original project: playlaughlovelearn/LisasForgeGradleTemplate
  */
- 
+
 /*
  * to use this project, run the following commands; with 'gradlew' if you want to use gradle
  * wrapper included in the project, or with 'gradle' to use a local installation of gradle
@@ -32,7 +32,7 @@
  * and, for idea/eclipse development:
  *     gradlew [idea|eclipse]
  */
- 
+
 buildscript {
     repositories {
         mavenCentral()
@@ -92,8 +92,8 @@ minecraft {
 // creates a timestamp to be appended to the end of the build; a simple way to keep track of dev
 // builds and not intended to be the end-all be-all; rather, a temporary solution
 def getTimestampSuffix() {
-	   def date = new Date()
-       return date.format('yyyy-MM-dd_HH-mm-ss')
+    def date = new Date()
+    return date.format('yyyy-MM-dd_HH-mm-ss')
 }
 
 version = "${config.mod_version}-${config.mod_builder_tok}-${getTimestampSuffix()}"
@@ -104,50 +104,49 @@ repositories {
 }
 
 processResources
-{
-    // rebuild if either of the versions below change
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
+        {
+            // rebuild if either of the versions below change
+            inputs.property "version", project.version
+            inputs.property "mcversion", project.minecraft.version
 
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-        exclude 'version.properties'
+            from(sourceSets.main.resources.srcDirs) {
+                include 'mcmod.info'
+                exclude 'version.properties'
 
-        expand 'version':project.version, 'mcversion':project.minecraft.version
-    }
-    
-    from(sourceSets.main.resources.srcDirs) {
-        exclude '**/mcmod.info'
-        exclude '**/version.properties'
-    }
-}
+                expand 'version': project.version, 'mcversion': project.minecraft.version
+            }
+
+            from(sourceSets.main.resources.srcDirs) {
+                exclude '**/mcmod.info'
+                exclude '**/version.properties'
+            }
+        }
 
 // properties that instruct gradle on how to create the .jar outputs
 jar {
-	// create a version plate for the beginning of the mod name to avoid confusion as to which
-	// version of minecraft/forge this build was for; at some point in the future would like to 
-	// expand this to create multiple builds as necessary for different Minecraft/Forge versions
-	baseName = "[${config.minecraft_version}-${config.forge_version}]${config.mod_basename}"
-	appendix = 'universal'
-	
-	// don't put in the version.properties file if it exists, and definitely leave out the MCP 
-	// (i.e. Minecraft) sources
-	exclude 'mcp'
-	exclude 'version.properties'
+    // create a version plate for the beginning of the mod name to avoid confusion as to which
+    // version of minecraft/forge this build was for; at some point in the future would like to
+    // expand this to create multiple builds as necessary for different Minecraft/Forge versions
+    baseName = "[${config.minecraft_version}-${config.forge_version}]${config.mod_basename}"
+    appendix = 'universal'
+
+    // don't put in the version.properties file if it exists, and definitely leave out the MCP
+    // (i.e. Minecraft) sources
+    exclude 'mcp'
+    exclude 'version.properties'
 }
 
 // instructions to gradle on which source to use
 sourceSets {
     main {
-	    java {
-	        srcDir '${config.mod_basename} mod src/main/java' exclude('net/minecraft/**')
-	    }
+        java {
+            srcDir '${config.mod_basename} mod src/main/java' exclude('net/minecraft/**')
+        }
         resources {
-            srcDir '${config.mod_basename} mod src/main/resources' include('assets/**','*.cfg','*.png','*.mcmeta','*.info')
+            srcDir '${config.mod_basename} mod src/main/resources' include('assets/**', '*.cfg', '*.png', '*.mcmeta', '*.info')
         }
     }
 }
-
 
 /*
  *------------------------------------------------------------------------------------------------
@@ -224,7 +223,7 @@ sourceSets {
  *
  *------------------------------------------------------------------------------------------------
  */
- 
+
 /*
  * thank You!
  * 

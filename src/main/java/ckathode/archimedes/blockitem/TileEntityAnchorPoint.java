@@ -6,40 +6,6 @@ import net.minecraft.tileentity.TileEntity;
 public class TileEntityAnchorPoint extends TileEntity {
 
     public AnchorPointInfo anchorPointInfo;
-
-    public class AnchorPointInfo {
-        public int linkX;
-        public int linkY;
-        public int linkZ;
-        public boolean forShip;
-
-        public AnchorPointInfo() {
-            linkX = 0;
-            linkY = 0;
-            linkZ = 0;
-            forShip = false;
-        }
-
-        public AnchorPointInfo(int x, int y, int z, boolean forShip) {
-            this.linkX = x;
-            this.linkY = y;
-            this.linkZ = z;
-            this.forShip = forShip;
-        }
-
-        public void setInfo(int linkX, int linkY, int linkZ, boolean forShip) {
-            this.linkX = linkX;
-            this.linkY = linkY;
-            this.linkZ = linkZ;
-            this.forShip = forShip;
-        }
-
-        public AnchorPointInfo clone() {
-            return new AnchorPointInfo(linkX, linkY, linkZ, forShip);
-        }
-
-    }
-
     int time;
 
     @Override
@@ -77,6 +43,39 @@ public class TileEntityAnchorPoint extends TileEntity {
         tag.setInteger("linkY", anchorPointInfo.linkY);
         tag.setInteger("linkZ", anchorPointInfo.linkZ);
         tag.setBoolean("forShip", anchorPointInfo.forShip);
+    }
+
+    public class AnchorPointInfo {
+        public int linkX;
+        public int linkY;
+        public int linkZ;
+        public boolean forShip;
+
+        public AnchorPointInfo() {
+            linkX = 0;
+            linkY = 0;
+            linkZ = 0;
+            forShip = false;
+        }
+
+        public AnchorPointInfo(int x, int y, int z, boolean forShip) {
+            this.linkX = x;
+            this.linkY = y;
+            this.linkZ = z;
+            this.forShip = forShip;
+        }
+
+        public void setInfo(int linkX, int linkY, int linkZ, boolean forShip) {
+            this.linkX = linkX;
+            this.linkY = linkY;
+            this.linkZ = linkZ;
+            this.forShip = forShip;
+        }
+
+        public AnchorPointInfo clone() {
+            return new AnchorPointInfo(linkX, linkY, linkZ, forShip);
+        }
+
     }
 
 }

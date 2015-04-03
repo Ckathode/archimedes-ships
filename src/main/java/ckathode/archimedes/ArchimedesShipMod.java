@@ -5,12 +5,6 @@ import ckathode.archimedes.command.CommandASHelp;
 import ckathode.archimedes.command.CommandDisassembleNear;
 import ckathode.archimedes.command.CommandDisassembleShip;
 import ckathode.archimedes.command.CommandShipInfo;
-import ckathode.archimedes.entity.EntityEntityAttachment;
-import ckathode.archimedes.entity.EntityParachute;
-import ckathode.archimedes.entity.EntitySeat;
-import ckathode.archimedes.entity.EntityShip;
-import ckathode.archimedes.event.AssembleBlockEvent;
-import ckathode.archimedes.mrot.MetaRotations;
 import ckathode.archimedes.network.ASMessagePipeline;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -20,8 +14,6 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockColored;
@@ -68,11 +60,9 @@ public class ArchimedesShipMod {
 
     public ArchimedesConfig modConfig;
     public ASMessagePipeline pipeline;
-    public MetaRotations metaRotations;
 
     public ArchimedesShipMod() {
         pipeline = new ASMessagePipeline();
-        metaRotations = new MetaRotations();
     }
 
     @EventHandler
@@ -117,8 +107,6 @@ public class ArchimedesShipMod {
 
         modConfig = new ArchimedesConfig(new Configuration(event.getSuggestedConfigurationFile()));
         modConfig.loadAndSave();
-
-        metaRotations.setConfigDirectory(event.getModConfigurationDirectory());
 
         pipeline.initalize();
 
@@ -206,10 +194,10 @@ public class ArchimedesShipMod {
     public void initMod(FMLInitializationEvent event) {
         registerBlocksAndItems();
 
-        EntityRegistry.registerModEntity(EntityShip.class, "shipmod", 1, this, 64, modConfig.shipEntitySyncRate, true);
-        EntityRegistry.registerModEntity(EntityEntityAttachment.class, "attachment", 2, this, 64, 100, false);
-        EntityRegistry.registerModEntity(EntitySeat.class, "attachment.seat", 3, this, 64, 100, false);
-        EntityRegistry.registerModEntity(EntityParachute.class, "parachute", 4, this, 32, modConfig.shipEntitySyncRate, true);
+        //EntityRegistry.registerModEntity(EntityShip.class, "shipmod", 1, this, 64, modConfig.shipEntitySyncRate, true);
+        //EntityRegistry.registerModEntity(EntityEntityAttachment.class, "attachment", 2, this, 64, 100, false);
+        //EntityRegistry.registerModEntity(EntitySeat.class, "attachment.seat", 3, this, 64, 100, false);
+        //EntityRegistry.registerModEntity(EntityParachute.class, "parachute", 4, this, 32, modConfig.shipEntitySyncRate, true);
 
         //In g/cm^3
         /*MaterialDensity.addDensity(Material.air, 0F);
@@ -249,7 +237,6 @@ public class ArchimedesShipMod {
 
     @EventHandler
     public void postInitMod(FMLPostInitializationEvent event) {
-        metaRotations.readMetaRotationFiles();
         pipeline.postInitialize();
     }
 

@@ -47,7 +47,7 @@ public class RenderBlockSeat implements ISimpleBlockRenderingHandler {
         GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 
 		/*
-		renderer.renderAllFaces = true;
+        renderer.renderAllFaces = true;
 		renderer.setRenderBounds(0D, 0D, 0D, 1D, 0.5D, 1D);
 		renderer.renderStandardBlock(block, 0, 0, 0);
 		if (meta == 0)

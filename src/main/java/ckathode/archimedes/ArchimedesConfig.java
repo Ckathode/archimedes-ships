@@ -3,6 +3,7 @@ package ckathode.archimedes;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import darkevilmac.movingworld.MaterialDensity;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
@@ -18,15 +19,9 @@ import java.util.regex.Pattern;
 
 public class ArchimedesConfig {
     public static final int CONTROL_TYPE_VANILLA = 0, CONTROL_TYPE_ARCHIMEDES = 1;
-
-    private Configuration config;
-    private String[] loadedBlockDensities;
-    private String[] loadedMaterialDensities;
-
     //Settings
     public boolean enableAirShips;
     public int shipEntitySyncRate;
-
     //Mobile Chunk
     public int maxShipChunkBlocks;
     public float flyBalloonRatio;
@@ -36,16 +31,17 @@ public class ArchimedesConfig {
     public Set<String> blockWhitelist;
     public Set<String> overwritableBlocks;
     public boolean useNewAlgorithm;
-
     //Control
     public int shipControlType;
     public float turnSpeed;
     public float speedLimit;
     public float bankingMultiplier;
-
     @SideOnly(Side.CLIENT)
     public KeyBinding kbUp, kbDown, kbBrake, kbAlign, kbDisassemble, kbShipInv;
     public boolean disassembleOnDismount;
+    private Configuration config;
+    private String[] loadedBlockDensities;
+    private String[] loadedMaterialDensities;
 
     public ArchimedesConfig(Configuration configuration) {
         config = configuration;

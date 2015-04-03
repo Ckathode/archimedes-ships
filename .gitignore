@@ -21,3 +21,13 @@ out/
 *.iml
 *.ipr
 *.iws
+
+extern
+node_modules
+tmp
+vendor
+/MovingWorld/project_libraries
+.idea/workspace.xml
+.idea/misc.xml
+ArchimedesShips.iws
+/MovingWorld/MovingWorld.iws

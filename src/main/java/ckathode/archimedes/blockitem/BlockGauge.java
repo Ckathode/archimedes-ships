@@ -1,8 +1,8 @@
 package ckathode.archimedes.blockitem;
 
-import ckathode.archimedes.util.RotationHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import darkevilmac.movingworld.util.RotationHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;

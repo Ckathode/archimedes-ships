@@ -5,8 +5,8 @@ import ckathode.archimedes.chunk.AssembleResult;
 import ckathode.archimedes.chunk.ChunkAssembler;
 import ckathode.archimedes.entity.EntityShip;
 import ckathode.archimedes.entity.IShipTileEntity;
-import ckathode.archimedes.entity.ShipInfo;
 import ckathode.archimedes.network.MsgAssembleResult;
+import darkevilmac.movingworld.entity.ShipInfo;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -39,21 +39,21 @@ public class TileEntityHelm extends TileEntity implements IShipTileEntity {
         return info;
     }
 
-    public AssembleResult getAssembleResult() {
-        return assembleResult;
-    }
-
-    public AssembleResult getPrevAssembleResult() {
-        return prevResult;
-    }
-
     public void setShipInfo(ShipInfo shipinfo) {
         if (shipinfo == null) throw new NullPointerException("Cannot set null ship info");
         info = shipinfo;
     }
 
+    public AssembleResult getAssembleResult() {
+        return assembleResult;
+    }
+
     public void setAssembleResult(AssembleResult result) {
         assembleResult = result;
+    }
+
+    public AssembleResult getPrevAssembleResult() {
+        return prevResult;
     }
 
     public void setPrevAssembleResult(AssembleResult result) {
