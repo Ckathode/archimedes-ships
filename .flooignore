@@ -2,8 +2,12 @@ extern
 node_modules
 tmp
 vendor
+/.gradle/
+/build/
+/run/
 /MovingWorld/project_libraries
+/MovingWorld/MovingWorld.iws
+archimedes-ships-plus.ipr
 .idea/workspace.xml
 .idea/misc.xml
 ArchimedesShips.iws
-/MovingWorld/MovingWorld.iws
