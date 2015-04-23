@@ -29,9 +29,9 @@ public class AssembleResultMessage extends ArchimedesShipsMessage {
         } else {
             buf.writeByte(result.getCode());
             buf.writeInt(result.getBlockCount());
-            buf.writeInt(((ShipAssemblyInteractor)result.assemblyInteractor).getBalloonCount());
             buf.writeInt(result.getTileEntityCount());
             buf.writeFloat(result.getMass());
+            buf.writeInt(((ShipAssemblyInteractor) result.assemblyInteractor).getBalloonCount());
         }
     }
 
@@ -39,6 +39,7 @@ public class AssembleResultMessage extends ArchimedesShipsMessage {
     public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf, EntityPlayer player) {
         prevFlag = buf.readBoolean();
         result = new AssembleResult(buf);
+        result.assemblyInteractor = new ShipAssemblyInteractor().fromByteBuf(buf);
     }
 
     @Override
