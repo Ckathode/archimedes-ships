@@ -1,11 +1,5 @@
 package darkevilmac.archimedes;
 
-import darkevilmac.archimedes.blockitem.*;
-import darkevilmac.archimedes.command.CommandASHelp;
-import darkevilmac.archimedes.command.CommandDisassembleNear;
-import darkevilmac.archimedes.command.CommandDisassembleShip;
-import darkevilmac.archimedes.command.CommandShipInfo;
-import darkevilmac.archimedes.network.ASMessagePipeline;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -14,7 +8,16 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
+import darkevilmac.archimedes.blockitem.*;
+import darkevilmac.archimedes.command.CommandASHelp;
+import darkevilmac.archimedes.command.CommandDisassembleNear;
+import darkevilmac.archimedes.command.CommandDisassembleShip;
+import darkevilmac.archimedes.command.CommandShipInfo;
+import darkevilmac.archimedes.network.ArchimedesShipsMessageToMessageCodec;
+import darkevilmac.archimedes.network.ArchimedesShipsPacketHandler;
+import darkevilmac.archimedes.network.NetworkUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockColored;
 import net.minecraft.block.material.MapColor;
@@ -59,10 +62,10 @@ public class ArchimedesShipMod {
     public static Material materialFloater;
 
     public ArchimedesConfig modConfig;
-    public ASMessagePipeline pipeline;
+    public NetworkUtil network;
 
     public ArchimedesShipMod() {
-        pipeline = new ASMessagePipeline();
+        network = new NetworkUtil();
     }
 
     @EventHandler
@@ -107,8 +110,6 @@ public class ArchimedesShipMod {
 
         modConfig = new ArchimedesConfig(new Configuration(event.getSuggestedConfigurationFile()));
         modConfig.loadAndSave();
-
-        pipeline.initalize();
 
         createBlocksAndItems();
 
@@ -192,7 +193,12 @@ public class ArchimedesShipMod {
 
     @EventHandler
     public void initMod(FMLInitializationEvent event) {
+
+        network.channels = NetworkRegistry.INSTANCE.newChannel
+                (MOD_ID, new ArchimedesShipsMessageToMessageCodec(), new ArchimedesShipsPacketHandler());
+
         registerBlocksAndItems();
+
 
         //EntityRegistry.registerModEntity(EntityShip.class, "shipmod", 1, this, 64, modConfig.shipEntitySyncRate, true);
         //EntityRegistry.registerModEntity(EntityEntityAttachment.class, "attachment", 2, this, 64, 100, false);
@@ -232,12 +238,10 @@ public class ArchimedesShipMod {
         proxy.registerKeyHandlers(modConfig);
         proxy.registerEventHandlers();
         proxy.registerRenderers();
-        proxy.registerPackets(pipeline);
     }
 
     @EventHandler
     public void postInitMod(FMLPostInitializationEvent event) {
-        pipeline.postInitialize();
     }
 
     @SuppressWarnings("unchecked")

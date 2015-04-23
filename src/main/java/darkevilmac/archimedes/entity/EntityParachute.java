@@ -14,7 +14,7 @@ public class EntityParachute extends Entity {
 
     public EntityParachute(World world, EntityShip ship, int x, int y, int z) {
         this(world);
-        Vec3 vec = Vec3.createVectorHelper(x - ship.getShipChunk().getCenterX(), y - ship.getShipChunk().minY(), z - ship.getShipChunk().getCenterZ());
+        Vec3 vec = Vec3.createVectorHelper(x - ship.getMovingWorldChunk().getCenterX(), y - ship.getMovingWorldChunk().minY(), z - ship.getMovingWorldChunk().getCenterZ());
         vec.rotateAroundY((float) Math.toRadians(ship.rotationYaw));
 
         setLocationAndAngles(ship.posX + vec.xCoord, ship.posY + vec.yCoord - 2D, ship.posZ + vec.zCoord, 0F, 0F);

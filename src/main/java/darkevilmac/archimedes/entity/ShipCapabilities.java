@@ -3,6 +3,7 @@ package darkevilmac.archimedes.entity;
 import darkevilmac.archimedes.blockitem.TileEntityEngine;
 import darkevilmac.movingworld.entity.EntityMovingWorld;
 import darkevilmac.movingworld.entity.MovingWorldCapabilities;
+import net.minecraft.entity.Entity;
 
 import java.util.List;
 
@@ -73,6 +74,11 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     @Override
     public int getBlockCount() {
         return blockCount;
+    }
+
+    @Override
+    public boolean mountEntity(Entity entity) {
+        return false;
     }
 
     public void setBlockCount(int blockCount) {

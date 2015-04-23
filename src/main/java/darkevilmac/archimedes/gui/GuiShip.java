@@ -1,8 +1,8 @@
 package darkevilmac.archimedes.gui;
 
-import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.entity.EntityShip;
-import darkevilmac.movingworld.network.advanced.MsgClientShipAction;
+import darkevilmac.movingworld.MovingWorld;
+import darkevilmac.movingworld.network.MovingWorldClientActionMessage;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
@@ -72,12 +72,12 @@ public class GuiShip extends GuiContainer {
     @Override
     protected void actionPerformed(GuiButton button) {
         if (button == btnDisassemble) {
-            MsgClientShipAction msg = new MsgClientShipAction(ship, 1);
-            ArchimedesShipMod.instance.pipeline.sendToServer(msg);
+            MovingWorldClientActionMessage msg = new MovingWorldClientActionMessage(ship, MovingWorldClientActionMessage.Action.DISASSEMBLE);
+            MovingWorld.instance.network.sendToServer(msg);
             mc.displayGuiScreen(null);
         } else if (button == btnAlign) {
-            MsgClientShipAction msg = new MsgClientShipAction(ship, 3);
-            ArchimedesShipMod.instance.pipeline.sendToServer(msg);
+            MovingWorldClientActionMessage msg = new MovingWorldClientActionMessage(ship, MovingWorldClientActionMessage.Action.ALIGN);
+            MovingWorld.instance.network.sendToServer(msg);
 
             ship.alignToGrid();
         }

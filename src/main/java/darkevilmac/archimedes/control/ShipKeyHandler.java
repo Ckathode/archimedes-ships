@@ -1,10 +1,5 @@
 package darkevilmac.archimedes.control;
 
-import darkevilmac.archimedes.ArchimedesConfig;
-import darkevilmac.archimedes.ArchimedesShipMod;
-import darkevilmac.archimedes.entity.EntityShip;
-import darkevilmac.archimedes.network.MsgClientOpenGUI;
-import darkevilmac.movingworld.network.advanced.MsgClientShipAction;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
@@ -12,6 +7,12 @@ import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import darkevilmac.archimedes.ArchimedesConfig;
+import darkevilmac.archimedes.ArchimedesShipMod;
+import darkevilmac.archimedes.entity.EntityShip;
+import darkevilmac.archimedes.network.ClientOpenGuiMessage;
+import darkevilmac.movingworld.MovingWorld;
+import darkevilmac.movingworld.network.MovingWorldClientActionMessage;
 
 @SideOnly(Side.CLIENT)
 public class ShipKeyHandler {
@@ -32,14 +33,14 @@ public class ShipKeyHandler {
     public void updateControl(PlayerTickEvent e) {
         if (e.phase == TickEvent.Phase.START && e.side == Side.CLIENT && e.player == FMLClientHandler.instance().getClientPlayerEntity() && e.player.ridingEntity instanceof EntityShip) {
             if (config.kbShipInv.getIsKeyPressed() && !kbShipGuiPrevState) {
-                MsgClientOpenGUI msg = new MsgClientOpenGUI(2);
-                ArchimedesShipMod.instance.pipeline.sendToServer(msg);
+                ClientOpenGuiMessage msg = new ClientOpenGuiMessage(2);
+                ArchimedesShipMod.instance.network.sendToServer(msg);
             }
             kbShipGuiPrevState = config.kbShipInv.getIsKeyPressed();
 
             if (config.kbDisassemble.getIsKeyPressed() && !kbDisassemblePrevState) {
-                MsgClientShipAction msg = new MsgClientShipAction((EntityShip) e.player.ridingEntity, 1);
-                ArchimedesShipMod.instance.pipeline.sendToServer(msg);
+                MovingWorldClientActionMessage msg = new MovingWorldClientActionMessage((EntityShip) e.player.ridingEntity, MovingWorldClientActionMessage.Action.DISASSEMBLE);
+                MovingWorld.instance.network.sendToServer(msg);
             }
             kbDisassemblePrevState = config.kbDisassemble.getIsKeyPressed();
 

@@ -1,26 +1,23 @@
 package darkevilmac.archimedes.entity;
 
-import darkevilmac.archimedes.ArchimedesShipMod;
-import darkevilmac.archimedes.network.MsgFarInteract;
-import net.minecraft.entity.player.EntityPlayer;
+import darkevilmac.movingworld.entity.EntityMovingWorld;
+import darkevilmac.movingworld.entity.MovingWorldHandlerClient;
 
-public class ShipHandlerClient extends ShipHandlerCommon {
-    public ShipHandlerClient(EntityShip entityship) {
-        super(entityship);
+public class ShipHandlerClient extends MovingWorldHandlerClient {
+
+    private EntityMovingWorld movingWorld;
+
+    public ShipHandlerClient(EntityMovingWorld movingWorld) {
+        super(movingWorld);
     }
 
     @Override
-    public boolean interact(EntityPlayer player) {
-        if (player.getDistanceSqToEntity(ship) >= 36D) {
-            MsgFarInteract msg = new MsgFarInteract(ship);
-            ArchimedesShipMod.instance.pipeline.sendToServer(msg);
-        }
-
-        return super.interact(player);
+    public EntityMovingWorld getMovingWorld() {
+        return movingWorld;
     }
 
     @Override
-    public void onChunkUpdate() {
-        super.onChunkUpdate();
+    public void setMovingWorld(EntityMovingWorld movingWorld) {
+        this.movingWorld = movingWorld;
     }
 }

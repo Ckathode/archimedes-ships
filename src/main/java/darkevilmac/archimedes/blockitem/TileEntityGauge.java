@@ -32,6 +32,11 @@ public class TileEntityGauge extends TileEntity implements IMovingWorldTileEntit
     }
 
     @Override
+    public void setParentMovingWorld(EntityMovingWorld entityMovingWorld) {
+        setParentMovingWorld(entityMovingWorld, 0, 0, 0);
+    }
+
+    @Override
     public Packet getDescriptionPacket() {
         NBTTagCompound compound = new NBTTagCompound();
         writeToNBT(compound);

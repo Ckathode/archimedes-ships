@@ -1,45 +1,31 @@
 package darkevilmac.archimedes.entity;
 
-import darkevilmac.archimedes.ArchimedesShipMod;
-import darkevilmac.movingworld.network.advanced.MsgChunkBlockUpdate;
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
-import darkevilmac.movingworld.chunk.MobileChunkServer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.ChunkPosition;
+import darkevilmac.movingworld.entity.EntityMovingWorld;
+import darkevilmac.movingworld.entity.MovingWorldHandlerServer;
 
-import java.util.Collection;
+public class ShipHandlerServer extends MovingWorldHandlerServer {
 
-public class ShipHandlerServer extends ShipHandlerCommon {
-    private boolean firstChunkUpdate;
+    private EntityMovingWorld movingWorld;
 
-    public ShipHandlerServer(EntityShip entityship) {
-        super(entityship);
-        firstChunkUpdate = true;
+    public ShipHandlerServer(EntityMovingWorld entitymovingWorld) {
+        super(entitymovingWorld);
     }
 
     @Override
-    public boolean interact(EntityPlayer player) {
-        if (ship.riddenByEntity == null) {
-            player.mountEntity(ship);
-            return true;
-        } else if (player.ridingEntity == null) {
-            return ship.getCapabilities().mountEntity(player);
-        }
+    public EntityMovingWorld getMovingWorld() {
+        return movingWorld;
+    }
 
-        return false;
+    @Override
+    public void setMovingWorld(EntityMovingWorld movingWorld) {
+        this.movingWorld = movingWorld;
     }
 
     @Override
     public void onChunkUpdate() {
         super.onChunkUpdate();
-        Collection<ChunkPosition> list = ((MobileChunkServer) ship.getShipChunk()).getSendQueue();
         if (firstChunkUpdate) {
-            ((ShipCapabilities)ship.getCapabilities()).spawnSeatEntities();
-        } else {
-            MsgChunkBlockUpdate msg = new MsgChunkBlockUpdate(ship, list);
-            ArchimedesShipMod.instance.pipeline.sendToAllAround(msg, new TargetPoint(ship.worldObj.provider.dimensionId, ship.posX, ship.posY, ship.posZ, 64D));
+            ((ShipCapabilities) movingWorld.getCapabilities()).spawnSeatEntities();
         }
-        list.clear();
-        firstChunkUpdate = false;
     }
 }

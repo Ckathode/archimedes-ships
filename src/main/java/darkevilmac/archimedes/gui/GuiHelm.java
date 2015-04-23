@@ -3,8 +3,8 @@ package darkevilmac.archimedes.gui;
 import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.blockitem.TileEntityHelm;
 import darkevilmac.archimedes.entity.ShipAssemblyInteractor;
-import darkevilmac.archimedes.network.MsgClientHelmAction;
-import darkevilmac.movingworld.network.advanced.MsgClientRenameShip;
+import darkevilmac.archimedes.network.ClientHelmActionMessage;
+import darkevilmac.archimedes.network.ClientRenameShipMessage;
 import darkevilmac.movingworld.chunk.AssembleResult;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
@@ -66,7 +66,7 @@ public class GuiHelm extends GuiContainer {
         txtShipName.setVisible(true);
         txtShipName.setCanLoseFocus(false);
         txtShipName.setTextColor(0xFFFFFF);
-        txtShipName.setText(tileEntity.getShipInfo().getName());
+        txtShipName.setText(tileEntity.getInfo().getName());
     }
 
     @Override
@@ -205,28 +205,28 @@ public class GuiHelm extends GuiContainer {
         if (button == btnRename) {
             if (txtShipName.isFocused()) {
                 btnRename.displayString = StatCollector.translateToLocal("gui.shipstatus.rename");
-                tileEntity.getShipInfo().setName(txtShipName.getText());
+                tileEntity.getInfo().setName(txtShipName.getText());
                 txtShipName.setFocused(false);
                 //txtShipName.setEnableBackgroundDrawing(false);
 
-                MsgClientRenameShip msg = new MsgClientRenameShip(tileEntity, tileEntity.getShipInfo().getName());
-                ArchimedesShipMod.instance.pipeline.sendToServer(msg);
+                ClientRenameShipMessage msg = new ClientRenameShipMessage(tileEntity, tileEntity.getInfo().getName());
+                ArchimedesShipMod.instance.network.sendToServer(msg);
             } else {
                 btnRename.displayString = StatCollector.translateToLocal("gui.shipstatus.done");
                 txtShipName.setFocused(true);
                 //txtShipName.setEnableBackgroundDrawing(true);
             }
         } else if (button == btnAssemble) {
-            MsgClientHelmAction msg = new MsgClientHelmAction(tileEntity, 0);
-            ArchimedesShipMod.instance.pipeline.sendToServer(msg);
+            ClientHelmActionMessage msg = new ClientHelmActionMessage(tileEntity, 0);
+            ArchimedesShipMod.instance.network.sendToServer(msg);
             tileEntity.setAssembleResult(null);
             busyCompiling = true;
         } else if (button == btnUndo) {
-            MsgClientHelmAction msg = new MsgClientHelmAction(tileEntity, 2);
-            ArchimedesShipMod.instance.pipeline.sendToServer(msg);
+            ClientHelmActionMessage msg = new ClientHelmActionMessage(tileEntity, 2);
+            ArchimedesShipMod.instance.network.sendToServer(msg);
         } else if (button == btnMount) {
-            MsgClientHelmAction msg = new MsgClientHelmAction(tileEntity, 1);
-            ArchimedesShipMod.instance.pipeline.sendToServer(msg);
+            ClientHelmActionMessage msg = new ClientHelmActionMessage(tileEntity, 1);
+            ArchimedesShipMod.instance.network.sendToServer(msg);
         }
     }
 
