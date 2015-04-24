@@ -109,14 +109,14 @@ public class GuiHelm extends GuiContainer {
         int rtes;
         float rmass;
 
-        if (result == null || (result != null && result.assemblyInteractor != null && !(result.assemblyInteractor instanceof ShipAssemblyInteractor))) {
+        if (result == null || (result != null && result.assemblyInteractor == null) || (result != null && result.assemblyInteractor != null && !(result.assemblyInteractor instanceof ShipAssemblyInteractor))) {
             rcode = busyCompiling ? AssembleResult.RESULT_BUSY_COMPILING : AssembleResult.RESULT_NONE;
             rblocks = rballoons = rtes = 0;
             rmass = 0f;
         } else {
             rcode = result.getCode();
             rblocks = result.getBlockCount();
-            rballoons = ((ShipAssemblyInteractor) result.assemblyInteractor).getBalloonCount();
+            rballoons = tileEntity.interactor.getBalloonCount();
             rtes = result.getTileEntityCount();
             rmass = result.getMass();
             if (rcode != AssembleResult.RESULT_NONE) {

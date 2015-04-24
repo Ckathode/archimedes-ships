@@ -4,11 +4,11 @@ import darkevilmac.archimedes.blockitem.TileEntityHelm;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
 
 public class ClientRenameShipMessage extends ArchimedesShipsMessage {
     public TileEntityHelm tileEntity;
     public String newName;
+    int x, y, z;
 
     public ClientRenameShipMessage() {
         tileEntity = null;
@@ -34,11 +34,9 @@ public class ClientRenameShipMessage extends ArchimedesShipsMessage {
         byte[] ab = new byte[buf.readShort()];
         buf.readBytes(ab);
         newName = new String(ab);
-
-        TileEntity te = player.worldObj.getTileEntity(buf.readInt(), buf.readInt(), buf.readInt());
-        if (te instanceof TileEntityHelm) {
-            tileEntity = (TileEntityHelm) te;
-        }
+        x = buf.readInt();
+        y = buf.readInt();
+        z = buf.readInt();
     }
 
     @Override
@@ -47,8 +45,10 @@ public class ClientRenameShipMessage extends ArchimedesShipsMessage {
 
     @Override
     public void handleServerSide(EntityPlayer player) {
-        if (tileEntity != null) {
+        if (player.worldObj.getTileEntity(x, y, z) != null && player.worldObj.getTileEntity(x, y, z) instanceof TileEntityHelm) {
+            tileEntity = (TileEntityHelm) player.worldObj.getTileEntity(x, y, z);
             tileEntity.getInfo().setName(newName);
+            System.out.println(player.worldObj.isRemote);
         }
     }
 }

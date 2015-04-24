@@ -1,10 +1,11 @@
 package darkevilmac.archimedes.blockitem;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.entity.EntityParachute;
 import darkevilmac.archimedes.entity.EntityShip;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import darkevilmac.movingworld.block.BlockMovingWorldMarker;
 import darkevilmac.movingworld.entity.EntityMovingWorldAttachment;
 import darkevilmac.movingworld.util.RotationHelper;
 import net.minecraft.block.Block;
@@ -55,6 +56,7 @@ public class BlockHelm extends BlockDirectional implements IEntitySelector, ITil
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityliving, ItemStack itemstack) {
         int dir = Math.round(entityliving.rotationYaw / 90F) & 3;
         world.setBlockMetadataWithNotify(x, y, z, dir, 3);
+        BlockMovingWorldMarker.onPlacedBy(world, x, y, z, entityliving, itemstack);
     }
 
     @Override

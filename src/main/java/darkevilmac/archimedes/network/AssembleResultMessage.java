@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public class AssembleResultMessage extends ArchimedesShipsMessage {
     public AssembleResult result;
+    public ShipAssemblyInteractor interactor;
     public boolean prevFlag;
 
     public AssembleResultMessage() {
@@ -31,7 +32,7 @@ public class AssembleResultMessage extends ArchimedesShipsMessage {
             buf.writeInt(result.getBlockCount());
             buf.writeInt(result.getTileEntityCount());
             buf.writeFloat(result.getMass());
-            buf.writeInt(((ShipAssemblyInteractor) result.assemblyInteractor).getBalloonCount());
+            result.assemblyInteractor.toByteBuf(buf);
         }
     }
 
@@ -39,7 +40,6 @@ public class AssembleResultMessage extends ArchimedesShipsMessage {
     public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf, EntityPlayer player) {
         prevFlag = buf.readBoolean();
         result = new AssembleResult(buf);
-        result.assemblyInteractor = new ShipAssemblyInteractor().fromByteBuf(buf);
     }
 
     @Override
@@ -47,8 +47,10 @@ public class AssembleResultMessage extends ArchimedesShipsMessage {
         if (player.openContainer instanceof ContainerHelm) {
             if (prevFlag) {
                 ((ContainerHelm) player.openContainer).tileEntity.setPrevAssembleResult(result);
+                ((ContainerHelm) player.openContainer).tileEntity.interactor = (ShipAssemblyInteractor) result.assemblyInteractor;
             } else {
                 ((ContainerHelm) player.openContainer).tileEntity.setAssembleResult(result);
+                ((ContainerHelm) player.openContainer).tileEntity.interactor = (ShipAssemblyInteractor) result.assemblyInteractor;
             }
         }
     }

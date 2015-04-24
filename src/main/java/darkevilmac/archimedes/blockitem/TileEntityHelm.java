@@ -14,17 +14,23 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 
 public class TileEntityHelm extends TileMovingWorldMarkingBlock {
+    public ShipAssemblyInteractor interactor;
     private EntityShip activeShip;
     private AssembleResult assembleResult, prevResult;
     private MovingWorldInfo info;
-    private ShipAssemblyInteractor interactor;
 
     public TileEntityHelm() {
         super();
-        info = new MovingWorldInfo();
         activeShip = null;
         assembleResult = prevResult = null;
     }
+
+    @Override
+    public void assembledMovingWorld(EntityPlayer player, boolean returnVal) {
+        sendAssembleResult(player, false);
+        sendAssembleResult(player, true);
+    }
+
 
     @Override
     public boolean canUpdate() {
@@ -56,7 +62,9 @@ public class TileEntityHelm extends TileMovingWorldMarkingBlock {
 
     @Override
     public MovingWorldInfo getInfo() {
-        return this.info;
+        if (this.info == null)
+            this.info = new MovingWorldInfo();
+        return info;
     }
 
     @Override

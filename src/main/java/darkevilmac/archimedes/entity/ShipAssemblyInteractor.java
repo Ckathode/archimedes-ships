@@ -1,11 +1,14 @@
 package darkevilmac.archimedes.entity;
 
 import darkevilmac.archimedes.ArchimedesShipMod;
+import darkevilmac.archimedes.blockitem.TileEntityHelm;
 import darkevilmac.movingworld.chunk.LocatedBlock;
 import darkevilmac.movingworld.chunk.MovingWorldAssemblyInteractor;
 import darkevilmac.movingworld.entity.MovingWorldCapabilities;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
@@ -16,9 +19,17 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
     }
 
     @Override
+    public void toByteBuf(ByteBuf byteBuf) {
+        byteBuf.writeInt(getBalloonCount());
+        System.out.println("ToBuf");
+    }
+
+    @Override
     public MovingWorldAssemblyInteractor fromByteBuf(ByteBuf buf) {
         ShipAssemblyInteractor mov = new ShipAssemblyInteractor();
         mov.setBalloonCount(buf.readInt());
+        System.out.println("FromBUf");
+
         return mov;
     }
 
@@ -35,6 +46,22 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
             balloonCount++;
         }
 
+    }
+
+    @Override
+    public boolean isBlockMovingWorldMarker(Block block) {
+        if (block != null)
+            return block.getUnlocalizedName() == ArchimedesShipMod.blockMarkShip.getUnlocalizedName();
+        else
+            return false;
+    }
+
+    @Override
+    public boolean isTileMovingWorldMarker(TileEntity tile) {
+        if (tile != null)
+            return tile instanceof TileEntityHelm;
+        else
+            return false;
     }
 
     public int getBalloonCount() {
