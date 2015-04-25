@@ -135,14 +135,14 @@ public class EntityShip extends EntityMovingWorld {
 
                 double steer = ((EntityLivingBase) riddenByEntity).moveStrafing;
 
-                motionYaw += steer * BASE_TURN_SPEED * capabilities.getRotationMultiplier() * ArchimedesShipMod.instance.modConfig.turnSpeed;
+                motionYaw += steer * BASE_TURN_SPEED * capabilities.getRotationMult() * ArchimedesShipMod.instance.modConfig.turnSpeed;
 
                 float yaw = (float) Math.toRadians(180F - rotationYaw + frontDirection * 90F);
                 vec.xCoord = motionX;
                 vec.zCoord = motionZ;
                 vec.rotateAroundY(yaw);
                 vec.xCoord *= 0.9D;
-                vec.zCoord -= throttle * BASE_FORWARD_SPEED * capabilities.getSpeedMultiplier();
+                vec.zCoord -= throttle * BASE_FORWARD_SPEED * capabilities.getSpeedMult();
                 vec.rotateAroundY(-yaw);
 
                 motionX = vec.xCoord;
@@ -175,9 +175,14 @@ public class EntityShip extends EntityMovingWorld {
                 } else {
                     i = -1;
                 }
-                motionY += i * BASE_LIFT_SPEED * capabilities.getLiftMultiplier();
+                motionY += i * BASE_LIFT_SPEED * capabilities.getLiftMult();
             }
         }
+    }
+
+    @Override
+    public boolean isFlying() {
+        return capabilities.canFly() && (isFlying || controller.getShipControl() == 2);
     }
 
     @Override
