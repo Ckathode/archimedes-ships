@@ -16,7 +16,6 @@ import net.minecraft.entity.player.EntityPlayer;
 
 @SideOnly(Side.CLIENT)
 public class ShipKeyHandler {
-    int ticks = 0;
     private ArchimedesConfig config;
     private boolean kbShipGuiPrevState, kbDisassemblePrevState;
 
@@ -33,15 +32,10 @@ public class ShipKeyHandler {
     @SubscribeEvent
     public void updateControl(TickEvent e) {
         if (e.phase == TickEvent.Phase.START) {
-            ticks++;
             if (e.side.isClient()) {
                 EntityPlayer player = Minecraft.getMinecraft().thePlayer;
                 if (player != null) {
-                    if (player.ridingEntity != null && ticks % 600 == 0)
-                        System.out.println(player.ridingEntity.toString());
                     if (player.ridingEntity != null && player.ridingEntity instanceof EntityShip) {
-                        if( ticks % 600 == 0)
-                        System.out.println("It worked.");
                         if (config.kbShipInv.getIsKeyPressed() && !kbShipGuiPrevState) {
                             ClientOpenGuiMessage msg = new ClientOpenGuiMessage(2);
                             ArchimedesShipMod.instance.network.sendToServer(msg);

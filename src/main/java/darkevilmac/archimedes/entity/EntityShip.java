@@ -75,6 +75,11 @@ public class EntityShip extends EntityMovingWorld {
     }
 
     @Override
+    protected MovingWorldAssemblyInteractor getNewAssemblyInteractor() {
+        return new ShipAssemblyInteractor();
+    }
+
+    @Override
     public void writeMovingWorldNBT(NBTTagCompound compound) {
     }
 
