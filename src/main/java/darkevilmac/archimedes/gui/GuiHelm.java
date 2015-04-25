@@ -116,7 +116,7 @@ public class GuiHelm extends GuiContainer {
         } else {
             rcode = result.getCode();
             rblocks = result.getBlockCount();
-            rballoons = tileEntity.interactor.getBalloonCount();
+            rballoons = ((ShipAssemblyInteractor) result.assemblyInteractor).getBalloonCount();
             rtes = result.getTileEntityCount();
             rmass = result.getMass();
             if (rcode != AssembleResult.RESULT_NONE) {

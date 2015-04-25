@@ -1,5 +1,6 @@
 package darkevilmac.archimedes.network;
 
+import cpw.mods.fml.relauncher.Side;
 import darkevilmac.archimedes.ArchimedesShipMod;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -17,12 +18,12 @@ public class ClientOpenGuiMessage extends ArchimedesShipsMessage {
     }
 
     @Override
-    public void encodeInto(ChannelHandlerContext ctx, ByteBuf buf) {
+    public void encodeInto(ChannelHandlerContext ctx, ByteBuf buf, Side side) {
         buf.writeInt(guiID);
     }
 
     @Override
-    public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf, EntityPlayer player) {
+    public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf, EntityPlayer player, Side side) {
         guiID = buf.readInt();
     }
 

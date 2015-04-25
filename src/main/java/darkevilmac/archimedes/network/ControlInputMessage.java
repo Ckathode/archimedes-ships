@@ -1,5 +1,6 @@
 package darkevilmac.archimedes.network;
 
+import cpw.mods.fml.relauncher.Side;
 import darkevilmac.archimedes.entity.EntityShip;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -19,14 +20,14 @@ public class ControlInputMessage extends ShipMessage {
     }
 
     @Override
-    public void encodeInto(ChannelHandlerContext ctx, ByteBuf buf) {
-        super.encodeInto(ctx, buf);
+    public void encodeInto(ChannelHandlerContext ctx, ByteBuf buf, Side side) {
+        super.encodeInto(ctx, buf, side);
         buf.writeByte(control);
     }
 
     @Override
-    public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf, EntityPlayer player) {
-        super.decodeInto(ctx, buf, player);
+    public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf, EntityPlayer player, Side side) {
+        super.decodeInto(ctx, buf, player, side);
         control = buf.readByte();
     }
 

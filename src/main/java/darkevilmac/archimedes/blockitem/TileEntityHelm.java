@@ -14,15 +14,13 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 
 public class TileEntityHelm extends TileMovingWorldMarkingBlock {
-    public ShipAssemblyInteractor interactor;
+    private ShipAssemblyInteractor interactor;
     private EntityShip activeShip;
-    private AssembleResult assembleResult, prevResult;
     private MovingWorldInfo info;
 
     public TileEntityHelm() {
         super();
         activeShip = null;
-        assembleResult = prevResult = null;
     }
 
     @Override
@@ -61,6 +59,11 @@ public class TileEntityHelm extends TileMovingWorldMarkingBlock {
     }
 
     @Override
+    public void setInteractor(MovingWorldAssemblyInteractor interactor) {
+        this.interactor = (ShipAssemblyInteractor) interactor;
+    }
+
+    @Override
     public MovingWorldInfo getInfo() {
         if (this.info == null)
             this.info = new MovingWorldInfo();
@@ -96,13 +99,18 @@ public class TileEntityHelm extends TileMovingWorldMarkingBlock {
         sendAssembleResult(player, true);
     }
 
+    @Override
+    public MovingWorldAssemblyInteractor getNewAssemblyInteractor() {
+        return new ShipAssemblyInteractor();
+    }
+
     public void sendAssembleResult(EntityPlayer player, boolean prev) {
         if (!worldObj.isRemote) {
             AssembleResult res;
             if (prev) {
-                res = prevResult;
+                res = getPrevAssembleResult();
             } else {
-                res = assembleResult;
+                res = getAssembleResult();
             }
             AssembleResultMessage message = new AssembleResultMessage(res, prev);
             ArchimedesShipMod.instance.network.sendTo(message, (EntityPlayerMP) player);

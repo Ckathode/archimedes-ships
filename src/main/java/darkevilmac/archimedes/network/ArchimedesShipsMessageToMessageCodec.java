@@ -34,7 +34,7 @@ public class ArchimedesShipsMessageToMessageCodec extends FMLIndexedMessageToMes
 
     @Override
     public void encodeInto(ChannelHandlerContext ctx, ArchimedesShipsMessage msg, ByteBuf target) throws Exception {
-        msg.encodeInto(ctx, target);
+        msg.encodeInto(ctx, target, FMLCommonHandler.instance().getSide());
     }
 
     @Override
@@ -43,11 +43,11 @@ public class ArchimedesShipsMessageToMessageCodec extends FMLIndexedMessageToMes
         switch (FMLCommonHandler.instance().getEffectiveSide()) {
             case CLIENT:
                 player = this.getClientPlayer();
-                msg.decodeInto(ctx, source, player);
+                msg.decodeInto(ctx, source, player, FMLCommonHandler.instance().getSide());
                 break;
             case SERVER:
                 player = getServerPlayer(ctx);
-                msg.decodeInto(ctx, source, player);
+                msg.decodeInto(ctx, source, player, FMLCommonHandler.instance().getSide());
                 break;
         }
     }

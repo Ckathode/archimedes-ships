@@ -1,5 +1,6 @@
 package darkevilmac.archimedes.network;
 
+import cpw.mods.fml.relauncher.Side;
 import darkevilmac.archimedes.entity.ShipAssemblyInteractor;
 import darkevilmac.archimedes.gui.ContainerHelm;
 import darkevilmac.movingworld.chunk.AssembleResult;
@@ -23,7 +24,7 @@ public class AssembleResultMessage extends ArchimedesShipsMessage {
     }
 
     @Override
-    public void encodeInto(ChannelHandlerContext ctx, ByteBuf buf) {
+    public void encodeInto(ChannelHandlerContext ctx, ByteBuf buf, Side side) {
         buf.writeBoolean(prevFlag);
         if (result == null) {
             buf.writeByte(AssembleResult.RESULT_NONE);
@@ -37,9 +38,13 @@ public class AssembleResultMessage extends ArchimedesShipsMessage {
     }
 
     @Override
-    public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf, EntityPlayer player) {
-        prevFlag = buf.readBoolean();
-        result = new AssembleResult(buf);
+    public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf, EntityPlayer player, Side side) {
+        if (side.isClient()) {
+            prevFlag = buf.readBoolean();
+            byte resultCode = buf.readByte();
+            result = new AssembleResult(resultCode, buf);
+            result.assemblyInteractor = new ShipAssemblyInteractor().fromByteBuf(resultCode, buf);
+        }
     }
 
     @Override
@@ -47,10 +52,10 @@ public class AssembleResultMessage extends ArchimedesShipsMessage {
         if (player.openContainer instanceof ContainerHelm) {
             if (prevFlag) {
                 ((ContainerHelm) player.openContainer).tileEntity.setPrevAssembleResult(result);
-                ((ContainerHelm) player.openContainer).tileEntity.interactor = (ShipAssemblyInteractor) result.assemblyInteractor;
+                ((ContainerHelm) player.openContainer).tileEntity.getPrevAssembleResult().assemblyInteractor = result.assemblyInteractor;
             } else {
                 ((ContainerHelm) player.openContainer).tileEntity.setAssembleResult(result);
-                ((ContainerHelm) player.openContainer).tileEntity.interactor = (ShipAssemblyInteractor) result.assemblyInteractor;
+                ((ContainerHelm) player.openContainer).tileEntity.getAssembleResult().assemblyInteractor = result.assemblyInteractor;
             }
         }
     }

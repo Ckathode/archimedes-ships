@@ -1,5 +1,6 @@
 package darkevilmac.archimedes.network;
 
+import cpw.mods.fml.relauncher.Side;
 import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.entity.EntityShip;
 import io.netty.buffer.ByteBuf;
@@ -24,12 +25,12 @@ public abstract class ShipMessage extends ArchimedesShipsMessage {
 
 
     @Override
-    public void encodeInto(ChannelHandlerContext ctx, ByteBuf buf) {
+    public void encodeInto(ChannelHandlerContext ctx, ByteBuf buf, Side side) {
         buf.writeInt(ship.getEntityId());
     }
 
     @Override
-    public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf, EntityPlayer player) {
+    public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf, EntityPlayer player, Side side) {
         int entityID = buf.readInt();
         Entity entity = player.worldObj.getEntityByID(entityID);
         if (entity instanceof EntityShip) {

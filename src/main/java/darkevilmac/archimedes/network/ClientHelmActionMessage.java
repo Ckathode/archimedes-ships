@@ -1,5 +1,6 @@
 package darkevilmac.archimedes.network;
 
+import cpw.mods.fml.relauncher.Side;
 import darkevilmac.archimedes.blockitem.TileEntityHelm;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -22,7 +23,7 @@ public class ClientHelmActionMessage extends ArchimedesShipsMessage {
     }
 
     @Override
-    public void encodeInto(ChannelHandlerContext ctx, ByteBuf buf) {
+    public void encodeInto(ChannelHandlerContext ctx, ByteBuf buf, Side side) {
         buf.writeByte(actionID);
         buf.writeInt(tileEntity.xCoord);
         buf.writeInt(tileEntity.yCoord);
@@ -30,7 +31,7 @@ public class ClientHelmActionMessage extends ArchimedesShipsMessage {
     }
 
     @Override
-    public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf, EntityPlayer player) {
+    public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf, EntityPlayer player, Side side) {
         actionID = buf.readByte();
         x = buf.readInt();
         y = buf.readInt();

@@ -2,6 +2,7 @@ package darkevilmac.archimedes.entity;
 
 import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.blockitem.TileEntityHelm;
+import darkevilmac.movingworld.chunk.AssembleResult;
 import darkevilmac.movingworld.chunk.LocatedBlock;
 import darkevilmac.movingworld.chunk.MovingWorldAssemblyInteractor;
 import darkevilmac.movingworld.entity.MovingWorldCapabilities;
@@ -20,17 +21,23 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
 
     @Override
     public void toByteBuf(ByteBuf byteBuf) {
+        System.out.println("ToBuf From ShipAssemblyInteractor");
+
         byteBuf.writeInt(getBalloonCount());
-        System.out.println("ToBuf");
     }
 
     @Override
-    public MovingWorldAssemblyInteractor fromByteBuf(ByteBuf buf) {
-        ShipAssemblyInteractor mov = new ShipAssemblyInteractor();
-        mov.setBalloonCount(buf.readInt());
-        System.out.println("FromBUf");
+    public MovingWorldAssemblyInteractor fromByteBuf(byte resultCode, ByteBuf buf) {
+        System.out.println("FromBug From ShipAssemblyInteractor");
 
-        return mov;
+        if (resultCode == AssembleResult.RESULT_NONE) {
+            return new ShipAssemblyInteractor();
+        }
+
+        ShipAssemblyInteractor assemblyInteractor = new ShipAssemblyInteractor();
+        assemblyInteractor.setBalloonCount(buf.readInt());
+
+        return assemblyInteractor;
     }
 
     @Override
@@ -42,7 +49,7 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
 
     @Override
     public void blockAssembled(LocatedBlock locatedBlock) {
-        if (locatedBlock.block.getUnlocalizedName() == ArchimedesShipMod.blockBalloon.getUnlocalizedName()) {
+        if (locatedBlock.block == ArchimedesShipMod.blockBalloon) {
             balloonCount++;
         }
 

@@ -1,5 +1,6 @@
 package darkevilmac.archimedes.network;
 
+import cpw.mods.fml.relauncher.Side;
 import darkevilmac.archimedes.blockitem.TileEntityHelm;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -21,7 +22,7 @@ public class ClientRenameShipMessage extends ArchimedesShipsMessage {
     }
 
     @Override
-    public void encodeInto(ChannelHandlerContext ctx, ByteBuf buf) {
+    public void encodeInto(ChannelHandlerContext ctx, ByteBuf buf, Side side) {
         buf.writeShort(newName.length());
         buf.writeBytes(newName.getBytes());
         buf.writeInt(tileEntity.xCoord);
@@ -30,7 +31,7 @@ public class ClientRenameShipMessage extends ArchimedesShipsMessage {
     }
 
     @Override
-    public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf, EntityPlayer player) {
+    public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf, EntityPlayer player, Side side) {
         byte[] ab = new byte[buf.readShort()];
         buf.readBytes(ab);
         newName = new String(ab);
@@ -48,7 +49,6 @@ public class ClientRenameShipMessage extends ArchimedesShipsMessage {
         if (player.worldObj.getTileEntity(x, y, z) != null && player.worldObj.getTileEntity(x, y, z) instanceof TileEntityHelm) {
             tileEntity = (TileEntityHelm) player.worldObj.getTileEntity(x, y, z);
             tileEntity.getInfo().setName(newName);
-            System.out.println(player.worldObj.isRemote);
         }
     }
 }
