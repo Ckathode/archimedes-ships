@@ -1,11 +1,11 @@
 package darkevilmac.archimedes;
 
-import darkevilmac.archimedes.entity.EntityShip;
-import darkevilmac.movingworld.MovingWorld;
-import darkevilmac.movingworld.network.RequestMovingWorldDataMessage;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import darkevilmac.archimedes.entity.EntityShip;
+import darkevilmac.movingworld.MovingWorld;
+import darkevilmac.movingworld.network.RequestMovingWorldDataMessage;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 
 @SideOnly(Side.CLIENT)

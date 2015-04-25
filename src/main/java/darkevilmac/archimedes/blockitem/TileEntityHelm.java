@@ -87,8 +87,10 @@ public class TileEntityHelm extends TileMovingWorldMarkingBlock {
 
     @Override
     public void mountedMovingWorld(EntityPlayer player, EntityMovingWorld movingWorld, int stage) {
-        if (stage == 1) {
-            sendAssembleResult(player, false);
+        switch (stage) {
+            case 1: {
+                sendAssembleResult(player, false);
+            }
         }
     }
 

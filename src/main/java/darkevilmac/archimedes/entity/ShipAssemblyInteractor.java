@@ -21,15 +21,11 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
 
     @Override
     public void toByteBuf(ByteBuf byteBuf) {
-        System.out.println("ToBuf From ShipAssemblyInteractor");
-
         byteBuf.writeInt(getBalloonCount());
     }
 
     @Override
     public MovingWorldAssemblyInteractor fromByteBuf(byte resultCode, ByteBuf buf) {
-        System.out.println("FromBug From ShipAssemblyInteractor");
-
         if (resultCode == AssembleResult.RESULT_NONE) {
             return new ShipAssemblyInteractor();
         }

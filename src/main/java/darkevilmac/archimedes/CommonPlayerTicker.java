@@ -1,9 +1,9 @@
 package darkevilmac.archimedes;
 
-import darkevilmac.archimedes.entity.EntityParachute;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
+import darkevilmac.archimedes.entity.EntityParachute;
 
 public class CommonPlayerTicker {
     @SubscribeEvent

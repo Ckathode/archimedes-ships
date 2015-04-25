@@ -1,7 +1,7 @@
 package darkevilmac.archimedes.render;
 
-import darkevilmac.archimedes.blockitem.BlockSeat;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import darkevilmac.archimedes.blockitem.BlockSeat;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;

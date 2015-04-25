@@ -29,13 +29,13 @@ public class TileEntityCrate extends TileEntity implements IMovingWorldTileEntit
     }
 
     @Override
-    public void setParentMovingWorld(EntityMovingWorld entityMovingWorld) {
-        setParentMovingWorld(entityMovingWorld,0,0,0);
+    public EntityShip getParentMovingWorld() {
+        return parentShip;
     }
 
     @Override
-    public EntityShip getParentMovingWorld() {
-        return parentShip;
+    public void setParentMovingWorld(EntityMovingWorld entityMovingWorld) {
+        setParentMovingWorld(entityMovingWorld, 0, 0, 0);
     }
 
     public boolean canCatchEntity() {

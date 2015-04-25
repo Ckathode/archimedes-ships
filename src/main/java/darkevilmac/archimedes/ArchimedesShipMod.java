@@ -9,12 +9,16 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import darkevilmac.archimedes.blockitem.*;
 import darkevilmac.archimedes.command.CommandASHelp;
 import darkevilmac.archimedes.command.CommandDisassembleNear;
 import darkevilmac.archimedes.command.CommandDisassembleShip;
 import darkevilmac.archimedes.command.CommandShipInfo;
+import darkevilmac.archimedes.entity.EntityParachute;
+import darkevilmac.archimedes.entity.EntitySeat;
+import darkevilmac.archimedes.entity.EntityShip;
 import darkevilmac.archimedes.network.ArchimedesShipsMessageToMessageCodec;
 import darkevilmac.archimedes.network.ArchimedesShipsPacketHandler;
 import darkevilmac.archimedes.network.NetworkUtil;
@@ -200,10 +204,10 @@ public class ArchimedesShipMod {
         registerBlocksAndItems();
 
 
-        //EntityRegistry.registerModEntity(EntityShip.class, "shipmod", 1, this, 64, modConfig.shipEntitySyncRate, true);
+        EntityRegistry.registerModEntity(EntityShip.class, "shipmod", 1, this, 64, modConfig.shipEntitySyncRate, true);
         //EntityRegistry.registerModEntity(EntityEntityAttachment.class, "attachment", 2, this, 64, 100, false);
-        //EntityRegistry.registerModEntity(EntitySeat.class, "attachment.seat", 3, this, 64, 100, false);
-        //EntityRegistry.registerModEntity(EntityParachute.class, "parachute", 4, this, 32, modConfig.shipEntitySyncRate, true);
+        EntityRegistry.registerModEntity(EntitySeat.class, "attachment.seat", 3, this, 64, 100, false);
+        EntityRegistry.registerModEntity(EntityParachute.class, "parachute", 4, this, 32, modConfig.shipEntitySyncRate, true);
 
         //In g/cm^3
         /*MaterialDensity.addDensity(Material.air, 0F);

@@ -18,10 +18,7 @@ public class RecipeBalloon implements IRecipe {
                 if (itemstack == null) continue;
                 if (itemstack.getItem() == Item.getItemFromBlock(Blocks.wool)) {
                     ItemStack itemstack1 = inventorycrafting.getStackInRowAndColumn(i, j + 1);
-                    if (itemstack1 != null && itemstack1.getItem() == Items.string) {
-                        return true;
-                    }
-                    return false;
+                    return itemstack1 != null && itemstack1.getItem() == Items.string;
                 }
                 return false;
             }

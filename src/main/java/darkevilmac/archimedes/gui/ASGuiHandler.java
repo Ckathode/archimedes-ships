@@ -1,9 +1,9 @@
 package darkevilmac.archimedes.gui;
 
+import cpw.mods.fml.common.network.IGuiHandler;
 import darkevilmac.archimedes.blockitem.TileEntityEngine;
 import darkevilmac.archimedes.blockitem.TileEntityHelm;
 import darkevilmac.archimedes.entity.EntityShip;
-import cpw.mods.fml.common.network.IGuiHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;

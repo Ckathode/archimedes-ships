@@ -2,6 +2,7 @@ package darkevilmac.archimedes.entity;
 
 import darkevilmac.archimedes.blockitem.TileEntityEngine;
 import darkevilmac.movingworld.entity.EntityMovingWorld;
+import darkevilmac.movingworld.entity.EntityMovingWorldAttachment;
 import darkevilmac.movingworld.entity.MovingWorldCapabilities;
 import net.minecraft.entity.Entity;
 
@@ -10,6 +11,20 @@ import java.util.List;
 public class ShipCapabilities extends MovingWorldCapabilities {
 
     private final EntityShip ship;
+    public float speedMultiplier, rotationMultiplier, liftMultiplier;
+    public float brakeMult;
+    private int balloonCount;
+    private int floaters;
+    private int blockCount;
+    private float mass;
+    private List<EntitySeat> seats;
+    private List<TileEntityEngine> engines;
+    private float enginePower;
+
+    public ShipCapabilities(EntityMovingWorld movingWorld, boolean autoCalcMass) {
+        super(movingWorld, autoCalcMass);
+        ship = (EntityShip) movingWorld;
+    }
 
     public float getEnginePower() {
         return enginePower;
@@ -76,13 +91,30 @@ public class ShipCapabilities extends MovingWorldCapabilities {
         return blockCount;
     }
 
-    @Override
-    public boolean mountEntity(Entity entity) {
-        return false;
-    }
-
     public void setBlockCount(int blockCount) {
         this.blockCount = blockCount;
+    }
+
+    @Override
+    public boolean mountEntity(Entity entity) {
+        if (seats == null)
+        {
+            return false;
+        }
+
+        for (EntityMovingWorldAttachment seat : seats)
+        {
+            if (seat.riddenByEntity == null)
+            {
+                entity.mountEntity(seat);
+                return true;
+            } else if (seat.riddenByEntity == entity)
+            {
+                seat.mountEntity(null);
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -109,21 +141,6 @@ public class ShipCapabilities extends MovingWorldCapabilities {
 
     public void setEngines(List<TileEntityEngine> engines) {
         this.engines = engines;
-    }
-
-    public float speedMultiplier, rotationMultiplier, liftMultiplier;
-    public float brakeMult;
-    private int balloonCount;
-    private int floaters;
-    private int blockCount;
-    private float mass;
-    private List<EntitySeat> seats;
-    private List<TileEntityEngine> engines;
-    private float enginePower;
-
-    public ShipCapabilities(EntityMovingWorld movingWorld, boolean autoCalcMass) {
-        super(movingWorld, autoCalcMass);
-        ship = (EntityShip) movingWorld;
     }
 
     public void spawnSeatEntities() {

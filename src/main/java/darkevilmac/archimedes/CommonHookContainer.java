@@ -1,7 +1,7 @@
 package darkevilmac.archimedes;
 
-import darkevilmac.archimedes.blockitem.TileEntityCrate;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import darkevilmac.archimedes.blockitem.TileEntityCrate;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;

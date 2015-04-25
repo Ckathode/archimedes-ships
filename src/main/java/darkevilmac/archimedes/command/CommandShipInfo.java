@@ -33,9 +33,9 @@ public class CommandShipInfo extends CommandBase {
             icommandsender.addChatMessage(new ChatComponentText(String.format(Locale.ENGLISH, "Airship: %b", ship.getCapabilities().canFly())));
             icommandsender.addChatMessage(new ChatComponentText(String.format(Locale.ENGLISH, "Position: %.2f, %.2f, %.2f", ship.posX, ship.posY, ship.posZ)));
             icommandsender.addChatMessage(new ChatComponentText(String.format(Locale.ENGLISH, "Speed: %.2f km/h", ship.getHorizontalVelocity() * 20 * 3.6F)));
-            float f = 100F * ((ShipCapabilities)ship.getCapabilities()).getBalloonCount() / ship.getCapabilities().getBlockCount();
+            float f = 100F * ((ShipCapabilities) ship.getCapabilities()).getBalloonCount() / ship.getCapabilities().getBlockCount();
             icommandsender.addChatMessage(new ChatComponentText(String.format(Locale.ENGLISH, "Block count: %d", ship.getCapabilities().getBlockCount())));
-            icommandsender.addChatMessage(new ChatComponentText(String.format(Locale.ENGLISH, "Balloon count: %d", ((ShipCapabilities)ship.getCapabilities()).getBalloonCount())));
+            icommandsender.addChatMessage(new ChatComponentText(String.format(Locale.ENGLISH, "Balloon count: %d", ((ShipCapabilities) ship.getCapabilities()).getBalloonCount())));
             icommandsender.addChatMessage(new ChatComponentText(String.format(Locale.ENGLISH, "Balloon percentage: %.0f%%", f)));
             icommandsender.addChatMessage(new ChatComponentText(""));
             return;

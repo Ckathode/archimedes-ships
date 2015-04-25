@@ -1,10 +1,8 @@
 package darkevilmac.archimedes.control;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import darkevilmac.archimedes.ArchimedesConfig;
@@ -13,9 +11,12 @@ import darkevilmac.archimedes.entity.EntityShip;
 import darkevilmac.archimedes.network.ClientOpenGuiMessage;
 import darkevilmac.movingworld.MovingWorld;
 import darkevilmac.movingworld.network.MovingWorldClientActionMessage;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 
 @SideOnly(Side.CLIENT)
 public class ShipKeyHandler {
+    int ticks = 0;
     private ArchimedesConfig config;
     private boolean kbShipGuiPrevState, kbDisassemblePrevState;
 
@@ -30,26 +31,39 @@ public class ShipKeyHandler {
     }
 
     @SubscribeEvent
-    public void updateControl(PlayerTickEvent e) {
-        if (e.phase == TickEvent.Phase.START && e.side == Side.CLIENT && e.player == FMLClientHandler.instance().getClientPlayerEntity() && e.player.ridingEntity instanceof EntityShip) {
-            if (config.kbShipInv.getIsKeyPressed() && !kbShipGuiPrevState) {
-                ClientOpenGuiMessage msg = new ClientOpenGuiMessage(2);
-                ArchimedesShipMod.instance.network.sendToServer(msg);
-            }
-            kbShipGuiPrevState = config.kbShipInv.getIsKeyPressed();
+    public void updateControl(TickEvent e) {
+        if (e.phase == TickEvent.Phase.START) {
+            ticks++;
+            if (e.side.isClient()) {
+                EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+                if (player != null) {
+                    if (player.ridingEntity != null && ticks % 600 == 0)
+                        System.out.println(player.ridingEntity.toString());
+                    if (player.ridingEntity != null && player.ridingEntity instanceof EntityShip) {
+                        if( ticks % 600 == 0)
+                        System.out.println("It worked.");
+                        if (config.kbShipInv.getIsKeyPressed() && !kbShipGuiPrevState) {
+                            ClientOpenGuiMessage msg = new ClientOpenGuiMessage(2);
+                            ArchimedesShipMod.instance.network.sendToServer(msg);
+                        }
+                        kbShipGuiPrevState = config.kbShipInv.getIsKeyPressed();
 
-            if (config.kbDisassemble.getIsKeyPressed() && !kbDisassemblePrevState) {
-                MovingWorldClientActionMessage msg = new MovingWorldClientActionMessage((EntityShip) e.player.ridingEntity, MovingWorldClientActionMessage.Action.DISASSEMBLE);
-                MovingWorld.instance.network.sendToServer(msg);
-            }
-            kbDisassemblePrevState = config.kbDisassemble.getIsKeyPressed();
+                        if (config.kbDisassemble.getIsKeyPressed() && !kbDisassemblePrevState) {
+                            MovingWorldClientActionMessage msg = new MovingWorldClientActionMessage((EntityShip) player.ridingEntity, MovingWorldClientActionMessage.Action.DISASSEMBLE);
+                            MovingWorld.instance.network.sendToServer(msg);
+                        }
+                        kbDisassemblePrevState = config.kbDisassemble.getIsKeyPressed();
 
-            int c = getHeightControl();
-            EntityShip ship = (EntityShip) e.player.ridingEntity;
-            if (c != ship.getController().getShipControl()) {
-                ship.getController().updateControl(ship, e.player, c);
+                        int c = getHeightControl();
+                        EntityShip ship = (EntityShip) player.ridingEntity;
+                        if (c != ship.getController().getShipControl()) {
+                            ship.getController().updateControl(ship, player, c);
+                        }
+                    }
+                }
             }
         }
+
     }
 
     public int getHeightControl() {

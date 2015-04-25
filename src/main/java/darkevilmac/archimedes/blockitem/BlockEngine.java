@@ -1,8 +1,8 @@
 package darkevilmac.archimedes.blockitem;
 
-import darkevilmac.archimedes.ArchimedesShipMod;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import darkevilmac.archimedes.ArchimedesShipMod;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
