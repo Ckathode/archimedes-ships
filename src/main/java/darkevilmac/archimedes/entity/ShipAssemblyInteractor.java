@@ -29,11 +29,17 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
         if (resultCode == AssembleResult.RESULT_NONE) {
             return new ShipAssemblyInteractor();
         }
+        int balloons = buf.readInt();
 
         ShipAssemblyInteractor assemblyInteractor = new ShipAssemblyInteractor();
-        assemblyInteractor.setBalloonCount(buf.readInt());
+        assemblyInteractor.setBalloonCount(balloons);
 
         return assemblyInteractor;
+    }
+
+    @Override
+    public MovingWorldAssemblyInteractor fromByteBuf(ByteBuf buf) {
+        return fromByteBuf((byte) AssembleResult.RESULT_OK, buf);
     }
 
     @Override
@@ -76,11 +82,13 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
     }
 
     @Override
-    public void transferToCapabilities(MovingWorldCapabilities capabilities) {
+    public MovingWorldCapabilities transferToCapabilities(MovingWorldCapabilities capabilities) {
         if (capabilities != null && capabilities instanceof ShipCapabilities) {
             ShipCapabilities shipCapabilities = (ShipCapabilities) capabilities;
             shipCapabilities.setBalloonCount(balloonCount);
+            return shipCapabilities;
         }
+        return capabilities;
     }
 
     @Override

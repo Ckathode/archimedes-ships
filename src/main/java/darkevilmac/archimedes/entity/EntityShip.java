@@ -66,7 +66,14 @@ public class EntityShip extends EntityMovingWorld {
 
     @Override
     public MovingWorldCapabilities getCapabilities() {
-        return capabilities;
+        return this.capabilities == null ? new ShipCapabilities(this, true) : this.capabilities;
+    }
+
+    @Override
+    public void setCapabilities(MovingWorldCapabilities capabilities) {
+        if (capabilities != null && capabilities instanceof ShipCapabilities) {
+            this.capabilities = (ShipCapabilities) capabilities;
+        }
     }
 
     @Override
@@ -75,7 +82,7 @@ public class EntityShip extends EntityMovingWorld {
     }
 
     @Override
-    protected MovingWorldAssemblyInteractor getNewAssemblyInteractor() {
+    public MovingWorldAssemblyInteractor getNewAssemblyInteractor() {
         return new ShipAssemblyInteractor();
     }
 
@@ -206,12 +213,13 @@ public class EntityShip extends EntityMovingWorld {
 
     @Override
     public MovingWorldAssemblyInteractor getAssemblyInteractor() {
-        return null;
+        return shipAssemblyInteractor;
     }
 
     @Override
     public void setAssemblyInteractor(MovingWorldAssemblyInteractor interactor) {
-        shipAssemblyInteractor = (ShipAssemblyInteractor) interactor;
+        //shipAssemblyInteractor = (ShipAssemblyInteractor) interactor;
+        //interactor.transferToCapabilities(getCapabilities());
     }
 
     public void fillAirBlocks(Set<ChunkPosition> set, int x, int y, int z) {

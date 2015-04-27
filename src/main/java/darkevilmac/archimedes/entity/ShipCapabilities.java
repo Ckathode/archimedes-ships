@@ -7,6 +7,7 @@ import darkevilmac.movingworld.entity.EntityMovingWorld;
 import darkevilmac.movingworld.entity.MovingWorldCapabilities;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
 import java.util.ArrayList;
@@ -60,7 +61,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
 
     @Override
     public boolean canFly() {
-        return ArchimedesShipMod.instance.modConfig.enableAirShips && balloonCount >= blockCount * ArchimedesShipMod.instance.modConfig.flyBalloonRatio;
+        return ArchimedesShipMod.instance.modConfig.enableAirShips && getBalloonCount() >= blockCount * ArchimedesShipMod.instance.modConfig.flyBalloonRatio;
     }
 
     @Override
@@ -74,6 +75,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
 
     public void setBalloonCount(int balloonCount) {
         this.balloonCount = balloonCount;
+        System.out.println("BalloonCount set on" + ship.worldObj.isRemote);
     }
 
     public int getFloaterCount() {
@@ -109,7 +111,11 @@ public class ShipCapabilities extends MovingWorldCapabilities {
         blockCount++;
         mass += MaterialDensity.getDensity(block);
 
-        if (block == ArchimedesShipMod.blockEngine) {
+        if (block == ArchimedesShipMod.blockBalloon) {
+            balloonCount++;
+        } else if (block == ArchimedesShipMod.blockFloater) {
+            floaters++;
+        } else if (block == ArchimedesShipMod.blockEngine) {
             TileEntity te = ship.getMovingWorldChunk().getTileEntity(x, y, z);
             if (te instanceof TileEntityEngine) {
                 if (engines == null) {
@@ -199,4 +205,11 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     public float getBankingMultiplier() {
         return ArchimedesShipMod.instance.modConfig.bankingMultiplier;
     }
+
+    public void readFromNBT(NBTTagCompound tag) {
+    }
+
+    public void writeToNBT(NBTTagCompound tag) {
+    }
+
 }
