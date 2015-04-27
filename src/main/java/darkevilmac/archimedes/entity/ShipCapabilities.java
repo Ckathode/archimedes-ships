@@ -75,7 +75,6 @@ public class ShipCapabilities extends MovingWorldCapabilities {
 
     public void setBalloonCount(int balloonCount) {
         this.balloonCount = balloonCount;
-        System.out.println("BalloonCount set on" + ship.worldObj.isRemote);
     }
 
     public int getFloaterCount() {

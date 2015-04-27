@@ -10,7 +10,6 @@ import darkevilmac.movingworld.chunk.MovingWorldAssemblyInteractor;
 import darkevilmac.movingworld.entity.EntityMovingWorld;
 import darkevilmac.movingworld.entity.MovingWorldInfo;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 
 public class TileEntityHelm extends TileMovingWorldMarkingBlock {
@@ -115,7 +114,7 @@ public class TileEntityHelm extends TileMovingWorldMarkingBlock {
                 res = getAssembleResult();
             }
             AssembleResultMessage message = new AssembleResultMessage(res, prev);
-            ArchimedesShipMod.instance.network.sendTo(message, (EntityPlayerMP) player);
+            ArchimedesShipMod.instance.network.sendToDimension(message, player.worldObj.provider.dimensionId);
         }
     }
 }
