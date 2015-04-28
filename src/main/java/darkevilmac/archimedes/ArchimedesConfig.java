@@ -25,7 +25,7 @@ public class ArchimedesConfig {
     //Mobile Chunk
     public int maxShipChunkBlocks;
     public float flyBalloonRatio;
-    public boolean connectDiagonalBlocks1, connectDiagonalBlocks2;
+    public boolean connectDiagonalBlocks;
     public boolean useWhitelist;
     public Set<String> blockBlacklist;
     public Set<String> blockWhitelist;
@@ -95,7 +95,9 @@ public class ArchimedesConfig {
         maxShipChunkBlocks = config.get("mobile_chunk", "max_chunk_blocks", 2048, "The maximum amount of blocks that a mobile ship chunk may contain.").getInt();
         //maxShipChunkBlocks = Math.min(maxShipChunkBlocks, 3400);
         flyBalloonRatio = (float) config.get("mobile_chunk", "airship_balloon_ratio", 0.4D, "The part of the total amount of blocks that should be balloon blocks in order to make an airship.").getDouble(0.4D);
-        connectDiagonalBlocks1 = config.get("mobile_chunk", "connect_diagonal_blocks_1", false, "Blocks connected diagonally on one axis will also be added to the ship if this value is set to 'true'.").getBoolean(false);
+
+        boolean connectDiagonalLegacy = config.get("mobile_chunk", "connect_diagonal_blocks_1", false, "Blocks connected diagonally on one axis will also be added to the ship if this value is set to 'true'.").getBoolean(false);
+        connectDiagonalBlocks = config.get("mobile_chunk", "connect_diagonal_blocks", connectDiagonalLegacy, "Blocks connected diagonally on one axis will also be added to the ship if this value is set to 'true'.").getBoolean(connectDiagonalLegacy);
         useWhitelist = config.get("mobile_chunk", "use_whitelist", false, "Switch this property to select the block restriction list to use. 'true' for the 'allowed_blocks' whitelist, 'false' for the 'forbidden_blocks' blacklist.").getBoolean(false);
         String[] forbiddenblocks = config.get("mobile_chunk", "forbidden_blocks", blockblacklistnames, "A list of blocks that will not be added to a ship.").getStringList();
         String[] allowedblocks = config.get("mobile_chunk", "allowed_blocks", blockwhitelistnames, "A list of blocks that are allowed on a ship.").getStringList();

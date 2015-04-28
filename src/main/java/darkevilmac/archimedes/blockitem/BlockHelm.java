@@ -4,9 +4,9 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.entity.EntityParachute;
+import darkevilmac.archimedes.entity.EntitySeat;
 import darkevilmac.archimedes.entity.EntityShip;
 import darkevilmac.movingworld.block.BlockMovingWorldMarker;
-import darkevilmac.movingworld.entity.EntityMovingWorldAttachment;
 import darkevilmac.movingworld.util.RotationHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
@@ -78,7 +78,7 @@ public class BlockHelm extends BlockDirectional implements IEntitySelector, ITil
 
     @Override
     public boolean isEntityApplicable(Entity entity) {
-        return !(entity instanceof EntityLivingBase) && !(entity instanceof EntityShip) && !(entity instanceof EntityMovingWorldAttachment) && !(entity instanceof EntityParachute);
+        return !(entity instanceof EntityLivingBase) && !(entity instanceof EntityShip) && !(entity instanceof EntitySeat) && !(entity instanceof EntityParachute);
     }
 
     @Override

@@ -77,41 +77,6 @@ public class ArchimedesShipMod {
         modLog = event.getModLog();
         MinecraftForge.EVENT_BUS.register(this);
 
-		/*MaterialMap.registerMaterial("air", Material.air);
-        MaterialMap.registerMaterial("anvil", Material.anvil);
-		MaterialMap.registerMaterial("cactus", Material.cactus);
-		MaterialMap.registerMaterial("cake", Material.cake);
-		MaterialMap.registerMaterial("carpet", Material.carpet);
-		MaterialMap.registerMaterial("circuits", Material.circuits);
-		MaterialMap.registerMaterial("clay", Material.clay);
-		MaterialMap.registerMaterial("cloth", Material.cloth);
-		MaterialMap.registerMaterial("coral", Material.coral);
-		MaterialMap.registerMaterial("dragon_egg", Material.dragonEgg);
-		MaterialMap.registerMaterial("fire", Material.fire);
-		MaterialMap.registerMaterial("glass", Material.glass);
-		MaterialMap.registerMaterial("gourd", Material.gourd);
-		MaterialMap.registerMaterial("grass", Material.grass);
-		MaterialMap.registerMaterial("ground", Material.ground);
-		MaterialMap.registerMaterial("ice", Material.ice);
-		MaterialMap.registerMaterial("ice_packed", Material.packedIce);
-		MaterialMap.registerMaterial("iron", Material.iron);
-		MaterialMap.registerMaterial("lava", Material.lava);
-		MaterialMap.registerMaterial("leaves", Material.leaves);
-		MaterialMap.registerMaterial("piston", Material.piston);
-		MaterialMap.registerMaterial("plants", Material.plants);
-		MaterialMap.registerMaterial("portal", Material.portal);
-		MaterialMap.registerMaterial("redstone_light", Material.redstoneLight);
-		MaterialMap.registerMaterial("rock", Material.rock);
-		MaterialMap.registerMaterial("sand", Material.sand);
-		MaterialMap.registerMaterial("snow", Material.snow);
-		MaterialMap.registerMaterial("snow_crafted", Material.craftedSnow);
-		MaterialMap.registerMaterial("sponge", Material.sponge);
-		MaterialMap.registerMaterial("tnt", Material.tnt);
-		MaterialMap.registerMaterial("vine", Material.vine);
-		MaterialMap.registerMaterial("water", Material.water);
-		MaterialMap.registerMaterial("web", Material.web);
-		MaterialMap.registerMaterial("wood", Material.wood);*/
-
         modConfig = new ArchimedesConfig(new Configuration(event.getSuggestedConfigurationFile()));
         modConfig.loadAndSave();
 
@@ -205,39 +170,9 @@ public class ArchimedesShipMod {
 
 
         EntityRegistry.registerModEntity(EntityShip.class, "shipmod", 1, this, 64, modConfig.shipEntitySyncRate, true);
-        //EntityRegistry.registerModEntity(EntityEntityAttachment.class, "attachment", 2, this, 64, 100, false);
-        EntityRegistry.registerModEntity(EntitySeat.class, "attachment.seat", 3, this, 64, 100, false);
-        EntityRegistry.registerModEntity(EntityParachute.class, "parachute", 4, this, 32, modConfig.shipEntitySyncRate, true);
+        EntityRegistry.registerModEntity(EntitySeat.class, "attachment.seat", 2, this, 64, 100, false);
+        EntityRegistry.registerModEntity(EntityParachute.class, "parachute", 3, this, 32, modConfig.shipEntitySyncRate, true);
 
-        //In g/cm^3
-        /*MaterialDensity.addDensity(Material.air, 0F);
-        //MaterialDensity.addDensity(Material.wood, 0.700F);
-		MaterialDensity.addDensity(Material.wood, 0.500F);
-		MaterialDensity.addDensity(Material.rock, 2.500F);
-		MaterialDensity.addDensity(Material.water, 1.000F);
-		MaterialDensity.addDensity(Material.lava, 2.500F);
-		MaterialDensity.addDensity(Material.ice, 0.916F);
-		//MaterialDensity.addDensity(Material.iron, 7.874F);
-		MaterialDensity.addDensity(Material.iron, 5.000F);
-		MaterialDensity.addDensity(Material.anvil, 5.000F);
-		//MaterialDensity.addDensity(Material.glass, 2.600F);
-		MaterialDensity.addDensity(Material.glass, 0.400F);
-		MaterialDensity.addDensity(Material.leaves, 0.200F);
-		MaterialDensity.addDensity(Material.plants, 0.200F);
-		//MaterialDensity.addDensity(Material.cloth, 1.314F);
-		MaterialDensity.addDensity(Material.cloth, 0.700F);
-		MaterialDensity.addDensity(Material.sand, 1.600F);
-		MaterialDensity.addDensity(Material.ground, 2.000F);
-		MaterialDensity.addDensity(Material.grass, 2.000F);
-		MaterialDensity.addDensity(Material.clay, 2.000F);
-		MaterialDensity.addDensity(Material.gourd, 0.900F);
-		MaterialDensity.addDensity(Material.sponge, 0.400F);
-		MaterialDensity.addDensity(Material.craftedSnow, 0.800F);
-		MaterialDensity.addDensity(Material.tnt, 1.200F);
-		MaterialDensity.addDensity(Material.piston, 1.000F);
-		MaterialDensity.addDensity(Material.cloth, 0.100F);
-		MaterialDensity.addDensity(materialFloater, 0.04F);
-		MaterialDensity.addDensity(blockBalloon, 0.02F);*/
 
         proxy.registerKeyHandlers(modConfig);
         proxy.registerEventHandlers();

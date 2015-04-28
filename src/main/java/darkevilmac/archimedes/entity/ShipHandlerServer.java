@@ -2,13 +2,16 @@ package darkevilmac.archimedes.entity;
 
 import darkevilmac.movingworld.entity.EntityMovingWorld;
 import darkevilmac.movingworld.entity.MovingWorldHandlerServer;
+import net.minecraft.entity.player.EntityPlayer;
 
 public class ShipHandlerServer extends MovingWorldHandlerServer {
 
     private EntityMovingWorld movingWorld;
+    private boolean firstChunkUpdate;
 
-    public ShipHandlerServer(EntityMovingWorld entitymovingWorld) {
-        super(entitymovingWorld);
+    public ShipHandlerServer(EntityShip entityship) {
+        super(entityship);
+        firstChunkUpdate = true;
     }
 
     @Override
@@ -19,6 +22,18 @@ public class ShipHandlerServer extends MovingWorldHandlerServer {
     @Override
     public void setMovingWorld(EntityMovingWorld movingWorld) {
         this.movingWorld = movingWorld;
+    }
+
+    @Override
+    public boolean interact(EntityPlayer player) {
+        if (movingWorld.riddenByEntity == null) {
+            player.mountEntity(movingWorld);
+            return true;
+        } else if (player.ridingEntity == null) {
+            return movingWorld.getCapabilities().mountEntity(player);
+        }
+
+        return false;
     }
 
     @Override

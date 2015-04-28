@@ -26,6 +26,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     private List<TileEntityEngine> engines;
     private float enginePower;
 
+
     public ShipCapabilities(EntityMovingWorld movingWorld, boolean autoCalcMass) {
         super(movingWorld, autoCalcMass);
         ship = (EntityShip) movingWorld;
@@ -91,10 +92,8 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     }
 
     public void addAttachments(EntitySeat entity) {
-        if (seats == null) {
-            seats = new ArrayList<EntitySeat>(4);
-        }
-        seats.add(entity);
+        if (seats == null) seats = new ArrayList<EntitySeat>();
+        if (entity != null && entity instanceof EntitySeat) seats.add((EntitySeat) entity);
     }
 
     public List<EntitySeat> getAttachments() {

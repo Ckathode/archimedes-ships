@@ -12,8 +12,11 @@ import darkevilmac.movingworld.entity.EntityMovingWorld;
 import darkevilmac.movingworld.entity.MovingWorldCapabilities;
 import darkevilmac.movingworld.entity.MovingWorldHandlerCommon;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
@@ -31,6 +34,11 @@ public class EntityShip extends EntityMovingWorld {
     public EntityShip(World world) {
         super(world);
         capabilities = new ShipCapabilities(this, true);
+    }
+
+    @Override
+    public AxisAlignedBB getCollisionBox(Entity entity) {
+        return entity instanceof EntitySeat || entity.ridingEntity instanceof EntitySeat || entity instanceof EntityLiving ? null : entity.boundingBox;
     }
 
     @Override

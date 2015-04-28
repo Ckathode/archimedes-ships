@@ -25,7 +25,7 @@ public class CommandShipInfo extends CommandBase {
             if (player.ridingEntity instanceof EntityShip) {
                 ship = (EntityShip) player.ridingEntity;
             } else if (player.ridingEntity instanceof EntitySeat) {
-                ship = (EntityShip) ((EntitySeat) player.ridingEntity).getParentMovingWorld();
+                ship = ((EntitySeat) player.ridingEntity).getParentShip();
             }
         }
         if (ship != null) {
