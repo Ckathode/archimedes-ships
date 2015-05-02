@@ -7,7 +7,6 @@ import darkevilmac.movingworld.entity.EntityMovingWorld;
 import darkevilmac.movingworld.entity.MovingWorldCapabilities;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
 import java.util.ArrayList;
@@ -93,7 +92,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
 
     public void addAttachments(EntitySeat entity) {
         if (seats == null) seats = new ArrayList<EntitySeat>();
-        if (entity != null && entity instanceof EntitySeat) seats.add((EntitySeat) entity);
+        if (entity != null && entity instanceof EntitySeat) seats.add(entity);
     }
 
     public List<EntitySeat> getAttachments() {
@@ -159,6 +158,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     }
 
     public void spawnSeatEntities() {
+        System.out.println("Spawn Seats");
         if (seats != null) {
             for (EntitySeat seat : seats) {
                 ship.worldObj.spawnEntityInWorld(seat);
@@ -204,10 +204,5 @@ public class ShipCapabilities extends MovingWorldCapabilities {
         return ArchimedesShipMod.instance.modConfig.bankingMultiplier;
     }
 
-    public void readFromNBT(NBTTagCompound tag) {
-    }
-
-    public void writeToNBT(NBTTagCompound tag) {
-    }
 
 }

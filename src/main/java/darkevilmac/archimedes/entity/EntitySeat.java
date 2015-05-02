@@ -1,6 +1,8 @@
 package darkevilmac.archimedes.entity;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import darkevilmac.archimedes.ArchimedesShipMod;
+import darkevilmac.archimedes.network.RequestSetParentShipMessage;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
@@ -13,8 +15,11 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     private ChunkPosition pos;
     private Entity prevRiddenByEntity;
 
+    private int ticksToRequest;
+
     public EntitySeat(World world) {
         super(world);
+        ticksToRequest = 0;
         ship = null;
         pos = null;
         prevRiddenByEntity = null;
@@ -41,8 +46,18 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     @Override
     public void onUpdate() {
         super.onUpdate();
+
+        if (worldObj.isRemote) {
+            ticksToRequest++;
+            if (ticksToRequest > 19) {
+                ticksToRequest = 0;
+            }
+        }
+
         if (ship != null) {
             setPosition(ship.posX, ship.posY, ship.posZ);
+        } else if (ticksToRequest == 0) {
+            ArchimedesShipMod.instance.network.sendToServer(new RequestSetParentShipMessage(this, worldObj.provider.dimensionId));
         }
 
         if (!worldObj.isRemote) {
@@ -72,6 +87,7 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     @Override
     public void updateRiderPosition() {
         if (ship != null) {
+            // null on reconnecters u wot
             ship.updateRiderPosition(riddenByEntity, pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ, 0);
         }
     }
@@ -122,9 +138,15 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
 
     @Override
     public void readSpawnData(ByteBuf data) {
-        Entity entity = worldObj.getEntityByID(data.readInt());
-        if (entity instanceof EntityShip) {
-            setParentShip((EntityShip) entity, data.readUnsignedByte(), data.readUnsignedByte(), data.readUnsignedByte());
+        int entityID = data.readInt();
+        int posChunkX = data.readUnsignedByte();
+        int posChunkY = data.readUnsignedByte();
+        int posChunkZ = data.readUnsignedByte();
+        if (entityID != 0) {
+            Entity entity = worldObj.getEntityByID(entityID);
+            if (entity instanceof EntityShip) {
+                setParentShip((EntityShip) entity, posChunkX, posChunkY, posChunkZ);
+            }
         }
     }
 }

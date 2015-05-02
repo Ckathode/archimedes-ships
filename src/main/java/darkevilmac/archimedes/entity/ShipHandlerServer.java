@@ -29,11 +29,11 @@ public class ShipHandlerServer extends MovingWorldHandlerServer {
         if (movingWorld.riddenByEntity == null) {
             player.mountEntity(movingWorld);
             return true;
-        } else if (player.ridingEntity == null) {
+        } else {
+            if (player.ridingEntity != null)
+                player.mountEntity(null);
             return movingWorld.getCapabilities().mountEntity(player);
         }
-
-        return false;
     }
 
     @Override

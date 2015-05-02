@@ -8,11 +8,9 @@ import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 
-/**
- * Created by DarkEvilMac on 4/19/2015.
- */
 
 public abstract class ShipMessage extends ArchimedesShipsMessage {
+
     public EntityShip ship;
 
     public ShipMessage() {
@@ -32,6 +30,7 @@ public abstract class ShipMessage extends ArchimedesShipsMessage {
     @Override
     public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf, EntityPlayer player, Side side) {
         int entityID = buf.readInt();
+
         Entity entity = player.worldObj.getEntityByID(entityID);
         if (entity instanceof EntityShip) {
             ship = (EntityShip) entity;

@@ -5,8 +5,11 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import darkevilmac.archimedes.ArchimedesConfig;
 import darkevilmac.archimedes.ArchimedesShipMod;
+import darkevilmac.archimedes.blockitem.TileEntityHelm;
 import darkevilmac.archimedes.control.ShipControllerClient;
 import darkevilmac.archimedes.control.ShipControllerCommon;
+import darkevilmac.movingworld.chunk.AssembleResult;
+import darkevilmac.movingworld.chunk.ChunkDisassembler;
 import darkevilmac.movingworld.chunk.MovingWorldAssemblyInteractor;
 import darkevilmac.movingworld.entity.EntityMovingWorld;
 import darkevilmac.movingworld.entity.MovingWorldCapabilities;
@@ -15,8 +18,12 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
@@ -135,6 +142,59 @@ public class EntityShip extends EntityMovingWorld {
             handlePlayerControl();
             prevRiddenByEntity = riddenByEntity;
         }
+    }
+
+    @Override
+    public void handleServerUpdatePreRotation() {
+        if (ArchimedesShipMod.instance.modConfig.shipControlType == ArchimedesConfig.CONTROL_TYPE_VANILLA) {
+            double newyaw = rotationYaw;
+            double dx = prevPosX - posX;
+            double dz = prevPosZ - posZ;
+
+            if (riddenByEntity != null && !isBraking() && dx * dx + dz * dz > 0.01D) {
+                newyaw = 270F - Math.toDegrees(Math.atan2(dz, dx)) + frontDirection * 90F;
+            }
+
+            double deltayaw = MathHelper.wrapAngleTo180_double(newyaw - rotationYaw);
+            double maxyawspeed = 2D;
+            if (deltayaw > maxyawspeed) {
+                deltayaw = maxyawspeed;
+            }
+            if (deltayaw < -maxyawspeed) {
+                deltayaw = -maxyawspeed;
+            }
+
+            rotationYaw = (float) (rotationYaw + deltayaw);
+        }
+    }
+
+    @Override
+    public boolean disassemble(boolean overwrite) {
+        if (worldObj.isRemote) return true;
+
+        updateRiderPosition();
+
+        ChunkDisassembler disassembler = getDisassembler();
+        disassembler.overwrite = overwrite;
+
+        if (!disassembler.canDisassemble(getNewAssemblyInteractor())) {
+            if (prevRiddenByEntity instanceof EntityPlayer) {
+                ChatComponentText c = new ChatComponentText("Cannot disassemble ship here");
+                ((EntityPlayer) prevRiddenByEntity).addChatMessage(c);
+            }
+            return false;
+        }
+
+        AssembleResult result = disassembler.doDisassemble(getNewAssemblyInteractor());
+        if (result.getShipMarker() != null) {
+            TileEntity te = result.getShipMarker().tileEntity;
+            if (te instanceof TileEntityHelm) {
+                ((TileEntityHelm) te).setAssembleResult(result);
+                ((TileEntityHelm) te).setInfo(getInfo());
+            }
+        }
+
+        return true;
     }
 
     private void handlePlayerControl() {

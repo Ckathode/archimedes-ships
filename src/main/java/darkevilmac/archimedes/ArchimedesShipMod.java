@@ -1,5 +1,6 @@
 package darkevilmac.archimedes;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -19,6 +20,7 @@ import darkevilmac.archimedes.command.CommandShipInfo;
 import darkevilmac.archimedes.entity.EntityParachute;
 import darkevilmac.archimedes.entity.EntitySeat;
 import darkevilmac.archimedes.entity.EntityShip;
+import darkevilmac.archimedes.handler.DisconnectHandler;
 import darkevilmac.archimedes.network.ArchimedesShipsMessageToMessageCodec;
 import darkevilmac.archimedes.network.ArchimedesShipsPacketHandler;
 import darkevilmac.archimedes.network.NetworkUtil;
@@ -167,6 +169,9 @@ public class ArchimedesShipMod {
                 (MOD_ID, new ArchimedesShipsMessageToMessageCodec(), new ArchimedesShipsPacketHandler());
 
         registerBlocksAndItems();
+
+        MinecraftForge.EVENT_BUS.register(new DisconnectHandler());
+        FMLCommonHandler.instance().bus().register(new DisconnectHandler());
 
 
         EntityRegistry.registerModEntity(EntityShip.class, "shipmod", 1, this, 64, modConfig.shipEntitySyncRate, true);
