@@ -1,0 +1,71 @@
+#Archimedes' Ships language file en_US to cs_CZ by DeRigeurEx
+
+entity.ArchimedesShips.shipmod.name=Archimedes' Ships
+
+tile.archimedes.marker.name=Lodní kormidlo
+tile.archimedes.floater.name=Plovák
+tile.archimedes.balloon.name=Vzdušný balón
+tile.archimedes.balloon.black.name=Černý vzdušný balón
+tile.archimedes.balloon.red.name=Červený vzdušný balón
+tile.archimedes.balloon.green.name=Zelený vzdušný balón
+tile.archimedes.balloon.brown.name=Hnědý vzdušný balón
+tile.archimedes.balloon.blue.name=Modrý vzdušný balón
+tile.archimedes.balloon.purple.name=Nachový vzdušný balón
+tile.archimedes.balloon.cyan.name=Cyan vzdušný balón
+tile.archimedes.balloon.silver.name=Stříbrný vzdušný balón
+tile.archimedes.balloon.gray.name=Šedý vzdušný balón
+tile.archimedes.balloon.pink.name=Růžový vzdušný balón
+tile.archimedes.balloon.lime.name=Limetkový vzdušný balón
+tile.archimedes.balloon.yellow.name=Žlutý vzdušný balón
+tile.archimedes.balloon.lightBlue.name=Světle modrý vzdušný balón
+tile.archimedes.balloon.magenta.name=Fialový vzdušný balón
+tile.archimedes.balloon.orange.name=Oranžový vzdušný balón
+tile.archimedes.balloon.white.name=Bílí vzdušný balón
+tile.archimedes.gauge.name=Panel měřáků
+tile.archimedes.seat.name=Sedadlo spolujezdce
+tile.archimedes.buffer.name=Pobřežní nárazník
+tile.archimedes.engine.name=Lodní paromotor
+tile.archimedes.crate_wood.name=Přepravní bedna
+tile.archimedes.anchorPoint.name=Anchor Point
+
+key.archimedes.up=Vzlet
+key.archimedes.down=Sestup
+key.archimedes.brake=Brzda
+key.archimedes.align=Vyrovnat
+key.archimedes.decompile=Vylodit se
+key.archimedes.shipinv=Lodní inventář
+
+gui.shipstatus.title=Status lodě
+gui.shipstatus.rename=Přejmenuj
+gui.shipstatus.done=Přejmenováni hotovo
+gui.shipstatus.compile=Sestavit loď
+gui.shipstatus.undo=Zrušit
+gui.shipstatus.mount=Nalodit se
+gui.shipstatus.name=Jméno
+gui.shipstatus.shiptype=Typ
+gui.shipstatus.type.unknown=Neznámý typ
+gui.shipstatus.type.airship=Vzducholoď
+gui.shipstatus.type.boat=Loď
+gui.shipstatus.compilerresult=Status
+gui.shipstatus.count.block=Bloků
+gui.shipstatus.count.balloon=Vzdušné balóny
+gui.shipstatus.count.tileentity=Tonáž
+gui.shipstatus.mass=Hmotnost
+gui.shipstatus.massunit=kg
+
+gui.shipstatus.result.none=Nesestaveno
+gui.shipstatus.result.ok=OK
+gui.shipstatus.result.okwarn=Detekována změna
+gui.shipstatus.result.missingmarker=Chybý kormidlo
+gui.shipstatus.result.overflow=Přetížení
+gui.shipstatus.result.error=Chyba
+gui.shipstatus.result.busy=Sestavuji...
+gui.shipstatus.result.inconsistent=Nekonzistentní
+
+gui.shipinv.title=Lodní inventář
+gui.shipinv.decompile=Vylodit se
+gui.shipinv.align=Srovnat
+
+gui.engine.title=Palivo paromotoru
+# Parent Language: en_US
+# by DeRigeurEx
