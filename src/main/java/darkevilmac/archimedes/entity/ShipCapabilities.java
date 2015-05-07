@@ -146,7 +146,12 @@ public class ShipCapabilities extends MovingWorldCapabilities {
         }
 
         for (EntitySeat seat : seats) {
-            if (seat.riddenByEntity == null) {
+            if (seat.riddenByEntity == null || (seat.riddenByEntity != null && seat.riddenByEntity.ridingEntity != seat)) {
+                if (seat.riddenByEntity != null && seat.riddenByEntity.ridingEntity != seat) {
+                    seat.riddenByEntity.mountEntity(null);
+                    seat.riddenByEntity = null;
+                }
+                seat.onMount();
                 entity.mountEntity(seat);
                 return true;
             } else if (seat.riddenByEntity == entity) {
@@ -158,7 +163,6 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     }
 
     public void spawnSeatEntities() {
-        System.out.println("Spawn Seats");
         if (seats != null) {
             for (EntitySeat seat : seats) {
                 ship.worldObj.spawnEntityInWorld(seat);

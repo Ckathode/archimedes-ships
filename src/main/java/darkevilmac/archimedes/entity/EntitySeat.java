@@ -1,8 +1,6 @@
 package darkevilmac.archimedes.entity;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
-import darkevilmac.archimedes.ArchimedesShipMod;
-import darkevilmac.archimedes.network.RequestSetParentShipMessage;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
@@ -11,15 +9,13 @@ import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 
 public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
+
     private EntityShip ship;
     private ChunkPosition pos;
     private Entity prevRiddenByEntity;
 
-    private int ticksToRequest;
-
     public EntitySeat(World world) {
         super(world);
-        ticksToRequest = 0;
         ship = null;
         pos = null;
         prevRiddenByEntity = null;
@@ -32,6 +28,20 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
         if (entityship != null) {
             pos = new ChunkPosition(x, y, z);
             setLocationAndAngles(entityship.posX, entityship.posY, entityship.posZ, 0F, 0F);
+            if (worldObj != null && !worldObj.isRemote) {
+                if (!this.dataWatcher.getIsBlank() && this.dataWatcher.getWatchableObjectByte(10) == new Byte((byte) 1)) {
+                    this.dataWatcher.updateObject(6, entityship.getEntityId());
+                    this.dataWatcher.updateObject(7, new Byte((byte) (x & 0xFF)));
+                    this.dataWatcher.updateObject(8, new Byte((byte) (y & 0xFF)));
+                    this.dataWatcher.updateObject(9, new Byte((byte) (z & 0xFF)));
+                } else {
+                    this.dataWatcher.addObject(6, entityship.getEntityId());
+                    this.dataWatcher.addObject(7, new Byte((byte) (x & 0xFF)));
+                    this.dataWatcher.addObject(8, new Byte((byte) (y & 0xFF)));
+                    this.dataWatcher.addObject(9, new Byte((byte) (z & 0xFF)));
+                    this.dataWatcher.addObject(10, 1);
+                }
+            }
         }
     }
 
@@ -43,21 +53,57 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
         return pos;
     }
 
+    public void onMount() {
+        if (worldObj != null) {
+            if (!worldObj.isRemote) {
+                if (!this.dataWatcher.getIsBlank() && this.dataWatcher.getWatchableObjectByte(10) == new Byte((byte) 1)) {
+                    this.dataWatcher.updateObject(6, ship.getEntityId());
+                    this.dataWatcher.updateObject(7, new Byte((byte) (pos.chunkPosX & 0xFF)));
+                    this.dataWatcher.updateObject(8, new Byte((byte) (pos.chunkPosY & 0xFF)));
+                    this.dataWatcher.updateObject(9, new Byte((byte) (pos.chunkPosZ & 0xFF)));
+                } else {
+                    this.dataWatcher.addObject(6, ship.getEntityId());
+                    this.dataWatcher.addObject(7, new Byte((byte) (pos.chunkPosX & 0xFF)));
+                    this.dataWatcher.addObject(8, new Byte((byte) (pos.chunkPosY & 0xFF)));
+                    this.dataWatcher.addObject(9, new Byte((byte) (pos.chunkPosZ & 0xFF)));
+                    this.dataWatcher.addObject(10, 1);
+                }
+            } else {
+                if (!this.dataWatcher.getIsBlank() && this.dataWatcher.getWatchableObjectByte(10) == new Byte((byte) 1)) {
+                    if (worldObj.getEntityByID(this.dataWatcher.getWatchableObjectInt(6)) != null &&
+                            worldObj.getEntityByID(this.dataWatcher.getWatchableObjectInt(6)) instanceof EntityShip) {
+                        EntityShip ship = (EntityShip) worldObj.getEntityByID(this.dataWatcher.getWatchableObjectInt(6));
+                        int chunkX = this.dataWatcher.getWatchableObjectByte(7);
+                        int chunkY = this.dataWatcher.getWatchableObjectByte(8);
+                        int chunkZ = this.dataWatcher.getWatchableObjectByte(9);
+
+                        setParentShip(ship, chunkX, chunkY, chunkZ);
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     public void onUpdate() {
         super.onUpdate();
 
-        if (worldObj.isRemote) {
-            ticksToRequest++;
-            if (ticksToRequest > 19) {
-                ticksToRequest = 0;
-            }
+        if (worldObj != null && worldObj.isRemote && !this.dataWatcher.getIsBlank() && this.dataWatcher.getWatchableObjectByte(10) == new Byte((byte) 1)) {
+            ship = (EntityShip) worldObj.getEntityByID(this.dataWatcher.getWatchableObjectInt(6));
+            pos = new ChunkPosition(this.dataWatcher.getWatchableObjectByte(7),
+                    this.dataWatcher.getWatchableObjectByte(8),
+                    this.dataWatcher.getWatchableObjectByte(9));
         }
 
         if (ship != null) {
             setPosition(ship.posX, ship.posY, ship.posZ);
-        } else if (ticksToRequest == 0) {
-            ArchimedesShipMod.instance.network.sendToServer(new RequestSetParentShipMessage(this, worldObj.provider.dimensionId));
+        }
+
+        if (worldObj != null && worldObj.isRemote && this.dataWatcher.hasChanges()) {
+            ship = (EntityShip) worldObj.getEntityByID(this.dataWatcher.getWatchableObjectInt(6));
+            pos = new ChunkPosition(this.dataWatcher.getWatchableObjectByte(7),
+                    this.dataWatcher.getWatchableObjectByte(8),
+                    this.dataWatcher.getWatchableObjectByte(9));
         }
 
         if (!worldObj.isRemote) {
@@ -82,12 +128,16 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
 
     @Override
     protected void entityInit() {
+        this.dataWatcher.addObject(6, 0);
+        this.dataWatcher.addObject(7, new Byte((byte) (0 & 0xFF)));
+        this.dataWatcher.addObject(8, new Byte((byte) (0 & 0xFF)));
+        this.dataWatcher.addObject(9, new Byte((byte) (0 & 0xFF)));
+        this.dataWatcher.addObject(10, new Byte((byte) 1));
     }
 
     @Override
     public void updateRiderPosition() {
         if (ship != null) {
-            // null on reconnecters u wot
             ship.updateRiderPosition(riddenByEntity, pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ, 0);
         }
     }
@@ -114,11 +164,32 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
 
     @Override
     protected void writeEntityToNBT(NBTTagCompound compound) {
+        if (ship == null) {
+            compound.setInteger("shipID", 0);
+            compound.setByte("cPosX", (byte) 0);
+            compound.setByte("cPosY", (byte) 0);
+            compound.setByte("cPosZ", (byte) 0);
+            return;
+        }
+        compound.setInteger("shipID", ship.getEntityId());
+        compound.setByte("cPosX", (byte) (pos.chunkPosX & 0xFF));
+        compound.setByte("cPosY", (byte) (pos.chunkPosY & 0xFF));
+        compound.setByte("cPosZ", (byte) (pos.chunkPosZ & 0xFF));
     }
+
 
     @Override
     protected void readEntityFromNBT(NBTTagCompound compound) {
-        setDead();
+        int entityID = compound.getInteger("shipID");
+        int posChunkX = compound.getByte("cPosX");
+        int posChunkY = compound.getByte("cPosY");
+        int posChunkZ = compound.getByte("cPosZ");
+        if (entityID != 0) {
+            Entity entity = worldObj.getEntityByID(entityID);
+            if (entity instanceof EntityShip) {
+                setParentShip((EntityShip) entity, posChunkX, posChunkY, posChunkZ);
+            }
+        }
     }
 
     @Override
