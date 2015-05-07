@@ -4,7 +4,6 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import darkevilmac.archimedes.entity.EntityParachute;
-import net.minecraft.client.Minecraft;
 
 public class CommonPlayerTicker {
     @SubscribeEvent
