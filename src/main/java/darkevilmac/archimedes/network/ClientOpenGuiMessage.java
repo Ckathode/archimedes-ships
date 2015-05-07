@@ -33,7 +33,6 @@ public class ClientOpenGuiMessage extends ArchimedesShipsMessage {
 
     @Override
     public void handleServerSide(EntityPlayer player) {
-        System.out.println("Open GUI packet");
         player.openGui(ArchimedesShipMod.instance, guiID, player.worldObj, 0, 0, 0);
     }
 

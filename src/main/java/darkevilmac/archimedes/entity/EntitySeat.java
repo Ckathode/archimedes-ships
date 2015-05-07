@@ -3,6 +3,7 @@ package darkevilmac.archimedes.entity;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.ChunkPosition;
@@ -21,6 +22,27 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
         prevRiddenByEntity = null;
         yOffset = 0f;
         setSize(0F, 0F);
+    }
+
+    /**
+     * Called from ShipCapabilities.
+     * @ShipCapabilities
+     *
+     * @param player
+     * @return
+     */
+    @Override
+    public boolean interactFirst(EntityPlayer player) {
+        if (this.riddenByEntity != null && this.riddenByEntity.ridingEntity != this) {
+            this.riddenByEntity = null;
+        }
+
+        if (this.riddenByEntity != null && this.riddenByEntity instanceof EntityPlayer && this.riddenByEntity != player) {
+            return true;
+        } else {
+            player.mountEntity(this);
+            return true;
+        }
     }
 
     public void setParentShip(EntityShip entityship, int x, int y, int z) {
@@ -53,57 +75,33 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
         return pos;
     }
 
-    public void onMount() {
-        if (worldObj != null) {
-            if (!worldObj.isRemote) {
-                if (!this.dataWatcher.getIsBlank() && this.dataWatcher.getWatchableObjectByte(10) == new Byte((byte) 1)) {
-                    this.dataWatcher.updateObject(6, ship.getEntityId());
-                    this.dataWatcher.updateObject(7, new Byte((byte) (pos.chunkPosX & 0xFF)));
-                    this.dataWatcher.updateObject(8, new Byte((byte) (pos.chunkPosY & 0xFF)));
-                    this.dataWatcher.updateObject(9, new Byte((byte) (pos.chunkPosZ & 0xFF)));
-                } else {
-                    this.dataWatcher.addObject(6, ship.getEntityId());
-                    this.dataWatcher.addObject(7, new Byte((byte) (pos.chunkPosX & 0xFF)));
-                    this.dataWatcher.addObject(8, new Byte((byte) (pos.chunkPosY & 0xFF)));
-                    this.dataWatcher.addObject(9, new Byte((byte) (pos.chunkPosZ & 0xFF)));
-                    this.dataWatcher.addObject(10, 1);
-                }
-            } else {
-                if (!this.dataWatcher.getIsBlank() && this.dataWatcher.getWatchableObjectByte(10) == new Byte((byte) 1)) {
-                    if (worldObj.getEntityByID(this.dataWatcher.getWatchableObjectInt(6)) != null &&
-                            worldObj.getEntityByID(this.dataWatcher.getWatchableObjectInt(6)) instanceof EntityShip) {
-                        EntityShip ship = (EntityShip) worldObj.getEntityByID(this.dataWatcher.getWatchableObjectInt(6));
-                        int chunkX = this.dataWatcher.getWatchableObjectByte(7);
-                        int chunkY = this.dataWatcher.getWatchableObjectByte(8);
-                        int chunkZ = this.dataWatcher.getWatchableObjectByte(9);
-
-                        setParentShip(ship, chunkX, chunkY, chunkZ);
-                    }
-                }
-            }
-        }
-    }
-
     @Override
     public void onUpdate() {
         super.onUpdate();
 
-        if (worldObj != null && worldObj.isRemote && !this.dataWatcher.getIsBlank() && this.dataWatcher.getWatchableObjectByte(10) == new Byte((byte) 1)) {
-            ship = (EntityShip) worldObj.getEntityByID(this.dataWatcher.getWatchableObjectInt(6));
-            pos = new ChunkPosition(this.dataWatcher.getWatchableObjectByte(7),
-                    this.dataWatcher.getWatchableObjectByte(8),
-                    this.dataWatcher.getWatchableObjectByte(9));
+        if (worldObj == null)
+            return;
+
+        if (worldObj.isRemote && !this.dataWatcher.getIsBlank() && this.dataWatcher.getWatchableObjectByte(10) == new Byte((byte) 1)) {
+            if (this.dataWatcher.getWatchableObjectInt(6) != 0) {
+                ship = (EntityShip) worldObj.getEntityByID(this.dataWatcher.getWatchableObjectInt(6));
+                pos = new ChunkPosition(this.dataWatcher.getWatchableObjectByte(7),
+                        this.dataWatcher.getWatchableObjectByte(8),
+                        this.dataWatcher.getWatchableObjectByte(9));
+            }
+        }
+
+        if (worldObj.isRemote && this.dataWatcher.hasChanges()) {
+            if (this.dataWatcher.getWatchableObjectInt(6) != 0) {
+                ship = (EntityShip) worldObj.getEntityByID(this.dataWatcher.getWatchableObjectInt(6));
+                pos = new ChunkPosition(this.dataWatcher.getWatchableObjectByte(7),
+                        this.dataWatcher.getWatchableObjectByte(8),
+                        this.dataWatcher.getWatchableObjectByte(9));
+            }
         }
 
         if (ship != null) {
             setPosition(ship.posX, ship.posY, ship.posZ);
-        }
-
-        if (worldObj != null && worldObj.isRemote && this.dataWatcher.hasChanges()) {
-            ship = (EntityShip) worldObj.getEntityByID(this.dataWatcher.getWatchableObjectInt(6));
-            pos = new ChunkPosition(this.dataWatcher.getWatchableObjectByte(7),
-                    this.dataWatcher.getWatchableObjectByte(8),
-                    this.dataWatcher.getWatchableObjectByte(9));
         }
 
         if (!worldObj.isRemote) {

@@ -5,7 +5,6 @@ import darkevilmac.archimedes.blockitem.TileEntityHelm;
 import darkevilmac.movingworld.chunk.AssembleResult;
 import darkevilmac.movingworld.chunk.LocatedBlock;
 import darkevilmac.movingworld.chunk.MovingWorldAssemblyInteractor;
-import darkevilmac.movingworld.entity.MovingWorldCapabilities;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
@@ -38,11 +37,6 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
     }
 
     @Override
-    public MovingWorldAssemblyInteractor fromByteBuf(ByteBuf buf) {
-        return fromByteBuf((byte) AssembleResult.RESULT_OK, buf);
-    }
-
-    @Override
     public MovingWorldAssemblyInteractor fromNBT(NBTTagCompound tag, World world) {
         ShipAssemblyInteractor mov = new ShipAssemblyInteractor();
         mov.setBalloonCount(tag.getInteger("balloonCount"));
@@ -54,7 +48,6 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
         if (locatedBlock.block == ArchimedesShipMod.blockBalloon) {
             balloonCount++;
         }
-
     }
 
     @Override
@@ -79,16 +72,6 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
 
     public void setBalloonCount(int balloonCount) {
         this.balloonCount = balloonCount;
-    }
-
-    @Override
-    public MovingWorldCapabilities transferToCapabilities(MovingWorldCapabilities capabilities) {
-        if (capabilities != null && capabilities instanceof ShipCapabilities) {
-            ShipCapabilities shipCapabilities = (ShipCapabilities) capabilities;
-            shipCapabilities.setBalloonCount(balloonCount);
-            return shipCapabilities;
-        }
-        return capabilities;
     }
 
     @Override

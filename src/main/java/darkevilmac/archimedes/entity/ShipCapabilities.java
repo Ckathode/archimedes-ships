@@ -7,6 +7,7 @@ import darkevilmac.movingworld.entity.EntityMovingWorld;
 import darkevilmac.movingworld.entity.MovingWorldCapabilities;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
 import java.util.ArrayList;
@@ -146,16 +147,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
         }
 
         for (EntitySeat seat : seats) {
-            if (seat.riddenByEntity == null || (seat.riddenByEntity != null && seat.riddenByEntity.ridingEntity != seat)) {
-                if (seat.riddenByEntity != null && seat.riddenByEntity.ridingEntity != seat) {
-                    seat.riddenByEntity.mountEntity(null);
-                    seat.riddenByEntity = null;
-                }
-                seat.onMount();
-                entity.mountEntity(seat);
-                return true;
-            } else if (seat.riddenByEntity == entity) {
-                seat.mountEntity(null);
+            if (seat.interactFirst((EntityPlayer) entity)) {
                 return true;
             }
         }
