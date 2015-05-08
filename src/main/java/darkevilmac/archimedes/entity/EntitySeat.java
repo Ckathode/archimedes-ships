@@ -2,6 +2,7 @@ package darkevilmac.archimedes.entity;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.gui.inventory.GuiFurnace;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -26,15 +27,17 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
 
     /**
      * Called from ShipCapabilities.
-     * @ShipCapabilities
      *
      * @param player
      * @return
+     * @ShipCapabilities
      */
     @Override
     public boolean interactFirst(EntityPlayer player) {
-        if (this.riddenByEntity != null && this.riddenByEntity.ridingEntity != this) {
-            this.riddenByEntity = null;
+        if (this.riddenByEntity != null) {
+            if (this.riddenByEntity.ridingEntity == null) {
+                this.riddenByEntity = null;
+            }
         }
 
         if (this.riddenByEntity != null && this.riddenByEntity instanceof EntityPlayer && this.riddenByEntity != player) {
