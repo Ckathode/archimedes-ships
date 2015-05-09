@@ -140,6 +140,25 @@ public class ShipCapabilities extends MovingWorldCapabilities {
         }
     }
 
+    public boolean hasSeat(EntitySeat seat) {
+        if (seats != null && !seats.isEmpty()) {
+            return seats.contains(seat);
+        } else {
+            return true;
+        }
+    }
+
+    public EntitySeat getAvailableSeat() {
+        for (EntitySeat seat : seats) {
+            if (seat.riddenByEntity == null || (seat.riddenByEntity != null && (seat.riddenByEntity.ridingEntity == null
+                    || (seat.riddenByEntity.ridingEntity != null && seat.riddenByEntity.ridingEntity != seat)))) {
+                seat.mountEntity(null);
+                return seat;
+            }
+        }
+        return null;
+    }
+
     @Override
     public boolean mountEntity(Entity entity) {
         if (seats == null) {

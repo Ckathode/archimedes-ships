@@ -1,12 +1,15 @@
 package darkevilmac.archimedes.entity;
 
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
-public class EntityParachute extends Entity {
+public class EntityParachute extends Entity implements IEntityAdditionalSpawnData {
     public EntityParachute(World world) {
         super(world);
         setSize(1F, 1F);
@@ -22,6 +25,19 @@ public class EntityParachute extends Entity {
         motionY = ship.motionY;
         motionZ = ship.motionZ;
     }
+
+    public EntityParachute(World world, Entity mounter, Vec3 vec, double shipPosX, double shipPosY, double shipPosZ, double motionX, double motionY, double motionZ) {
+        this(world);
+
+        setLocationAndAngles(shipPosX + vec.xCoord, shipPosY + vec.yCoord - 2D, shipPosZ + vec.zCoord, 0F, 0F);
+        this.motionX = motionX;
+        this.motionY = motionY;
+        this.motionZ = motionZ;
+
+        mounter.mountEntity(null);
+        mounter.mountEntity(this);
+    }
+
 
     @Override
     protected void entityInit() {
@@ -88,4 +104,21 @@ public class EntityParachute extends Entity {
     protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
     }
 
+    @Override
+    public void writeSpawnData(ByteBuf buffer) {
+        buffer.writeBoolean(riddenByEntity != null);
+        if (riddenByEntity != null) {
+            buffer.writeInt(riddenByEntity.getEntityId());
+        }
+    }
+
+    @Override
+    public void readSpawnData(ByteBuf additionalData) {
+        if (additionalData.readBoolean() && worldObj != null) {
+            int entityID = additionalData.readInt();
+            if (worldObj.getEntityByID(entityID) != null) {
+                worldObj.getEntityByID(entityID).mountEntity(this);
+            }
+        }
+    }
 }

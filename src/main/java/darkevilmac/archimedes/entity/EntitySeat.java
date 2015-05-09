@@ -2,7 +2,6 @@ package darkevilmac.archimedes.entity;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.gui.inventory.GuiFurnace;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,9 +14,11 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     private EntityShip ship;
     private ChunkPosition pos;
     private Entity prevRiddenByEntity;
+    private int ticksTillShipCheck;
 
     public EntitySeat(World world) {
         super(world);
+        ticksTillShipCheck = 0;
         ship = null;
         pos = null;
         prevRiddenByEntity = null;
@@ -34,20 +35,27 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
      */
     @Override
     public boolean interactFirst(EntityPlayer player) {
-        if (this.riddenByEntity != null) {
-            if (this.riddenByEntity.ridingEntity == null) {
-                this.riddenByEntity = null;
-            }
-        }
+        checkShipOpinion();
 
-        if (this.riddenByEntity != null && this.riddenByEntity instanceof EntityPlayer && this.riddenByEntity != player) {
-            return true;
-        } else {
+        if (riddenByEntity == null) {
+            player.mountEntity(null);
+            player.setSneaking(false);
             player.mountEntity(this);
             return true;
+        } else {
+            return false;
         }
     }
 
+
+    /**
+     * Sets the parent ship as well as chunkposition.
+     *
+     * @param entityship
+     * @param x
+     * @param y
+     * @param z
+     */
     public void setParentShip(EntityShip entityship, int x, int y, int z) {
         ship = entityship;
         if (entityship != null) {
@@ -74,8 +82,27 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
         return ship;
     }
 
-    public ChunkPosition getChunkPosition() {
+    public ChunkPosition getPos() {
         return pos;
+    }
+
+    public void checkShipOpinion() {
+        if (ship != null && ship.getCapabilities() != null && !((ShipCapabilities) ship.getCapabilities()).hasSeat(this)) {
+            if (riddenByEntity != null && this.riddenByEntity instanceof EntityPlayer) {
+                EntityPlayer player = (EntityPlayer) riddenByEntity;
+                EntitySeat seat = ((ShipCapabilities) ship.getCapabilities()).getAvailableSeat();
+                if (seat != null) {
+                    player.mountEntity(null);
+                    player.mountEntity(seat);
+                    EntityParachute parachute = new EntityParachute(worldObj, ship, pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ);
+                    if (worldObj.spawnEntityInWorld(parachute)) {
+                        player.mountEntity(parachute);
+                        player.setSneaking(false);
+                    }
+                }
+                setDead();
+            }
+        }
     }
 
     @Override
@@ -85,17 +112,16 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
         if (worldObj == null)
             return;
 
-        if (worldObj.isRemote && !this.dataWatcher.getIsBlank() && this.dataWatcher.getWatchableObjectByte(10) == new Byte((byte) 1)) {
-            if (this.dataWatcher.getWatchableObjectInt(6) != 0) {
-                ship = (EntityShip) worldObj.getEntityByID(this.dataWatcher.getWatchableObjectInt(6));
-                pos = new ChunkPosition(this.dataWatcher.getWatchableObjectByte(7),
-                        this.dataWatcher.getWatchableObjectByte(8),
-                        this.dataWatcher.getWatchableObjectByte(9));
+        if (worldObj.isRemote) {
+            if (!this.dataWatcher.getIsBlank() && this.dataWatcher.getWatchableObjectByte(10) == new Byte((byte) 1)) {
+                if (this.dataWatcher.getWatchableObjectInt(6) != 0) {
+                    ship = (EntityShip) worldObj.getEntityByID(this.dataWatcher.getWatchableObjectInt(6));
+                    pos = new ChunkPosition(this.dataWatcher.getWatchableObjectByte(7),
+                            this.dataWatcher.getWatchableObjectByte(8),
+                            this.dataWatcher.getWatchableObjectByte(9));
+                }
             }
-        }
-
-        if (worldObj.isRemote && this.dataWatcher.hasChanges()) {
-            if (this.dataWatcher.getWatchableObjectInt(6) != 0) {
+            if (this.dataWatcher.hasChanges() && this.dataWatcher.getWatchableObjectInt(6) != 0) {
                 ship = (EntityShip) worldObj.getEntityByID(this.dataWatcher.getWatchableObjectInt(6));
                 pos = new ChunkPosition(this.dataWatcher.getWatchableObjectByte(7),
                         this.dataWatcher.getWatchableObjectByte(8),
@@ -108,6 +134,7 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
         }
 
         if (!worldObj.isRemote) {
+
             if (riddenByEntity == null) {
                 if (prevRiddenByEntity != null) {
                     if (ship != null && ship.isFlying()) {
@@ -119,11 +146,20 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
                     }
                     prevRiddenByEntity = null;
                 }
-            }
-
-            if (riddenByEntity != null) {
+            } else {
                 prevRiddenByEntity = riddenByEntity;
             }
+            ticksTillShipCheck++;
+            if (ticksTillShipCheck >= 40) {
+                if (ship != null)
+                    ticksTillShipCheck = 0;
+            }
+        }
+
+        if (riddenByEntity != null && riddenByEntity.ridingEntity != this) {
+            Entity rider = riddenByEntity;
+            rider.mountEntity(null);
+            rider.mountEntity(this);
         }
     }
 
@@ -164,33 +200,13 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     }
 
     @Override
-    protected void writeEntityToNBT(NBTTagCompound compound) {
-        if (ship == null) {
-            compound.setInteger("shipID", 0);
-            compound.setByte("cPosX", (byte) 0);
-            compound.setByte("cPosY", (byte) 0);
-            compound.setByte("cPosZ", (byte) 0);
-            return;
-        }
-        compound.setInteger("shipID", ship.getEntityId());
-        compound.setByte("cPosX", (byte) (pos.chunkPosX & 0xFF));
-        compound.setByte("cPosY", (byte) (pos.chunkPosY & 0xFF));
-        compound.setByte("cPosZ", (byte) (pos.chunkPosZ & 0xFF));
+    protected void readEntityFromNBT(NBTTagCompound compound) {
+        checkShipOpinion();
     }
 
-
     @Override
-    protected void readEntityFromNBT(NBTTagCompound compound) {
-        int entityID = compound.getInteger("shipID");
-        int posChunkX = compound.getByte("cPosX");
-        int posChunkY = compound.getByte("cPosY");
-        int posChunkZ = compound.getByte("cPosZ");
-        if (entityID != 0) {
-            Entity entity = worldObj.getEntityByID(entityID);
-            if (entity instanceof EntityShip) {
-                setParentShip((EntityShip) entity, posChunkX, posChunkY, posChunkZ);
-            }
-        }
+    protected void writeEntityToNBT(NBTTagCompound p_70014_1_) {
+
     }
 
     @Override

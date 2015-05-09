@@ -1,6 +1,7 @@
 package darkevilmac.archimedes;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 import darkevilmac.archimedes.blockitem.TileEntityCrate;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
@@ -20,6 +21,10 @@ public class CommonHookContainer {
                 event.setCanceled(true);
             }
         }
+    }
+
+    @SubscribeEvent
+    public void onPlayerTick(TickEvent.PlayerTickEvent e) {
     }
 
 }
