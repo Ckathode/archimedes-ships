@@ -5,6 +5,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import darkevilmac.archimedes.ArchimedesConfig;
 import darkevilmac.archimedes.ArchimedesShipMod;
+import darkevilmac.archimedes.blockitem.TileEntityEngine;
 import darkevilmac.archimedes.blockitem.TileEntityHelm;
 import darkevilmac.archimedes.control.ShipControllerClient;
 import darkevilmac.archimedes.control.ShipControllerCommon;
@@ -44,6 +45,11 @@ public class EntityShip extends EntityMovingWorld {
     }
 
     @Override
+    public void onEntityUpdate() {
+        super.onEntityUpdate();
+    }
+
+    @Override
     public AxisAlignedBB getCollisionBox(Entity entity) {
         return entity instanceof EntitySeat || entity.ridingEntity instanceof EntitySeat || entity instanceof EntityLiving ? null : entity.boundingBox;
     }
@@ -64,6 +70,7 @@ public class EntityShip extends EntityMovingWorld {
 
     @Override
     public void initMovingWorld() {
+        dataWatcher.addObject(29, 0F); // Engine power
     }
 
     @Override
@@ -115,6 +122,8 @@ public class EntityShip extends EntityMovingWorld {
 
     @Override
     public void handleControl(double horvel) {
+        capabilities.updateEngines();
+
         if (riddenByEntity == null) {
             if (prevRiddenByEntity != null) {
                 if (ArchimedesShipMod.instance.modConfig.disassembleOnDismount) {
@@ -141,6 +150,24 @@ public class EntityShip extends EntityMovingWorld {
         } else {
             handlePlayerControl();
             prevRiddenByEntity = riddenByEntity;
+        }
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void spawnParticles(double horvel) {
+        if (capabilities.getEngines() != null) {
+            Vec3 vec = Vec3.createVectorHelper(0d, 0d, 0d);
+            float yaw = (float) Math.toRadians(rotationYaw);
+            for (TileEntityEngine engine : capabilities.getEngines()) {
+                if (engine.isRunning()) {
+                    vec.xCoord = engine.xCoord - getMovingWorldChunk().getCenterX() + 0.5f;
+                    vec.yCoord = engine.yCoord;
+                    vec.zCoord = engine.zCoord - getMovingWorldChunk().getCenterZ() + 0.5f;
+                    vec.rotateAroundY(yaw);
+                    worldObj.spawnParticle("smoke", posX + vec.xCoord, posY + vec.yCoord + 1d, posZ + vec.zCoord, 0d, 0d, 0d);
+                }
+            }
         }
     }
 

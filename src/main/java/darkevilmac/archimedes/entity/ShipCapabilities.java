@@ -24,8 +24,6 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     private float mass;
     private List<EntitySeat> seats;
     private List<TileEntityEngine> engines;
-    private float enginePower;
-
 
     public ShipCapabilities(EntityMovingWorld movingWorld, boolean autoCalcMass) {
         super(movingWorld, autoCalcMass);
@@ -33,31 +31,33 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     }
 
     public float getSpeedMult() {
-        return speedMultiplier + enginePower * 0.5f;
+        return speedMultiplier + getEnginePower() * 0.5f;
     }
 
     public float getRotationMult() {
-        return rotationMultiplier + enginePower * 0.25f;
+        return rotationMultiplier + getEnginePower() * 0.25f;
     }
 
     public float getLiftMult() {
-        return liftMultiplier + enginePower * 0.5f;
+        return liftMultiplier + getEnginePower() * 0.5f;
     }
 
     public float getEnginePower() {
-        return enginePower;
+        return ship.getDataWatcher().getWatchableObjectFloat(29);
     }
 
     public void updateEngines() {
-        enginePower = 0f;
+        float ePower = 0;
         if (engines != null) {
             for (TileEntityEngine te : engines) {
                 te.updateRunning();
                 if (te.isRunning()) {
-                    enginePower += te.enginePower;
+                    ePower += te.enginePower;
                 }
             }
         }
+        if (!ship.worldObj.isRemote)
+            ship.getDataWatcher().updateObject(29, ePower);
     }
 
     @Override
