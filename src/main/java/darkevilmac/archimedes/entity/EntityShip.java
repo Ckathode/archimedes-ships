@@ -47,6 +47,17 @@ public class EntityShip extends EntityMovingWorld {
     @Override
     public void onEntityUpdate() {
         super.onEntityUpdate();
+
+        if (worldObj != null && !worldObj.isRemote) {
+            boolean hasEngines = false;
+            if (capabilities.engines != null) {
+                hasEngines = capabilities.engines.isEmpty();
+            }
+            if (ArchimedesShipMod.instance.modConfig.enginesMandatory)
+                getDataWatcher().updateObject(28, new Byte(hasEngines ? (byte) 1 : (byte) 0));
+            else
+                getDataWatcher().updateObject(28, new Byte((byte) 1));
+        }
     }
 
     @Override
@@ -70,7 +81,9 @@ public class EntityShip extends EntityMovingWorld {
 
     @Override
     public void initMovingWorld() {
+        getCapabilities();
         dataWatcher.addObject(29, 0F); // Engine power
+        dataWatcher.addObject(28, new Byte((byte) 0)); // Do we have any engines
     }
 
     @Override
@@ -225,7 +238,7 @@ public class EntityShip extends EntityMovingWorld {
     }
 
     private void handlePlayerControl() {
-        if (riddenByEntity instanceof EntityLivingBase) {
+        if (riddenByEntity instanceof EntityLivingBase && ((ShipCapabilities) getCapabilities()).canMove()) {
             double throttle = ((EntityLivingBase) riddenByEntity).moveForward;
             if (isFlying()) {
                 throttle *= 0.5D;

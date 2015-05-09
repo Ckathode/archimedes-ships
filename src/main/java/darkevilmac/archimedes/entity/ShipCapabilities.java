@@ -22,8 +22,8 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     private int floaters;
     private int blockCount;
     private float mass;
-    private List<EntitySeat> seats;
-    private List<TileEntityEngine> engines;
+    public List<EntitySeat> seats;
+    public List<TileEntityEngine> engines;
 
     public ShipCapabilities(EntityMovingWorld movingWorld, boolean autoCalcMass) {
         super(movingWorld, autoCalcMass);
@@ -94,6 +94,10 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     public void addAttachments(EntitySeat entity) {
         if (seats == null) seats = new ArrayList<EntitySeat>();
         if (entity != null && entity instanceof EntitySeat) seats.add(entity);
+    }
+
+    public boolean canMove() {
+        return ship.getDataWatcher().getWatchableObjectByte(28) == 1;
     }
 
     public List<EntitySeat> getAttachments() {
