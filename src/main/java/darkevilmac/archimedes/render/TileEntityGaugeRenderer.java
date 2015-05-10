@@ -19,6 +19,7 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
         RenderHelper.disableStandardItemLighting();
 
         boolean extended = (tileentity.blockMetadata & 4) != 0;
+
         int meta = tileentity.blockMetadata & 3;
         Tessellator tess = Tessellator.instance;
 

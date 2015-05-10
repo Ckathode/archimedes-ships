@@ -51,7 +51,11 @@ public class EntityShip extends EntityMovingWorld {
         if (worldObj != null && !worldObj.isRemote) {
             boolean hasEngines = false;
             if (capabilities.engines != null) {
-                hasEngines = capabilities.engines.isEmpty();
+                if (capabilities.engines.isEmpty())
+                    hasEngines = false;
+                else {
+                    hasEngines = capabilities.getEnginePower() > 0;
+                }
             }
             if (ArchimedesShipMod.instance.modConfig.enginesMandatory)
                 getDataWatcher().updateObject(28, new Byte(hasEngines ? (byte) 1 : (byte) 0));
@@ -156,7 +160,7 @@ public class EntityShip extends EntityMovingWorld {
             }
         }
 
-        if (riddenByEntity == null) {
+        if (riddenByEntity == null || !capabilities.canMove()) {
             if (isFlying()) {
                 motionY -= BASE_LIFT_SPEED * 0.2F;
             }

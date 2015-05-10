@@ -55,7 +55,10 @@ public class BlockGauge extends BlockContainer {
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
+
+
         return (meta & 4) != 0 ? extendedIcon : blockIcon;
+
     }
 
     @Override
