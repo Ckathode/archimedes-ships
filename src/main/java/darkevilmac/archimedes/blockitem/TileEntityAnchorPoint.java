@@ -33,16 +33,21 @@ public class TileEntityAnchorPoint extends TileEntity {
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
-        anchorPointInfo = new AnchorPointInfo(tag.getInteger("linkX"), tag.getInteger("linkY"), tag.getInteger("linkZ"), tag.getBoolean("forShip"));
+        if (tag.getBoolean("hasAnchorInfo")) {
+            anchorPointInfo = new AnchorPointInfo(tag.getInteger("linkX"), tag.getInteger("linkY"), tag.getInteger("linkZ"), tag.getBoolean("forShip"));
+        }
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
-        tag.setInteger("linkX", anchorPointInfo.linkX);
-        tag.setInteger("linkY", anchorPointInfo.linkY);
-        tag.setInteger("linkZ", anchorPointInfo.linkZ);
-        tag.setBoolean("forShip", anchorPointInfo.forShip);
+        if (anchorPointInfo != null) {
+            tag.setBoolean("hasAnchorInfo", true);
+            tag.setInteger("linkX", anchorPointInfo.linkX);
+            tag.setInteger("linkY", anchorPointInfo.linkY);
+            tag.setInteger("linkZ", anchorPointInfo.linkZ);
+            tag.setBoolean("forShip", anchorPointInfo.forShip);
+        }
     }
 
     public class AnchorPointInfo {
