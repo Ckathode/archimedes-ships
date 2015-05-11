@@ -1,0 +1,4 @@
+# Archimedes' Ships block meta rotations
+ArchimedesShipsPlus:marker; 0x3; 0, 1, 2, 3;
+ArchimedesShipsPlus:seat; 0x3; 0, 1, 2, 3;
+#ArchimedesShipsPlus:gauge; 0x3; 0, 1, 2, 3;

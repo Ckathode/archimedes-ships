@@ -51,7 +51,6 @@ public class TileEntityGauge extends TileEntity implements IMovingWorldTileEntit
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
-        blockMetadata = compound.getInteger("meta");
         if (compound.hasKey("vehicle") && worldObj != null) {
             int id = compound.getInteger("vehicle");
             Entity entity = worldObj.getEntityByID(id);
@@ -59,6 +58,13 @@ public class TileEntityGauge extends TileEntity implements IMovingWorldTileEntit
                 parentShip = (EntityMovingWorld) entity;
             }
         }
+
+        if (worldObj != null && worldObj.isRemote) {
+            if (worldObj.getBlockMetadata(xCoord, yCoord, zCoord) != compound.getInteger("meta")) {
+                worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, compound.getInteger("meta"), 2);
+            }
+        }
+        blockMetadata = compound.getInteger("meta");
     }
 
     @Override

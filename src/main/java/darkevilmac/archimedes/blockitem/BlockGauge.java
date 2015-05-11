@@ -2,7 +2,6 @@ package darkevilmac.archimedes.blockitem;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import darkevilmac.movingworld.util.RotationHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -55,10 +54,7 @@ public class BlockGauge extends BlockContainer {
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
-
-
         return (meta & 4) != 0 ? extendedIcon : blockIcon;
-
     }
 
     @Override
@@ -112,6 +108,16 @@ public class BlockGauge extends BlockContainer {
 
     @Override
     public boolean rotateBlock(World world, int x, int y, int z, ForgeDirection axis) {
-        return RotationHelper.rotateArchimedesBlock(this, world, x, y, z, axis);
+        if (axis == ForgeDirection.UP || axis == ForgeDirection.DOWN) {
+            boolean extended = (world.getBlockMetadata(x, y, z) & 4) != 0;
+            int d = axis == ForgeDirection.DOWN ? -1 : 1;
+            if (!extended) {
+                world.setBlockMetadataWithNotify(x, y, z, (world.getBlockMetadata(x, y, z) + d) & 3, 2);
+            } else {
+                world.setBlockMetadataWithNotify(x, y, z, (world.getBlockMetadata(x, y, z) + d) & 7, 2);
+            }
+        }
+        return true;
+        //return RotationHelper.rotateArchimedesBlock(this, world, x, y, z, axis); This is flawed, our meta is different.
     }
 }

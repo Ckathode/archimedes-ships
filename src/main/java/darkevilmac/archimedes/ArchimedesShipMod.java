@@ -24,6 +24,7 @@ import darkevilmac.archimedes.handler.ConnectionHandler;
 import darkevilmac.archimedes.network.ArchimedesShipsMessageToMessageCodec;
 import darkevilmac.archimedes.network.ArchimedesShipsPacketHandler;
 import darkevilmac.archimedes.network.NetworkUtil;
+import darkevilmac.movingworld.MovingWorld;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockColored;
 import net.minecraft.block.material.MapColor;
@@ -40,12 +41,13 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.util.Collections;
 
-@Mod(modid = ArchimedesShipMod.MOD_ID, name = ArchimedesShipMod.MOD_NAME, version = ArchimedesShipMod.MOD_VERSION)
+@Mod(modid = ArchimedesShipMod.MOD_ID, name = ArchimedesShipMod.MOD_NAME, version = ArchimedesShipMod.MOD_VERSION, dependencies = "required-after:MovingWorld@")
 public class ArchimedesShipMod {
     public static final String MOD_ID = "ArchimedesShipsPlus";
-    public static final String MOD_VERSION = "1.7.10-V1.8.0";
+    public static final String MOD_VERSION = "1.7.10-ALPHA-0";
     public static final String MOD_NAME = "Archimedes' Ships Plus";
 
     @Instance(MOD_ID)
@@ -164,6 +166,12 @@ public class ArchimedesShipMod {
 
     @EventHandler
     public void initMod(FMLInitializationEvent event) {
+
+        try {
+            MovingWorld.instance.metaRotations.registerMetaRotationFile("archimedesships.mrot", getClass().getResourceAsStream("/darkevilmac/archimedes/mrot/archimedesships.mrot"));
+        } catch (IOException e) {
+            modLog.error("UNABLE TO LOAD ARCHIMEDESSHIPS.MROT");
+        }
 
         network.channels = NetworkRegistry.INSTANCE.newChannel
                 (MOD_ID, new ArchimedesShipsMessageToMessageCodec(), new ArchimedesShipsPacketHandler());

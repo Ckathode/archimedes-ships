@@ -1,6 +1,7 @@
 package darkevilmac.archimedes.entity;
 
 import darkevilmac.archimedes.ArchimedesShipMod;
+import darkevilmac.archimedes.blockitem.TileEntityAnchorPoint;
 import darkevilmac.archimedes.blockitem.TileEntityEngine;
 import darkevilmac.movingworld.MaterialDensity;
 import darkevilmac.movingworld.entity.EntityMovingWorld;
@@ -22,6 +23,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     private int floaters;
     private int blockCount;
     private float mass;
+    public List<TileEntityAnchorPoint> anchorPoints;
     public List<EntitySeat> seats;
     public List<TileEntityEngine> engines;
 
