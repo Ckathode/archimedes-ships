@@ -168,7 +168,7 @@ public class ArchimedesShipMod {
     public void initMod(FMLInitializationEvent event) {
 
         try {
-            MovingWorld.instance.metaRotations.registerMetaRotationFile("archimedesships.mrot", getClass().getResourceAsStream("/darkevilmac/archimedes/mrot/archimedesships.mrot"));
+            MovingWorld.instance.metaRotations.registerMetaRotationFile("archimedesships.mrot", getClass().getResourceAsStream("/mrot/archimedesships.mrot"));
         } catch (IOException e) {
             modLog.error("UNABLE TO LOAD ARCHIMEDESSHIPS.MROT");
         }
