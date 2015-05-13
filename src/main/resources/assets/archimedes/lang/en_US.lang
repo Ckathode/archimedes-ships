@@ -2,6 +2,12 @@
 
 entity.ArchimedesShips.shipmod.name=Archimedes' Ships
 
+common.tile.anchor.activateGround=You have activated an anchor for use on the ground, activate any anchors for ships you want this anchor to be associated with.
+common.tile.anchor.activateShip=Linked ship anchor with ground anchor at
+common.tile.anchor.changeModeGround=This Anchor is now set for use on the ground.
+common.tile.anchor.changeModeShip=This Anchor is now set for use on ships.
+common.tile.anchor.noGroundLink=You must activate a ground anchor to link with this ship anchor.
+
 tile.archimedes.marker.name=Ship's Helm
 tile.archimedes.floater.name=Floater
 tile.archimedes.balloon.name=Air Balloon

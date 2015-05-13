@@ -1,12 +1,21 @@
 package darkevilmac.archimedes.blockitem;
 
+import darkevilmac.movingworld.entity.EntityMovingWorld;
+import darkevilmac.movingworld.tile.IMovingWorldTileEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileEntityAnchorPoint extends TileEntity {
+public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTileEntity {
 
     public AnchorPointInfo anchorPointInfo;
     int time;
+    private EntityMovingWorld activeShip;
+
+    public TileEntityAnchorPoint() {
+        super();
+        activeShip = null;
+    }
 
     @Override
     public void updateEntity() {
@@ -33,6 +42,13 @@ public class TileEntityAnchorPoint extends TileEntity {
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
+        if (worldObj != null && tag.hasKey("vehicle") && worldObj != null) {
+            int id = tag.getInteger("vehicle");
+            Entity entity = worldObj.getEntityByID(id);
+            if (entity != null && entity instanceof EntityMovingWorld) {
+                activeShip = (EntityMovingWorld) entity;
+            }
+        }
         if (tag.getBoolean("hasAnchorInfo")) {
             anchorPointInfo = new AnchorPointInfo(tag.getInteger("linkX"), tag.getInteger("linkY"), tag.getInteger("linkZ"), tag.getBoolean("forShip"));
         }
@@ -41,6 +57,9 @@ public class TileEntityAnchorPoint extends TileEntity {
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
+        if (activeShip != null && !activeShip.isDead) {
+            tag.setInteger("vehicle", activeShip.getEntityId());
+        }
         if (anchorPointInfo != null) {
             tag.setBoolean("hasAnchorInfo", true);
             tag.setInteger("linkX", anchorPointInfo.linkX);
@@ -48,6 +67,21 @@ public class TileEntityAnchorPoint extends TileEntity {
             tag.setInteger("linkZ", anchorPointInfo.linkZ);
             tag.setBoolean("forShip", anchorPointInfo.forShip);
         }
+    }
+
+    @Override
+    public void setParentMovingWorld(EntityMovingWorld entityMovingWorld, int x, int y, int z) {
+        activeShip = entityMovingWorld;
+    }
+
+    @Override
+    public EntityMovingWorld getParentMovingWorld() {
+        return activeShip;
+    }
+
+    @Override
+    public void setParentMovingWorld(EntityMovingWorld entityMovingWorld) {
+        setParentMovingWorld(entityMovingWorld, 0, 0, 0);
     }
 
     public class AnchorPointInfo {
@@ -80,7 +114,6 @@ public class TileEntityAnchorPoint extends TileEntity {
         public AnchorPointInfo clone() {
             return new AnchorPointInfo(linkX, linkY, linkZ, forShip);
         }
-
     }
 
 }

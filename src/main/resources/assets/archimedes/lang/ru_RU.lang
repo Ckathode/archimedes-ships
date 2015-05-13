@@ -2,6 +2,12 @@
 
 entity.ArchimedesShips.shipmod.name=Корабль Архимеда
 
+common.tile.anchor.activateGround=no entry
+common.tile.anchor.activateShip=no entry
+common.tile.anchor.changeModeGround=no entry
+common.tile.anchor.changeModeShip=no entry
+common.tile.anchor.noGroundLink=no entry
+
 tile.archimedes.marker.name=Корабельный штурвал
 tile.archimedes.floater.name=Плот
 tile.archimedes.balloon.name=Воздушный шар

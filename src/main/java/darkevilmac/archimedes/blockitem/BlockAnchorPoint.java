@@ -1,10 +1,12 @@
 package darkevilmac.archimedes.blockitem;
 
+import darkevilmac.archimedes.ArchimedesShipMod;
+import darkevilmac.archimedes.network.TranslatedChatMessage;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 
 public class BlockAnchorPoint extends BlockContainer {
@@ -22,20 +24,20 @@ public class BlockAnchorPoint extends BlockContainer {
                     return false;
                 if (player.isSneaking()) {
                     tile.anchorPointInfo.forShip = !tile.anchorPointInfo.forShip;
-                    player.addChatComponentMessage(new ChatComponentText("This Anchor is now set for use on " + (tile.anchorPointInfo.forShip ? "ships" : "the ground.")));
+                    ArchimedesShipMod.instance.network.sendTo(new TranslatedChatMessage("TR:" + (tile.anchorPointInfo.forShip ? "common.tile.anchor.changeModeShip" : "common.tile.anchor.changeModeGround") + "~ "), (EntityPlayerMP) player);
                 } else {
                     if (tile.anchorPointInfo.forShip) {
                         if (player.getEntityData().getBoolean("SelectedShipData")) {
                             int[] selectedShipPos = player.getEntityData().getIntArray("SelectedShipAnchorPos");
                             tile.anchorPointInfo.setInfo(selectedShipPos[0], selectedShipPos[1], selectedShipPos[2], tile.anchorPointInfo.forShip);
-                            player.addChatComponentMessage(new ChatComponentText("Linked ship anchor with ground anchor" + (" X:" + selectedShipPos[0] + " Y:" + selectedShipPos[1] + " Z:" + selectedShipPos[2])));
+                            ArchimedesShipMod.instance.network.sendTo(new TranslatedChatMessage("TR:" + "common.tile.anchor.activateShip" + "~ X:" + selectedShipPos[0] + " Y:" + selectedShipPos[1] + " Z:" + selectedShipPos[2]), (EntityPlayerMP) player);
                         } else {
-                            player.addChatComponentMessage(new ChatComponentText("You must activate a ground anchor to link with this ship anchor."));
+                            ArchimedesShipMod.instance.network.sendTo(new TranslatedChatMessage("TR:" + "common.tile.anchor.noGroundLink"), (EntityPlayerMP) player);
                         }
                     } else {
                         player.getEntityData().setIntArray("SelectedShipAnchorPos", new int[]{x, y, z});
                         player.getEntityData().setBoolean("SelectedShipData", true);
-                        player.addChatComponentMessage(new ChatComponentText("You have activated an anchor for use on the ground, activate any anchors for ships you want this anchor to be associated with."));
+                        ArchimedesShipMod.instance.network.sendTo(new TranslatedChatMessage("TR:" + "common.tile.anchor.activateGround"), (EntityPlayerMP) player);
                     }
                 }
             }

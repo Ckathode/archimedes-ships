@@ -5,6 +5,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import darkevilmac.archimedes.ArchimedesConfig;
 import darkevilmac.archimedes.ArchimedesShipMod;
+import darkevilmac.archimedes.blockitem.TileEntityAnchorPoint;
 import darkevilmac.archimedes.blockitem.TileEntityEngine;
 import darkevilmac.archimedes.blockitem.TileEntityHelm;
 import darkevilmac.archimedes.control.ShipControllerClient;
@@ -50,8 +51,8 @@ public class EntityShip extends EntityMovingWorld {
 
         if (worldObj != null && !worldObj.isRemote) {
             boolean hasEngines = false;
-            if (capabilities.engines != null) {
-                if (capabilities.engines.isEmpty())
+            if (capabilities.getEngines() != null) {
+                if (capabilities.getEngines().isEmpty())
                     hasEngines = false;
                 else {
                     hasEngines = capabilities.getEnginePower() > 0;
@@ -115,6 +116,27 @@ public class EntityShip extends EntityMovingWorld {
         }
     }
 
+    /**
+     * Aligns to the closest anchor within 16 blocks.
+     *
+     * @return
+     */
+    public boolean alignToAnchor() {
+        for (int amountToIgnore = 0; amountToIgnore < 100; amountToIgnore++) {
+            if (capabilities.findClosestValidAnchor(16) != null) {
+                TileEntityAnchorPoint anchorPoint = capabilities.findClosestValidAnchor(16);
+                setPosition(anchorPoint.xCoord - 0, anchorPoint.yCoord + 2, anchorPoint.zCoord - 0);
+            } else {
+                alignToGrid();
+                return false;
+            }
+        }
+
+        alignToGrid();
+
+        return false;
+    }
+
     @Override
     public boolean isBraking() {
         return controller.getShipControl() == 3;
@@ -144,7 +166,7 @@ public class EntityShip extends EntityMovingWorld {
         if (riddenByEntity == null) {
             if (prevRiddenByEntity != null) {
                 if (ArchimedesShipMod.instance.modConfig.disassembleOnDismount) {
-                    alignToGrid();
+                    alignToAnchor();
                     updateRiderPosition(prevRiddenByEntity, riderDestinationX, riderDestinationY, riderDestinationZ, 1);
                     disassemble(false);
                 } else {
@@ -279,7 +301,7 @@ public class EntityShip extends EntityMovingWorld {
 
         if (controller.getShipControl() != 0) {
             if (controller.getShipControl() == 4) {
-                alignToGrid();
+                alignToAnchor();
             } else if (isBraking()) {
                 motionX *= capabilities.brakeMult;
                 motionZ *= capabilities.brakeMult;

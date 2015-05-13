@@ -14,7 +14,6 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import org.lwjgl.Sys;
 
 public class BlockEngine extends BlockContainer {
     public float enginePower;
@@ -36,7 +35,7 @@ public class BlockEngine extends BlockContainer {
         if (side == meta)
             return this.frontIcon;
 
-        if(ForgeDirection.getOrientation(side).getOpposite().ordinal() == meta){
+        if (ForgeDirection.getOrientation(side).getOpposite().ordinal() == meta) {
             return this.backIcon;
         }
 

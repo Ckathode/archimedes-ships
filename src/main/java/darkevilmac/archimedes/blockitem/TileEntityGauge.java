@@ -1,7 +1,7 @@
 package darkevilmac.archimedes.blockitem;
 
 import darkevilmac.movingworld.entity.EntityMovingWorld;
-import darkevilmac.movingworld.entity.IMovingWorldTileEntity;
+import darkevilmac.movingworld.tile.IMovingWorldTileEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;

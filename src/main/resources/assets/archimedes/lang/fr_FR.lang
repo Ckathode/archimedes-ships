@@ -2,6 +2,12 @@
 
 entity.ArchimedesShips.shipmod.name=Les vaisseaux d'Archimède
 
+common.tile.anchor.activateGround=no entry
+common.tile.anchor.activateShip=no entry
+common.tile.anchor.changeModeGround=no entry
+common.tile.anchor.changeModeShip=no entry
+common.tile.anchor.noGroundLink=no entry
+
 tile.archimedes.marker.name=Barre de vaisseau
 tile.archimedes.floater.name=Flotteur
 tile.archimedes.balloon.name=Montgolfière

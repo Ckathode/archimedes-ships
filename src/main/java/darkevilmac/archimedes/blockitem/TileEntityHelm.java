@@ -4,11 +4,11 @@ import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.entity.EntityShip;
 import darkevilmac.archimedes.entity.ShipAssemblyInteractor;
 import darkevilmac.archimedes.network.AssembleResultMessage;
-import darkevilmac.movingworld.block.TileMovingWorldMarkingBlock;
 import darkevilmac.movingworld.chunk.AssembleResult;
 import darkevilmac.movingworld.chunk.MovingWorldAssemblyInteractor;
 import darkevilmac.movingworld.entity.EntityMovingWorld;
 import darkevilmac.movingworld.entity.MovingWorldInfo;
+import darkevilmac.movingworld.tile.TileMovingWorldMarkingBlock;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
