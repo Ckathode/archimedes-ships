@@ -399,6 +399,8 @@ public class EntityShip extends EntityBoat implements IEntityAdditionalSpawnData
 	
 	protected void handleServerUpdate(double horvel)
 	{
+		boolean underControl = false;
+		
 		//START outer forces
 		byte b0 = 5;
 		int bpermeter = (int) (b0 * (boundingBox.maxY - boundingBox.minY));
@@ -485,9 +487,10 @@ public class EntityShip extends EntityBoat implements IEntityAdditionalSpawnData
 			}
 		} else
 		{
-			handlePlayerControl();
+			underControl = handlePlayerControl();
 			prevRiddenByEntity = riddenByEntity;
 		}
+		if( !underControl ) driftToGrid();
 		//END player input
 		
 		//START limit motion
@@ -616,8 +619,10 @@ public class EntityShip extends EntityBoat implements IEntityAdditionalSpawnData
 		//END Collision
 	}
 	
-	private void handlePlayerControl()
+	private boolean handlePlayerControl()
 	{
+		boolean underControl = false;
+
 		if (riddenByEntity instanceof EntityLivingBase)
 		{
 			double throttle = ((EntityLivingBase) riddenByEntity).moveForward;
@@ -625,6 +630,7 @@ public class EntityShip extends EntityBoat implements IEntityAdditionalSpawnData
 			{
 				throttle *= 0.5D;
 			}
+			if( throttle > 0.0D ) underControl = true;
 			
 			if (ArchimedesShipMod.instance.modConfig.shipControlType == ArchimedesConfig.CONTROL_TYPE_ARCHIMEDES)
 			{
@@ -632,6 +638,7 @@ public class EntityShip extends EntityBoat implements IEntityAdditionalSpawnData
 				vec.rotateAroundY((float) Math.toRadians(riddenByEntity.rotationYaw));
 				
 				double steer = ((EntityLivingBase) riddenByEntity).moveStrafing;
+				if( steer != 0.0D ) underControl = true;
 				
 				motionYaw += steer * BASE_TURN_SPEED * capabilities.getPoweredRotationMult() * ArchimedesShipMod.instance.modConfig.turnSpeed;
 				
@@ -645,7 +652,6 @@ public class EntityShip extends EntityBoat implements IEntityAdditionalSpawnData
 				
 				motionX = vec.xCoord;
 				motionZ = vec.zCoord;
-				
 			} else if (ArchimedesShipMod.instance.modConfig.shipControlType == ArchimedesConfig.CONTROL_TYPE_VANILLA)
 			{
 				if (throttle > 0.0D)
@@ -684,7 +690,9 @@ public class EntityShip extends EntityBoat implements IEntityAdditionalSpawnData
 				}
 				motionY += i * BASE_LIFT_SPEED * capabilities.getPoweredLiftMult();
 			}
+			underControl = true;
 		}
+		return underControl;
 	}
 	
 	@Override
@@ -928,14 +936,47 @@ public class EntityShip extends EntityBoat implements IEntityAdditionalSpawnData
 		int ix = MathHelperMod.round_double(vec.xCoord + posX);
 		int iy = MathHelperMod.round_double(vec.yCoord + posY);
 		int iz = MathHelperMod.round_double(vec.zCoord + posZ);
-		
+
 		posX = ix - vec.xCoord;
 		posY = iy - vec.yCoord;
 		posZ = iz - vec.zCoord;
 		
 		motionX = motionY = motionZ = 0D;
 	}
+
+	public void driftToGrid()
+	{
+		if( Math.abs( motionYaw ) < BASE_TURN_SPEED  * 0.25f )
+		{
+			float targetYaw = Math.round(rotationYaw / 90F) * 90F - rotationYaw;
+			float targetDir = Math.min( Math.abs( targetYaw ), BASE_TURN_SPEED * 0.25f ) * Math.signum( targetYaw );
+			motionYaw = targetDir;
+		}
+		
+		if( Math.abs( motionX ) < BASE_FORWARD_SPEED * 0.25f && Math.abs( motionZ ) < BASE_FORWARD_SPEED * 0.25f )
+		{
+			Vec3 size = Vec3.createVectorHelper(shipChunk.getSizeX(), shipChunk.getSizeY(), shipChunk.getSizeZ());
+			size.rotateAroundY((float) Math.toRadians(rotationYaw));
+			
+			Vec3 target = Vec3.createVectorHelper(getBlockAt(posX, size.xCoord), getBlockAt(posY, size.yCoord), getBlockAt(posZ, size.zCoord));
+			double ix = target.xCoord - posX;
+			double iy = target.yCoord - posY;
+			double iz = target.zCoord - posZ;
 	
+			double targetX = Math.min( Math.abs( ix ), BASE_FORWARD_SPEED * 0.25f ) * Math.signum( ix );
+			double targetY = Math.min( Math.abs( iy ), BASE_FORWARD_SPEED * 0.25f ) * Math.signum( iy );
+			double targetZ = Math.min( Math.abs( iz ), BASE_FORWARD_SPEED * 0.25f ) * Math.signum( iz );
+	
+			motionX = targetX;
+			motionZ = targetZ;
+		}
+	}
+	
+	public double getBlockAt( double x, double width)
+	{
+		return (double)((int)x) +(width % 2) * 0.5;
+	}
+
 	public boolean disassemble(boolean overwrite)
 	{
 		if (worldObj.isRemote) return true;
