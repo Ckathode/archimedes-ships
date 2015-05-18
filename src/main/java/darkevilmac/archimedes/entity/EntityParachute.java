@@ -1,12 +1,15 @@
 package darkevilmac.archimedes.entity;
 
-import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import darkevilmac.movingworld.util.Vec3Mod;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class EntityParachute extends Entity implements IEntityAdditionalSpawnData {
     public EntityParachute(World world) {
@@ -14,10 +17,10 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
         setSize(1F, 1F);
     }
 
-    public EntityParachute(World world, EntityShip ship, int x, int y, int z) {
+    public EntityParachute(World world, EntityShip ship, BlockPos pos) {
         this(world);
-        Vec3 vec = Vec3.createVectorHelper(x - ship.getMovingWorldChunk().getCenterX(), y - ship.getMovingWorldChunk().minY(), z - ship.getMovingWorldChunk().getCenterZ());
-        vec.rotateAroundY((float) Math.toRadians(ship.rotationYaw));
+        Vec3Mod vec = new Vec3Mod(pos.getX() - ship.getMovingWorldChunk().getCenterX(), pos.getY() - ship.getMovingWorldChunk().minY(), pos.getZ() - ship.getMovingWorldChunk().getCenterZ());
+        vec = new Vec3Mod(vec.rotateYaw((float) Math.toRadians(ship.rotationYaw)));
 
         setLocationAndAngles(ship.posX + vec.xCoord, ship.posY + vec.yCoord - 2D, ship.posZ + vec.zCoord, 0F, 0F);
         motionX = ship.motionX;
@@ -88,11 +91,14 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
     }
 
     @Override
-    protected void updateFallState(double d, boolean ground) {
+    public void func_180433_a(double y, boolean grounded, Block blockIn, BlockPos pos) {
+        // Do nothing
     }
 
+
     @Override
-    protected void fall(float f) {
+    public void fall(float fallDistance, float damageMult) {
+        // Do nothing
     }
 
     @Override

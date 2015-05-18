@@ -5,6 +5,7 @@ import darkevilmac.movingworld.tile.IMovingWorldTileEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 
 public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTileEntity {
 
@@ -85,15 +86,11 @@ public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTil
     }
 
     public class AnchorPointInfo {
-        public int linkX;
-        public int linkY;
-        public int linkZ;
+        public BlockPos linkPos;
         public boolean forShip;
 
         public AnchorPointInfo() {
-            linkX = 0;
-            linkY = 0;
-            linkZ = 0;
+            linkPos = new BlockPos(BlockPos.ORIGIN);
             forShip = false;
         }
 

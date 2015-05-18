@@ -1,8 +1,5 @@
 package darkevilmac.archimedes.entity;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import darkevilmac.archimedes.ArchimedesConfig;
 import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.blockitem.TileEntityAnchorPoint;
@@ -16,6 +13,7 @@ import darkevilmac.movingworld.chunk.MovingWorldAssemblyInteractor;
 import darkevilmac.movingworld.entity.EntityMovingWorld;
 import darkevilmac.movingworld.entity.MovingWorldCapabilities;
 import darkevilmac.movingworld.entity.MovingWorldHandlerCommon;
+import darkevilmac.movingworld.util.Vec3Mod;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -23,12 +21,11 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.ChunkPosition;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Set;
 
@@ -67,7 +64,7 @@ public class EntityShip extends EntityMovingWorld {
 
     @Override
     public AxisAlignedBB getCollisionBox(Entity entity) {
-        return entity instanceof EntitySeat || entity.ridingEntity instanceof EntitySeat || entity instanceof EntityLiving ? null : entity.boundingBox;
+        return entity instanceof EntitySeat || entity.ridingEntity instanceof EntitySeat || entity instanceof EntityLiving ? null : entity.getBoundingBox();
     }
 
     @Override
@@ -125,7 +122,7 @@ public class EntityShip extends EntityMovingWorld {
         for (int amountToIgnore = 0; amountToIgnore < 100; amountToIgnore++) {
             if (capabilities.findClosestValidAnchor(16) != null) {
                 TileEntityAnchorPoint anchorPoint = capabilities.findClosestValidAnchor(16);
-                setPosition(anchorPoint.xCoord - 0, anchorPoint.yCoord + 2, anchorPoint.zCoord - 0);
+                setPosition(anchorPoint.getPos().getX() - 0, anchorPoint.getPos().getY() + 2, anchorPoint.getPos().getZ() - 0);
             } else {
                 alignToGrid();
                 return false;
@@ -167,11 +164,11 @@ public class EntityShip extends EntityMovingWorld {
             if (prevRiddenByEntity != null) {
                 if (ArchimedesShipMod.instance.modConfig.disassembleOnDismount) {
                     alignToAnchor();
-                    updateRiderPosition(prevRiddenByEntity, riderDestinationX, riderDestinationY, riderDestinationZ, 1);
+                    updateRiderPosition(prevRiddenByEntity, riderDestination, 1);
                     disassemble(false);
                 } else {
                     if (!worldObj.isRemote && isFlying()) {
-                        EntityParachute parachute = new EntityParachute(worldObj, this, riderDestinationX, riderDestinationY, riderDestinationZ);
+                        EntityParachute parachute = new EntityParachute(worldObj, this, riderDestination);
                         if (worldObj.spawnEntityInWorld(parachute)) {
                             prevRiddenByEntity.mountEntity(parachute);
                             prevRiddenByEntity.setSneaking(false);
@@ -196,15 +193,15 @@ public class EntityShip extends EntityMovingWorld {
     @SideOnly(Side.CLIENT)
     public void spawnParticles(double horvel) {
         if (capabilities.getEngines() != null) {
-            Vec3 vec = Vec3.createVectorHelper(0d, 0d, 0d);
+            Vec3Mod vec = Vec3Mod.getOrigin();
             float yaw = (float) Math.toRadians(rotationYaw);
             for (TileEntityEngine engine : capabilities.getEngines()) {
                 if (engine.isRunning()) {
-                    vec.xCoord = engine.xCoord - getMovingWorldChunk().getCenterX() + 0.5f;
-                    vec.yCoord = engine.yCoord;
-                    vec.zCoord = engine.zCoord - getMovingWorldChunk().getCenterZ() + 0.5f;
-                    vec.rotateAroundY(yaw);
-                    worldObj.spawnParticle("smoke", posX + vec.xCoord, posY + vec.yCoord + 1d, posZ + vec.zCoord, 0d, 0d, 0d);
+                    vec = vec.setX(engine.getPos().getX() - getMovingWorldChunk().getCenterX() + 0.5f);
+                    vec = vec.setY(engine.getPos().getY());
+                    vec = vec.setZ(engine.getPos().getZ() - getMovingWorldChunk().getCenterZ() + 0.5f);
+                    vec = new Vec3Mod(vec.rotateYaw(yaw));
+                    worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX + vec.xCoord, posY + vec.yCoord + 1d, posZ + vec.zCoord, 0d, 0d, 0d);
                 }
             }
         }
@@ -271,20 +268,20 @@ public class EntityShip extends EntityMovingWorld {
             }
 
             if (ArchimedesShipMod.instance.modConfig.shipControlType == ArchimedesConfig.CONTROL_TYPE_ARCHIMEDES) {
-                Vec3 vec = Vec3.createVectorHelper(riddenByEntity.motionX, 0D, riddenByEntity.motionZ);
-                vec.rotateAroundY((float) Math.toRadians(riddenByEntity.rotationYaw));
+                Vec3Mod vec = new Vec3Mod(riddenByEntity.motionX, 0D, riddenByEntity.motionZ);
+                vec = new Vec3Mod(vec.rotateYaw((float) Math.toRadians(riddenByEntity.rotationYaw)));
 
                 double steer = ((EntityLivingBase) riddenByEntity).moveStrafing;
 
                 motionYaw += steer * BASE_TURN_SPEED * capabilities.getRotationMult() * ArchimedesShipMod.instance.modConfig.turnSpeed;
 
                 float yaw = (float) Math.toRadians(180F - rotationYaw + frontDirection * 90F);
-                vec.xCoord = motionX;
-                vec.zCoord = motionZ;
-                vec.rotateAroundY(yaw);
-                vec.xCoord *= 0.9D;
-                vec.zCoord -= throttle * BASE_FORWARD_SPEED * capabilities.getSpeedMult();
-                vec.rotateAroundY(-yaw);
+                vec = vec.setX(motionX);
+                vec = vec.setZ(motionZ);
+                vec = new Vec3Mod(vec.rotateYaw(yaw));
+                vec = new Vec3Mod(vec.setX(vec.xCoord * 0.9D));
+                vec = new Vec3Mod(vec.setZ(vec.zCoord - throttle * BASE_FORWARD_SPEED * capabilities.getSpeedMult()));
+                vec = new Vec3Mod(vec.rotateYaw(-yaw));
 
                 motionX = vec.xCoord;
                 motionZ = vec.zCoord;
@@ -356,8 +353,8 @@ public class EntityShip extends EntityMovingWorld {
         //interactor.transferToCapabilities(getCapabilities());
     }
 
-    public void fillAirBlocks(Set<ChunkPosition> set, int x, int y, int z) {
-        super.fillAirBlocks(set, x, y, z);
+    public void fillAirBlocks(Set<BlockPos> set, BlockPos pos) {
+        super.fillAirBlocks(set, pos);
     }
 
     public ShipControllerCommon getController() {
