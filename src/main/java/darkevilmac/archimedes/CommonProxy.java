@@ -1,9 +1,9 @@
 package darkevilmac.archimedes;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.NetworkRegistry;
 import darkevilmac.archimedes.gui.ASGuiHandler;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 public class CommonProxy {
     public CommonPlayerTicker playerTicker;

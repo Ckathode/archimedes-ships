@@ -7,7 +7,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
@@ -28,13 +27,13 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
         motionZ = ship.motionZ;
     }
 
-    public EntityParachute(World world, Entity mounter, Vec3 vec, double shipPosX, double shipPosY, double shipPosZ, double motionX, double motionY, double motionZ) {
+    public EntityParachute(World world, Entity mounter, Vec3Mod vec, Vec3Mod shipPos, Vec3Mod motion) {
         this(world);
 
-        setLocationAndAngles(shipPosX + vec.xCoord, shipPosY + vec.yCoord - 2D, shipPosZ + vec.zCoord, 0F, 0F);
-        this.motionX = motionX;
-        this.motionY = motionY;
-        this.motionZ = motionZ;
+        setLocationAndAngles(shipPos.xCoord + vec.xCoord, shipPos.yCoord + vec.yCoord - 2D, shipPos.zCoord + vec.zCoord, 0F, 0F);
+        this.motionX = motion.xCoord;
+        this.motionY = motion.yCoord;
+        this.motionZ = motion.zCoord;
 
         mounter.mountEntity(null);
         mounter.mountEntity(this);

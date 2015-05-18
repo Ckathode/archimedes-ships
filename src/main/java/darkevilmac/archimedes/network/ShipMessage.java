@@ -1,12 +1,12 @@
 package darkevilmac.archimedes.network;
 
-import cpw.mods.fml.relauncher.Side;
 import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.entity.EntityShip;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.relauncher.Side;
 
 
 public abstract class ShipMessage extends ArchimedesShipsMessage {

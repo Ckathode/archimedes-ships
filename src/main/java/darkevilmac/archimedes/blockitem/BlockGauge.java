@@ -1,39 +1,32 @@
 package darkevilmac.archimedes.blockitem;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.BlockFurnace;
+import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
+
 public class BlockGauge extends BlockContainer {
     public static int gaugeBlockRenderID;
-
-    private IIcon extendedIcon;
 
     public BlockGauge() {
         super(Material.circuits);
         setBlockBounds(0F, 0F, 0F, 1F, 0.1F, 1F);
     }
-
-    @Override
-    public boolean renderAsNormalBlock() {
-        return false;
-    }
-
     @Override
     public boolean isOpaqueCube() {
         return false;
@@ -107,10 +100,10 @@ public class BlockGauge extends BlockContainer {
     }
 
     @Override
-    public boolean rotateBlock(World world, int x, int y, int z, ForgeDirection axis) {
-        if (axis == ForgeDirection.UP || axis == ForgeDirection.DOWN) {
+    public boolean rotateBlock(World world, int x, int y, int z, EnumFacing axis) {
+        if (axis == EnumFacing.UP || axis == EnumFacing.DOWN) {
             boolean extended = (world.getBlockMetadata(x, y, z) & 4) != 0;
-            int d = axis == ForgeDirection.DOWN ? -1 : 1;
+            int d = axis == EnumFacing.DOWN ? -1 : 1;
             if (!extended) {
                 world.setBlockMetadataWithNotify(x, y, z, (world.getBlockMetadata(x, y, z) + d) & 3, 2);
             } else {

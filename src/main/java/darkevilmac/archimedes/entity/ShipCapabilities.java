@@ -7,9 +7,11 @@ import darkevilmac.movingworld.MaterialDensity;
 import darkevilmac.movingworld.entity.EntityMovingWorld;
 import darkevilmac.movingworld.entity.MovingWorldCapabilities;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,48 +66,48 @@ public class ShipCapabilities extends MovingWorldCapabilities {
                     boolean validZDistance = false;
                     boolean validDistance = false;
 
-                    if (anchorPointInfo.linkX > ship.posX) {
+                    if (anchorPointInfo.linkPos.getX() > ship.posX) {
                         for (int i = 1; i < range; i++) {
-                            if (ship.posX + i >= anchorPointInfo.linkX) {
+                            if (ship.posX + i >= anchorPointInfo.linkPos.getX()) {
                                 validXDistance = true;
                                 differenceX = i;
                             }
                         }
                     } else {
                         for (int i = 1; i < range; i++) {
-                            if (anchorPointInfo.linkX + i >= ship.posX) {
+                            if (anchorPointInfo.linkPos.getX() + i >= ship.posX) {
                                 validXDistance = true;
                                 differenceX = i;
                             }
                         }
                     }
 
-                    if (anchorPointInfo.linkY > ship.posY) {
+                    if (anchorPointInfo.linkPos.getY() > ship.posY) {
                         for (int i = 1; i < range; i++) {
-                            if (ship.posY + i >= anchorPointInfo.linkY) {
+                            if (ship.posY + i >= anchorPointInfo.linkPos.getY()) {
                                 validYDistance = true;
                                 differenceY = i;
                             }
                         }
                     } else {
                         for (int i = 1; i < range; i++) {
-                            if (anchorPointInfo.linkY + i >= ship.posY) {
+                            if (anchorPointInfo.linkPos.getY() + i >= ship.posY) {
                                 validYDistance = true;
                                 differenceY = i;
                             }
                         }
                     }
 
-                    if (anchorPointInfo.linkZ > ship.posZ) {
+                    if (anchorPointInfo.linkPos.getZ() > ship.posZ) {
                         for (int i = 1; i < range; i++) {
-                            if (ship.posZ + i >= anchorPointInfo.linkZ) {
+                            if (ship.posZ + i >= anchorPointInfo.linkPos.getZ()) {
                                 validZDistance = true;
                                 differenceZ = i;
                             }
                         }
                     } else {
                         for (int i = 1; i < range; i++) {
-                            if (anchorPointInfo.linkZ + i >= ship.posZ) {
+                            if (anchorPointInfo.linkPos.getZ() + i >= ship.posZ) {
                                 validZDistance = true;
                                 differenceZ = i;
                             }
@@ -114,10 +116,10 @@ public class ShipCapabilities extends MovingWorldCapabilities {
 
                     validDistance = validXDistance && validYDistance && validZDistance;
 
-                    if (validDistance && ship.worldObj.getTileEntity(anchorPointInfo.linkX, anchorPointInfo.linkY, anchorPointInfo.linkZ) != null
-                            && ship.worldObj.getTileEntity(anchorPointInfo.linkX, anchorPointInfo.linkY, anchorPointInfo.linkZ) instanceof TileEntityAnchorPoint) {
-                        if (!((TileEntityAnchorPoint) ship.worldObj.getTileEntity(anchorPointInfo.linkX, anchorPointInfo.linkY, anchorPointInfo.linkZ)).anchorPointInfo.forShip) {
-                            validAnchorPoints.add((TileEntityAnchorPoint) ship.worldObj.getTileEntity(anchorPointInfo.linkX, anchorPointInfo.linkY, anchorPointInfo.linkZ));
+                    if (validDistance && ship.worldObj.getTileEntity(anchorPointInfo.linkPos) != null
+                            && ship.worldObj.getTileEntity(anchorPointInfo.linkPos) instanceof TileEntityAnchorPoint) {
+                        if (!((TileEntityAnchorPoint) ship.worldObj.getTileEntity(anchorPointInfo.linkPos)).anchorPointInfo.forShip) {
+                            validAnchorPoints.add((TileEntityAnchorPoint) ship.worldObj.getTileEntity(anchorPointInfo.linkPos));
                             validAnchorPointsDistance.add(differenceX + differenceY + differenceZ);
                         }
                     }
@@ -207,16 +209,16 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     }
 
     @Override
-    public void onChunkBlockAdded(Block block, int metadata, int x, int y, int z) {
+    public void onChunkBlockAdded(IBlockState state, BlockPos pos) {
         blockCount++;
-        mass += MaterialDensity.getDensity(block);
+        mass += MaterialDensity.getDensity(state);
 
         if (block == ArchimedesShipMod.blockBalloon) {
             balloonCount++;
         } else if (block == ArchimedesShipMod.blockFloater) {
             floaters++;
         } else if (block == ArchimedesShipMod.blockAnchorPoint) {
-            TileEntity te = ship.getMovingWorldChunk().getTileEntity(x, y, z);
+            TileEntity te = ship.getMovingWorldChunk().getTileEntity(pos);
             if (te != null && te instanceof TileEntityAnchorPoint && ((TileEntityAnchorPoint) te).anchorPointInfo != null && ((TileEntityAnchorPoint) te).anchorPointInfo.forShip) {
                 if (anchorPoints == null) {
                     anchorPoints = new ArrayList<TileEntityAnchorPoint.AnchorPointInfo>();
@@ -224,7 +226,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
                 anchorPoints.add(((TileEntityAnchorPoint) te).anchorPointInfo);
             }
         } else if (block == ArchimedesShipMod.blockEngine) {
-            TileEntity te = ship.getMovingWorldChunk().getTileEntity(x, y, z);
+            TileEntity te = ship.getMovingWorldChunk().getTileEntity(pos);
             if (te instanceof TileEntityEngine) {
                 if (engines == null) {
                     engines = new ArrayList<TileEntityEngine>(4);
@@ -232,6 +234,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
                 engines.add((TileEntityEngine) te);
             }
         } else if (block == ArchimedesShipMod.blockSeat && !ship.worldObj.isRemote) {
+            BlockPos pos1 = ship.riderDestination;
             int x1 = ship.riderDestinationX, y1 = ship.riderDestinationY, z1 = ship.riderDestinationZ;
             if (ship.frontDirection == 0) {
                 z1 -= 1;
@@ -244,7 +247,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
             }
             if (x != x1 || y != y1 || z != z1) {
                 EntitySeat seat = new EntitySeat(ship.worldObj);
-                seat.setParentShip(ship, x, y, z);
+                seat.setParentShip(ship, pos);
                 addAttachments(seat);
             }
         }

@@ -1,8 +1,5 @@
 package darkevilmac.archimedes;
 
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
 import darkevilmac.archimedes.blockitem.BlockGauge;
 import darkevilmac.archimedes.blockitem.BlockSeat;
 import darkevilmac.archimedes.blockitem.TileEntityGauge;
@@ -14,6 +11,9 @@ import darkevilmac.archimedes.render.RenderBlockSeat;
 import darkevilmac.archimedes.render.RenderParachute;
 import darkevilmac.archimedes.render.TileEntityGaugeRenderer;
 import darkevilmac.movingworld.render.RenderMovingWorld;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class ClientProxy extends CommonProxy {
     public ShipKeyHandler shipKeyHandler;

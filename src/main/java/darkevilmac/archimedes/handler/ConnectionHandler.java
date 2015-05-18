@@ -1,14 +1,14 @@
 package darkevilmac.archimedes.handler;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
 import darkevilmac.archimedes.entity.EntityParachute;
 import darkevilmac.archimedes.entity.EntitySeat;
 import darkevilmac.archimedes.entity.EntityShip;
+import darkevilmac.movingworld.util.Vec3Mod;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 public class ConnectionHandler {
 
@@ -26,8 +26,8 @@ public class ConnectionHandler {
                 if (ship != null && seat.getPos() != null) {
                     NBTTagCompound nbt = new NBTTagCompound();
 
-                    Vec3 vec = Vec3.createVectorHelper(seat.getPos().chunkPosX - ship.getMovingWorldChunk().getCenterX(), seat.getPos().chunkPosY - ship.getMovingWorldChunk().minY(), seat.getPos().chunkPosZ - ship.getMovingWorldChunk().getCenterZ());
-                    vec.rotateAroundY((float) Math.toRadians(ship.rotationYaw));
+                    Vec3Mod vec = new Vec3Mod(seat.getPos().getX() - ship.getMovingWorldChunk().getCenterX(), seat.getPos().getY() - ship.getMovingWorldChunk().minY(), seat.getPos().getZ() - ship.getMovingWorldChunk().getCenterZ());
+                    vec = new Vec3Mod(vec.rotateYaw((float) Math.toRadians(ship.rotationYaw)));
 
                     nbt.setDouble("vecX", vec.xCoord);
                     nbt.setDouble("vecY", vec.yCoord);
@@ -64,9 +64,11 @@ public class ConnectionHandler {
                 double motionX = nbt.getDouble("motionX");
                 double motionY = nbt.getDouble("motionY");
                 double motionZ = nbt.getDouble("motionZ");
-                Vec3 vec = Vec3.createVectorHelper(vecX, vecY, vecZ);
+                Vec3Mod vec = new Vec3Mod(vecX, vecY, vecZ);
+                Vec3Mod shipVec = new Vec3Mod(shipX, shipY, shipZ);
+                Vec3Mod motionVec = new Vec3Mod(motionX, motionY, motionZ);
 
-                EntityParachute parachute = new EntityParachute(worldObj, player, vec, shipX, shipY, shipZ, motionX, motionY, motionZ);
+                EntityParachute parachute = new EntityParachute(worldObj, player, vec, shipVec, motionVec);
                 worldObj.spawnEntityInWorld(parachute);
 
                 player.getEntityData().removeTag("parachuteInfo");

@@ -1,11 +1,13 @@
 package darkevilmac.archimedes;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
+
 import darkevilmac.archimedes.blockitem.TileEntityCrate;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class CommonHookContainer {
     @SubscribeEvent
@@ -15,7 +17,7 @@ public class CommonHookContainer {
             int y = MathHelper.floor_double(event.target.posY);
             int z = MathHelper.floor_double(event.target.posZ);
 
-            TileEntity te = event.entity.worldObj.getTileEntity(x, y, z);
+            TileEntity te = event.entity.worldObj.getTileEntity(new BlockPos(x, y, z));
             if (te instanceof TileEntityCrate && ((TileEntityCrate) te).getContainedEntity() == event.target) {
                 ((TileEntityCrate) te).releaseEntity();
                 event.setCanceled(true);
