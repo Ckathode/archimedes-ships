@@ -43,7 +43,6 @@ public class MobileChunkRenderer
 	/** Axis aligned bounding box */
 	public AxisAlignedBB		rendererBoundingBox;
 	
-	@SuppressWarnings("unused")
 	private boolean				isInitialized		= false;
 	
 	/** All the tile entities that have special rendering code for this chunk */
@@ -51,7 +50,6 @@ public class MobileChunkRenderer
 	public List<TileEntity>		tileEntities;
 	
 	/** Bytes sent to the GPU */
-	@SuppressWarnings("unused")
 	private int					bytesDrawn;
 	
 	public MobileChunkRenderer(MobileChunk mobilechunk)

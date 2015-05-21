@@ -12,6 +12,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import ckathode.archimedes.ArchimedesShipMod;
@@ -31,6 +32,7 @@ public class BlockHelm extends BlockDirectional implements IEntitySelector, ITil
 		super(Material.wood);
 	}
 	
+	/*
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta)
@@ -58,6 +60,30 @@ public class BlockHelm extends BlockDirectional implements IEntitySelector, ITil
 		super.registerBlockIcons(reg);
 		frontIcon = reg.registerIcon(getTextureName() + "_front");
 	}
+	*/
+
+	// ------------------------------
+	// Disable rendering of the block
+	@Override
+	public boolean shouldSideBeRendered(IBlockAccess p_149646_1_, int p_149646_2_, int p_149646_3_, int p_149646_4_, int p_149646_5_)
+    {
+        return false;
+    }
+	
+	@Override
+	public boolean isOpaqueCube()
+	{
+		return false;
+	}
+
+    /**
+     * If this block doesn't render as an ordinary block it will return False (examples: signs, buttons, stairs, etc)
+     */
+    public boolean renderAsNormalBlock()
+    {
+        return false;
+    }
+    // ------------------------------
 	
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityliving, ItemStack itemstack)

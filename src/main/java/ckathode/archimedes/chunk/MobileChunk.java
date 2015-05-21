@@ -89,7 +89,22 @@ public class MobileChunk implements IBlockAccess
 	{
 		return (minZ + maxZ) / 2F;
 	}
+
+	public int getSizeX()
+	{
+		return (minX + maxX);
+	}
 	
+	public int getSizeY()
+	{
+		return (minY + maxY);
+	}
+	
+	public int getSizeZ()
+	{
+		return (minZ + maxZ);
+	}
+
 	public int minX()
 	{
 		return minX;
