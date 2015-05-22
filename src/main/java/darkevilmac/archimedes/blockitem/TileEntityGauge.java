@@ -2,12 +2,14 @@ package darkevilmac.archimedes.blockitem;
 
 import darkevilmac.movingworld.entity.EntityMovingWorld;
 import darkevilmac.movingworld.tile.IMovingWorldTileEntity;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 
 public class TileEntityGauge extends TileEntity implements IMovingWorldTileEntity {
     public EntityMovingWorld parentShip;
@@ -17,12 +19,7 @@ public class TileEntityGauge extends TileEntity implements IMovingWorldTileEntit
     }
 
     @Override
-    public boolean canUpdate() {
-        return false;
-    }
-
-    @Override
-    public void setParentMovingWorld(EntityMovingWorld entityMovingWorld, int x, int y, int z) {
+    public void setParentMovingWorld(BlockPos pos, EntityMovingWorld entityMovingWorld) {
         parentShip = entityMovingWorld;
     }
 
@@ -33,19 +30,19 @@ public class TileEntityGauge extends TileEntity implements IMovingWorldTileEntit
 
     @Override
     public void setParentMovingWorld(EntityMovingWorld entityMovingWorld) {
-        setParentMovingWorld(entityMovingWorld, 0, 0, 0);
+        setParentMovingWorld(new BlockPos(BlockPos.ORIGIN), entityMovingWorld);
     }
 
     @Override
     public Packet getDescriptionPacket() {
         NBTTagCompound compound = new NBTTagCompound();
         writeToNBT(compound);
-        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, compound);
+        return new S35PacketUpdateTileEntity(pos, 1, compound);
     }
 
     @Override
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
-        readFromNBT(packet.func_148857_g());
+        readFromNBT(packet.getNbtCompound());
     }
 
     @Override
@@ -60,8 +57,9 @@ public class TileEntityGauge extends TileEntity implements IMovingWorldTileEntit
         }
 
         if (worldObj != null && worldObj.isRemote) {
-            if (worldObj.getBlockMetadata(xCoord, yCoord, zCoord) != compound.getInteger("meta")) {
-                worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, compound.getInteger("meta"), 2);
+            IBlockState state = worldObj.getBlockState(pos);
+            if (state != null && state.getBlock().getMetaFromState(state) != compound.getInteger("meta")) {
+                worldObj.setBlockState(pos, state.getBlock().getStateFromMeta(compound.getInteger("meta")), 2);
             }
         }
         blockMetadata = compound.getInteger("meta");

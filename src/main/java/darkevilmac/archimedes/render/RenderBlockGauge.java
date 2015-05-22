@@ -1,10 +1,8 @@
 package darkevilmac.archimedes.render;
 
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.IIcon;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.world.IBlockAccess;
 
 public class RenderBlockGauge implements ISimpleBlockRenderingHandler {
@@ -17,13 +15,14 @@ public class RenderBlockGauge implements ISimpleBlockRenderingHandler {
 
     @Override
     public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
-        Tessellator tessellator = Tessellator.instance;
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldRenderer = tessellator.getWorldRenderer();
         int l = world.getBlockMetadata(x, y, z);
         IIcon iicon = renderer.getBlockIconFromSideAndMetadata(block, 0, l);
         int dir = l & 3;
 
-        tessellator.setBrightness(block.getMixedBrightnessForBlock(world, x, y, z));
-        tessellator.setColorOpaque_F(1.0F, 1.0F, 1.0F);
+        worldRenderer.setBrightness(block.getMixedBrightnessForBlock(world, x, y, z));
+        worldRenderer.setColorOpaque_F(1.0F, 1.0F, 1.0F);
         double u0 = iicon.getMinU();
         double v0 = iicon.getMinV();
         double u1 = iicon.getMaxU();
@@ -35,29 +34,29 @@ public class RenderBlockGauge implements ISimpleBlockRenderingHandler {
 
         switch (dir) {
             case 0:
-                tessellator.addVertexWithUV(x, dy, z, u1, v1);
-                tessellator.addVertexWithUV(x, dy, dz, u1, v0);
-                tessellator.addVertexWithUV(dx, dy, dz, u0, v0);
-                tessellator.addVertexWithUV(dx, dy, z, u0, v1);
+                worldRenderer.addVertexWithUV(x, dy, z, u1, v1);
+                worldRenderer.addVertexWithUV(x, dy, dz, u1, v0);
+                worldRenderer.addVertexWithUV(dx, dy, dz, u0, v0);
+                worldRenderer.addVertexWithUV(dx, dy, z, u0, v1);
                 break;
             case 1:
-                tessellator.addVertexWithUV(x, dy, z, u1, v0);
-                tessellator.addVertexWithUV(x, dy, dz, u0, v0);
-                tessellator.addVertexWithUV(dx, dy, dz, u0, v1);
-                tessellator.addVertexWithUV(dx, dy, z, u1, v1);
+                worldRenderer.addVertexWithUV(x, dy, z, u1, v0);
+                worldRenderer.addVertexWithUV(x, dy, dz, u0, v0);
+                worldRenderer.addVertexWithUV(dx, dy, dz, u0, v1);
+                worldRenderer.addVertexWithUV(dx, dy, z, u1, v1);
                 break;
             case 2:
-                tessellator.addVertexWithUV(x, dy, z, u0, v0);
-                tessellator.addVertexWithUV(x, dy, dz, u0, v1);
-                tessellator.addVertexWithUV(dx, dy, dz, u1, v1);
-                tessellator.addVertexWithUV(dx, dy, z, u1, v0);
+                worldRenderer.addVertexWithUV(x, dy, z, u0, v0);
+                worldRenderer.addVertexWithUV(x, dy, dz, u0, v1);
+                worldRenderer.addVertexWithUV(dx, dy, dz, u1, v1);
+                worldRenderer.addVertexWithUV(dx, dy, z, u1, v0);
                 break;
             case 3:
             default:
-                tessellator.addVertexWithUV(x, dy, z, u0, v1);
-                tessellator.addVertexWithUV(x, dy, dz, u1, v1);
-                tessellator.addVertexWithUV(dx, dy, dz, u1, v0);
-                tessellator.addVertexWithUV(dx, dy, z, u0, v0);
+                worldRenderer.addVertexWithUV(x, dy, z, u0, v1);
+                worldRenderer.addVertexWithUV(x, dy, dz, u1, v1);
+                worldRenderer.addVertexWithUV(dx, dy, dz, u1, v0);
+                worldRenderer.addVertexWithUV(dx, dy, z, u0, v0);
         }
         return true;
     }

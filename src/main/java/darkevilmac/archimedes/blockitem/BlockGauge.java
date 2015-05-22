@@ -2,26 +2,30 @@ package darkevilmac.archimedes.blockitem;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
-import net.minecraft.block.BlockFurnace;
-import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.Vec3i;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-
 public class BlockGauge extends BlockContainer {
+
+    public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+    public static final PropertyBool EXTENDED = PropertyBool.create("extended");
+
     public static int gaugeBlockRenderID;
+
 
     public BlockGauge() {
         super(Material.circuits);
@@ -44,27 +48,22 @@ public class BlockGauge extends BlockContainer {
         list.add(new ItemStack(item, 1, 1));
     }
 
+    /**
+     * No hitbox for the gauge, it's not needed considering the size.
+     *
+     * @param worldIn
+     * @param pos
+     * @param state
+     * @return
+     */
     @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int side, int meta) {
-        return (meta & 4) != 0 ? extendedIcon : blockIcon;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconregister) {
-        super.registerBlockIcons(iconregister);
-        extendedIcon = iconregister.registerIcon(getTextureName() + "_ext");
-    }
-
-    @Override
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4) {
+    public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state) {
         return null;
     }
 
     @Override
-    public boolean canPlaceBlockAt(World world, int x, int y, int z) {
-        return World.doesBlockHaveSolidTopSurface(world, x, y - 1, z);
+    public boolean canPlaceBlockAt(World world, BlockPos pos) {
+        return World.doesBlockHaveSolidTopSurface(world, pos.subtract(new Vec3i(0, 1, 0)));
     }
 
     @Override
@@ -73,12 +72,6 @@ public class BlockGauge extends BlockContainer {
             dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
             world.setBlockToAir(x, y, z);
         }
-    }
-
-    //This will tell minecraft not to render any side of our cube.
-    @Override
-    public boolean shouldSideBeRendered(IBlockAccess iblockaccess, int i, int j, int k, int l) {
-        return false;
     }
 
     @Override
@@ -111,6 +104,5 @@ public class BlockGauge extends BlockContainer {
             }
         }
         return true;
-        //return RotationHelper.rotateArchimedesBlock(this, world, x, y, z, axis); This is flawed, our meta is different.
     }
 }

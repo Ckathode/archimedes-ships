@@ -4,6 +4,7 @@ import com.sun.javafx.geom.Vec3d;
 import darkevilmac.archimedes.blockitem.TileEntityGauge;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
@@ -34,9 +35,9 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
                     tileEntity.parentShip.riderDestination.getY() - tileEntity.getPos().getY(),
                     tileEntity.parentShip.riderDestination.getZ() - tileEntity.getPos().getZ());
         } else {
-            dVec.set(tileEntity.parentShip.posX - Minecraft.getMinecraft().getRenderManager().viewerPosX,
-                    tileEntity.parentShip.posY - Minecraft.getMinecraft().getRenderManager().viewerPosY,
-                    tileEntity.parentShip.posZ - Minecraft.getMinecraft().getRenderManager().viewerPosZ);
+            dVec.set(tileEntity.parentShip.posX - Minecraft.getMinecraft().getRenderManager().renderPosX,
+                    tileEntity.parentShip.posY - Minecraft.getMinecraft().getRenderManager().renderPosY,
+                    tileEntity.parentShip.posZ - Minecraft.getMinecraft().getRenderManager().renderPosZ);
         }
         double d = dVec.x * dVec.x + dVec.y * dVec.y + dVec.z * dVec.z;
         if (d > 256D) return;
@@ -44,7 +45,7 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
         GL11.glLineWidth(8F / (float) Math.sqrt(d));
 
         GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GlStateManager.disableTexture2D();
 
         float northgaugeang;
         float velgaugeang;
@@ -60,14 +61,14 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
                 northgaugeang = (tileEntity.parentShip.ticksExisted + partialTicks) * 42F + tileEntity.parentShip.rotationYaw / 3F;
             }
         }
-        GL11.glPushMatrix();
-        GL11.glTranslatef((float) x + 0.5F, (float) y + 0.05F, (float) z + 0.5F);
-        GL11.glRotatef(180F - meta * 90F, 0F, 1F, 0F);
+        GlStateManager.pushMatrix();
+        GlStateManager.translate((float) x + 0.5F, (float) y + 0.05F, (float) z + 0.5F);
+        GlStateManager.rotate(180F - meta * 90F, 0F, 1F, 0F);
 
         //Direction gauge
-        GL11.glPushMatrix();
-        GL11.glTranslatef(-0.28125F, 0.02F, -0.28125F);
-        GL11.glRotatef(northgaugeang, 0F, 1F, 0F);
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(-0.28125F, 0.02F, -0.28125F);
+        GlStateManager.rotate(northgaugeang, 0F, 1F, 0F);
 
         worldRenderer.startDrawing(GL11.GL_LINES);
         worldRenderer.setColorOpaque_F(1F, 0F, 0F);
@@ -77,59 +78,59 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
         worldRenderer.addVertex(0D, 0D, 0D);
         worldRenderer.addVertex(0D, 0D, -0.15D);
         tess.draw();
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
 
         //Velocity gauge
-        GL11.glPushMatrix();
-        GL11.glTranslatef(0.25F, 0.02F, -0.25F);
-        GL11.glRotatef(velgaugeang, 0F, 1F, 0F);
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(0.25F, 0.02F, -0.25F);
+        GlStateManager.rotate(velgaugeang, 0F, 1F, 0F);
 
         worldRenderer.startDrawing(GL11.GL_LINES);
         worldRenderer.setColorOpaque_F(0F, 0F, 0.5F);
         worldRenderer.addVertex(0D, 0D, 0D);
         worldRenderer.addVertex(0D, 0D, 0.2D);
         tess.draw();
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
 
         if (extended) {
-            float vertgaugeang;
+            float vertGaugeAng;
             float height = tileEntity.getPos().getY();
             if (tileEntity.parentShip == null) {
-                vertgaugeang = 0F;
+                vertGaugeAng = 0F;
             } else {
-                vertgaugeang = MathHelper.clamp_float(((float) tileEntity.parentShip.motionY * 3.6F * 20) / 40F * 360F, -90F, 90F);
+                vertGaugeAng = MathHelper.clamp_float(((float) tileEntity.parentShip.motionY * 3.6F * 20) / 40F * 360F, -90F, 90F);
                 height += (float) tileEntity.parentShip.posY;
             }
-            float heightgaugelongang = -height / 10F * 360F;
+            float heightGaugeLongAng = -height / 10F * 360F;
             //float heightgaugeshortang = -height / 100F * 360F;
-            float heightgaugeshortang = heightgaugelongang / 10F;
+            float heightGaugeShortAng = heightGaugeLongAng / 10F;
 
             //Vertical velocity gauge
-            GL11.glPushMatrix();
-            GL11.glTranslatef(0.25F, 0.02F, 0.25F);
-            GL11.glRotatef(vertgaugeang, 0F, 1F, 0F);
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(0.25F, 0.02F, 0.25F);
+            GlStateManager.rotate(vertGaugeAng, 0F, 1F, 0F);
 
             worldRenderer.startDrawing(GL11.GL_LINES);
             worldRenderer.setColorOpaque_F(0F, 0F, 0.5F);
             worldRenderer.addVertex(0D, 0D, 0D);
             worldRenderer.addVertex(0.2D, 0D, 0D);
             tess.draw();
-            GL11.glPopMatrix();
+            GlStateManager.popMatrix();
 
             //Height gauge
-            GL11.glPushMatrix();
-            GL11.glTranslatef(-0.25F, 0.02F, 0.25F);
-            GL11.glPushMatrix();
-            GL11.glRotatef(heightgaugelongang, 0F, 1F, 0F);
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(-0.25F, 0.02F, 0.25F);
+            GlStateManager.pushMatrix();
+            GlStateManager.rotate(heightGaugeLongAng, 0F, 1F, 0F);
 
             worldRenderer.startDrawing(GL11.GL_LINES);
             worldRenderer.setColorOpaque_F(0.9F, 0.9F, 0F);
             worldRenderer.addVertex(0D, 0D, 0D);
             worldRenderer.addVertex(0D, 0D, -0.2D);
             tess.draw();
-            GL11.glPopMatrix();
+            GlStateManager.popMatrix();
 
-            GL11.glRotatef(heightgaugeshortang, 0F, 1F, 0F);
+            GlStateManager.rotate(heightGaugeShortAng, 0F, 1F, 0F);
 
             worldRenderer.startDrawing(GL11.GL_LINES);
             worldRenderer.setColorOpaque_F(0.7F, 0.7F, 0F);
@@ -137,12 +138,12 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
             worldRenderer.addVertex(0D, -0.01, -0.15D);
             tess.draw();
 
-            GL11.glPopMatrix();
+            GlStateManager.popMatrix();
         }
 
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
 
-        GL11.glPopAttrib();
+        GlStateManager.popAttrib();
     }
 
 

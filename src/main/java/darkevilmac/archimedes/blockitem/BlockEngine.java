@@ -1,52 +1,37 @@
 package darkevilmac.archimedes.blockitem;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import darkevilmac.archimedes.ArchimedesShipMod;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
+import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+//Rotation code from BlockFurnace.
 public class BlockEngine extends BlockContainer {
+
+    public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+
     public float enginePower;
     public int engineFuelConsumption;
 
-    private IIcon frontIcon, backIcon;
-
     public BlockEngine(Material material, float power, int fuelconsumption) {
         super(material);
+        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
         enginePower = power;
         engineFuelConsumption = fuelconsumption;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int side, int meta) {
-        if (side == 1 || side == 0)
-            return this.backIcon;
-        if (side == meta)
-            return this.frontIcon;
-
-        if (ForgeDirection.getOrientation(side).getOpposite().ordinal() == meta) {
-            return this.backIcon;
-        }
-
-        return this.blockIcon;
-    }
-
-    @Override
-    public void registerBlockIcons(IIconRegister reg) {
-        super.registerBlockIcons(reg);
-        frontIcon = reg.registerIcon(getTextureName() + "_front");
-        backIcon = reg.registerIcon(getTextureName() + "_back");
     }
 
     @Override
@@ -54,35 +39,96 @@ public class BlockEngine extends BlockContainer {
         return new TileEntityEngine(enginePower, engineFuelConsumption);
     }
 
+    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
+        this.setDefaultFacing(worldIn, pos, state);
+    }
+
+    private void setDefaultFacing(World worldIn, BlockPos pos, IBlockState state) {
+        if (!worldIn.isRemote) {
+            Block block = worldIn.getBlockState(pos.north()).getBlock();
+            Block block1 = worldIn.getBlockState(pos.south()).getBlock();
+            Block block2 = worldIn.getBlockState(pos.west()).getBlock();
+            Block block3 = worldIn.getBlockState(pos.east()).getBlock();
+            EnumFacing enumfacing = (EnumFacing) state.getValue(FACING);
+
+            if (enumfacing == EnumFacing.NORTH && block.isFullBlock() && !block1.isFullBlock()) {
+                enumfacing = EnumFacing.SOUTH;
+            } else if (enumfacing == EnumFacing.SOUTH && block1.isFullBlock() && !block.isFullBlock()) {
+                enumfacing = EnumFacing.NORTH;
+            } else if (enumfacing == EnumFacing.WEST && block2.isFullBlock() && !block3.isFullBlock()) {
+                enumfacing = EnumFacing.EAST;
+            } else if (enumfacing == EnumFacing.EAST && block3.isFullBlock() && !block2.isFullBlock()) {
+                enumfacing = EnumFacing.WEST;
+            }
+
+            worldIn.setBlockState(pos, state.withProperty(FACING, enumfacing), 2);
+        }
+    }
+
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int metadata, float what, float these, float are) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!player.isSneaking()) {
-            TileEntity tileentity = world.getTileEntity(x, y, z);
+            TileEntity tileentity = world.getTileEntity(pos);
             if (tileentity != null) {
-                player.openGui(ArchimedesShipMod.instance, 3, world, x, y, z);
+                player.openGui(ArchimedesShipMod.instance, 3, world, pos.getX(), pos.getY(), pos.getZ());
                 return true;
             }
         }
         return false;
     }
 
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase placer, ItemStack stack) {
-        int l = MathHelper.floor_double((double) (placer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+        return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
+    }
 
-        if (l == 0) {
-            world.setBlockMetadataWithNotify(x, y, z, 2, 2);
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
+
+        if (stack.hasDisplayName()) {
+            TileEntity tileentity = worldIn.getTileEntity(pos);
+
+            if (tileentity instanceof TileEntityFurnace) {
+                ((TileEntityFurnace) tileentity).setCustomInventoryName(stack.getDisplayName());
+            }
+        }
+    }
+
+    /**
+     * The type of render function that is called for this block
+     */
+    public int getRenderType() {
+        return 3;
+    }
+
+    /**
+     * Possibly modify the given BlockState before rendering it on an Entity (Minecarts, Endermen, ...)
+     */
+    @SideOnly(Side.CLIENT)
+    public IBlockState getStateForEntityRender(IBlockState state) {
+        return this.getDefaultState().withProperty(FACING, EnumFacing.SOUTH);
+    }
+
+    /**
+     * Convert the given metadata into a BlockState for this Block
+     */
+    public IBlockState getStateFromMeta(int meta) {
+        EnumFacing enumfacing = EnumFacing.getFront(meta);
+
+        if (enumfacing.getAxis() == EnumFacing.Axis.Y) {
+            enumfacing = EnumFacing.NORTH;
         }
 
-        if (l == 1) {
-            world.setBlockMetadataWithNotify(x, y, z, 5, 2);
-        }
+        return this.getDefaultState().withProperty(FACING, enumfacing);
+    }
 
-        if (l == 2) {
-            world.setBlockMetadataWithNotify(x, y, z, 3, 2);
-        }
+    /**
+     * Convert the BlockState into the correct metadata value
+     */
+    public int getMetaFromState(IBlockState state) {
+        return ((EnumFacing) state.getValue(FACING)).getIndex();
+    }
 
-        if (l == 3) {
-            world.setBlockMetadataWithNotify(x, y, z, 4, 2);
-        }
+    protected BlockState createBlockState() {
+        return new BlockState(this, new IProperty[]{FACING});
     }
 }

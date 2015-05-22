@@ -1,0 +1,9 @@
+{
+    "parent": "archimedes:block/orientableback",
+    "textures": {
+        "front": "archimedes:blocks/engine_front",
+		"top": "archimedes:blocks/engine",
+        "side": "archimedes:blocks/engine_side",
+        "back": "archimedes:blocks/engine"
+    }
+}

@@ -10,6 +10,7 @@ import darkevilmac.movingworld.entity.EntityMovingWorld;
 import darkevilmac.movingworld.entity.MovingWorldInfo;
 import darkevilmac.movingworld.tile.TileMovingWorldMarkingBlock;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public class TileEntityHelm extends TileMovingWorldMarkingBlock {
@@ -30,12 +31,7 @@ public class TileEntityHelm extends TileMovingWorldMarkingBlock {
 
 
     @Override
-    public boolean canUpdate() {
-        return false;
-    }
-
-    @Override
-    public void setParentMovingWorld(EntityMovingWorld entityMovingWorld, int x, int y, int z) {
+    public void setParentMovingWorld(BlockPos pos, EntityMovingWorld entityMovingWorld) {
         activeShip = (EntityShip) entityMovingWorld;
     }
 
@@ -46,7 +42,7 @@ public class TileEntityHelm extends TileMovingWorldMarkingBlock {
 
     @Override
     public void setParentMovingWorld(EntityMovingWorld entityMovingWorld) {
-        setParentMovingWorld(entityMovingWorld, 0, 0, 0);
+        setParentMovingWorld(new BlockPos(BlockPos.ORIGIN), entityMovingWorld);
     }
 
     @Override
@@ -114,7 +110,7 @@ public class TileEntityHelm extends TileMovingWorldMarkingBlock {
                 res = getAssembleResult();
             }
             AssembleResultMessage message = new AssembleResultMessage(res, prev);
-            ArchimedesShipMod.instance.network.sendToDimension(message, player.worldObj.provider.dimensionId);
+            ArchimedesShipMod.instance.network.sendToDimension(message, player.worldObj.provider.getDimensionId());
         }
     }
 }

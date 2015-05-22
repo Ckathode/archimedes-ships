@@ -1,0 +1,19 @@
+{
+    "textures": {
+		"texture": "archimedes:blocks/gauge"
+        "particle": "#texture"
+    },
+    "elements": [
+        {   "from": [ 0, 0, 0 ],
+            "to": [ 16, 1, 16 ],
+            "faces": {
+                "down":  { "uv": [ 1,  1, 16, 15 ], "texture": "#texture", "cullface": "down" },
+                "up":    { "uv": [ 1,  1, 16, 15 ], "texture": "#texture" },
+                "north": { "uv": [ 1, 16, 16, 16 ], "texture": "#texture" },
+                "south": { "uv": [ 1, 16, 16, 16 ], "texture": "#texture" },
+                "west":  { "uv": [ 1, 16, 16, 16 ], "texture": "#texture" },
+                "east":  { "uv": [ 1, 16, 16, 16 ], "texture": "#texture" }
+            }
+        }
+    ]
+}

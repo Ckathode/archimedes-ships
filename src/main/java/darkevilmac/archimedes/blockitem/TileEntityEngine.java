@@ -10,16 +10,18 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.IChatComponent;
 
 public class TileEntityEngine extends TileEntity implements IInventory {
     public float enginePower;
     public int engineFuelConsumption;
-    ItemStack[] itemstacks;
+    ItemStack[] itemStacks;
     private int burnTime;
     private boolean running;
 
     public TileEntityEngine() {
-        itemstacks = new ItemStack[getSizeInventory()];
+        itemStacks = new ItemStack[getSizeInventory()];
         burnTime = 0;
         running = false;
     }
@@ -35,12 +37,12 @@ public class TileEntityEngine extends TileEntity implements IInventory {
     public Packet getDescriptionPacket() {
         NBTTagCompound compound = new NBTTagCompound();
         writeToNBT(compound);
-        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, compound);
+        return new S35PacketUpdateTileEntity(pos, 1, compound);
     }
 
     @Override
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
-        readFromNBT(packet.func_148857_g());
+        readFromNBT(packet.getNbtCompound());
     }
 
     @Override
@@ -53,7 +55,7 @@ public class TileEntityEngine extends TileEntity implements IInventory {
         for (int i = 0; i < list.tagCount(); i++) {
             NBTTagCompound comp = list.getCompoundTagAt(i);
             int j = comp.getByte("i");
-            itemstacks[j] = ItemStack.loadItemStackFromNBT(comp);
+            itemStacks[j] = ItemStack.loadItemStackFromNBT(comp);
         }
     }
 
@@ -65,10 +67,10 @@ public class TileEntityEngine extends TileEntity implements IInventory {
         compound.setFloat("power", enginePower);
         NBTTagList list = new NBTTagList();
         for (int i = 0; i < getSizeInventory(); i++) {
-            if (itemstacks[i] != null) {
+            if (itemStacks[i] != null) {
                 NBTTagCompound comp = new NBTTagCompound();
                 comp.setByte("i", (byte) i);
-                itemstacks[i].writeToNBT(comp);
+                itemStacks[i].writeToNBT(comp);
                 list.appendTag(comp);
             }
         }
@@ -104,35 +106,30 @@ public class TileEntityEngine extends TileEntity implements IInventory {
     }
 
     @Override
-    public boolean canUpdate() {
-        return false;
-    }
-
-    @Override
     public int getSizeInventory() {
         return 4;
     }
 
     @Override
     public ItemStack getStackInSlot(int i) {
-        return i >= 0 && i < 4 ? itemstacks[i] : null;
+        return i >= 0 && i < 4 ? itemStacks[i] : null;
     }
 
     @Override
     public ItemStack decrStackSize(int i, int n) {
-        if (itemstacks[i] != null) {
+        if (itemStacks[i] != null) {
             ItemStack itemstack;
 
-            if (itemstacks[i].stackSize <= n) {
-                itemstack = itemstacks[i];
-                itemstacks[i] = null;
+            if (itemStacks[i].stackSize <= n) {
+                itemstack = itemStacks[i];
+                itemStacks[i] = null;
                 markDirty();
                 return itemstack;
             }
 
-            itemstack = itemstacks[i].splitStack(n);
-            if (itemstacks[i].stackSize <= 0) {
-                itemstacks[i] = null;
+            itemstack = itemStacks[i].splitStack(n);
+            if (itemStacks[i].stackSize <= 0) {
+                itemStacks[i] = null;
             }
 
             markDirty();
@@ -149,18 +146,8 @@ public class TileEntityEngine extends TileEntity implements IInventory {
     @Override
     public void setInventorySlotContents(int i, ItemStack is) {
         if (i >= 0 && i < 4) {
-            itemstacks[i] = is;
+            itemStacks[i] = is;
         }
-    }
-
-    @Override
-    public String getInventoryName() {
-        return "Engine Inventory";
-    }
-
-    @Override
-    public boolean hasCustomInventoryName() {
-        return false;
     }
 
     @Override
@@ -174,19 +161,56 @@ public class TileEntityEngine extends TileEntity implements IInventory {
 
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
-        return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this && player.getDistanceSq(xCoord + 0.5d, yCoord + 0.5d, zCoord + 0.5d) <= 64d;
+        return worldObj.getTileEntity(pos) == this && player.getDistanceSq(pos.getX() + 0.5d, pos.getY() + 0.5d, pos.getZ() + 0.5d) <= 64d;
     }
 
     @Override
-    public void openInventory() {
+    public void openInventory(EntityPlayer player) {
     }
 
     @Override
-    public void closeInventory() {
+    public void closeInventory(EntityPlayer player) {
     }
 
     @Override
     public boolean isItemValidForSlot(int i, ItemStack is) {
         return i >= 0 && i < 4 && TileEntityFurnace.isItemFuel(is);
+    }
+
+    @Override
+    public int getField(int id) {
+        return 0;
+        // We have none.
+    }
+
+    @Override
+    public void setField(int id, int value) {
+        // We have none.
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+        // We have none.
+    }
+
+    @Override
+    public void clear() {
+        itemStacks = new ItemStack[getSizeInventory()];
+    }
+
+    @Override
+    public String getName() {
+        return "container.shipEngine";
+    }
+
+    @Override
+    public boolean hasCustomName() {
+        return false; //No custom names for this.
+    }
+
+    @Override
+    public IChatComponent getDisplayName() {
+        return new ChatComponentText("Engine Inventory");
     }
 }

@@ -41,6 +41,8 @@ key.archimedes.align=Align
 key.archimedes.decompile=Disassemble
 key.archimedes.shipinv=Ship Inventory
 
+container.shipEngine=Engine
+
 gui.shipstatus.title=Ship Status
 gui.shipstatus.rename=Rename
 gui.shipstatus.done=Done Renaming

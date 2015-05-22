@@ -8,9 +8,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 
-public class TileEntityCrate extends TileEntity implements IMovingWorldTileEntity {
+public class TileEntityCrate extends TileEntity implements IMovingWorldTileEntity, IUpdatePlayerListBox {
     private EntityShip parentShip;
     private int containedEntityId;
     private Entity containedEntity;
@@ -24,7 +26,7 @@ public class TileEntityCrate extends TileEntity implements IMovingWorldTileEntit
     }
 
     @Override
-    public void setParentMovingWorld(EntityMovingWorld entityMovingWorld, int x, int y, int z) {
+    public void setParentMovingWorld(BlockPos pos, EntityMovingWorld entityMovingWorld) {
         parentShip = (EntityShip) entityMovingWorld;
     }
 
@@ -35,7 +37,7 @@ public class TileEntityCrate extends TileEntity implements IMovingWorldTileEntit
 
     @Override
     public void setParentMovingWorld(EntityMovingWorld entityMovingWorld) {
-        setParentMovingWorld(entityMovingWorld, 0, 0, 0);
+        setParentMovingWorld(new BlockPos(BlockPos.ORIGIN), entityMovingWorld);
     }
 
     public boolean canCatchEntity() {
@@ -58,20 +60,15 @@ public class TileEntityCrate extends TileEntity implements IMovingWorldTileEntit
     }
 
     @Override
-    public boolean canUpdate() {
-        return true;
-    }
-
-    @Override
     public Packet getDescriptionPacket() {
         NBTTagCompound compound = new NBTTagCompound();
         writeToNBT(compound);
-        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, compound);
+        return new S35PacketUpdateTileEntity(pos, 0, compound);
     }
 
     @Override
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
-        readFromNBT(packet.func_148857_g());
+        readFromNBT(packet.getNbtCompound());
     }
 
     @Override
@@ -95,7 +92,7 @@ public class TileEntityCrate extends TileEntity implements IMovingWorldTileEntit
     }
 
     @Override
-    public void updateEntity() {
+    public void update() {
         if (worldObj.isRemote) {
             if (parentShip != null && parentShip.isDead) {
                 parentShip = null;
@@ -116,9 +113,9 @@ public class TileEntityCrate extends TileEntity implements IMovingWorldTileEntit
         } else {
             containedEntity.motionX = containedEntity.motionY = containedEntity.motionZ = 0d;
             if (parentShip == null) {
-                containedEntity.setPosition(xCoord + 0.5d, yCoord + 0.15f + containedEntity.getYOffset(), zCoord + 0.5d);
+                containedEntity.setPosition(pos.getX() + 0.5d, pos.getY() + 0.15f + containedEntity.getYOffset(), pos.getZ() + 0.5d);
             } else {
-                parentShip.updateRiderPosition(containedEntity, xCoord, yCoord, zCoord, 2);
+                parentShip.updateRiderPosition(containedEntity, pos, 2);
             }
 
             if (containedEntity.hurtResistantTime > 0 || containedEntity.isSneaking()) {
