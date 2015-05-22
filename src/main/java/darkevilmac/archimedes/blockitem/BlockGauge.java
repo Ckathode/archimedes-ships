@@ -2,6 +2,7 @@ package darkevilmac.archimedes.blockitem;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.BlockFence;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
@@ -14,7 +15,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Vec3i;
+import net.minecraft.util.EnumWorldBlockLayer;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -26,14 +28,14 @@ public class BlockGauge extends BlockContainer {
 
     public static int gaugeBlockRenderID;
 
-
     public BlockGauge() {
         super(Material.circuits);
         setBlockBounds(0F, 0F, 0F, 1F, 0.1F, 1F);
     }
+
     @Override
-    public boolean isOpaqueCube() {
-        return false;
+    public EnumWorldBlockLayer getBlockLayer() {
+        return EnumWorldBlockLayer.CUTOUT;
     }
 
     @Override
@@ -42,45 +44,63 @@ public class BlockGauge extends BlockContainer {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
+    public boolean isOpaqueCube() {
+        return false;
+    }
+
+    @Override
+    public boolean isFullCube() {
+        return false;
+    }
+
+    @Override
     public void getSubBlocks(Item item, CreativeTabs tab, @SuppressWarnings("rawtypes") List list) {
         list.add(new ItemStack(item, 1, 0));
         list.add(new ItemStack(item, 1, 1));
     }
 
-    /**
-     * No hitbox for the gauge, it's not needed considering the size.
-     *
-     * @param worldIn
-     * @param pos
-     * @param state
-     * @return
-     */
+    //No hitbox for the gauge, it's not needed considering the size.
     @Override
     public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state) {
         return null;
     }
 
     @Override
-    public boolean canPlaceBlockAt(World world, BlockPos pos) {
-        return World.doesBlockHaveSolidTopSurface(world, pos.subtract(new Vec3i(0, 1, 0)));
+    public boolean isPassable(IBlockAccess worldIn, BlockPos pos) {
+        return true;
     }
 
     @Override
-    public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
-        if (!World.doesBlockHaveSolidTopSurface(world, x, y - 1, z)) {
-            dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
-            world.setBlockToAir(x, y, z);
+    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+        return this.canBePlacedOn(worldIn, pos.down());
+    }
+
+    @Override
+    public int damageDropped(IBlockState state) {
+        Boolean isExtended = (Boolean) state.getValue(EXTENDED);
+        return isExtended ? 1 : 0;
+    }
+
+    private boolean canBePlacedOn(World worldIn, BlockPos pos) {
+        return World.doesBlockHaveSolidTopSurface(worldIn, pos) || worldIn.getBlockState(pos).getBlock() instanceof BlockFence;
+    }
+
+    @Override
+    public void onNeighborBlockChange(World world, BlockPos pos, IBlockState blockState, Block neighbor) {
+        if (!World.doesBlockHaveSolidTopSurface(world, new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ()))) {
+            dropBlockAsItem(world, pos, blockState, 0);
+            world.setBlockToAir(pos);
         }
     }
 
     @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityliving, ItemStack itemstack) {
-        int meta = Math.round(entityliving.rotationYaw / 90F) & 3;
-        if (itemstack.getItemDamage() == 1) {
-            meta |= 4;
-        }
-        world.setBlockMetadataWithNotify(x, y, z, meta, 3);
+    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+        return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite()).withProperty(EXTENDED, meta != 0);
+    }
+
+    @Override
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()).withProperty(EXTENDED, stack.getMetadata() != 0), 2);
     }
 
     /**
@@ -90,19 +110,5 @@ public class BlockGauge extends BlockContainer {
     public TileEntity createNewTileEntity(World world, int metadata) {
         TileEntityGauge tileentitygauge = new TileEntityGauge();
         return tileentitygauge;
-    }
-
-    @Override
-    public boolean rotateBlock(World world, int x, int y, int z, EnumFacing axis) {
-        if (axis == EnumFacing.UP || axis == EnumFacing.DOWN) {
-            boolean extended = (world.getBlockMetadata(x, y, z) & 4) != 0;
-            int d = axis == EnumFacing.DOWN ? -1 : 1;
-            if (!extended) {
-                world.setBlockMetadataWithNotify(x, y, z, (world.getBlockMetadata(x, y, z) + d) & 3, 2);
-            } else {
-                world.setBlockMetadataWithNotify(x, y, z, (world.getBlockMetadata(x, y, z) + d) & 7, 2);
-            }
-        }
-        return true;
     }
 }

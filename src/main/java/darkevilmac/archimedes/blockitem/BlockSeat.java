@@ -1,16 +1,18 @@
 package darkevilmac.archimedes.blockitem;
 
-import darkevilmac.movingworld.util.RotationHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class BlockSeat extends Block/*Container*/ {
+
+    public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
     public static int seatBlockRenderID = 0;
 
     public BlockSeat() {
@@ -19,7 +21,7 @@ public class BlockSeat extends Block/*Container*/ {
     }
 
     @Override
-    public boolean renderAsNormalBlock() {
+    public boolean isFullCube() {
         return false;
     }
 
@@ -34,54 +36,14 @@ public class BlockSeat extends Block/*Container*/ {
     }
 
     @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityliving, ItemStack itemstack) {
-        int dir = Math.round(entityliving.rotationYaw / 90F) & 3;
-        world.setBlockMetadataWithNotify(x, y, z, dir, 3);
+    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+        return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
     }
 
     @Override
-    public IIcon getIcon(int side, int meta) {
-        if (side == 0) return Blocks.planks.getIcon(side, 0);
-        switch (meta) {
-            case 0:
-                return side == 3 || side == 4 || side == 5 ? Blocks.planks.getIcon(side, 0) : blockIcon;
-            case 1:
-                return side == 2 || side == 3 || side == 4 ? Blocks.planks.getIcon(side, 0) : blockIcon;
-            case 2:
-                return side == 5 || side == 4 || side == 2 ? Blocks.planks.getIcon(side, 0) : blockIcon;
-            case 3:
-                return side == 3 || side == 2 || side == 5 ? Blocks.planks.getIcon(side, 0) : blockIcon;
-            default:
-                return blockIcon;
-        }
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
     }
 
-    @Override
-    public boolean rotateBlock(World world, int x, int y, int z, ForgeDirection axis) {
-        return RotationHelper.rotateArchimedesBlock(this, world, x, y, z, axis);
-    }
-    /*
-    @Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float p_149727_7_, float p_149727_8_, float p_149727_9_)
-	{
-		TileEntity te = world.getTileEntity(x, y, z);
-		if (te instanceof TileEntityCrate)
-		{
-			if (((TileEntityCrate) te).getContainedEntity() == player)
-			{
-				((TileEntityCrate) te).setContainedEntity(null);
-			} else if (((TileEntityCrate) te).getContainedEntity() == null)
-			{
-				((TileEntityCrate) te).setContainedEntity(player);
-			}
-			return true;
-		}
-		return false;
-	}
-	
-	@Override
-	public TileEntity createNewTileEntity(World world, int var2)
-	{
-		return new TileEntityCrate();
-	}*/
+
 }

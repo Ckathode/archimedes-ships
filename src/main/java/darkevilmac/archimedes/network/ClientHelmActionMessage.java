@@ -1,16 +1,17 @@
 package darkevilmac.archimedes.network;
 
-import cpw.mods.fml.relauncher.Side;
 import darkevilmac.archimedes.blockitem.TileEntityHelm;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class ClientHelmActionMessage extends ArchimedesShipsMessage {
     public TileEntityHelm tileEntity;
     public int actionID;
 
-    private int x, y, z;
+    private BlockPos pos;
 
     public ClientHelmActionMessage() {
         tileEntity = null;
@@ -25,17 +26,15 @@ public class ClientHelmActionMessage extends ArchimedesShipsMessage {
     @Override
     public void encodeInto(ChannelHandlerContext ctx, ByteBuf buf, Side side) {
         buf.writeByte(actionID);
-        buf.writeInt(tileEntity.xCoord);
-        buf.writeInt(tileEntity.yCoord);
-        buf.writeInt(tileEntity.zCoord);
+        buf.writeInt(tileEntity.getPos().getX());
+        buf.writeInt(tileEntity.getPos().getY());
+        buf.writeInt(tileEntity.getPos().getZ());
     }
 
     @Override
     public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf, EntityPlayer player, Side side) {
         actionID = buf.readByte();
-        x = buf.readInt();
-        y = buf.readInt();
-        z = buf.readInt();
+        pos = new BlockPos(buf.readInt(), buf.readInt(), buf.readInt());
     }
 
     @Override
@@ -44,14 +43,14 @@ public class ClientHelmActionMessage extends ArchimedesShipsMessage {
 
     @Override
     public void handleServerSide(EntityPlayer player) {
-        if (player.worldObj.getTileEntity(x, y, z) != null && player.worldObj.getTileEntity(x, y, z) instanceof TileEntityHelm) {
-            tileEntity = (TileEntityHelm) player.worldObj.getTileEntity(x, y, z);
+        if (player.worldObj.getTileEntity(pos) != null && player.worldObj.getTileEntity(pos) instanceof TileEntityHelm) {
+            tileEntity = (TileEntityHelm) player.worldObj.getTileEntity(pos);
             switch (actionID) {
                 case 0:
                     tileEntity.assembleMovingWorld(player);
                     break;
                 case 1:
-                    tileEntity.mountMovingWorld(player, tileEntity.getMovingWorld(tileEntity.getWorldObj()));
+                    tileEntity.mountMovingWorld(player, tileEntity.getMovingWorld(tileEntity.getWorld()));
                     break;
                 case 2:
                     tileEntity.undoCompilation(player);

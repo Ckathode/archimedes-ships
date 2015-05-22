@@ -1,17 +1,5 @@
 package darkevilmac.archimedes;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.registry.EntityRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
 import darkevilmac.archimedes.blockitem.*;
 import darkevilmac.archimedes.command.CommandASHelp;
 import darkevilmac.archimedes.command.CommandDisassembleNear;
@@ -39,6 +27,16 @@ import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
@@ -50,7 +48,7 @@ public class ArchimedesShipMod {
     public static final String MOD_VERSION = "1.7.10-ALPHA-0";
     public static final String MOD_NAME = "Archimedes' Ships Plus";
 
-    @Instance(MOD_ID)
+    @Mod.Instance(MOD_ID)
     public static ArchimedesShipMod instance;
 
     @SidedProxy(clientSide = "darkevilmac.archimedes.ClientProxy", serverSide = "darkevilmac.archimedes.CommonProxy")
@@ -76,7 +74,7 @@ public class ArchimedesShipMod {
         network = new NetworkUtil();
     }
 
-    @EventHandler
+    @Mod.EventHandler
     public void preInitMod(FMLPreInitializationEvent event) {
         modLog = event.getModLog();
         MinecraftForge.EVENT_BUS.register(this);
@@ -124,7 +122,7 @@ public class ArchimedesShipMod {
         blockCrateWood.setStepSound(Block.soundTypeWood);
         registerBlock("crate_wood", blockCrateWood);
 
-        blockAnchorPoint = new BlockAnchorPoint(Material.wood).setHardness(1f).setResistance(1F).setCreativeTab(CreativeTabs.tabTransport).setBlockTextureName("archimedes:anchorPoint");
+        blockAnchorPoint = new BlockAnchorPoint(Material.wood).setHardness(1f).setResistance(1F).setCreativeTab(CreativeTabs.tabTransport);
         blockAnchorPoint.setStepSound(Block.soundTypePiston);
         registerBlock("anchorPoint", blockAnchorPoint);
     }
@@ -138,7 +136,7 @@ public class ArchimedesShipMod {
         GameRegistry.addShapelessRecipe(new ItemStack(blockFloater, 1), Blocks.log2, Blocks.wool);
 
         //GameRegistry.addRecipe(new ItemStack(blockBalloon, 1), "X", "#", Character.valueOf('X'), Block.cloth, Character.valueOf('#'), Item.silk);
-        for (int i = 0; i < ItemDye.field_150923_a.length; i++) {
+        for (int i = 0; i < ItemDye.dyeColors.length; i++) {
             GameRegistry.addRecipe(new ItemStack(blockBalloon, 1, i), "X", "#", Character.valueOf('X'), new ItemStack(Blocks.wool, 1, i), Character.valueOf('#'), Items.string);
         }
         Blocks.fire.setFireInfo(blockBalloon, 30, 60);
@@ -164,7 +162,7 @@ public class ArchimedesShipMod {
         GameRegistry.registerTileEntity(TileEntityAnchorPoint.class, "archiAnchor");
     }
 
-    @EventHandler
+    @Mod.EventHandler
     public void initMod(FMLInitializationEvent event) {
 
         try {
@@ -192,12 +190,12 @@ public class ArchimedesShipMod {
         proxy.registerRenderers();
     }
 
-    @EventHandler
+    @Mod.EventHandler
     public void postInitMod(FMLPostInitializationEvent event) {
     }
 
     @SuppressWarnings("unchecked")
-    @EventHandler
+    @Mod.EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
         registerASCommand(event, new CommandASHelp());
         registerASCommand(event, new CommandDisassembleShip());
@@ -215,10 +213,9 @@ public class ArchimedesShipMod {
         registerBlock(id, block, ItemBlock.class);
     }
 
-    private void registerBlock(String id, Block block, Class<? extends ItemBlock> itemblockclass) {
-        block.setBlockName("archimedes." + id);
-        block.setBlockTextureName("archimedes:" + id);
-        GameRegistry.registerBlock(block, itemblockclass, id);
+    private void registerBlock(String id, Block block, Class<? extends ItemBlock> itemBlockClass) {
+        block.setUnlocalizedName("archimedes." + id);
+        GameRegistry.registerBlock(block, itemBlockClass, id);
     }
 
 }
