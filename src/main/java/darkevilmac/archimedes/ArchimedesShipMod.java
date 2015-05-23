@@ -1,17 +1,17 @@
 package darkevilmac.archimedes;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ListMultimap;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import darkevilmac.archimedes.blockitem.*;
 import darkevilmac.archimedes.command.CommandASHelp;
 import darkevilmac.archimedes.command.CommandDisassembleNear;
@@ -33,16 +33,15 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemCloth;
-import net.minecraft.item.ItemDye;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 
 @Mod(modid = ArchimedesShipMod.MOD_ID, name = ArchimedesShipMod.MOD_NAME, version = ArchimedesShipMod.MOD_VERSION, dependencies = "required-after:MovingWorld@")
 public class ArchimedesShipMod {
@@ -219,6 +218,40 @@ public class ArchimedesShipMod {
         block.setBlockName("archimedes." + id);
         block.setBlockTextureName("archimedes:" + id);
         GameRegistry.registerBlock(block, itemblockclass, id);
+    }
+
+    @Mod.EventHandler
+    public void missingMappingFound(FMLMissingMappingsEvent event) {
+        if (event != null && event.getAll() != null && !event.getAll().isEmpty()) {
+            ListMultimap<String, FMLMissingMappingsEvent.MissingMapping> missing = ReflectionHelper.getPrivateValue(FMLMissingMappingsEvent.class, event, "missing");
+            if (missing != null) {
+                List<FMLMissingMappingsEvent.MissingMapping> missingMappingList = ImmutableList.copyOf(missing.get("ArchimedesShips"));
+
+                if (missingMappingList != null && !missingMappingList.isEmpty()) {
+
+                    Logger log = LogManager.getLogger(MOD_ID);
+
+                    log.info("ARCHIMEDES LEGACY MAPPINGS FOUND");
+
+                    for (FMLMissingMappingsEvent.MissingMapping mapping : missingMappingList) {
+                        if (mapping != null && mapping.type != null && mapping.name != null && !mapping.name.isEmpty()) {
+
+                            String name = mapping.name.substring("ArchimedesShips:".length());
+
+                            if (mapping.type == GameRegistry.Type.BLOCK) {
+                                mapping.remap(GameRegistry.findBlock(ArchimedesShipMod.MOD_ID, name));
+                            } else {
+                                mapping.remap(Item.getItemFromBlock(GameRegistry.findBlock(ArchimedesShipMod.MOD_ID, name)));
+                            }
+
+                            log.debug("ArchimedesShips:" + name + " ~~~> " + "ArchimedesShipsPlus:" + name);
+                        }
+                    }
+
+                    log.info("REMAPPED TO ARCHIMEDES SHIPS PLUS, ENJOY! ~Darkevilmac");
+                }
+            }
+        }
     }
 
 }
