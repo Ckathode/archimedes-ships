@@ -1,15 +1,16 @@
 package darkevilmac.archimedes.network;
 
-import cpw.mods.fml.relauncher.Side;
 import darkevilmac.archimedes.blockitem.TileEntityHelm;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class ClientRenameShipMessage extends ArchimedesShipsMessage {
     public TileEntityHelm tileEntity;
     public String newName;
-    int x, y, z;
+    BlockPos pos;
 
     public ClientRenameShipMessage() {
         tileEntity = null;
@@ -25,9 +26,9 @@ public class ClientRenameShipMessage extends ArchimedesShipsMessage {
     public void encodeInto(ChannelHandlerContext ctx, ByteBuf buf, Side side) {
         buf.writeShort(newName.length());
         buf.writeBytes(newName.getBytes());
-        buf.writeInt(tileEntity.xCoord);
-        buf.writeInt(tileEntity.yCoord);
-        buf.writeInt(tileEntity.zCoord);
+        buf.writeInt(tileEntity.getPos().getX());
+        buf.writeInt(tileEntity.getPos().getY());
+        buf.writeInt(tileEntity.getPos().getZ());
     }
 
     @Override
@@ -35,9 +36,9 @@ public class ClientRenameShipMessage extends ArchimedesShipsMessage {
         byte[] ab = new byte[buf.readShort()];
         buf.readBytes(ab);
         newName = new String(ab);
-        x = buf.readInt();
-        y = buf.readInt();
-        z = buf.readInt();
+        pos = new BlockPos(buf.readInt(),
+                buf.readInt(),
+                buf.readInt());
     }
 
     @Override
@@ -46,8 +47,8 @@ public class ClientRenameShipMessage extends ArchimedesShipsMessage {
 
     @Override
     public void handleServerSide(EntityPlayer player) {
-        if (player.worldObj.getTileEntity(x, y, z) != null && player.worldObj.getTileEntity(x, y, z) instanceof TileEntityHelm) {
-            tileEntity = (TileEntityHelm) player.worldObj.getTileEntity(x, y, z);
+        if (player.worldObj.getTileEntity(pos) != null && player.worldObj.getTileEntity(pos) instanceof TileEntityHelm) {
+            tileEntity = (TileEntityHelm) player.worldObj.getTileEntity(pos);
             tileEntity.getInfo().setName(newName);
         }
     }

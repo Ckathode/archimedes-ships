@@ -45,7 +45,7 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
 
     @Override
     public void blockAssembled(LocatedBlock locatedBlock) {
-        if (locatedBlock.block == ArchimedesShipMod.blockBalloon) {
+        if (locatedBlock.blockState.getBlock() == ArchimedesShipMod.blockBalloon) {
             balloonCount++;
         }
     }

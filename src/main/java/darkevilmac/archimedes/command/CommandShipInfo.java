@@ -12,13 +12,14 @@ import net.minecraft.util.EnumChatFormatting;
 import java.util.Locale;
 
 public class CommandShipInfo extends CommandBase {
+
     @Override
-    public String getCommandName() {
+    public String getName() {
         return "asinfo";
     }
 
     @Override
-    public void processCommand(ICommandSender icommandsender, String[] astring) {
+    public void execute(ICommandSender icommandsender, String[] astring) {
         EntityShip ship = null;
         if (icommandsender instanceof Entity) {
             Entity player = (Entity) icommandsender;
@@ -49,12 +50,12 @@ public class CommandShipInfo extends CommandBase {
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender icommandsender) {
+    public boolean canCommandSenderUse(ICommandSender icommandsender) {
         return icommandsender instanceof Entity;
     }
 
     @Override
     public String getCommandUsage(ICommandSender icommandsender) {
-        return "/".concat(getCommandName());
+        return "/".concat(getName());
     }
 }

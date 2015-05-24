@@ -29,7 +29,7 @@ public class ContainerHelm extends Container {
 
     @Override
     public boolean canInteractWith(EntityPlayer player) {
-        return player.worldObj.getTileEntity(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord) == tileEntity && player.getDistanceSq(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord) < 25D;
+        return player.worldObj.getTileEntity(tileEntity.getPos()) == tileEntity && player.getDistanceSq(tileEntity.getPos()) < 25D;
     }
 
     protected void bindPlayerInventory(InventoryPlayer inventoryPlayer) {

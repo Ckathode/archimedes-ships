@@ -1,12 +1,12 @@
 package darkevilmac.archimedes.network;
 
-import cpw.mods.fml.relauncher.Side;
 import darkevilmac.archimedes.entity.ShipAssemblyInteractor;
 import darkevilmac.archimedes.gui.ContainerHelm;
 import darkevilmac.movingworld.chunk.AssembleResult;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class AssembleResultMessage extends ArchimedesShipsMessage {
     public AssembleResult result;

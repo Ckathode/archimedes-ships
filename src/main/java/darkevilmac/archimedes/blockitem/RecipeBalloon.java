@@ -17,8 +17,8 @@ public class RecipeBalloon implements IRecipe {
                 ItemStack itemstack = inventorycrafting.getStackInRowAndColumn(i, j);
                 if (itemstack == null) continue;
                 if (itemstack.getItem() == Item.getItemFromBlock(Blocks.wool)) {
-                    ItemStack itemstack1 = inventorycrafting.getStackInRowAndColumn(i, j + 1);
-                    return itemstack1 != null && itemstack1.getItem() == Items.string;
+                    ItemStack itemStack1 = inventorycrafting.getStackInRowAndColumn(i, j + 1);
+                    return itemStack1 != null && itemStack1.getItem() == Items.string;
                 }
                 return false;
             }
@@ -33,8 +33,8 @@ public class RecipeBalloon implements IRecipe {
                 ItemStack itemstack = inventorycrafting.getStackInRowAndColumn(i, j);
                 if (itemstack == null) continue;
                 if (itemstack.getItem() == Item.getItemFromBlock(Blocks.wool)) {
-                    ItemStack itemstack1 = inventorycrafting.getStackInRowAndColumn(i, j + 1);
-                    if (itemstack1 != null && itemstack1.getItem() == Items.string) {
+                    ItemStack itemStack1 = inventorycrafting.getStackInRowAndColumn(i, j + 1);
+                    if (itemStack1 != null && itemStack1.getItem() == Items.string) {
                         return new ItemStack(ArchimedesShipMod.blockBalloon, 1, itemstack.getItemDamage());
                     }
                     return null;
@@ -53,6 +53,11 @@ public class RecipeBalloon implements IRecipe {
     @Override
     public ItemStack getRecipeOutput() {
         return new ItemStack(ArchimedesShipMod.blockBalloon);
+    }
+
+    @Override
+    public ItemStack[] getRemainingItems(InventoryCrafting inventoryCrafting) {
+        return new ItemStack[0];
     }
 
 }

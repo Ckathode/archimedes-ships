@@ -3,10 +3,12 @@ package darkevilmac.archimedes.blockitem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockFence;
+import net.minecraft.block.BlockSlab;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.tileentity.TileEntitySignRenderer;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
@@ -26,8 +28,6 @@ public class BlockGauge extends BlockContainer {
     public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
     public static final PropertyBool EXTENDED = PropertyBool.create("extended");
 
-    public static int gaugeBlockRenderID;
-
     public BlockGauge() {
         super(Material.circuits);
         setBlockBounds(0F, 0F, 0F, 1F, 0.1F, 1F);
@@ -40,7 +40,7 @@ public class BlockGauge extends BlockContainer {
 
     @Override
     public int getRenderType() {
-        return gaugeBlockRenderID;
+        return 3;
     }
 
     @Override

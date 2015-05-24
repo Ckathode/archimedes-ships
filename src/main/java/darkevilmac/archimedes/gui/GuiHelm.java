@@ -15,6 +15,7 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
+import java.io.IOException;
 import java.util.Locale;
 
 public class GuiHelm extends GuiContainer {
@@ -60,7 +61,7 @@ public class GuiHelm extends GuiContainer {
         btnMount.enabled = tileEntity.getAssembleResult() != null && tileEntity.getAssembleResult().getCode() == AssembleResult.RESULT_OK;
         buttonList.add(btnMount);
 
-        txtShipName = new GuiTextField(fontRendererObj, guiLeft + 8 + xSize / 2, guiTop + 21, 120, 10);
+        txtShipName = new GuiTextField(0, fontRendererObj, guiLeft + 8 + xSize / 2, guiTop + 21, 120, 10); // TODO: Might be incorrect not sure about 0 in GuiTextField()
         txtShipName.setMaxStringLength(127);
         txtShipName.setEnableBackgroundDrawing(false);
         txtShipName.setVisible(true);
@@ -237,7 +238,11 @@ public class GuiHelm extends GuiContainer {
                 actionPerformed(btnRename);
             } else if (txtShipName.textboxKeyTyped(c, k)) {
             } else {
-                super.keyTyped(c, k);
+                try {
+                    super.keyTyped(c, k);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

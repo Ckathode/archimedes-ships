@@ -213,6 +213,10 @@ public class ShipCapabilities extends MovingWorldCapabilities {
         blockCount++;
         mass += MaterialDensity.getDensity(state);
 
+        Block block = state.getBlock();
+        if (block == null)
+            return;
+
         if (block == ArchimedesShipMod.blockBalloon) {
             balloonCount++;
         } else if (block == ArchimedesShipMod.blockFloater) {
@@ -235,17 +239,16 @@ public class ShipCapabilities extends MovingWorldCapabilities {
             }
         } else if (block == ArchimedesShipMod.blockSeat && !ship.worldObj.isRemote) {
             BlockPos pos1 = ship.riderDestination;
-            int x1 = ship.riderDestinationX, y1 = ship.riderDestinationY, z1 = ship.riderDestinationZ;
             if (ship.frontDirection == 0) {
-                z1 -= 1;
+                pos1.add(0, 0, -1);
             } else if (ship.frontDirection == 1) {
-                x1 += 1;
+                pos1.add(1, 0, 0);
             } else if (ship.frontDirection == 2) {
-                z1 += 1;
+                pos1.add(0, 0, 1);
             } else if (ship.frontDirection == 3) {
-                x1 -= 1;
+                pos1.add(-1, 0, 0);
             }
-            if (x != x1 || y != y1 || z != z1) {
+            if (pos.getX() != pos1.getX() || pos.getY() != pos1.getY() || pos.getZ() != pos1.getZ()) {
                 EntitySeat seat = new EntitySeat(ship.worldObj);
                 seat.setParentShip(ship, pos);
                 addAttachments(seat);

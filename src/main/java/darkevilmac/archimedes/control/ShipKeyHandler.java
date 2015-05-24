@@ -1,17 +1,17 @@
 package darkevilmac.archimedes.control;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.InputEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import darkevilmac.archimedes.ArchimedesConfig;
 import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.entity.EntityShip;
 import darkevilmac.archimedes.network.ClientOpenGuiMessage;
 import darkevilmac.movingworld.MovingWorld;
 import darkevilmac.movingworld.network.MovingWorldClientActionMessage;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ShipKeyHandler {
@@ -31,17 +31,17 @@ public class ShipKeyHandler {
     @SubscribeEvent
     public void updateControl(TickEvent.PlayerTickEvent e) {
         if (e.phase == TickEvent.Phase.START && e.side == Side.CLIENT && e.player == FMLClientHandler.instance().getClientPlayerEntity() && e.player.ridingEntity != null && e.player.ridingEntity instanceof EntityShip) {
-            if (config.kbShipInv.getIsKeyPressed() && !kbShipGuiPrevState) {
+            if (config.kbShipInv.isKeyDown() && !kbShipGuiPrevState) {
                 ClientOpenGuiMessage msg = new ClientOpenGuiMessage(2);
                 ArchimedesShipMod.instance.network.sendToServer(msg);
             }
-            kbShipGuiPrevState = config.kbShipInv.getIsKeyPressed();
+            kbShipGuiPrevState = config.kbShipInv.isKeyDown();
 
-            if (config.kbDisassemble.getIsKeyPressed() && !kbDisassemblePrevState) {
+            if (config.kbDisassemble.isKeyDown() && !kbDisassemblePrevState) {
                 MovingWorldClientActionMessage msg = new MovingWorldClientActionMessage((EntityShip) e.player.ridingEntity, MovingWorldClientActionMessage.Action.DISASSEMBLE);
                 MovingWorld.instance.network.sendToServer(msg);
             }
-            kbDisassemblePrevState = config.kbDisassemble.getIsKeyPressed();
+            kbDisassemblePrevState = config.kbDisassemble.isKeyDown();
 
             int c = getHeightControl();
             EntityShip ship = (EntityShip) e.player.ridingEntity;
@@ -53,11 +53,11 @@ public class ShipKeyHandler {
 
 
     public int getHeightControl() {
-        if (config.kbAlign.getIsKeyPressed()) return 4;
-        if (config.kbBrake.getIsKeyPressed()) return 3;
+        if (config.kbAlign.isKeyDown()) return 4;
+        if (config.kbBrake.isKeyDown()) return 3;
         int vert = 0;
-        if (config.kbUp.getIsKeyPressed()) vert++;
-        if (config.kbDown.getIsKeyPressed()) vert--;
+        if (config.kbUp.isKeyDown()) vert++;
+        if (config.kbDown.isKeyDown()) vert--;
         return vert == 0 ? 0 : vert < 0 ? 1 : vert > 0 ? 2 : 0;
     }
 }

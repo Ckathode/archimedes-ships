@@ -11,20 +11,24 @@ import java.util.List;
 
 public class CommandDisassembleNear extends CommandBase {
     @Override
-    public String getCommandName() {
+    public String getName() {
         return "asdisassemblenear";
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public void processCommand(ICommandSender icommandsender, String[] astring) {
+    public void execute(ICommandSender icommandsender, String[] astring) {
         if (icommandsender instanceof Entity) {
             double range = 16D;
             if (astring != null && astring.length > 0) {
                 try {
                     range = Integer.parseInt(astring[0]);
                 } catch (NumberFormatException e) {
-                    throw new NumberInvalidException();
+                    try {
+                        throw new NumberInvalidException();
+                    } catch (NumberInvalidException e1) {
+                        e1.printStackTrace();
+                    }
                 }
             }
             double rangesqrd = range * range;
@@ -61,7 +65,7 @@ public class CommandDisassembleNear extends CommandBase {
 
     @Override
     public String getCommandUsage(ICommandSender icommandsender) {
-        return "/" + getCommandName() + " [range]";
+        return "/" + getName() + " [range]";
     }
 
     @Override
@@ -70,7 +74,7 @@ public class CommandDisassembleNear extends CommandBase {
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender icommandsender) {
-        return icommandsender instanceof Entity && super.canCommandSenderUseCommand(icommandsender);
+    public boolean canCommandSenderUse(ICommandSender icommandsender) {
+        return icommandsender instanceof Entity && super.canCommandSenderUse(icommandsender);
     }
 }

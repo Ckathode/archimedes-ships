@@ -4,9 +4,12 @@ import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.network.TranslatedChatMessage;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 public class BlockAnchorPoint extends BlockContainer {
@@ -16,10 +19,10 @@ public class BlockAnchorPoint extends BlockContainer {
     }
 
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int p6, float p7, float p8, float p9) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (world != null && player != null && !world.isRemote) {
-            if (world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileEntityAnchorPoint) {
-                TileEntityAnchorPoint tile = (TileEntityAnchorPoint) world.getTileEntity(x, y, z);
+            if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityAnchorPoint) {
+                TileEntityAnchorPoint tile = (TileEntityAnchorPoint) world.getTileEntity(pos);
                 if (tile.anchorPointInfo == null)
                     return false;
                 if (player.isSneaking()) {
@@ -29,13 +32,13 @@ public class BlockAnchorPoint extends BlockContainer {
                     if (tile.anchorPointInfo.forShip) {
                         if (player.getEntityData().getBoolean("SelectedShipData")) {
                             int[] selectedShipPos = player.getEntityData().getIntArray("SelectedShipAnchorPos");
-                            tile.anchorPointInfo.setInfo(selectedShipPos[0], selectedShipPos[1], selectedShipPos[2], tile.anchorPointInfo.forShip);
+                            tile.anchorPointInfo.setInfo(new BlockPos(selectedShipPos[0], selectedShipPos[1], selectedShipPos[2]), tile.anchorPointInfo.forShip);
                             ArchimedesShipMod.instance.network.sendTo(new TranslatedChatMessage("TR:" + "common.tile.anchor.activateShip" + "~ X:" + selectedShipPos[0] + " Y:" + selectedShipPos[1] + " Z:" + selectedShipPos[2]), (EntityPlayerMP) player);
                         } else {
                             ArchimedesShipMod.instance.network.sendTo(new TranslatedChatMessage("TR:" + "common.tile.anchor.noGroundLink"), (EntityPlayerMP) player);
                         }
                     } else {
-                        player.getEntityData().setIntArray("SelectedShipAnchorPos", new int[]{x, y, z});
+                        player.getEntityData().setIntArray("SelectedShipAnchorPos", new int[]{pos.getX(), pos.getY(), pos.getZ()});
                         player.getEntityData().setBoolean("SelectedShipData", true);
                         ArchimedesShipMod.instance.network.sendTo(new TranslatedChatMessage("TR:" + "common.tile.anchor.activateGround"), (EntityPlayerMP) player);
                     }

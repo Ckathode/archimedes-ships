@@ -1,52 +1,61 @@
 package darkevilmac.archimedes.render;
 
 import darkevilmac.archimedes.entity.EntityParachute;
+import net.minecraft.client.model.ModelHorse;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderHorse;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
+//TODO: possible rewrite?
 
 public class RenderParachute extends Render {
     public static final ResourceLocation PARACHUTE_TEXTURE = new ResourceLocation("archimedes", "textures/entity/parachute.png");
 
     public ModelParachute model;
 
-    public RenderParachute() {
+    public RenderParachute(RenderManager renderManager) {
+        super(renderManager);
         model = new ModelParachute();
     }
 
     public void renderParachute(EntityParachute entity, double x, double y, double z, float yaw, float pitch) {
-        GL11.glPushMatrix();
-        GL11.glTranslatef((float) x, (float) y + 4F, (float) z);
+        GlStateManager.pushMatrix();
+        GlStateManager.translate((float) x, (float) y + 4F, (float) z);
 
-        GL11.glPushMatrix();
-        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-        GL11.glScalef(0.0625F, -0.0625F, -0.0625F);
+        GlStateManager.pushMatrix();
+        GlStateManager.enableRescaleNormal();
+        GlStateManager.scale(0.0625F, -0.0625F, -0.0625F);
         bindEntityTexture(entity);
         model.render(entity, 0F, 0F, 0F, 0F, 0F, 1F);
-        GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-        GL11.glPopMatrix();
+        GlStateManager.disableRescaleNormal();
+        GlStateManager.popMatrix();
 
-        GL11.glColor4f(0F, 0F, 0F, 1F);
+        GlStateManager.color(0F, 0F, 0F, 1F);
         GL11.glLineWidth(4F);
-        Tessellator tess = Tessellator.instance;
-        tess.startDrawing(GL11.GL_LINES);
-        tess.addTranslation(0F, 0F, 0F);
-        tess.addVertex(0D, -3D, 0D);
-        tess.addVertex(-1D, 0D, 1D);
+        Tessellator tess = Tessellator.getInstance();
+        WorldRenderer worldRenderer = tess.getWorldRenderer();
+        worldRenderer.startDrawing(GL11.GL_LINES);
+        //worldRenderer.addTranslation(0F, 0F, 0F); TODO: Not required?
+        worldRenderer.addVertex(0D, -3D, 0D);
+        worldRenderer.addVertex(-1D, 0D, 1D);
 
-        tess.addVertex(0D, -3D, 0D);
-        tess.addVertex(-1D, 0D, -1D);
+        worldRenderer.addVertex(0D, -3D, 0D);
+        worldRenderer.addVertex(-1D, 0D, -1D);
 
-        tess.addVertex(0D, -3D, 0D);
-        tess.addVertex(1D, 0D, 1D);
+        worldRenderer.addVertex(0D, -3D, 0D);
+        worldRenderer.addVertex(1D, 0D, 1D);
 
-        tess.addVertex(0D, -3D, 0D);
-        tess.addVertex(1D, 0D, -1D);
+        worldRenderer.addVertex(0D, -3D, 0D);
+        worldRenderer.addVertex(1D, 0D, -1D);
         tess.draw();
-        tess.setTranslation(0F, 0F, 0F);
+        worldRenderer.setTranslation(0F, 0F, 0F);
 
         GL11.glPopMatrix();
     }

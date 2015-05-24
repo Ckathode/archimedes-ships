@@ -13,7 +13,6 @@ import net.minecraft.world.World;
 public class BlockSeat extends Block/*Container*/ {
 
     public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-    public static int seatBlockRenderID = 0;
 
     public BlockSeat() {
         super(Material.wood);
@@ -32,7 +31,7 @@ public class BlockSeat extends Block/*Container*/ {
 
     @Override
     public int getRenderType() {
-        return seatBlockRenderID;
+        return 3;
     }
 
     @Override

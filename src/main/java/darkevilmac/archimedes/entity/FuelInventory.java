@@ -4,8 +4,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.IChatComponent;
 
 public class FuelInventory implements IInventory {
+
     private EntityShip ship;
     private ItemStack[] itemstacks;
 
@@ -60,13 +63,18 @@ public class FuelInventory implements IInventory {
     }
 
     @Override
-    public String getInventoryName() {
+    public String getName() {
         return "Engine Inventory";
     }
 
     @Override
-    public boolean hasCustomInventoryName() {
+    public boolean hasCustomName() {
         return false;
+    }
+
+    @Override
+    public IChatComponent getDisplayName() {
+        return new ChatComponentText("Engine Inventory");
     }
 
     @Override
@@ -84,16 +92,36 @@ public class FuelInventory implements IInventory {
     }
 
     @Override
-    public void openInventory() {
+    public void openInventory(EntityPlayer player) {
     }
 
     @Override
-    public void closeInventory() {
+    public void closeInventory(EntityPlayer playe) {
     }
 
     @Override
     public boolean isItemValidForSlot(int i, ItemStack is) {
         return i >= 0 && i < 4 && TileEntityFurnace.isItemFuel(is);
+    }
+
+    @Override
+    public int getField(int id) {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value) {
+
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public void clear() {
+
     }
 
 }
