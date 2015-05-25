@@ -61,7 +61,6 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
             if (tileEntity.parentShip.dimension == 0) {
                 northGaugeAngle = -tileEntity.parentShip.rotationYaw + meta * 90F;
             } else {
-                //ang = (float) Math.random() * 360F;
                 northGaugeAngle = (tileEntity.parentShip.ticksExisted + partialTicks) * 42F + tileEntity.parentShip.rotationYaw / 3F;
             }
         }
@@ -106,7 +105,6 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
                 height += (float) tileEntity.parentShip.posY;
             }
             float heightGaugeLongAng = -height / 10F * 360F;
-            //float heightgaugeshortang = -height / 100F * 360F;
             float heightGaugeShortAng = heightGaugeLongAng / 10F;
 
             //Vertical velocity gauge
