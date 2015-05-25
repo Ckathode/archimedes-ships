@@ -40,7 +40,13 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
         double d = dVec.x * dVec.x + dVec.y * dVec.y + dVec.z * dVec.z;
         if (d > 256D) return;
 
-        GL11.glLineWidth(8F / (float) Math.sqrt(d));
+        float lineWidth = 8F / (float) Math.sqrt(d);
+
+        if (lineWidth > 9.25F) {
+            lineWidth = 9F;
+        }
+
+        GL11.glLineWidth(lineWidth);
 
         GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
         GlStateManager.disableTexture2D();
