@@ -55,23 +55,11 @@ public class TileEntityGauge extends TileEntity implements IMovingWorldTileEntit
                 parentShip = (EntityMovingWorld) entity;
             }
         }
-
-        if (worldObj != null && worldObj.isRemote) {
-            IBlockState state = worldObj.getBlockState(pos);
-            if (state != null && state.getBlock().getMetaFromState(state) != compound.getInteger("meta")) {
-                worldObj.setBlockState(pos, state.getBlock().getStateFromMeta(compound.getInteger("meta")), 2);
-            }
-        }
-        blockMetadata = compound.getInteger("meta");
     }
 
     @Override
     public void writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
-        compound.setInteger("meta", blockMetadata);
-        if (parentShip != null && !parentShip.isDead) {
-            compound.setInteger("vehicle", parentShip.getEntityId());
-        }
     }
 
 }

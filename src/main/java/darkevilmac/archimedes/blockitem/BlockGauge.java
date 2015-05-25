@@ -2,7 +2,6 @@ package darkevilmac.archimedes.blockitem;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
-import net.minecraft.block.BlockFence;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
@@ -60,7 +59,6 @@ public class BlockGauge extends BlockContainer {
         list.add(new ItemStack(item, 1, 1));
     }
 
-    //No hitbox for the gauge, it's not needed considering the size.
     @Override
     public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state) {
         return null;
@@ -83,7 +81,7 @@ public class BlockGauge extends BlockContainer {
     }
 
     private boolean canBePlacedOn(World worldIn, BlockPos pos) {
-        return World.doesBlockHaveSolidTopSurface(worldIn, pos) || worldIn.getBlockState(pos).getBlock() instanceof BlockFence;
+        return World.doesBlockHaveSolidTopSurface(worldIn, pos);
     }
 
     @Override
@@ -104,9 +102,6 @@ public class BlockGauge extends BlockContainer {
         worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()).withProperty(EXTENDED, stack.getItemDamage() == 1), 2);
     }
 
-    /**
-     * Returns a new instance of a block's tile entity class. Called on placing the block.
-     */
     @Override
     public TileEntity createNewTileEntity(World world, int metadata) {
         TileEntityGauge tileentitygauge = new TileEntityGauge();
