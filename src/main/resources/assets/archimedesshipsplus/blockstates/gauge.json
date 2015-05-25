@@ -1,0 +1,12 @@
+{
+    "variants": {
+        "extended=false,facing=north": { "model": "archimedesshipsplus:gauge" },
+        "extended=false,facing=south": { "model": "archimedesshipsplus:gauge", "y": 180 },
+        "extended=false,facing=west":  { "model": "archimedesshipsplus:gauge", "y": 270 },
+        "extended=false,facing=east":  { "model": "archimedesshipsplus:gauge", "y": 90 },
+		"extended=true,facing=north": { "model": "archimedesshipsplus:gauge_ext" },
+        "extended=true,facing=south": { "model": "archimedesshipsplus:gauge_ext", "y": 180 },
+        "extended=true,facing=west":  { "model": "archimedesshipsplus:gauge_ext", "y": 270 },
+        "extended=true,facing=east":  { "model": "archimedesshipsplus:gauge_ext", "y": 90 }
+    }
+}

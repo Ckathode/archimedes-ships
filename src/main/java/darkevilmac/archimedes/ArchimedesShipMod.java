@@ -44,6 +44,7 @@ import java.util.Collections;
 
 @Mod(modid = ArchimedesShipMod.MOD_ID, name = ArchimedesShipMod.MOD_NAME, version = ArchimedesShipMod.MOD_VERSION, dependencies = "required-after:MovingWorld@")
 public class ArchimedesShipMod {
+
     public static final String MOD_ID = "ArchimedesShipsPlus";
     public static final String MOD_VERSION = "1.7.10-ALPHA-0";
     public static final String MOD_NAME = "Archimedes' Ships Plus";
@@ -77,6 +78,7 @@ public class ArchimedesShipMod {
     @Mod.EventHandler
     public void preInitMod(FMLPreInitializationEvent event) {
         modLog = event.getModLog();
+
         MinecraftForge.EVENT_BUS.register(this);
 
         modConfig = new ArchimedesConfig(new Configuration(event.getSuggestedConfigurationFile()));

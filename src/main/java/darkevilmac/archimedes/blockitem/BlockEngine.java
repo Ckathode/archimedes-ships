@@ -39,6 +39,7 @@ public class BlockEngine extends BlockContainer {
         return new TileEntityEngine(enginePower, engineFuelConsumption);
     }
 
+    @Override
     public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
         this.setDefaultFacing(worldIn, pos, state);
     }
@@ -77,10 +78,13 @@ public class BlockEngine extends BlockContainer {
         return false;
     }
 
+    @Override
+
     public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
     }
 
+    @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
 
@@ -93,24 +97,21 @@ public class BlockEngine extends BlockContainer {
         }
     }
 
-    /**
-     * The type of render function that is called for this block
-     */
+
+    @Override
     public int getRenderType() {
         return 3;
     }
 
-    /**
-     * Possibly modify the given BlockState before rendering it on an Entity (Minecarts, Endermen, ...)
-     */
+
     @SideOnly(Side.CLIENT)
+    @Override
     public IBlockState getStateForEntityRender(IBlockState state) {
         return this.getDefaultState().withProperty(FACING, EnumFacing.SOUTH);
     }
 
-    /**
-     * Convert the given metadata into a BlockState for this Block
-     */
+
+    @Override
     public IBlockState getStateFromMeta(int meta) {
         EnumFacing enumfacing = EnumFacing.getFront(meta);
 
@@ -121,13 +122,13 @@ public class BlockEngine extends BlockContainer {
         return this.getDefaultState().withProperty(FACING, enumfacing);
     }
 
-    /**
-     * Convert the BlockState into the correct metadata value
-     */
+
+    @Override
     public int getMetaFromState(IBlockState state) {
         return ((EnumFacing) state.getValue(FACING)).getIndex();
     }
 
+    @Override
     protected BlockState createBlockState() {
         return new BlockState(this, new IProperty[]{FACING});
     }

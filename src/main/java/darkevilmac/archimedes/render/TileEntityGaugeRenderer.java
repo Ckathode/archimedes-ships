@@ -11,19 +11,17 @@ import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
-    public static final ResourceLocation GAUGE_TEXTURE_DEFAULT = new ResourceLocation("archimedes", "textures/blocks/gauge.png");
-    public static final ResourceLocation GAUGE_TEXTURE_AIRSHIP = new ResourceLocation("archimedes", "textures/blocks/gauge_ext.png");
 
     public void renderGauge(TileEntityGauge tileEntity, double x, double y, double z, float partialTicks) {
         RenderHelper.disableStandardItemLighting();
 
-        boolean extended = (tileEntity.blockMetadata & 4) != 0;
+        boolean extended = tileEntity.getBlockMetadata() > 3;
 
         int meta = tileEntity.blockMetadata & 3;
+
         Tessellator tess = Tessellator.getInstance();
         WorldRenderer worldRenderer = tess.getWorldRenderer();
 
@@ -35,9 +33,9 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
                     tileEntity.parentShip.riderDestination.getY() - tileEntity.getPos().getY(),
                     tileEntity.parentShip.riderDestination.getZ() - tileEntity.getPos().getZ());
         } else {
-            dVec.set(tileEntity.parentShip.posX - Minecraft.getMinecraft().getRenderManager().renderPosX,
-                    tileEntity.parentShip.posY - Minecraft.getMinecraft().getRenderManager().renderPosY,
-                    tileEntity.parentShip.posZ - Minecraft.getMinecraft().getRenderManager().renderPosZ);
+            dVec.set(tileEntity.parentShip.posX - Minecraft.getMinecraft().getRenderManager().viewerPosX,
+                    tileEntity.parentShip.posY - Minecraft.getMinecraft().getRenderManager().viewerPosY,
+                    tileEntity.parentShip.posZ - Minecraft.getMinecraft().getRenderManager().viewerPosZ);
         }
         double d = dVec.x * dVec.x + dVec.y * dVec.y + dVec.z * dVec.z;
         if (d > 256D) return;
@@ -47,18 +45,18 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
         GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
         GlStateManager.disableTexture2D();
 
-        float northgaugeang;
-        float velgaugeang;
+        float northGaugeAngle;
+        float velGaugeAngle;
         if (tileEntity.parentShip == null) {
-            northgaugeang = meta * 90F;
-            velgaugeang = 0F;
+            northGaugeAngle = meta * 90F;
+            velGaugeAngle = 0F;
         } else {
-            velgaugeang = -(tileEntity.parentShip.getHorizontalVelocity() * 3.6F * 20) / 60F * 270F; //vel in m/s * Tick rate (20 Hz) * 3.6 (conversion to km/h) with 60 km/h being 270 degrees.
+            velGaugeAngle = -(tileEntity.parentShip.getHorizontalVelocity() * 3.6F * 20) / 60F * 270F; //vel in m/s * Tick rate (20 Hz) * 3.6 (conversion to km/h) with 60 km/h being 270 degrees.
             if (tileEntity.parentShip.dimension == 0) {
-                northgaugeang = -tileEntity.parentShip.rotationYaw + meta * 90F;
+                northGaugeAngle = -tileEntity.parentShip.rotationYaw + meta * 90F;
             } else {
                 //ang = (float) Math.random() * 360F;
-                northgaugeang = (tileEntity.parentShip.ticksExisted + partialTicks) * 42F + tileEntity.parentShip.rotationYaw / 3F;
+                northGaugeAngle = (tileEntity.parentShip.ticksExisted + partialTicks) * 42F + tileEntity.parentShip.rotationYaw / 3F;
             }
         }
         GlStateManager.pushMatrix();
@@ -68,7 +66,7 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
         //Direction gauge
         GlStateManager.pushMatrix();
         GlStateManager.translate(-0.28125F, 0.02F, -0.28125F);
-        GlStateManager.rotate(northgaugeang, 0F, 1F, 0F);
+        GlStateManager.rotate(northGaugeAngle, 0F, 1F, 0F);
 
         worldRenderer.startDrawing(GL11.GL_LINES);
         worldRenderer.setColorOpaque_F(1F, 0F, 0F);
@@ -83,7 +81,7 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
         //Velocity gauge
         GlStateManager.pushMatrix();
         GlStateManager.translate(0.25F, 0.02F, -0.25F);
-        GlStateManager.rotate(velgaugeang, 0F, 1F, 0F);
+        GlStateManager.rotate(velGaugeAngle, 0F, 1F, 0F);
 
         worldRenderer.startDrawing(GL11.GL_LINES);
         worldRenderer.setColorOpaque_F(0F, 0F, 0.5F);

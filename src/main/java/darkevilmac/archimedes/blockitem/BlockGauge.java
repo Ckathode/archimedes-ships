@@ -3,12 +3,12 @@ package darkevilmac.archimedes.blockitem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockFence;
-import net.minecraft.block.BlockSlab;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.tileentity.TileEntitySignRenderer;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
@@ -31,16 +31,17 @@ public class BlockGauge extends BlockContainer {
     public BlockGauge() {
         super(Material.circuits);
         setBlockBounds(0F, 0F, 0F, 1F, 0.1F, 1F);
+        setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(EXTENDED, false));
     }
 
     @Override
     public EnumWorldBlockLayer getBlockLayer() {
-        return EnumWorldBlockLayer.CUTOUT;
+        return EnumWorldBlockLayer.CUTOUT_MIPPED;
     }
 
     @Override
-    public int getRenderType() {
-        return 3;
+    public boolean isFullCube() {
+        return false;
     }
 
     @Override
@@ -49,8 +50,8 @@ public class BlockGauge extends BlockContainer {
     }
 
     @Override
-    public boolean isFullCube() {
-        return false;
+    public int getRenderType() {
+        return 3;
     }
 
     @Override
@@ -95,12 +96,12 @@ public class BlockGauge extends BlockContainer {
 
     @Override
     public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-        return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite()).withProperty(EXTENDED, meta != 0);
+        return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite()).withProperty(EXTENDED, meta == 1);
     }
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()).withProperty(EXTENDED, stack.getMetadata() != 0), 2);
+        worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()).withProperty(EXTENDED, stack.getItemDamage() == 1), 2);
     }
 
     /**
@@ -111,4 +112,33 @@ public class BlockGauge extends BlockContainer {
         TileEntityGauge tileentitygauge = new TileEntityGauge();
         return tileentitygauge;
     }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        int facingIndex = meta & 3;
+        EnumFacing facing = EnumFacing.getHorizontal(facingIndex);
+
+        boolean extended = meta > 3;
+
+        return this.getDefaultState().withProperty(EXTENDED, extended).withProperty(FACING, facing);
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        EnumFacing facing = (EnumFacing) state.getValue(FACING);
+        boolean extended = (Boolean) state.getValue(EXTENDED);
+        int metaResult = facing.getHorizontalIndex();
+
+        if (extended) {
+            metaResult = metaResult | 4;
+        }
+
+        return metaResult;
+    }
+
+    @Override
+    public BlockState createBlockState() {
+        return new BlockState(this, new IProperty[]{FACING, EXTENDED});
+    }
+
 }
