@@ -40,7 +40,9 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 @Mod(modid = ArchimedesShipMod.MOD_ID, name = ArchimedesShipMod.MOD_NAME, version = ArchimedesShipMod.MOD_VERSION, dependencies = "required-after:MovingWorld@")
 public class ArchimedesShipMod {
@@ -48,6 +50,8 @@ public class ArchimedesShipMod {
     public static final String MOD_ID = "ArchimedesShipsPlus";
     public static final String MOD_VERSION = "1.7.10-ALPHA-0";
     public static final String MOD_NAME = "Archimedes' Ships Plus";
+
+    public static final String RESOURCE_DOMAIN = "archimedesshipsplus:";
 
     @Mod.Instance(MOD_ID)
     public static ArchimedesShipMod instance;
@@ -67,6 +71,8 @@ public class ArchimedesShipMod {
     public static Block blockCrateWood;
     public static Block blockAnchorPoint;
     public static Material materialFloater;
+
+    public HashMap<String, Block> registeredBlocks;
 
     public ArchimedesConfig modConfig;
     public NetworkUtil network;
@@ -90,6 +96,8 @@ public class ArchimedesShipMod {
     }
 
     private void createBlocksAndItems() {
+        registeredBlocks = new HashMap<String, Block>();
+
         materialFloater = new Material(MapColor.clothColor);
 
         blockMarkShip = (BlockHelm) new BlockHelm().setCreativeTab(CreativeTabs.tabTransport);
@@ -218,6 +226,7 @@ public class ArchimedesShipMod {
     private void registerBlock(String id, Block block, Class<? extends ItemBlock> itemBlockClass) {
         block.setUnlocalizedName("archimedes." + id);
         GameRegistry.registerBlock(block, itemBlockClass, id);
+        registeredBlocks.put(id, block);
     }
 
 }

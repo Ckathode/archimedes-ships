@@ -39,7 +39,6 @@ public class RenderParachute extends Render {
         Tessellator tess = Tessellator.getInstance();
         WorldRenderer worldRenderer = tess.getWorldRenderer();
         worldRenderer.startDrawing(GL11.GL_LINES);
-        //worldRenderer.addTranslation(0F, 0F, 0F); TODO: Not required?
         worldRenderer.addVertex(0D, -3D, 0D);
         worldRenderer.addVertex(-1D, 0D, 1D);
 
