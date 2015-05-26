@@ -14,7 +14,6 @@ import darkevilmac.archimedes.network.ArchimedesShipsPacketHandler;
 import darkevilmac.archimedes.network.NetworkUtil;
 import darkevilmac.movingworld.MovingWorld;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockColored;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.command.CommandBase;
@@ -40,7 +39,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
@@ -108,7 +106,7 @@ public class ArchimedesShipMod {
         blockFloater.setStepSound(Block.soundTypeWood).setHardness(1F).setResistance(1F);
         registerBlock("floater", blockFloater);
 
-        blockBalloon = new BlockColored(Material.cloth).setCreativeTab(CreativeTabs.tabTransport);
+        blockBalloon = new BlockRecolourable(Material.cloth).setCreativeTab(CreativeTabs.tabTransport);
         blockBalloon.setStepSound(Block.soundTypeCloth).setHardness(0.35F).setResistance(1F);
         registerBlock("balloon", blockBalloon, ItemCloth.class);
 
