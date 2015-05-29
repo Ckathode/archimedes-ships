@@ -3,6 +3,7 @@ package darkevilmac.archimedes.blockitem;
 import darkevilmac.archimedes.ArchimedesShipMod;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.BlockStone;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
@@ -32,6 +33,12 @@ public class BlockEngine extends BlockContainer {
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
         enginePower = power;
         engineFuelConsumption = fuelconsumption;
+    }
+
+    @Override
+    public int getRenderType()
+    {
+        return 3;
     }
 
     @Override
@@ -79,7 +86,6 @@ public class BlockEngine extends BlockContainer {
     }
 
     @Override
-
     public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
     }
@@ -87,20 +93,6 @@ public class BlockEngine extends BlockContainer {
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
-
-        if (stack.hasDisplayName()) {
-            TileEntity tileentity = worldIn.getTileEntity(pos);
-
-            if (tileentity instanceof TileEntityFurnace) {
-                ((TileEntityFurnace) tileentity).setCustomInventoryName(stack.getDisplayName());
-            }
-        }
-    }
-
-
-    @Override
-    public int getRenderType() {
-        return 3;
     }
 
 

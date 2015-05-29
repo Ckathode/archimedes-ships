@@ -10,6 +10,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.world.World;
 
 public class BlockAnchorPoint extends BlockContainer {
@@ -46,6 +47,11 @@ public class BlockAnchorPoint extends BlockContainer {
             }
         }
         return true;
+    }
+
+    @Override
+    public EnumWorldBlockLayer getBlockLayer() {
+        return EnumWorldBlockLayer.SOLID;
     }
 
     @Override

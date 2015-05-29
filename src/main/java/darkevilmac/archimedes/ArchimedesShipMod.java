@@ -91,6 +91,7 @@ public class ArchimedesShipMod {
         createBlocksAndItems();
 
         modConfig.postLoad();
+        proxy.registerRenderers(event.getModState());
     }
 
     private void createBlocksAndItems() {
@@ -195,7 +196,7 @@ public class ArchimedesShipMod {
 
         proxy.registerKeyHandlers(modConfig);
         proxy.registerEventHandlers();
-        proxy.registerRenderers();
+        proxy.registerRenderers(event.getModState());
     }
 
     @Mod.EventHandler

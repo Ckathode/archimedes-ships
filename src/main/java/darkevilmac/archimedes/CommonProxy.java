@@ -3,6 +3,7 @@ package darkevilmac.archimedes;
 import darkevilmac.archimedes.gui.ASGuiHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.LoaderState;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 public class CommonProxy {
@@ -24,7 +25,7 @@ public class CommonProxy {
         MinecraftForge.EVENT_BUS.register(hookContainer = getHookContainer());
     }
 
-    public void registerRenderers() {
+    public void registerRenderers(LoaderState.ModState state) {
     }
 
 }

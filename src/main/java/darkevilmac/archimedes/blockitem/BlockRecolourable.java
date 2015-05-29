@@ -3,6 +3,7 @@ package darkevilmac.archimedes.blockitem;
 import net.minecraft.block.BlockColored;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemDye;
@@ -10,11 +11,8 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-/**
- * Created by DarkEvilMac on 5/25/2015.
- */
-
 public class BlockRecolourable extends BlockColored {
+
     public BlockRecolourable(Material materialIn) {
         super(materialIn);
     }
@@ -26,6 +24,9 @@ public class BlockRecolourable extends BlockColored {
                 world.setBlockState(pos, state.withProperty(BlockColored.COLOR, EnumDyeColor.byDyeDamage(playerIn.getItemInUse().getItemDamage()).getMetadata()));
             }
         }
+
         return false;
     }
+
+
 }

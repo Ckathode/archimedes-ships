@@ -10,11 +10,16 @@ import darkevilmac.movingworld.render.RenderMovingWorld;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
+import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.LoaderState;
+
+import java.util.ArrayList;
 
 public class ClientProxy extends CommonProxy {
     public ShipKeyHandler shipKeyHandler;
@@ -31,10 +36,16 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public void registerRenderers() {
-        registerEntityRenderers();
-        registerTileEntitySpeacialRenderers();
-        registerItemRenderers();
+    public void registerRenderers(LoaderState.ModState state) {
+        if (state == LoaderState.ModState.PREINITIALIZED) {
+            registerRendererVariants();
+        }
+
+        if (state == LoaderState.ModState.INITIALIZED) {
+            registerEntityRenderers();
+            registerTileEntitySpeacialRenderers();
+            registerItemRenderers();
+        }
     }
 
     public void registerEntityRenderers() {
@@ -44,6 +55,28 @@ public class ClientProxy extends CommonProxy {
 
     public void registerTileEntitySpeacialRenderers() {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGauge.class, new TileEntityGaugeRenderer());
+    }
+
+    public void registerRendererVariants() {
+        Item itemToRegister = null;
+        ArrayList<String> variants = null;
+
+        itemToRegister = Item.getItemFromBlock(ArchimedesShipMod.blockBalloon);
+        variants = new ArrayList<String>();
+
+        for (EnumDyeColor color : EnumDyeColor.values()) {
+            variants.add(ArchimedesShipMod.RESOURCE_DOMAIN + "balloon_" + color.getName());
+        }
+
+        String[] variantsArray = new String[variants.size()];
+        int index = 0;
+
+        for (String str : variants) {
+            variantsArray[index] = str;
+            index++;
+        }
+
+        ModelBakery.addVariantName(itemToRegister, variantsArray);
     }
 
     public void registerItemRenderers() {
@@ -66,6 +99,15 @@ public class ClientProxy extends CommonProxy {
         modelResourceLocation = new ModelResourceLocation(ArchimedesShipMod.RESOURCE_DOMAIN + "gauge_ext", "inventory");
 
         modelMesher.register(itemToRegister, 1, modelResourceLocation);
+
+        itemToRegister = Item.getItemFromBlock(ArchimedesShipMod.blockBalloon);
+        modelResourceLocation = null;
+
+        for (EnumDyeColor color : EnumDyeColor.values()) {
+            modelResourceLocation = new ModelResourceLocation(ArchimedesShipMod.RESOURCE_DOMAIN + "balloon_" + color.getName(), "inventory");
+            modelMesher.register(itemToRegister, color.getMetadata(), modelResourceLocation);
+        }
+
 
     }
 

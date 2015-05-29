@@ -1,10 +1,15 @@
 {
     "parent": "archimedesshipsplus:block/gauge_ext",
-    "display": {
+	"display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],
-            "translation": [ 0, 1.5, -2.75 ],
+            "translation": [ 0, 0, -2.75 ],
             "scale": [ 0.375, 0.375, 0.375 ]
+        },
+        "firstperson": {
+            "rotation": [ 10, -45, 170 ],
+            "translation": [ -1, 1.5, -2.5 ],
+            "scale": [ 0.75, 0.75, 0.75 ]
         }
     }
 }
