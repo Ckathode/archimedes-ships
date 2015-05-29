@@ -28,6 +28,10 @@ public class GuiShip extends GuiContainer {
     @Override
     public void initGui() {
         super.initGui();
+        initButtons();
+    }
+
+    protected void initButtons() {
         buttonList.clear();
 
         btnDisassemble = new GuiButton(1, guiLeft + 4, guiTop + 20, 100, 20, StatCollector.translateToLocal("gui.shipinv.decompile"));
@@ -41,6 +45,10 @@ public class GuiShip extends GuiContainer {
     @Override
     public void updateScreen() {
         super.updateScreen();
+
+        if (btnDisassemble == null || btnAlign == null) {
+            return;
+        }
 
         btnDisassemble.xPosition = btnAlign.xPosition = guiLeft + 4;
         int y = guiTop + 20;
