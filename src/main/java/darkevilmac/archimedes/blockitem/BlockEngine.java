@@ -3,7 +3,6 @@ package darkevilmac.archimedes.blockitem;
 import darkevilmac.archimedes.ArchimedesShipMod;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
-import net.minecraft.block.BlockStone;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
@@ -13,14 +12,12 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-//Rotation code from BlockFurnace.
 public class BlockEngine extends BlockContainer {
 
     public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
@@ -36,8 +33,7 @@ public class BlockEngine extends BlockContainer {
     }
 
     @Override
-    public int getRenderType()
-    {
+    public int getRenderType() {
         return 3;
     }
 
@@ -82,6 +78,7 @@ public class BlockEngine extends BlockContainer {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -94,7 +91,6 @@ public class BlockEngine extends BlockContainer {
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
     }
-
 
     @SideOnly(Side.CLIENT)
     @Override

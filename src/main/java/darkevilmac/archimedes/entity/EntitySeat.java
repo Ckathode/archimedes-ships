@@ -111,16 +111,16 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
             if (!this.dataWatcher.getIsBlank() && this.dataWatcher.getWatchableObjectByte(10) == new Byte((byte) 1)) {
                 if (this.dataWatcher.getWatchableObjectInt(6) != 0) {
                     ship = (EntityShip) worldObj.getEntityByID(this.dataWatcher.getWatchableObjectInt(6));
-                    pos = new BlockPos(this.dataWatcher.getWatchableObjectByte(7),
-                            this.dataWatcher.getWatchableObjectByte(8),
-                            this.dataWatcher.getWatchableObjectByte(9));
+                    pos = new BlockPos(this.dataWatcher.getWatchableObjectInt(7),
+                            this.dataWatcher.getWatchableObjectInt(8),
+                            this.dataWatcher.getWatchableObjectInt(9));
                 }
             }
             if (this.dataWatcher.hasObjectChanged() && this.dataWatcher.getWatchableObjectInt(6) != 0) {
                 ship = (EntityShip) worldObj.getEntityByID(this.dataWatcher.getWatchableObjectInt(6));
-                pos = new BlockPos(this.dataWatcher.getWatchableObjectByte(7),
-                        this.dataWatcher.getWatchableObjectByte(8),
-                        this.dataWatcher.getWatchableObjectByte(9));
+                pos = new BlockPos(this.dataWatcher.getWatchableObjectInt(7),
+                        this.dataWatcher.getWatchableObjectInt(8),
+                        this.dataWatcher.getWatchableObjectInt(9));
             }
         }
 
@@ -161,9 +161,9 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     @Override
     protected void entityInit() {
         this.dataWatcher.addObject(6, 0);
-        this.dataWatcher.addObject(7, new Byte((byte) (0 & 0xFF)));
-        this.dataWatcher.addObject(8, new Byte((byte) (0 & 0xFF)));
-        this.dataWatcher.addObject(9, new Byte((byte) (0 & 0xFF)));
+        this.dataWatcher.addObject(7, 0);
+        this.dataWatcher.addObject(8, 0);
+        this.dataWatcher.addObject(9, 0);
         this.dataWatcher.addObject(10, new Byte((byte) 1));
     }
 
@@ -200,31 +200,30 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     }
 
     @Override
-    protected void writeEntityToNBT(NBTTagCompound p_70014_1_) {
-
+    protected void writeEntityToNBT(NBTTagCompound tagCompound) {
     }
 
     @Override
     public void writeSpawnData(ByteBuf data) {
-        if (ship == null) {
+        if (ship == null || pos == null) {
             data.writeInt(0);
-            data.writeByte(0);
-            data.writeByte(0);
-            data.writeByte(0);
+            data.writeInt(0);
+            data.writeInt(0);
+            data.writeInt(0);
             return;
         }
         data.writeInt(ship.getEntityId());
-        data.writeByte(pos.getX() & 0xFF);
-        data.writeByte(pos.getY() & 0xFF);
-        data.writeByte(pos.getZ() & 0xFF);
+        data.writeInt(pos.getX());
+        data.writeInt(pos.getY());
+        data.writeInt(pos.getZ());
     }
 
     @Override
     public void readSpawnData(ByteBuf data) {
         int entityID = data.readInt();
-        int posChunkX = data.readUnsignedByte();
-        int posChunkY = data.readUnsignedByte();
-        int posChunkZ = data.readUnsignedByte();
+        int posChunkX = data.readInt();
+        int posChunkY = data.readInt();
+        int posChunkZ = data.readInt();
         if (entityID != 0) {
             Entity entity = worldObj.getEntityByID(entityID);
             if (entity instanceof EntityShip) {

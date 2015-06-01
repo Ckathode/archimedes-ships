@@ -13,7 +13,7 @@ import org.lwjgl.opengl.GL11;
 //TODO: possible rewrite?
 
 public class RenderParachute extends Render {
-    public static final ResourceLocation PARACHUTE_TEXTURE = new ResourceLocation("archimedes", "textures/entity/parachute.png");
+    public static final ResourceLocation PARACHUTE_TEXTURE = new ResourceLocation("archimedesshipsplus", "textures/entity/parachute.png");
 
     public ModelParachute model;
 

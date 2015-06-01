@@ -11,7 +11,7 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 
 public class GuiShip extends GuiContainer {
-    public static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("archimedes", "textures/gui/shipinv.png");
+    public static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("archimedesshipsplus", "textures/gui/shipinv.png");
 
     public final EntityShip ship;
     public final EntityPlayer player;
@@ -41,6 +41,10 @@ public class GuiShip extends GuiContainer {
     @Override
     public void updateScreen() {
         super.updateScreen();
+
+        if (btnDisassemble == null || btnAlign == null) {
+            return;
+        }
 
         btnDisassemble.xPosition = btnAlign.xPosition = guiLeft + 4;
         int y = guiTop + 20;

@@ -11,8 +11,7 @@ public class ItemBalloonBlock extends ItemCloth {
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack stack)
-    {
+    public String getUnlocalizedName(ItemStack stack) {
         EnumDyeColor colour = EnumDyeColor.byMetadata(stack.getMetadata());
         return super.getUnlocalizedName() + "." + colour.toString();
     }

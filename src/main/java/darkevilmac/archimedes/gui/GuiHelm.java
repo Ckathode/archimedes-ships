@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.Locale;
 
 public class GuiHelm extends GuiContainer {
-    public static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("archimedes", "textures/gui/shipstatus.png");
+    public static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("archimedesshipsplus", "textures/gui/shipstatus.png");
 
     public final TileEntityHelm tileEntity;
     public final EntityPlayer player;
