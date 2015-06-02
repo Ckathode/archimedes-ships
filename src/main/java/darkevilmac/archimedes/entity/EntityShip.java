@@ -200,7 +200,7 @@ public class EntityShip extends EntityMovingWorld {
                     vec = vec.setX(engine.getPos().getX() - getMovingWorldChunk().getCenterX() + 0.5f);
                     vec = vec.setY(engine.getPos().getY());
                     vec = vec.setZ(engine.getPos().getZ() - getMovingWorldChunk().getCenterZ() + 0.5f);
-                    vec = new Vec3Mod(vec.rotateYaw(yaw));
+                    vec = vec.rotateAroundY(yaw);
                     worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX + vec.xCoord, posY + vec.yCoord + 1d, posZ + vec.zCoord, 0d, 0d, 0d);
                 }
             }
@@ -215,7 +215,7 @@ public class EntityShip extends EntityMovingWorld {
             double dz = prevPosZ - posZ;
 
             if (riddenByEntity != null && !isBraking() && dx * dx + dz * dz > 0.01D) {
-                newyaw = 270F - Math.toDegrees(Math.atan2(dz, dx)) + frontDirection * 90F;
+                newyaw = 270F - Math.toDegrees(Math.atan2(dz, dx)) + frontDirection.getOpposite().getHorizontalIndex() * 90F;
             }
 
             double deltayaw = MathHelper.wrapAngleTo180_double(newyaw - rotationYaw);
@@ -269,19 +269,19 @@ public class EntityShip extends EntityMovingWorld {
 
             if (ArchimedesShipMod.instance.modConfig.shipControlType == ArchimedesConfig.CONTROL_TYPE_ARCHIMEDES) {
                 Vec3Mod vec = new Vec3Mod(riddenByEntity.motionX, 0D, riddenByEntity.motionZ);
-                vec = new Vec3Mod(vec.rotateYaw((float) Math.toRadians(riddenByEntity.rotationYaw)));
+                vec = vec.rotateAroundY((float) Math.toRadians(riddenByEntity.rotationYaw));
 
                 double steer = ((EntityLivingBase) riddenByEntity).moveStrafing;
 
                 motionYaw += steer * BASE_TURN_SPEED * capabilities.getRotationMult() * ArchimedesShipMod.instance.modConfig.turnSpeed;
 
-                float yaw = (float) Math.toRadians(180F - rotationYaw + frontDirection * 90F);
+                float yaw = (float) Math.toRadians(180F - rotationYaw + frontDirection.getOpposite().getHorizontalIndex() * 90F);
                 vec = vec.setX(motionX);
                 vec = vec.setZ(motionZ);
-                vec = new Vec3Mod(vec.rotateYaw(yaw));
-                vec = new Vec3Mod(vec.setX(vec.xCoord * 0.9D));
-                vec = new Vec3Mod(vec.setZ(vec.zCoord - throttle * BASE_FORWARD_SPEED * capabilities.getSpeedMult()));
-                vec = new Vec3Mod(vec.rotateYaw(-yaw));
+                vec = vec.rotateAroundY(yaw);
+                vec = vec.setX(vec.xCoord * 0.9D);
+                vec = vec.setZ(vec.zCoord - throttle * BASE_FORWARD_SPEED * capabilities.getSpeedMult());
+                vec = vec.rotateAroundY(-yaw);
 
                 motionX = vec.xCoord;
                 motionZ = vec.zCoord;

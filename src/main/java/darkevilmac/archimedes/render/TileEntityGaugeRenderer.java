@@ -42,8 +42,8 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
 
         float lineWidth = 8F / (float) Math.sqrt(d);
 
-        if (lineWidth > 9.25F) {
-            lineWidth = 9F;
+        if (lineWidth > 8.5F) {
+            lineWidth = 8.25F;
         }
 
         GL11.glLineWidth(lineWidth);

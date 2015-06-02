@@ -21,13 +21,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockHelm extends BlockDirectional implements ITileEntityProvider {
 
-    public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-
     public BlockHelm() {
         super(Material.wood);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
     }
-
 
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!player.isSneaking()) {

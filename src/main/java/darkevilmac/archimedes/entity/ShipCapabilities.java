@@ -238,17 +238,17 @@ public class ShipCapabilities extends MovingWorldCapabilities {
                 engines.add((TileEntityEngine) te);
             }
         } else if (block == ArchimedesShipMod.blockSeat && !ship.worldObj.isRemote) {
-            BlockPos pos1 = ship.riderDestination;
-            if (ship.frontDirection == 0) {
-                pos1.add(0, 0, -1);
-            } else if (ship.frontDirection == 1) {
-                pos1.add(1, 0, 0);
-            } else if (ship.frontDirection == 2) {
-                pos1.add(0, 0, 1);
-            } else if (ship.frontDirection == 3) {
-                pos1.add(-1, 0, 0);
+            int x1 = ship.riderDestination.getX(), y1 = ship.riderDestination.getY(), z1 = ship.riderDestination.getZ();
+            if (ship.frontDirection.getIndex() == 0) {
+                z1 -= 1;
+            } else if (ship.frontDirection.getIndex() == 1) {
+                x1 += 1;
+            } else if (ship.frontDirection.getIndex() == 2) {
+                z1 += 1;
+            } else if (ship.frontDirection.getIndex() == 3) {
+                x1 -= 1;
             }
-            if (pos.getX() != pos1.getX() || pos.getY() != pos1.getY() || pos.getZ() != pos1.getZ()) {
+            if (pos.getX() != x1 || pos.getY() != y1 || pos.getZ() != z1) {
                 EntitySeat seat = new EntitySeat(ship.worldObj);
                 seat.setParentShip(ship, pos);
                 addAttachments(seat);
@@ -292,7 +292,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     public void spawnSeatEntities() {
         if (seats != null) {
             for (EntitySeat seat : seats) {
-                ship.worldObj.spawnEntityInWorld(seat);
+                //ship.worldObj.spawnEntityInWorld(seat);
             }
         }
     }
