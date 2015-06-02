@@ -12,6 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -239,13 +240,13 @@ public class ShipCapabilities extends MovingWorldCapabilities {
             }
         } else if (block == ArchimedesShipMod.blockSeat && !ship.worldObj.isRemote) {
             int x1 = ship.riderDestination.getX(), y1 = ship.riderDestination.getY(), z1 = ship.riderDestination.getZ();
-            if (ship.frontDirection.getIndex() == 0) {
+            if (ship.frontDirection == EnumFacing.SOUTH) {
                 z1 -= 1;
-            } else if (ship.frontDirection.getIndex() == 1) {
+            } else if (ship.frontDirection == EnumFacing.WEST) {
                 x1 += 1;
-            } else if (ship.frontDirection.getIndex() == 2) {
+            } else if (ship.frontDirection == EnumFacing.NORTH) {
                 z1 += 1;
-            } else if (ship.frontDirection.getIndex() == 3) {
+            } else if (ship.frontDirection == EnumFacing.EAST) {
                 x1 -= 1;
             }
             if (pos.getX() != x1 || pos.getY() != y1 || pos.getZ() != z1) {

@@ -210,24 +210,24 @@ public class EntityShip extends EntityMovingWorld {
     @Override
     public void handleServerUpdatePreRotation() {
         if (ArchimedesShipMod.instance.modConfig.shipControlType == ArchimedesConfig.CONTROL_TYPE_VANILLA) {
-            double newyaw = rotationYaw;
+            double newYaw = rotationYaw;
             double dx = prevPosX - posX;
             double dz = prevPosZ - posZ;
 
             if (riddenByEntity != null && !isBraking() && dx * dx + dz * dz > 0.01D) {
-                newyaw = 270F - Math.toDegrees(Math.atan2(dz, dx)) + frontDirection.getOpposite().getHorizontalIndex() * 90F;
+                newYaw = 270F - Math.toDegrees(Math.atan2(dz, dx)) + frontDirection.getHorizontalIndex() * 90F;
             }
 
-            double deltayaw = MathHelper.wrapAngleTo180_double(newyaw - rotationYaw);
-            double maxyawspeed = 2D;
-            if (deltayaw > maxyawspeed) {
-                deltayaw = maxyawspeed;
+            double deltaYaw = MathHelper.wrapAngleTo180_double(newYaw - rotationYaw);
+            double maxYawSpeed = 2D;
+            if (deltaYaw > maxYawSpeed) {
+                deltaYaw = maxYawSpeed;
             }
-            if (deltayaw < -maxyawspeed) {
-                deltayaw = -maxyawspeed;
+            if (deltaYaw < -maxYawSpeed) {
+                deltaYaw = -maxYawSpeed;
             }
 
-            rotationYaw = (float) (rotationYaw + deltayaw);
+            rotationYaw = (float) (rotationYaw + deltaYaw);
         }
     }
 
@@ -275,7 +275,7 @@ public class EntityShip extends EntityMovingWorld {
 
                 motionYaw += steer * BASE_TURN_SPEED * capabilities.getRotationMult() * ArchimedesShipMod.instance.modConfig.turnSpeed;
 
-                float yaw = (float) Math.toRadians(180F - rotationYaw + frontDirection.getOpposite().getHorizontalIndex() * 90F);
+                float yaw = (float) Math.toRadians(180F - rotationYaw + frontDirection.getHorizontalIndex() * 90F);
                 vec = vec.setX(motionX);
                 vec = vec.setZ(motionZ);
                 vec = vec.rotateAroundY(yaw);
