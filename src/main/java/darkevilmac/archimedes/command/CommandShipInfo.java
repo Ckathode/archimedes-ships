@@ -14,12 +14,12 @@ import java.util.Locale;
 public class CommandShipInfo extends CommandBase {
 
     @Override
-    public String getName() {
+    public String getCommandName() {
         return "asinfo";
     }
 
     @Override
-    public void execute(ICommandSender icommandsender, String[] astring) {
+    public void processCommand(ICommandSender icommandsender, String[] astring) {
         EntityShip ship = null;
         if (icommandsender instanceof Entity) {
             Entity player = (Entity) icommandsender;
@@ -50,12 +50,12 @@ public class CommandShipInfo extends CommandBase {
     }
 
     @Override
-    public boolean canCommandSenderUse(ICommandSender icommandsender) {
+    public boolean canCommandSenderUseCommand(ICommandSender icommandsender) {
         return icommandsender instanceof Entity;
     }
 
     @Override
     public String getCommandUsage(ICommandSender icommandsender) {
-        return "/".concat(getName());
+        return "/".concat(getCommandName());
     }
 }

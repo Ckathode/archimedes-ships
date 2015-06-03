@@ -63,7 +63,7 @@ public class FuelInventory implements IInventory {
     }
 
     @Override
-    public String getName() {
+    public String getCommandSenderName() {
         return "Engine Inventory";
     }
 

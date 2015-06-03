@@ -13,7 +13,7 @@ public class CommandASHelp extends CommandBase {
     public static List<CommandBase> asCommands = new ArrayList<CommandBase>();
 
     @Override
-    public String getName() {
+    public String getCommandName() {
         return "ashelp";
     }
 
@@ -23,17 +23,17 @@ public class CommandASHelp extends CommandBase {
     }
 
     @Override
-    public boolean canCommandSenderUse(ICommandSender icommandsender) {
+    public boolean canCommandSenderUseCommand(ICommandSender icommandsender) {
         return true;
     }
 
     @Override
-    public List<String> getAliases() {
+    public List<String> getCommandAliases() {
         return Arrays.asList("as?");
     }
 
     @Override
-    public void execute(ICommandSender icommandsender, String[] astring) {
+    public void processCommand(ICommandSender icommandsender, String[] astring) {
         icommandsender.addChatMessage(new ChatComponentText(EnumChatFormatting.AQUA.toString() + "Archimedes' Ships mod commands:"));
         for (CommandBase cb : asCommands) {
             icommandsender.addChatMessage(new ChatComponentText(cb.getCommandUsage(icommandsender)));

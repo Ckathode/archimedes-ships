@@ -200,7 +200,7 @@ public class TileEntityEngine extends TileEntity implements IInventory {
     }
 
     @Override
-    public String getName() {
+    public String getCommandSenderName() {
         return "container.shipEngine";
     }
 

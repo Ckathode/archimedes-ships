@@ -8,7 +8,7 @@ import net.minecraft.util.ChatComponentText;
 
 public class CommandDisassembleShip extends CommandBase {
     @Override
-    public String getName() {
+    public String getCommandName() {
         return "asdisassemble";
     }
 
@@ -18,7 +18,7 @@ public class CommandDisassembleShip extends CommandBase {
     }
 
     @Override
-    public void execute(ICommandSender icommandsender, String[] astring) {
+    public void processCommand(ICommandSender icommandsender, String[] astring) {
         if (icommandsender instanceof Entity) {
             Entity player = (Entity) icommandsender;
             if (player.ridingEntity instanceof EntityShip) {
@@ -49,12 +49,12 @@ public class CommandDisassembleShip extends CommandBase {
     }
 
     @Override
-    public boolean canCommandSenderUse(ICommandSender icommandsender) {
+    public boolean canCommandSenderUseCommand(ICommandSender icommandsender) {
         return icommandsender instanceof Entity;
     }
 
     @Override
     public String getCommandUsage(ICommandSender icommandsender) {
-        return "/" + getName() + " [overwrite OR drop]";
+        return "/" + getCommandName() + " [overwrite OR drop]";
     }
 }

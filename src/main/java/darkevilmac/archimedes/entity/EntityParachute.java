@@ -90,7 +90,7 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
     }
 
     @Override
-    public void func_180433_a(double y, boolean grounded, Block blockIn, BlockPos pos) {
+    public void updateFallState(double y, boolean grounded, Block blockIn, BlockPos pos) {
         // Do nothing
     }
 
