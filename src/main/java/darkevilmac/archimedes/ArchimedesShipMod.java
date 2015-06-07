@@ -46,7 +46,7 @@ import java.util.List;
 @Mod(modid = ArchimedesShipMod.MOD_ID, name = ArchimedesShipMod.MOD_NAME, version = ArchimedesShipMod.MOD_VERSION, dependencies = "required-after:MovingWorld@")
 public class ArchimedesShipMod {
     public static final String MOD_ID = "ArchimedesShipsPlus";
-    public static final String MOD_VERSION = "1.7.10-ALPHA-0";
+    public static final String MOD_VERSION = "1.7.10-1.7.12";
     public static final String MOD_NAME = "Archimedes' Ships Plus";
 
     @Instance(MOD_ID)
