@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "archimedes:crate_wood" },
+        "facing=south": { "model": "archimedes:crate_wood", "y": 180 },
+        "facing=west":  { "model": "archimedes:crate_wood", "y": 270 },
+        "facing=east":  { "model": "archimedes:crate_wood", "y": 90 }
+    }
+}

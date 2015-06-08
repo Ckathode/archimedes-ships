@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "archimedes:seat" },
+        "facing=south": { "model": "archimedes:seat", "y": 180 },
+        "facing=west":  { "model": "archimedes:seat", "y": 270 },
+        "facing=east":  { "model": "archimedes:seat", "y": 90 }
+    }
+}
