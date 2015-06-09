@@ -7,7 +7,10 @@ import darkevilmac.movingworld.MaterialDensity;
 import darkevilmac.movingworld.entity.EntityMovingWorld;
 import darkevilmac.movingworld.entity.MovingWorldCapabilities;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockPistonBase;
+import net.minecraft.block.BlockPistonExtension;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -240,15 +243,18 @@ public class ShipCapabilities extends MovingWorldCapabilities {
             }
         } else if (block == ArchimedesShipMod.blockSeat && !ship.worldObj.isRemote) {
             int x1 = ship.riderDestination.getX(), y1 = ship.riderDestination.getY(), z1 = ship.riderDestination.getZ();
-            if (ship.frontDirection == EnumFacing.SOUTH) {
+            int frontDir = ship.frontDirection.getHorizontalIndex();
+
+            if (frontDir == 0) {
                 z1 -= 1;
-            } else if (ship.frontDirection == EnumFacing.WEST) {
+            } else if (frontDir == 1) {
                 x1 += 1;
-            } else if (ship.frontDirection == EnumFacing.NORTH) {
+            } else if (frontDir == 2) {
                 z1 += 1;
-            } else if (ship.frontDirection == EnumFacing.EAST) {
+            } else if (frontDir == 3) {
                 x1 -= 1;
             }
+
             if (pos.getX() != x1 || pos.getY() != y1 || pos.getZ() != z1) {
                 EntitySeat seat = new EntitySeat(ship.worldObj);
                 seat.setParentShip(ship, pos);
@@ -291,9 +297,9 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     }
 
     public void spawnSeatEntities() {
-        if (seats != null) {
+        if (seats != null && !seats.isEmpty()) {
             for (EntitySeat seat : seats) {
-                //ship.worldObj.spawnEntityInWorld(seat);
+                ship.worldObj.spawnEntityInWorld(seat);
             }
         }
     }
@@ -315,6 +321,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     public void clear() {
         if (seats != null) {
             for (EntitySeat seat : seats) {
+                seat.killedBy(this);
                 seat.setDead();
             }
             seats = null;

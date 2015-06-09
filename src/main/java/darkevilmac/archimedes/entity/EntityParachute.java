@@ -11,6 +11,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class EntityParachute extends Entity implements IEntityAdditionalSpawnData {
+
     public EntityParachute(World world) {
         super(world);
         setSize(1F, 1F);
@@ -47,6 +48,7 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
     @Override
     public void onUpdate() {
         super.onUpdate();
+
         prevPosX = posX;
         prevPosY = posY;
         prevPosZ = posZ;
@@ -67,6 +69,11 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
         motionY -= 0.05D;
 
         moveEntity(motionX, motionY, motionZ);
+    }
+
+    @Override
+    public void updateRiderPosition() {
+        super.updateRiderPosition();
     }
 
     @Override
@@ -91,7 +98,6 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 
     @Override
     public void updateFallState(double y, boolean grounded, Block blockIn, BlockPos pos) {
-        // Do nothing
     }
 
 

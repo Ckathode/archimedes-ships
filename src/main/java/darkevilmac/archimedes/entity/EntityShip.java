@@ -210,24 +210,24 @@ public class EntityShip extends EntityMovingWorld {
     @Override
     public void handleServerUpdatePreRotation() {
         if (ArchimedesShipMod.instance.modConfig.shipControlType == ArchimedesConfig.CONTROL_TYPE_VANILLA) {
-            double newYaw = rotationYaw;
+            double newyaw = rotationYaw;
             double dx = prevPosX - posX;
             double dz = prevPosZ - posZ;
 
             if (riddenByEntity != null && !isBraking() && dx * dx + dz * dz > 0.01D) {
-                newYaw = 270F - Math.toDegrees(Math.atan2(dz, dx)) + frontDirection.getHorizontalIndex() * 90F;
+                newyaw = 270F - Math.toDegrees(Math.atan2(dz, dx)) + frontDirection.getHorizontalIndex() * 90F;
             }
 
-            double deltaYaw = MathHelper.wrapAngleTo180_double(newYaw - rotationYaw);
-            double maxYawSpeed = 2D;
-            if (deltaYaw > maxYawSpeed) {
-                deltaYaw = maxYawSpeed;
+            double deltayaw = MathHelper.wrapAngleTo180_double(newyaw - rotationYaw);
+            double maxyawspeed = 2D;
+            if (deltayaw > maxyawspeed) {
+                deltayaw = maxyawspeed;
             }
-            if (deltaYaw < -maxYawSpeed) {
-                deltaYaw = -maxYawSpeed;
+            if (deltayaw < -maxyawspeed) {
+                deltayaw = -maxyawspeed;
             }
 
-            rotationYaw = (float) (rotationYaw + deltaYaw);
+            rotationYaw = (float) (rotationYaw + deltayaw);
         }
     }
 
@@ -269,7 +269,7 @@ public class EntityShip extends EntityMovingWorld {
 
             if (ArchimedesShipMod.instance.modConfig.shipControlType == ArchimedesConfig.CONTROL_TYPE_ARCHIMEDES) {
                 Vec3Mod vec = new Vec3Mod(riddenByEntity.motionX, 0D, riddenByEntity.motionZ);
-                vec = vec.rotateAroundY((float) Math.toRadians(riddenByEntity.rotationYaw));
+                vec.rotateAroundY((float) Math.toRadians(riddenByEntity.rotationYaw));
 
                 double steer = ((EntityLivingBase) riddenByEntity).moveStrafing;
 
@@ -285,7 +285,6 @@ public class EntityShip extends EntityMovingWorld {
 
                 motionX = vec.xCoord;
                 motionZ = vec.zCoord;
-
             } else if (ArchimedesShipMod.instance.modConfig.shipControlType == ArchimedesConfig.CONTROL_TYPE_VANILLA) {
                 if (throttle > 0.0D) {
                     double dsin = -Math.sin(Math.toRadians(riddenByEntity.rotationYaw));
@@ -329,17 +328,17 @@ public class EntityShip extends EntityMovingWorld {
 
     @Override
     public float getXRenderScale() {
-        return 1.000001F;
+        return 1F;
     }
 
     @Override
     public float getYRenderScale() {
-        return 1.000001F;
+        return 1F;
     }
 
     @Override
     public float getZRenderScale() {
-        return 1.000001F;
+        return 1F;
     }
 
     @Override

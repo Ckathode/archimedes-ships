@@ -46,7 +46,7 @@ import java.util.HashMap;
 public class ArchimedesShipMod {
 
     public static final String MOD_ID = "ArchimedesShipsPlus";
-    public static final String MOD_VERSION = "1.7.10-ALPHA-0";
+    public static final String MOD_VERSION = "1.7.10-1.7.12";
     public static final String MOD_NAME = "Archimedes' Ships Plus";
 
     public static final String RESOURCE_DOMAIN = "archimedesshipsplus:";
