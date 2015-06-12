@@ -174,11 +174,11 @@ public class ArchimedesShipMod {
     @Mod.EventHandler
     public void initMod(FMLInitializationEvent event) {
 
-        try {
-            MovingWorld.instance.metaRotations.registerMetaRotationFile("archimedesships.mrot", getClass().getResourceAsStream("/mrot/archimedesships.mrot"));
-        } catch (IOException e) {
-            modLog.error("UNABLE TO LOAD ARCHIMEDESSHIPS.MROT");
-        }
+        //try {
+        //    MovingWorld.instance.metaRotations.registerMetaRotationFile("archimedesships.mrot", getClass().getResourceAsStream("/mrot/archimedesships.mrot"));
+        //} catch (IOException e) {
+        //    modLog.error("UNABLE TO LOAD ARCHIMEDESSHIPS.MROT");
+        //}
 
         network.channels = NetworkRegistry.INSTANCE.newChannel
                 (MOD_ID, new ArchimedesShipsMessageToMessageCodec(), new ArchimedesShipsPacketHandler());

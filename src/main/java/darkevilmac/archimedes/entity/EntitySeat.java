@@ -184,13 +184,13 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     @Override
     public void updateRiderPosition() {
         if (ship != null) {
-            ship.updateRiderPosition(riddenByEntity, pos, 0);
+            ship.updateRiderPosition(riddenByEntity, pos, 1);
         }
     }
 
     @Override
     public double getMountedYOffset() {
-        return 0.5d;
+        return 0.5D;
     }
 
     @Override
