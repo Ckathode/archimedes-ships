@@ -343,6 +343,9 @@ public class EntityShip extends EntityMovingWorld {
 
     @Override
     public MovingWorldAssemblyInteractor getAssemblyInteractor() {
+        if(shipAssemblyInteractor == null)
+            shipAssemblyInteractor = (ShipAssemblyInteractor) getNewAssemblyInteractor();
+
         return shipAssemblyInteractor;
     }
 
