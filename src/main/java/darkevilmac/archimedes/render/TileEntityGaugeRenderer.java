@@ -48,7 +48,6 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
 
         GL11.glLineWidth(lineWidth);
 
-        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
         GlStateManager.disableTexture2D();
 
         float northGaugeAngle;
@@ -143,9 +142,9 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
             GlStateManager.popMatrix();
         }
 
+        GlStateManager.enableTexture2D();
         GlStateManager.popMatrix();
-
-        GlStateManager.popAttrib();
+        RenderHelper.enableStandardItemLighting();
     }
 
 

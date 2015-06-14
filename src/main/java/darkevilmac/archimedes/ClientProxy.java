@@ -77,6 +77,8 @@ public class ClientProxy extends CommonProxy {
         }
 
         ModelBakery.addVariantName(itemToRegister, variantsArray);
+
+        ModelBakery.addVariantName(Item.getItemFromBlock(ArchimedesShipMod.blockGauge), ArchimedesShipMod.RESOURCE_DOMAIN + "gauge", ArchimedesShipMod.RESOURCE_DOMAIN + "gauge_ext");
     }
 
     public void registerItemRenderers() {
@@ -107,8 +109,6 @@ public class ClientProxy extends CommonProxy {
             modelResourceLocation = new ModelResourceLocation(ArchimedesShipMod.RESOURCE_DOMAIN + "balloon_" + color.getName(), "inventory");
             modelMesher.register(itemToRegister, color.getMetadata(), modelResourceLocation);
         }
-
-
     }
 
 }
