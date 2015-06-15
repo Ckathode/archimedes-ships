@@ -1,13 +1,39 @@
 {
-    "parent": "archimedesshipsplus:block/seat",
-    "display": {
-        "thirdperson": {
-            "rotation": [ 10, -45, -120 ],
-            "translation": [ 0, 1.5, -2.75 ],
-            "scale": [ 0.375, 0.375, 0.375 ]
-        },
-        "gui": {
-            "rotation": [ 0, 180, 0 ]
-        }
+  "parent": "archimedesshipsplus:block/seat",
+  "display": {
+    "thirdperson": {
+      "rotation": [
+        10,
+        -45,
+        -120
+      ],
+      "translation": [
+        0,
+        1.5,
+        -2.75
+      ],
+      "scale": [
+        0.375,
+        0.375,
+        0.375
+      ]
+    },
+    "gui": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        -0.25,
+        0,
+        0.25
+      ],
+      "scale": [
+        0.975,
+        0.975,
+        0.975
+      ]
     }
+  }
 }

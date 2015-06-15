@@ -1,5 +1,5 @@
 {
-  "parent": "archimedesshipsplus:block/balloon_silver",
+  "parent": "archimedesshipsplus:block/crate_wood",
   "display": {
     "thirdperson": {
       "rotation": [

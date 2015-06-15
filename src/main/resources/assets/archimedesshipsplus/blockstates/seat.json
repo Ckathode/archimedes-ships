@@ -1,8 +1,17 @@
 {
   "variants": {
-    "facing=north": { "model": "archimedesshipsplus:seat" },
-    "facing=south": { "model": "archimedesshipsplus:seat", "y": 180 },
-    "facing=west":  { "model": "archimedesshipsplus:seat", "y": 270 },
-    "facing=east":  { "model": "archimedesshipsplus:seat", "y": 90 }
+    "facing=north": {"model": "archimedesshipsplus:seat"},
+    "facing=south": {
+      "model": "archimedesshipsplus:seat",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "archimedesshipsplus:seat",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "archimedesshipsplus:seat",
+      "y": 90
+    }
   }
 }

@@ -12,7 +12,6 @@ import darkevilmac.archimedes.handler.ConnectionHandler;
 import darkevilmac.archimedes.network.ArchimedesShipsMessageToMessageCodec;
 import darkevilmac.archimedes.network.ArchimedesShipsPacketHandler;
 import darkevilmac.archimedes.network.NetworkUtil;
-import darkevilmac.movingworld.MovingWorld;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -38,7 +37,6 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 

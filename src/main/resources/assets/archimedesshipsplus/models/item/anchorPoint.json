@@ -1,5 +1,5 @@
 {
-  "parent": "archimedesshipsplus:block/gauge_ext",
+  "parent": "archimedesshipsplus:block/anchorpoint",
   "display": {
     "thirdperson": {
       "rotation": [
@@ -9,30 +9,37 @@
       ],
       "translation": [
         0,
-        0,
-        -2.75
-      ],
-      "scale": [
-        0.375,
-        0.375,
-        0.375
-      ]
-    },
-    "firstperson": {
-      "rotation": [
-        10,
-        -45,
-        170
-      ],
-      "translation": [
-        -1,
         1.5,
-        -2.5
+        -2.75
       ],
       "scale": [
         0.75,
         0.75,
         0.75
+      ]
+    },
+    "firstperson": {
+      "translation": [
+        0,
+        2,
+        -2.75
+      ]
+    },
+    "gui": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        -0.25,
+        0.75,
+        0.25
+      ],
+      "scale": [
+        1.5,
+        1.5,
+        1.5
       ]
     }
   }

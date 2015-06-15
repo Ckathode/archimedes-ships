@@ -1,5 +1,9 @@
 {
   "variants": {
-    "normal": { "model": "archimedesshipsplus:anchorPoint" }
+    "axis=z": {
+      "model": "archimedesshipsplus:anchorpoint",
+      "y": 90
+    },
+    "axis=x": {"model": "archimedesshipsplus:anchorpoint"}
   }
 }

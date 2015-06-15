@@ -2,7 +2,7 @@ package darkevilmac.archimedes.network;
 
 import darkevilmac.archimedes.entity.ShipAssemblyInteractor;
 import darkevilmac.archimedes.gui.ContainerHelm;
-import darkevilmac.movingworld.chunk.AssembleResult;
+import darkevilmac.movingworld.chunk.assembly.AssembleResult;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;

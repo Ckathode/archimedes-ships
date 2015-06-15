@@ -1,6 +1,5 @@
 package darkevilmac.archimedes.entity;
 
-import darkevilmac.archimedes.ArchimedesShipMod;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -184,7 +183,7 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     @Override
     public void updateRiderPosition() {
         if (ship != null) {
-            ship.updateRiderPosition(riddenByEntity, pos, 1);
+            ship.updateRiderPosition(riddenByEntity, new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1), 1);
         }
     }
 

@@ -1,9 +1,9 @@
 {
-    "parent": "archimedesshipsplus:block/orientableback",
-    "textures": {
-        "front": "archimedesshipsplus:blocks/marker_front",
-		"top": "archimedesshipsplus:blocks/marker",
-        "side": "archimedesshipsplus:blocks/marker",
-        "back": "archimedesshipsplus:blocks/marker"
-    }
+  "parent": "archimedesshipsplus:block/orientableback",
+  "textures": {
+    "front": "archimedesshipsplus:blocks/marker_front",
+    "top": "archimedesshipsplus:blocks/marker",
+    "side": "archimedesshipsplus:blocks/marker",
+    "back": "archimedesshipsplus:blocks/marker"
+  }
 }

@@ -7,15 +7,11 @@ import darkevilmac.movingworld.MaterialDensity;
 import darkevilmac.movingworld.entity.EntityMovingWorld;
 import darkevilmac.movingworld.entity.MovingWorldCapabilities;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockPistonBase;
-import net.minecraft.block.BlockPistonExtension;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +53,6 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     public TileEntityAnchorPoint findClosestValidAnchor(int range) {
         if (ship != null && ship.worldObj != null && !ship.worldObj.isRemote) {
             if (anchorPoints != null) {
-
                 List<TileEntityAnchorPoint> validAnchorPoints = new ArrayList<TileEntityAnchorPoint>();
                 List<Integer> validAnchorPointsDistance = new ArrayList<Integer>();
                 for (TileEntityAnchorPoint.AnchorPointInfo anchorPointInfo : anchorPoints) {
@@ -122,7 +117,8 @@ public class ShipCapabilities extends MovingWorldCapabilities {
 
                     if (validDistance && ship.worldObj.getTileEntity(anchorPointInfo.linkPos) != null
                             && ship.worldObj.getTileEntity(anchorPointInfo.linkPos) instanceof TileEntityAnchorPoint) {
-                        if (!((TileEntityAnchorPoint) ship.worldObj.getTileEntity(anchorPointInfo.linkPos)).anchorPointInfo.forShip) {
+                        TileEntityAnchorPoint anchorPoint = (TileEntityAnchorPoint) ship.worldObj.getTileEntity(anchorPointInfo.linkPos);
+                        if (anchorPoint.anchorPointInfo != null && !anchorPoint.anchorPointInfo.forShip) {
                             validAnchorPoints.add((TileEntityAnchorPoint) ship.worldObj.getTileEntity(anchorPointInfo.linkPos));
                             validAnchorPointsDistance.add(differenceX + differenceY + differenceZ);
                         }

@@ -4,14 +4,12 @@ import darkevilmac.movingworld.entity.EntityMovingWorld;
 import darkevilmac.movingworld.tile.IMovingWorldTileEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 
-public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTileEntity, IUpdatePlayerListBox {
+public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTileEntity {
 
     public AnchorPointInfo anchorPointInfo;
-    int time;
     private EntityMovingWorld activeShip;
 
     public TileEntityAnchorPoint() {
@@ -19,23 +17,10 @@ public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTil
         activeShip = null;
     }
 
-    @Override
-    public void update() {
-        if (time > 20) {
-            if (worldObj != null && !worldObj.isRemote) {
-                if (anchorPointInfo == null) {
-                    anchorPointInfo = new AnchorPointInfo();
-                } else {
-                    if (anchorPointInfo.forShip) {
-                        if (worldObj.getTileEntity(anchorPointInfo.linkPos) == null || (worldObj.getTileEntity(anchorPointInfo.linkPos) != null && worldObj.getTileEntity(anchorPointInfo.linkPos) instanceof TileEntityAnchorPoint == false)) {
-                            anchorPointInfo.linkPos = new BlockPos(BlockPos.ORIGIN);
-                        }
-                    } else {
-                        anchorPointInfo.linkPos = new BlockPos(BlockPos.ORIGIN);
-                    }
-                }
-            }
-        } else time++;
+    public void setAnchorPointInfo(BlockPos pos, boolean forShip) {
+        if (anchorPointInfo == null)
+            anchorPointInfo = new AnchorPointInfo();
+        anchorPointInfo.setInfo(pos, forShip);
     }
 
     @Override
@@ -48,7 +33,7 @@ public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTil
                 activeShip = (EntityMovingWorld) entity;
             }
         }
-        if (tag.getBoolean("hasAnchorInfo")) {
+        if (tag.getBoolean("hasAnchorInfo") && anchorPointInfo == null) {
             anchorPointInfo = new AnchorPointInfo(new BlockPos(tag.getInteger("linkX"), tag.getInteger("linkY"), tag.getInteger("linkZ")), tag.getBoolean("forShip"));
         }
     }
@@ -56,15 +41,17 @@ public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTil
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
-        if (activeShip != null && !activeShip.isDead) {
-            tag.setInteger("vehicle", activeShip.getEntityId());
-        }
         if (anchorPointInfo != null) {
-            tag.setBoolean("hasAnchorInfo", true);
             tag.setInteger("linkX", anchorPointInfo.linkPos.getX());
             tag.setInteger("linkY", anchorPointInfo.linkPos.getY());
             tag.setInteger("linkZ", anchorPointInfo.linkPos.getZ());
             tag.setBoolean("forShip", anchorPointInfo.forShip);
+            tag.setBoolean("hasAnchorInfo", true);
+        } else {
+            tag.setBoolean("hasAnchorInfo", false);
+        }
+        if (activeShip != null && !activeShip.isDead) {
+            tag.setInteger("vehicle", activeShip.getEntityId());
         }
     }
 
@@ -93,7 +80,6 @@ public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTil
         }
 
         public AnchorPointInfo(BlockPos pos, boolean forShip) {
-
             this.linkPos = pos;
             this.forShip = forShip;
         }

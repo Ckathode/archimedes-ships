@@ -1,6 +1,6 @@
 {
-    "parent": "block/cube_all",
-    "textures": {
-        "all": "archimedesshipsplus:blocks/balloon_black"
-    }
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "archimedesshipsplus:blocks/balloon_black"
+  }
 }

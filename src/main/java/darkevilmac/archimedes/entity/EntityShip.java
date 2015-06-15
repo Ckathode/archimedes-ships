@@ -7,9 +7,9 @@ import darkevilmac.archimedes.blockitem.TileEntityEngine;
 import darkevilmac.archimedes.blockitem.TileEntityHelm;
 import darkevilmac.archimedes.control.ShipControllerClient;
 import darkevilmac.archimedes.control.ShipControllerCommon;
-import darkevilmac.movingworld.chunk.AssembleResult;
-import darkevilmac.movingworld.chunk.ChunkDisassembler;
 import darkevilmac.movingworld.chunk.MovingWorldAssemblyInteractor;
+import darkevilmac.movingworld.chunk.assembly.AssembleResult;
+import darkevilmac.movingworld.chunk.assembly.ChunkDisassembler;
 import darkevilmac.movingworld.entity.EntityMovingWorld;
 import darkevilmac.movingworld.entity.MovingWorldCapabilities;
 import darkevilmac.movingworld.entity.MovingWorldHandlerCommon;
@@ -343,7 +343,7 @@ public class EntityShip extends EntityMovingWorld {
 
     @Override
     public MovingWorldAssemblyInteractor getAssemblyInteractor() {
-        if(shipAssemblyInteractor == null)
+        if (shipAssemblyInteractor == null)
             shipAssemblyInteractor = (ShipAssemblyInteractor) getNewAssemblyInteractor();
 
         return shipAssemblyInteractor;

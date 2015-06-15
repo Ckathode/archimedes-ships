@@ -2,9 +2,9 @@ package darkevilmac.archimedes.entity;
 
 import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.blockitem.TileEntityHelm;
-import darkevilmac.movingworld.chunk.AssembleResult;
 import darkevilmac.movingworld.chunk.LocatedBlock;
 import darkevilmac.movingworld.chunk.MovingWorldAssemblyInteractor;
+import darkevilmac.movingworld.chunk.assembly.AssembleResult;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
