@@ -1,6 +1,5 @@
 package darkevilmac.archimedes.render;
 
-import com.sun.javafx.geom.Vec3d;
 import darkevilmac.archimedes.blockitem.TileEntityGauge;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -11,6 +10,7 @@ import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.Vec3;
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
@@ -20,24 +20,24 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
 
         boolean extended = tileEntity.getBlockMetadata() > 3;
 
-        int meta = tileEntity.blockMetadata & 3;
+        int meta = tileEntity.getBlockMetadata() & 3;
 
         Tessellator tess = Tessellator.getInstance();
         WorldRenderer worldRenderer = tess.getWorldRenderer();
 
-        Vec3d dVec = new Vec3d(0, 0, 0);
+        Vec3 dVec = new Vec3(0, 0, 0);
         if (tileEntity.parentShip == null) {
-            dVec.set(x + 0.5F, y, z + 0.5F);
+            dVec.addVector(0.5F, 0, 0.5F);
         } else if (tileEntity.parentShip.riddenByEntity instanceof EntityPlayerSP) {
-            dVec.set(tileEntity.parentShip.riderDestination.getX() - tileEntity.getPos().getX(),
+            dVec = new Vec3(tileEntity.parentShip.riderDestination.getX() - tileEntity.getPos().getX(),
                     tileEntity.parentShip.riderDestination.getY() - tileEntity.getPos().getY(),
                     tileEntity.parentShip.riderDestination.getZ() - tileEntity.getPos().getZ());
         } else {
-            dVec.set(tileEntity.parentShip.posX - Minecraft.getMinecraft().getRenderManager().viewerPosX,
+            dVec = new Vec3(tileEntity.parentShip.posX - Minecraft.getMinecraft().getRenderManager().viewerPosX,
                     tileEntity.parentShip.posY - Minecraft.getMinecraft().getRenderManager().viewerPosY,
                     tileEntity.parentShip.posZ - Minecraft.getMinecraft().getRenderManager().viewerPosZ);
         }
-        double d = dVec.x * dVec.x + dVec.y * dVec.y + dVec.z * dVec.z;
+        double d = dVec.xCoord * dVec.xCoord + dVec.yCoord * dVec.yCoord + dVec.zCoord * dVec.zCoord;
         if (d > 256D) return;
 
         float lineWidth = 8F / (float) Math.sqrt(d);
