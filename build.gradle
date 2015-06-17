@@ -32,7 +32,7 @@ archivesBaseName = "archimedesshipsplus"
 minecraft {
     version = "1.8-11.14.2.1427"
     runDir = "run"
-    
+
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
     // stable_#            stables are built at the discretion of the MCP team.
@@ -42,10 +42,6 @@ minecraft {
 }
 
 dependencies {
-	compile('org.spongepowered:mixin:0.4.4-SNAPSHOT') {
-        exclude module: 'launchwrapper'
-        exclude module: 'guava'
-    }
     compile project(":MovingWorld")
 }
 
