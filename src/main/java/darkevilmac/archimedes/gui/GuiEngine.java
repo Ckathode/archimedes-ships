@@ -8,7 +8,7 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 
 public class GuiEngine extends GuiContainer {
-    public static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("archimedes", "textures/gui/engine.png");
+    public static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("archimedesshipsplus", "textures/gui/engine.png");
 
     public GuiEngine(TileEntityEngine tileentity, EntityPlayer entityplayer) {
         super(new ContainerEngine(tileentity, entityplayer));
