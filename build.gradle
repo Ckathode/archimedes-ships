@@ -36,7 +36,7 @@ minecraft {
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
     // stable_#            stables are built at the discretion of the MCP team.
-    // Use non-default mappings at your own risk. they may not allways work.
+    // Use non-default mappings at your own risk. they may not always work.
     // simply re-run your setup task after changing the mappings to update your workspace.
     mappings = "snapshot_20150602"
 }
@@ -64,3 +64,30 @@ processResources
                 exclude 'mcmod.info'
             }
         }
+
+idea {
+    workspace {
+        iws.withXml { xmlFile ->
+            //Please don't kill me for my shitty groovy usage ;-;
+            def runManager = xmlFile.asNode().component.find { it.@name == 'RunManager' }
+
+            def minecraftClientDefaults = runManager.configuration.find {
+                it.@name == 'Minecraft Client' && it.@type == 'Application'
+            }
+
+            def minecraftServerDefaults = runManager.configuration.find {
+                it.@name == 'Minecraft Server' && it.@type == 'Application'
+            }
+
+            def minecraftClientVMArgs = '-Xincgc -Xmx1024M -Xms1024M Dfml.coremods.load=darkevilmac.movingworld.asm.core.MovingWorldCoreMod Dmixin.debug=true'
+            minecraftClientDefaults.option.find { it.@name == 'VM_PARAMETERS' }.replaceNode {
+                option(name: 'VM_PARAMETERS', value: minecraftClientVMArgs)
+            }
+
+            def minecraftServerVMArgs = '-Xincgc -Dfml.ignoreInvalidMinecraftCertificates=true Dfml.coremods.load=darkevilmac.movingworld.asm.core.MovingWorldCoreMod Dmixin.debug=true'
+            minecraftServerDefaults.option.find { it.@name == 'VM_PARAMETERS' }.replaceNode {
+                option(name: 'VM_PARAMETERS', value: minecraftServerVMArgs)
+            }
+        }
+    }
+}
