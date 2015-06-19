@@ -1,10 +1,10 @@
 package darkevilmac.archimedes.client.gui;
 
 import darkevilmac.archimedes.ArchimedesShipMod;
-import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
 import darkevilmac.archimedes.common.entity.ShipAssemblyInteractor;
 import darkevilmac.archimedes.common.network.ClientHelmActionMessage;
 import darkevilmac.archimedes.common.network.ClientRenameShipMessage;
+import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
 import darkevilmac.movingworld.chunk.assembly.AssembleResult;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;

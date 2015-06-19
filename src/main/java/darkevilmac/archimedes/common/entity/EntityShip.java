@@ -1,12 +1,12 @@
 package darkevilmac.archimedes.common.entity;
 
-import darkevilmac.archimedes.common.ArchimedesConfig;
 import darkevilmac.archimedes.ArchimedesShipMod;
+import darkevilmac.archimedes.client.control.ShipControllerClient;
+import darkevilmac.archimedes.common.ArchimedesConfig;
+import darkevilmac.archimedes.common.control.ShipControllerCommon;
 import darkevilmac.archimedes.common.tileentity.TileEntityAnchorPoint;
 import darkevilmac.archimedes.common.tileentity.TileEntityEngine;
 import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
-import darkevilmac.archimedes.client.control.ShipControllerClient;
-import darkevilmac.archimedes.common.control.ShipControllerCommon;
 import darkevilmac.movingworld.chunk.MovingWorldAssemblyInteractor;
 import darkevilmac.movingworld.chunk.assembly.AssembleResult;
 import darkevilmac.movingworld.chunk.assembly.ChunkDisassembler;
@@ -114,7 +114,7 @@ public class EntityShip extends EntityMovingWorld {
     }
 
     /**
-     * Aligns to the closest anchor within 16 blocks.
+     * Aligns to the closest anchor within 16 objects.
      *
      * @return
      */

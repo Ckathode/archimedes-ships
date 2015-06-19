@@ -1,7 +1,7 @@
 package darkevilmac.archimedes.client.control;
 
-import darkevilmac.archimedes.common.ArchimedesConfig;
 import darkevilmac.archimedes.ArchimedesShipMod;
+import darkevilmac.archimedes.common.ArchimedesConfig;
 import darkevilmac.archimedes.common.entity.EntityShip;
 import darkevilmac.archimedes.common.network.ClientOpenGuiMessage;
 import darkevilmac.movingworld.MovingWorld;

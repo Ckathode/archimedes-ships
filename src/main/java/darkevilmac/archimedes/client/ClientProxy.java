@@ -1,15 +1,15 @@
 package darkevilmac.archimedes.client;
 
-import darkevilmac.archimedes.common.ArchimedesConfig;
 import darkevilmac.archimedes.ArchimedesShipMod;
-import darkevilmac.archimedes.client.handler.ClientHookContainer;
-import darkevilmac.archimedes.common.CommonProxy;
-import darkevilmac.archimedes.common.tileentity.TileEntityGauge;
 import darkevilmac.archimedes.client.control.ShipKeyHandler;
-import darkevilmac.archimedes.common.entity.EntityParachute;
-import darkevilmac.archimedes.common.entity.EntityShip;
+import darkevilmac.archimedes.client.handler.ClientHookContainer;
 import darkevilmac.archimedes.client.render.RenderParachute;
 import darkevilmac.archimedes.client.render.TileEntityGaugeRenderer;
+import darkevilmac.archimedes.common.ArchimedesConfig;
+import darkevilmac.archimedes.common.CommonProxy;
+import darkevilmac.archimedes.common.entity.EntityParachute;
+import darkevilmac.archimedes.common.entity.EntityShip;
+import darkevilmac.archimedes.common.tileentity.TileEntityGauge;
 import darkevilmac.movingworld.render.RenderMovingWorld;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -91,7 +91,7 @@ public class ClientProxy extends CommonProxy {
 
         ItemModelMesher modelMesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
 
-        // Do some general render registrations for blocks, not considering meta.
+        // Do some general render registrations for objects, not considering meta.
 
         for (int i = 0; i < ArchimedesShipMod.instance.registeredBlocks.size(); i++) {
             modelResourceLocation = new ModelResourceLocation(ArchimedesShipMod.RESOURCE_DOMAIN + ArchimedesShipMod.instance.registeredBlocks.keySet().toArray()[i], "inventory");
@@ -100,7 +100,7 @@ public class ClientProxy extends CommonProxy {
             modelMesher.register(itemToRegister, 0, modelResourceLocation);
         }
 
-        // Some specific meta registrations for blocks, like for extended gauges.
+        // Some specific meta registrations for objects, like for extended gauges.
         itemToRegister = Item.getItemFromBlock(ArchimedesShipMod.blockGauge);
         modelResourceLocation = new ModelResourceLocation(ArchimedesShipMod.RESOURCE_DOMAIN + "gauge_ext", "inventory");
 

@@ -52,7 +52,7 @@ public class CommandDisassembleNear extends CommandBase {
             }
 
             if (ne == null) {
-                icommandsender.addChatMessage(new ChatComponentText("No ship in a " + ((int) range) + " blocks' range"));
+                icommandsender.addChatMessage(new ChatComponentText("No ship in a " + ((int) range) + " objects' range"));
                 return;
             }
             if (!ne.disassemble(false)) {

@@ -1,8 +1,8 @@
 package darkevilmac.archimedes.client.gui;
 
+import darkevilmac.archimedes.common.entity.EntityShip;
 import darkevilmac.archimedes.common.tileentity.TileEntityEngine;
 import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
-import darkevilmac.archimedes.common.entity.EntityShip;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;

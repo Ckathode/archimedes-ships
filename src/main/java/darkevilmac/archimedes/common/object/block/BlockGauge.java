@@ -1,4 +1,4 @@
-package darkevilmac.archimedes.common.block;
+package darkevilmac.archimedes.common.object.block;
 
 import darkevilmac.archimedes.common.tileentity.TileEntityGauge;
 import net.minecraft.block.Block;

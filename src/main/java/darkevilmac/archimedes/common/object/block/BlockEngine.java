@@ -1,4 +1,4 @@
-package darkevilmac.archimedes.common.block;
+package darkevilmac.archimedes.common.object.block;
 
 import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.common.tileentity.TileEntityEngine;

@@ -1,8 +1,8 @@
-package darkevilmac.archimedes.common.block;
+package darkevilmac.archimedes.common.object.block;
 
 import darkevilmac.archimedes.ArchimedesShipMod;
-import darkevilmac.archimedes.common.tileentity.TileEntityAnchorPoint;
 import darkevilmac.archimedes.common.network.TranslatedChatMessage;
+import darkevilmac.archimedes.common.tileentity.TileEntityAnchorPoint;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;

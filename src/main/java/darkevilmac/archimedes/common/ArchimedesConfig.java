@@ -54,19 +54,19 @@ public class ArchimedesConfig {
 
         shipControlType = config.get("control", "control_type", CONTROL_TYPE_ARCHIMEDES, "Set to 0 to use vanilla boat controls, set to 1 to use the new Archimedes controls.").getInt();
         turnSpeed = (float) config.get("control", "turn_speed", 1D, "A multiplier of the ship's turn speed.").getDouble(1D);
-        speedLimit = (float) config.get("control", "speed_limit", 30D, "The maximum velocity a ship can have, in blocks per second. This does not affect acceleration.").getDouble(30D);
+        speedLimit = (float) config.get("control", "speed_limit", 30D, "The maximum velocity a ship can have, in objects per second. This does not affect acceleration.").getDouble(30D);
         speedLimit /= 20F;
         disassembleOnDismount = config.get("control", "decompile_on_dismount", false).getBoolean(false);
 
-        maxShipChunkBlocks = config.get("mobile_chunk", "max_chunk_blocks", 2048, "The maximum amount of blocks that a mobile ship chunk may contain.").getInt();
+        maxShipChunkBlocks = config.get("mobile_chunk", "max_chunk_blocks", 2048, "The maximum amount of objects that a mobile ship chunk may contain.").getInt();
         //maxShipChunkBlocks = Math.min(maxShipChunkBlocks, 3400);
-        flyBalloonRatio = (float) config.get("mobile_chunk", "airship_balloon_ratio", 0.4D, "The part of the total amount of blocks that should be balloon blocks in order to make an airship.").getDouble(0.4D);
+        flyBalloonRatio = (float) config.get("mobile_chunk", "airship_balloon_ratio", 0.4D, "The part of the total amount of objects that should be balloon objects in order to make an airship.").getDouble(0.4D);
 
         boolean connectDiagonalLegacy = config.get("mobile_chunk", "connect_diagonal_blocks_1", false, "Blocks connected diagonally on one axis will also be added to the ship if this value is set to 'true'.").getBoolean(false);
         connectDiagonalBlocks = config.get("mobile_chunk", "connect_diagonal_blocks", connectDiagonalLegacy, "Blocks connected diagonally on one axis will also be added to the ship if this value is set to 'true'.").getBoolean(connectDiagonalLegacy);
 
         loadedBlockDensities = config.get("mobile_chunk", "block_densities", defaultBlockDensities, "A list of pairs of a block with a density value. This list overrides the 'material_densities' list.").getStringList();
-        loadedMaterialDensities = config.get("mobile_chunk", "material_densities", defaultMaterialDensities, "A list of pairs of a material with a density value. The first value is the name of a block. All blocks with the same material will get this density value, unless overridden.").getStringList();
+        loadedMaterialDensities = config.get("mobile_chunk", "material_densities", defaultMaterialDensities, "A list of pairs of a material with a density value. The first value is the name of a block. All objects with the same material will get this density value, unless overridden.").getStringList();
 
         if (FMLCommonHandler.instance().getSide().isClient()) {
             loadKeybindings();

@@ -1,7 +1,7 @@
 package darkevilmac.archimedes.common.network;
 
-import darkevilmac.archimedes.common.entity.ShipAssemblyInteractor;
 import darkevilmac.archimedes.client.gui.ContainerHelm;
+import darkevilmac.archimedes.common.entity.ShipAssemblyInteractor;
 import darkevilmac.movingworld.chunk.assembly.AssembleResult;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

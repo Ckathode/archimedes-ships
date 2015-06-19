@@ -1,7 +1,7 @@
 package darkevilmac.archimedes.client.handler;
 
-import darkevilmac.archimedes.common.handler.CommonHookContainer;
 import darkevilmac.archimedes.common.entity.EntityShip;
+import darkevilmac.archimedes.common.handler.CommonHookContainer;
 import darkevilmac.movingworld.MovingWorld;
 import darkevilmac.movingworld.network.RequestMovingWorldDataMessage;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;

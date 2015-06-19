@@ -1,7 +1,7 @@
-package darkevilmac.archimedes.common.block;
+package darkevilmac.archimedes.common.object.block;
 
-import darkevilmac.archimedes.common.tileentity.TileEntityCrate;
 import darkevilmac.archimedes.common.entity.EntityShip;
+import darkevilmac.archimedes.common.tileentity.TileEntityCrate;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;

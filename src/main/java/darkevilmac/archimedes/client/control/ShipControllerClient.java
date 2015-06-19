@@ -1,9 +1,9 @@
 package darkevilmac.archimedes.client.control;
 
 import darkevilmac.archimedes.ArchimedesShipMod;
+import darkevilmac.archimedes.common.control.ShipControllerCommon;
 import darkevilmac.archimedes.common.entity.EntityShip;
 import darkevilmac.archimedes.common.network.ControlInputMessage;
-import darkevilmac.archimedes.common.control.ShipControllerCommon;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class ShipControllerClient extends ShipControllerCommon {

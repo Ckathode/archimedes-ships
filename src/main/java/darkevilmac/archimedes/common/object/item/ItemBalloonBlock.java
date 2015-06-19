@@ -1,4 +1,4 @@
-package darkevilmac.archimedes.common.item;
+package darkevilmac.archimedes.common.object.item;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.EnumDyeColor;

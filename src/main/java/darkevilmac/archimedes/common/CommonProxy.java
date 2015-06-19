@@ -1,9 +1,9 @@
 package darkevilmac.archimedes.common;
 
 import darkevilmac.archimedes.ArchimedesShipMod;
+import darkevilmac.archimedes.client.gui.ASGuiHandler;
 import darkevilmac.archimedes.common.handler.CommonHookContainer;
 import darkevilmac.archimedes.common.handler.CommonPlayerTicker;
-import darkevilmac.archimedes.client.gui.ASGuiHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.LoaderState;
