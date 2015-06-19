@@ -101,17 +101,10 @@ public class ArchimedesShipMod {
     public void missingMappingsFound(FMLMissingMappingsEvent event) {
         if (event != null && event.getAll() != null && !event.getAll().isEmpty()) {
             ListMultimap<String, FMLMissingMappingsEvent.MissingMapping> missing = ReflectionHelper.getPrivateValue(FMLMissingMappingsEvent.class, event, "missing");
-
-            for (FMLMissingMappingsEvent.MissingMapping mapping : event.getAll()) {
-                if (mapping != null && mapping.name != null)
-                    System.out.println(mapping.name);
-            }
-
             if (missing != null) {
                 List<FMLMissingMappingsEvent.MissingMapping> missingMappingList = ImmutableList.copyOf(missing.get("ArchimedesShips"));
 
                 if (missingMappingList != null && !missingMappingList.isEmpty()) {
-
                     Logger log = LogManager.getLogger(MOD_ID);
 
                     log.info("ARCHIMEDES LEGACY MAPPINGS FOUND");
