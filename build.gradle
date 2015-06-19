@@ -79,12 +79,12 @@ idea {
                 it.@name == 'Minecraft Server' && it.@type == 'Application'
             }
 
-            def minecraftClientVMArgs = '-Xincgc -Xmx1024M -Xms1024M Dfml.coremods.load=darkevilmac.movingworld.asm.coremod.MovingWorldCoreMod Dmixin.debug=true'
+            def minecraftClientVMArgs = '-Xincgc -Xmx1024M -Xms1024M -Dfml.coremods.load=darkevilmac.movingworld.asm.coremod.MovingWorldCoreMod -Dmixin.debug=true'
             minecraftClientDefaults.option.find { it.@name == 'VM_PARAMETERS' }.replaceNode {
                 option(name: 'VM_PARAMETERS', value: minecraftClientVMArgs)
             }
 
-            def minecraftServerVMArgs = '-Xincgc -Dfml.ignoreInvalidMinecraftCertificates=true Dfml.coremods.load=darkevilmac.movingworld.asm.coremod.MovingWorldCoreMod Dmixin.debug=true'
+            def minecraftServerVMArgs = '-Xincgc -Dfml.ignoreInvalidMinecraftCertificates=true -Dfml.coremods.load=darkevilmac.movingworld.asm.coremod.MovingWorldCoreMod -Dmixin.debug=true'
             minecraftServerDefaults.option.find { it.@name == 'VM_PARAMETERS' }.replaceNode {
                 option(name: 'VM_PARAMETERS', value: minecraftServerVMArgs)
             }
