@@ -217,11 +217,11 @@ public class ShipCapabilities extends MovingWorldCapabilities {
         if (block == null)
             return;
 
-        if (block == ArchimedesShipMod.blockBalloon) {
+        if (block == ArchimedesShipMod.objects.blockBalloon) {
             balloonCount++;
-        } else if (block == ArchimedesShipMod.blockFloater) {
+        } else if (block == ArchimedesShipMod.objects.blockFloater) {
             floaters++;
-        } else if (block == ArchimedesShipMod.blockAnchorPoint) {
+        } else if (block == ArchimedesShipMod.objects.blockAnchorPoint) {
             TileEntity te = ship.getMovingWorldChunk().getTileEntity(pos);
             if (te != null && te instanceof TileEntityAnchorPoint && ((TileEntityAnchorPoint) te).anchorPointInfo != null && ((TileEntityAnchorPoint) te).anchorPointInfo.forShip) {
                 if (anchorPoints == null) {
@@ -229,7 +229,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
                 }
                 anchorPoints.add(((TileEntityAnchorPoint) te).anchorPointInfo);
             }
-        } else if (block == ArchimedesShipMod.blockEngine) {
+        } else if (block == ArchimedesShipMod.objects.blockEngine) {
             TileEntity te = ship.getMovingWorldChunk().getTileEntity(pos);
             if (te instanceof TileEntityEngine) {
                 if (engines == null) {
@@ -237,7 +237,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
                 }
                 engines.add((TileEntityEngine) te);
             }
-        } else if (block == ArchimedesShipMod.blockSeat && !ship.worldObj.isRemote) {
+        } else if (block == ArchimedesShipMod.objects.blockSeat && !ship.worldObj.isRemote) {
             int x1 = ship.riderDestination.getX(), y1 = ship.riderDestination.getY(), z1 = ship.riderDestination.getZ();
             int frontDir = ship.frontDirection.getHorizontalIndex();
 

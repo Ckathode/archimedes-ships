@@ -45,7 +45,7 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
 
     @Override
     public void blockAssembled(LocatedBlock locatedBlock) {
-        if (locatedBlock.blockState.getBlock() == ArchimedesShipMod.blockBalloon) {
+        if (locatedBlock.blockState.getBlock() == ArchimedesShipMod.objects.blockBalloon) {
             balloonCount++;
         }
     }
@@ -53,7 +53,7 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
     @Override
     public boolean isBlockMovingWorldMarker(Block block) {
         if (block != null)
-            return block.getUnlocalizedName() == ArchimedesShipMod.blockMarkShip.getUnlocalizedName();
+            return block.getUnlocalizedName() == ArchimedesShipMod.objects.blockMarkShip.getUnlocalizedName();
         else
             return false;
     }

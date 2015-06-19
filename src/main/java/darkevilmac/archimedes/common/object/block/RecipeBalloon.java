@@ -35,7 +35,7 @@ public class RecipeBalloon implements IRecipe {
                 if (itemstack.getItem() == Item.getItemFromBlock(Blocks.wool)) {
                     ItemStack itemStack1 = inventorycrafting.getStackInRowAndColumn(i, j + 1);
                     if (itemStack1 != null && itemStack1.getItem() == Items.string) {
-                        return new ItemStack(ArchimedesShipMod.blockBalloon, 1, itemstack.getItemDamage());
+                        return new ItemStack(ArchimedesShipMod.objects.blockBalloon, 1, itemstack.getItemDamage());
                     }
                     return null;
                 }
@@ -52,7 +52,7 @@ public class RecipeBalloon implements IRecipe {
 
     @Override
     public ItemStack getRecipeOutput() {
-        return new ItemStack(ArchimedesShipMod.blockBalloon);
+        return new ItemStack(ArchimedesShipMod.objects.blockBalloon);
     }
 
     @Override

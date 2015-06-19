@@ -65,7 +65,7 @@ public class ClientProxy extends CommonProxy {
         Item itemToRegister = null;
         ArrayList<String> variants = null;
 
-        itemToRegister = Item.getItemFromBlock(ArchimedesShipMod.blockBalloon);
+        itemToRegister = Item.getItemFromBlock(ArchimedesShipMod.objects.blockBalloon);
         variants = new ArrayList<String>();
 
         for (EnumDyeColor color : EnumDyeColor.values()) {
@@ -82,7 +82,7 @@ public class ClientProxy extends CommonProxy {
 
         ModelBakery.addVariantName(itemToRegister, variantsArray);
 
-        ModelBakery.addVariantName(Item.getItemFromBlock(ArchimedesShipMod.blockGauge), ArchimedesShipMod.RESOURCE_DOMAIN + "gauge", ArchimedesShipMod.RESOURCE_DOMAIN + "gauge_ext");
+        ModelBakery.addVariantName(Item.getItemFromBlock(ArchimedesShipMod.objects.blockGauge), ArchimedesShipMod.RESOURCE_DOMAIN + "gauge", ArchimedesShipMod.RESOURCE_DOMAIN + "gauge_ext");
     }
 
     public void registerItemRenderers() {
@@ -93,20 +93,20 @@ public class ClientProxy extends CommonProxy {
 
         // Do some general render registrations for objects, not considering meta.
 
-        for (int i = 0; i < ArchimedesShipMod.instance.registeredBlocks.size(); i++) {
-            modelResourceLocation = new ModelResourceLocation(ArchimedesShipMod.RESOURCE_DOMAIN + ArchimedesShipMod.instance.registeredBlocks.keySet().toArray()[i], "inventory");
-            itemToRegister = Item.getItemFromBlock((Block) ArchimedesShipMod.instance.registeredBlocks.values().toArray()[i]);
+        for (int i = 0; i < ArchimedesShipMod.objects.registeredBlocks.size(); i++) {
+            modelResourceLocation = new ModelResourceLocation(ArchimedesShipMod.RESOURCE_DOMAIN + ArchimedesShipMod.objects.registeredBlocks.keySet().toArray()[i], "inventory");
+            itemToRegister = Item.getItemFromBlock((Block) ArchimedesShipMod.objects.registeredBlocks.values().toArray()[i]);
 
             modelMesher.register(itemToRegister, 0, modelResourceLocation);
         }
 
         // Some specific meta registrations for objects, like for extended gauges.
-        itemToRegister = Item.getItemFromBlock(ArchimedesShipMod.blockGauge);
+        itemToRegister = Item.getItemFromBlock(ArchimedesShipMod.objects.blockGauge);
         modelResourceLocation = new ModelResourceLocation(ArchimedesShipMod.RESOURCE_DOMAIN + "gauge_ext", "inventory");
 
         modelMesher.register(itemToRegister, 1, modelResourceLocation);
 
-        itemToRegister = Item.getItemFromBlock(ArchimedesShipMod.blockBalloon);
+        itemToRegister = Item.getItemFromBlock(ArchimedesShipMod.objects.blockBalloon);
         modelResourceLocation = null;
 
         for (EnumDyeColor color : EnumDyeColor.values()) {
