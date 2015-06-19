@@ -1,17 +1,23 @@
 package darkevilmac.archimedes;
 
-import darkevilmac.archimedes.blockitem.*;
-import darkevilmac.archimedes.command.CommandASHelp;
-import darkevilmac.archimedes.command.CommandDisassembleNear;
-import darkevilmac.archimedes.command.CommandDisassembleShip;
-import darkevilmac.archimedes.command.CommandShipInfo;
-import darkevilmac.archimedes.entity.EntityParachute;
-import darkevilmac.archimedes.entity.EntitySeat;
-import darkevilmac.archimedes.entity.EntityShip;
-import darkevilmac.archimedes.handler.ConnectionHandler;
-import darkevilmac.archimedes.network.ArchimedesShipsMessageToMessageCodec;
-import darkevilmac.archimedes.network.ArchimedesShipsPacketHandler;
-import darkevilmac.archimedes.network.NetworkUtil;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ListMultimap;
+import darkevilmac.archimedes.common.ArchimedesConfig;
+import darkevilmac.archimedes.common.CommonProxy;
+import darkevilmac.archimedes.common.block.*;
+import darkevilmac.archimedes.common.command.CommandASHelp;
+import darkevilmac.archimedes.common.command.CommandDisassembleNear;
+import darkevilmac.archimedes.common.command.CommandDisassembleShip;
+import darkevilmac.archimedes.common.command.CommandShipInfo;
+import darkevilmac.archimedes.common.entity.EntityParachute;
+import darkevilmac.archimedes.common.entity.EntitySeat;
+import darkevilmac.archimedes.common.entity.EntityShip;
+import darkevilmac.archimedes.common.handler.ConnectionHandler;
+import darkevilmac.archimedes.common.item.ItemGaugeBlock;
+import darkevilmac.archimedes.common.network.ArchimedesShipsMessageToMessageCodec;
+import darkevilmac.archimedes.common.network.ArchimedesShipsPacketHandler;
+import darkevilmac.archimedes.common.network.NetworkUtil;
+import darkevilmac.archimedes.common.tileentity.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -19,32 +25,29 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemCloth;
-import net.minecraft.item.ItemDye;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 @Mod(modid = ArchimedesShipMod.MOD_ID, name = ArchimedesShipMod.MOD_NAME, version = ArchimedesShipMod.MOD_VERSION, dependencies = "required-after:MovingWorld@")
 public class ArchimedesShipMod {
 
     public static final String MOD_ID = "ArchimedesShipsPlus";
-    public static final String MOD_VERSION = "1.7.10-1.7.12";
+    public static final String MOD_VERSION = "1.8-ALPHA-0";
     public static final String MOD_NAME = "Archimedes' Ships Plus";
 
     public static final String RESOURCE_DOMAIN = "archimedesshipsplus:";
@@ -52,7 +55,7 @@ public class ArchimedesShipMod {
     @Mod.Instance(MOD_ID)
     public static ArchimedesShipMod instance;
 
-    @SidedProxy(clientSide = "darkevilmac.archimedes.ClientProxy", serverSide = "darkevilmac.archimedes.CommonProxy")
+    @SidedProxy(clientSide = "darkevilmac.archimedes.client.ClientProxy", serverSide = "darkevilmac.archimedes.common.CommonProxy")
     public static CommonProxy proxy;
 
     public static Logger modLog;
@@ -201,7 +204,46 @@ public class ArchimedesShipMod {
     public void postInitMod(FMLPostInitializationEvent event) {
     }
 
-    @SuppressWarnings("unchecked")
+    @Mod.EventHandler
+    public void missingMappingsFound(FMLMissingMappingsEvent event) {
+        if (event != null && event.getAll() != null && !event.getAll().isEmpty()) {
+            ListMultimap<String, FMLMissingMappingsEvent.MissingMapping> missing = ReflectionHelper.getPrivateValue(FMLMissingMappingsEvent.class, event, "missing");
+
+            for (FMLMissingMappingsEvent.MissingMapping mapping : event.getAll()) {
+                if (mapping != null && mapping.name != null)
+                    System.out.println(mapping.name);
+            }
+
+            if (missing != null) {
+                List<FMLMissingMappingsEvent.MissingMapping> missingMappingList = ImmutableList.copyOf(missing.get("ArchimedesShips"));
+
+                if (missingMappingList != null && !missingMappingList.isEmpty()) {
+
+                    Logger log = LogManager.getLogger(MOD_ID);
+
+                    log.info("ARCHIMEDES LEGACY MAPPINGS FOUND");
+
+                    for (FMLMissingMappingsEvent.MissingMapping mapping : missingMappingList) {
+                        if (mapping != null && mapping.type != null && mapping.name != null && !mapping.name.isEmpty()) {
+
+                            String name = mapping.name.substring("ArchimedesShips:".length());
+
+                            if (mapping.type == GameRegistry.Type.BLOCK) {
+                                mapping.remap(GameRegistry.findBlock(ArchimedesShipMod.MOD_ID, name));
+                            } else {
+                                mapping.remap(Item.getItemFromBlock(GameRegistry.findBlock(ArchimedesShipMod.MOD_ID, name)));
+                            }
+
+                            log.debug("ArchimedesShips:" + name + " ~~~> " + "ArchimedesShipsPlus:" + name);
+                        }
+                    }
+
+                    log.info("REMAPPED TO ARCHIMEDES SHIPS PLUS, ENJOY! ~Darkevilmac");
+                }
+            }
+        }
+    }
+
     @Mod.EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
         registerASCommand(event, new CommandASHelp());
