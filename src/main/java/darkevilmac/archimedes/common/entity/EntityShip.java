@@ -64,7 +64,11 @@ public class EntityShip extends EntityMovingWorld {
 
     @Override
     public AxisAlignedBB getCollisionBox(Entity entity) {
-        return entity instanceof EntitySeat || entity.ridingEntity instanceof EntitySeat || entity instanceof EntityLiving ? null : entity.getBoundingBox();
+        if (entity != null && entity instanceof EntityMovingWorld || entity instanceof EntitySeat) {
+            EntityMovingWorld entityMovingWorld = (EntityMovingWorld) entity;
+            return entity instanceof EntitySeat || entity.ridingEntity instanceof EntitySeat || entity instanceof EntityLiving ? null : entityMovingWorld.getMovingWorldCollBox();
+        }
+        return null;
     }
 
     @Override
