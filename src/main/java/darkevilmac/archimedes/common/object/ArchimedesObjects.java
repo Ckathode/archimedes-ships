@@ -31,6 +31,7 @@ public class ArchimedesObjects {
     public static Block blockBalloon;
     public static BlockGauge blockGauge;
     public static BlockSeat blockSeat;
+    public static Block blockStickyBuffer;
     public static Block blockBuffer;
     public static Block blockEngine;
     public static Block blockCrateWood;
@@ -68,6 +69,10 @@ public class ArchimedesObjects {
         blockBuffer.setStepSound(Block.soundTypeWood);
         registerBlock("buffer", blockBuffer);
 
+        blockStickyBuffer = new BlockAS(Material.cloth).setHardness(1F).setResistance(1F).setCreativeTab(CreativeTabs.tabTransport);
+        blockStickyBuffer.setStepSound(Block.soundTypeMetal);
+        registerBlock("stickyBuffer", blockStickyBuffer);
+
         blockEngine = new BlockEngine(Material.iron, 1f, 10).setHardness(2F).setResistance(3F).setCreativeTab(CreativeTabs.tabTransport);
         blockEngine.setStepSound(Block.soundTypeMetal);
         registerBlock("engine", blockEngine);
@@ -104,7 +109,8 @@ public class ArchimedesObjects {
         GameRegistry.addRecipe(new ItemStack(blockSeat), "X ", "XX", Character.valueOf('X'), Blocks.wool);
         Blocks.fire.setFireInfo(blockSeat, 30, 30);
 
-        GameRegistry.addShapelessRecipe(new ItemStack(blockBuffer), blockFloater, new ItemStack(Items.dye, 1, 0));
+        GameRegistry.addShapelessRecipe(new ItemStack(blockBuffer), blockFloater, new ItemStack(Items.dye, 1));
+        GameRegistry.addShapelessRecipe(new ItemStack(blockStickyBuffer), blockBuffer, new ItemStack(Items.slime_ball, 1));
 
         GameRegistry.addRecipe(new ItemStack(blockCrateWood, 3), " # ", "# #", "XXX", Character.valueOf('#'), Items.leather, Character.valueOf('X'), Blocks.planks);
         GameRegistry.registerTileEntity(TileEntityCrate.class, "archiCrate");
