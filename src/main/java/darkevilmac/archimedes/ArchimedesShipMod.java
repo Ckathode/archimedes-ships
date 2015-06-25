@@ -16,6 +16,7 @@ import darkevilmac.archimedes.common.network.ArchimedesShipsMessageToMessageCode
 import darkevilmac.archimedes.common.network.ArchimedesShipsPacketHandler;
 import darkevilmac.archimedes.common.network.NetworkUtil;
 import darkevilmac.archimedes.common.object.ArchimedesObjects;
+import darkevilmac.movingworld.MovingWorld;
 import net.minecraft.command.CommandBase;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
@@ -91,6 +92,8 @@ public class ArchimedesShipMod {
         proxy.registerKeyHandlers(modConfig);
         proxy.registerEventHandlers();
         proxy.registerRenderers(event.getModState());
+
+        MovingWorld.instance.mConfig.addBlacklistedBlock(ArchimedesObjects.blockBuffer);
     }
 
     @Mod.EventHandler
