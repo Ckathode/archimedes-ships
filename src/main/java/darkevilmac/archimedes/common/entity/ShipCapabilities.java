@@ -217,7 +217,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
         if (block == null)
             return;
 
-        if (block == ArchimedesShipMod.objects.blockBalloon) {
+        if (ArchimedesShipMod.instance.modConfig.isBalloon(block)) {
             balloonCount++;
         } else if (block == ArchimedesShipMod.objects.blockFloater) {
             floaters++;

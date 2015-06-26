@@ -1,6 +1,7 @@
 package darkevilmac.archimedes.common;
 
 import darkevilmac.archimedes.ArchimedesShipMod;
+import darkevilmac.archimedes.common.object.ArchimedesObjects;
 import darkevilmac.movingworld.MaterialDensity;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -12,6 +13,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.input.Keyboard;
 
+import java.util.Collections;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 public class ArchimedesConfig {
@@ -32,12 +35,22 @@ public class ArchimedesConfig {
     public KeyBinding kbUp, kbDown, kbBrake, kbAlign, kbDisassemble, kbShipInv;
     public boolean disassembleOnDismount;
     public boolean enginesMandatory;
+    public Set<String> balloonAlternatives;
     private Configuration config;
     private String[] loadedBlockDensities;
     private String[] loadedMaterialDensities;
 
     public ArchimedesConfig(Configuration configuration) {
         config = configuration;
+    }
+
+    /**
+     * A private method so I can hide it in my IDE, because it's an eye sore.
+     *
+     * @return
+     */
+    private Block[] getDefaultBalloons() {
+        return new Block[]{ArchimedesObjects.blockBalloon};
     }
 
     public void loadAndSave() {
@@ -122,6 +135,18 @@ public class ArchimedesConfig {
 
             MaterialDensity.addDensity(block.getMaterial(), density);
         }
+
+        config.load();
+
+        String[] blockBalloonsNames = new String[6 + getDefaultBalloons().length];
+        for (int i = 0; i < blockBalloonsNames.length - 6; i++) {
+            blockBalloonsNames[i] = Block.blockRegistry.getNameForObject(getDefaultBalloons()[i]).toString();
+        }
+
+        String[] balloonBlocks = config.get(Configuration.CATEGORY_GENERAL, "balloons", blockBalloonsNames, "A list of blocks that are taken into account for flight percentage.").getStringList();
+        Collections.addAll(balloonAlternatives, balloonBlocks);
+
+        config.save();
     }
 
     @SideOnly(Side.CLIENT)
@@ -139,5 +164,9 @@ public class ArchimedesConfig {
     @SideOnly(Side.CLIENT)
     private int getKeyIndex(Configuration config, String name, int defaultkey) {
         return Keyboard.getKeyIndex(config.get("control", name, Keyboard.getKeyName(defaultkey)).getString());
+    }
+
+    public boolean isBalloon(Block block) {
+        return balloonAlternatives.contains(Block.blockRegistry.getNameForObject(block).toString());
     }
 }
