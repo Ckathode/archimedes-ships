@@ -7,7 +7,9 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.ArrayUtils;
@@ -44,6 +46,8 @@ public class ArchimedesConfig {
     public ArchimedesConfig(Configuration configuration) {
         config = configuration;
         balloonAlternatives = new HashSet<String>();
+
+        FMLCommonHandler.instance().bus().register(this); // For in game config reloads.
     }
 
     public void loadAndSave() {
@@ -164,5 +168,18 @@ public class ArchimedesConfig {
 
     public boolean isBalloon(Block block) {
         return balloonAlternatives.contains(Block.blockRegistry.getNameForObject(block).toString());
+    }
+
+    @SubscribeEvent
+    public void onConfigChange(ConfigChangedEvent.OnConfigChangedEvent event) {
+        if (event.modID.equals(ArchimedesShipMod.MOD_ID)) {
+            if (config.hasChanged())
+                config.save();
+            loadAndSave();
+        }
+    }
+
+    public Configuration getConfig() {
+        return config;
     }
 }
