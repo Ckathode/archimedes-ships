@@ -14,6 +14,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.input.Keyboard;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -42,20 +43,13 @@ public class ArchimedesConfig {
 
     public ArchimedesConfig(Configuration configuration) {
         config = configuration;
-    }
-
-    /**
-     * A private method so I can hide it in my IDE, because it's an eye sore.
-     *
-     * @return
-     */
-    private Block[] getDefaultBalloons() {
-        return new Block[]{ArchimedesObjects.blockBalloon};
+        balloonAlternatives = new HashSet<String>();
     }
 
     public void loadAndSave() {
         String[] defaultMaterialDensities = {"\"minecraft:air=0.0\"", "\"minecraft:wool=0.1\""};
         String[] defaultBlockDensities = {"\"ArchimedesShips:floater=0.04\"", "\"ArchimedesShips:balloon=0.02\""};
+
         config.load();
 
         shipEntitySyncRate = config.get("settings", "sync_rate", 20, "The amount of ticks between a server-client synchronization. Higher numbers reduce network traffic. Lower numbers increase multiplayer experience. 20 ticks = 1 second").getInt();
@@ -136,15 +130,17 @@ public class ArchimedesConfig {
             MaterialDensity.addDensity(block.getMaterial(), density);
         }
 
-        config.load();
+        Block[] defaultBalloonBlocks = {ArchimedesObjects.blockBalloon};
 
-        String[] blockBalloonsNames = new String[6 + getDefaultBalloons().length];
-        for (int i = 0; i < blockBalloonsNames.length - 6; i++) {
-            blockBalloonsNames[i] = Block.blockRegistry.getNameForObject(getDefaultBalloons()[i]).toString();
+        String[] balloonBlockNames = new String[defaultBalloonBlocks.length];
+        for (int i = 0; i < defaultBalloonBlocks.length; i++) {
+            balloonBlockNames[i] = Block.blockRegistry.getNameForObject(defaultBalloonBlocks[i]).toString();
         }
 
-        String[] balloonBlocks = config.get(Configuration.CATEGORY_GENERAL, "balloons", blockBalloonsNames, "A list of blocks that are taken into account for flight percentage.").getStringList();
-        Collections.addAll(balloonAlternatives, balloonBlocks);
+        config.load();
+
+        String[] balloonBlocks = config.get("mobile_chunk", "balloon_blocks", balloonBlockNames, "A list of blocks that are taken into account for ship flight capability").getStringList();
+        Collections.addAll(this.balloonAlternatives, balloonBlocks);
 
         config.save();
     }

@@ -67,10 +67,10 @@ public class ArchimedesShipMod {
 
         MinecraftForge.EVENT_BUS.register(this);
 
+        objects.preInit(event);
+
         modConfig = new ArchimedesConfig(new Configuration(event.getSuggestedConfigurationFile()));
         modConfig.loadAndSave();
-
-        objects.preInit(event);
 
         modConfig.postLoad();
         proxy.registerRenderers(event.getModState());
