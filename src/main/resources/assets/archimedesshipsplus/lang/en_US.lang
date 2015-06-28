@@ -31,6 +31,7 @@ tile.archimedes.gauge.name=Measurement Gauges
 tile.archimedes.gauge_ext.name=Extended Measurement Gauges
 tile.archimedes.seat.name=Passenger Seat
 tile.archimedes.buffer.name=Shore Buffer
+tile.archimedes.stickyBuffer.name=Sticky Buffer
 tile.archimedes.engine.name=Steam Engine
 tile.archimedes.crate_wood.name=Wooden Crate
 tile.archimedes.anchorPoint.name=Anchor Point

@@ -3,6 +3,7 @@ package darkevilmac.archimedes.common;
 import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.common.object.ArchimedesObjects;
 import darkevilmac.movingworld.MaterialDensity;
+import darkevilmac.movingworld.MovingWorld;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
@@ -80,6 +81,19 @@ public class ArchimedesConfig {
         }
 
         config.save();
+    }
+
+    public void addBlacklistWhitelistEntries() {
+        MovingWorld.instance.mConfig.addBlacklistedBlock(ArchimedesObjects.blockBuffer);
+
+        MovingWorld.instance.mConfig.addWhitelistedBlock(ArchimedesObjects.blockMarkShip);
+        MovingWorld.instance.mConfig.addWhitelistedBlock(ArchimedesObjects.blockFloater);
+        MovingWorld.instance.mConfig.addWhitelistedBlock(ArchimedesObjects.blockBalloon);
+        MovingWorld.instance.mConfig.addWhitelistedBlock(ArchimedesObjects.blockGauge);
+        MovingWorld.instance.mConfig.addWhitelistedBlock(ArchimedesObjects.blockSeat);
+        MovingWorld.instance.mConfig.addWhitelistedBlock(ArchimedesObjects.blockEngine);
+        MovingWorld.instance.mConfig.addWhitelistedBlock(ArchimedesObjects.blockStickyBuffer);
+        MovingWorld.instance.mConfig.addWhitelistedBlock(ArchimedesObjects.blockAnchorPoint);
     }
 
     public void postLoad() {

@@ -94,7 +94,7 @@ public class ArchimedesShipMod {
         proxy.registerEventHandlers();
         proxy.registerRenderers(event.getModState());
 
-        MovingWorld.instance.mConfig.addBlacklistedBlock(ArchimedesObjects.blockBuffer);
+        modConfig.addBlacklistWhitelistEntries();
     }
 
     @Mod.EventHandler
