@@ -1,5 +1,5 @@
 {
-  "parent": "archimedesshipsplus:block/anchorpoint",
+  "parent": "archimedesshipsplus:block/anchorPoint",
   "display": {
     "thirdperson": {
       "rotation": [

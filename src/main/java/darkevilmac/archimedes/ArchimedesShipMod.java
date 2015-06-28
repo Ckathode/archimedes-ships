@@ -39,7 +39,7 @@ import java.util.List;
 public class ArchimedesShipMod {
 
     public static final String MOD_ID = "ArchimedesShipsPlus";
-    public static final String MOD_VERSION = "1.8-ALPHA-1";
+    public static final String MOD_VERSION = "1.8-ALPHA-2";
     public static final String MOD_NAME = "Archimedes' Ships Plus";
     public static final String RESOURCE_DOMAIN = "archimedesshipsplus:";
     public static final String MOD_GUIFACTORY = "darkevilmac.archimedes.client.gui.ArchimedesGUIFactory";
