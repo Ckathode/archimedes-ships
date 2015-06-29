@@ -1,9 +1,11 @@
 package darkevilmac.archimedes.common.entity;
 
 import darkevilmac.archimedes.ArchimedesShipMod;
+import darkevilmac.archimedes.common.object.block.AnchorPointLocation;
 import darkevilmac.archimedes.common.tileentity.TileEntityAnchorPoint;
 import darkevilmac.archimedes.common.tileentity.TileEntityEngine;
 import darkevilmac.movingworld.MaterialDensity;
+import darkevilmac.movingworld.chunk.LocatedBlock;
 import darkevilmac.movingworld.entity.EntityMovingWorld;
 import darkevilmac.movingworld.entity.MovingWorldCapabilities;
 import net.minecraft.block.Block;
@@ -21,7 +23,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     private final EntityShip ship;
     public float speedMultiplier, rotationMultiplier, liftMultiplier;
     public float brakeMult;
-    private List<TileEntityAnchorPoint.AnchorPointInfo> anchorPoints;
+    private List<LocatedBlock> anchorPoints;
     private List<EntitySeat> seats;
     private List<TileEntityEngine> engines;
     private int balloonCount;
@@ -50,12 +52,16 @@ public class ShipCapabilities extends MovingWorldCapabilities {
         return ship.getDataWatcher().getWatchableObjectFloat(29);
     }
 
-    public TileEntityAnchorPoint findClosestValidAnchor(int range) {
+    public AnchorPointLocation findClosestValidAnchor(int range) {
         if (ship != null && ship.worldObj != null && !ship.worldObj.isRemote) {
             if (anchorPoints != null) {
-                List<TileEntityAnchorPoint> validAnchorPoints = new ArrayList<TileEntityAnchorPoint>();
+                AnchorPointLocation apLoc = new AnchorPointLocation(null, null);
+                List<AnchorPointLocation> validAnchorPoints = new ArrayList<AnchorPointLocation>();
+
                 List<Integer> validAnchorPointsDistance = new ArrayList<Integer>();
-                for (TileEntityAnchorPoint.AnchorPointInfo anchorPointInfo : anchorPoints) {
+                for (LocatedBlock anchorPointLB : anchorPoints) {
+                    TileEntityAnchorPoint.AnchorPointInfo anchorPointInfo = ((TileEntityAnchorPoint) anchorPointLB.tileEntity).anchorPointInfo;
+
                     int differenceX = 0;
                     int differenceY = 0;
                     int differenceZ = 0;
@@ -119,12 +125,16 @@ public class ShipCapabilities extends MovingWorldCapabilities {
                             && ship.worldObj.getTileEntity(anchorPointInfo.linkPos) instanceof TileEntityAnchorPoint) {
                         TileEntityAnchorPoint anchorPoint = (TileEntityAnchorPoint) ship.worldObj.getTileEntity(anchorPointInfo.linkPos);
                         if (anchorPoint.anchorPointInfo != null && !anchorPoint.anchorPointInfo.forShip) {
-                            validAnchorPoints.add((TileEntityAnchorPoint) ship.worldObj.getTileEntity(anchorPointInfo.linkPos));
+                            AnchorPointLocation anchorPointLocation = new AnchorPointLocation(null, null);
+                            anchorPointLocation.worldAnchor = new LocatedBlock(anchorPoint.getWorld().getBlockState(anchorPoint.getPos()), anchorPoint, anchorPoint.getPos());
+                            anchorPointLocation.shipAnchor = anchorPointLB;
+                            validAnchorPoints.add(anchorPointLocation);
                             validAnchorPointsDistance.add(differenceX + differenceY + differenceZ);
                         }
                     }
                 }
-                TileEntityAnchorPoint shortestAnchor = null;
+
+                AnchorPointLocation shortestAnchorLocation = null;
 
                 if (validAnchorPoints != null && !validAnchorPoints.isEmpty()) {
                     int shortestIndex = 0;
@@ -133,10 +143,10 @@ public class ShipCapabilities extends MovingWorldCapabilities {
                             shortestIndex = index;
                         }
                     }
-                    shortestAnchor = validAnchorPoints.get(shortestIndex);
+                    shortestAnchorLocation = validAnchorPoints.get(shortestIndex);
                 }
 
-                return shortestAnchor;
+                return shortestAnchorLocation;
             }
         }
         return null;
@@ -204,7 +214,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
         return engines;
     }
 
-    public List<TileEntityAnchorPoint.AnchorPointInfo> getAnchorPoints() {
+    public List<LocatedBlock> getAnchorPoints() {
         return anchorPoints;
     }
 
@@ -225,9 +235,9 @@ public class ShipCapabilities extends MovingWorldCapabilities {
             TileEntity te = ship.getMovingWorldChunk().getTileEntity(pos);
             if (te != null && te instanceof TileEntityAnchorPoint && ((TileEntityAnchorPoint) te).anchorPointInfo != null && ((TileEntityAnchorPoint) te).anchorPointInfo.forShip) {
                 if (anchorPoints == null) {
-                    anchorPoints = new ArrayList<TileEntityAnchorPoint.AnchorPointInfo>();
+                    anchorPoints = new ArrayList<LocatedBlock>();
                 }
-                anchorPoints.add(((TileEntityAnchorPoint) te).anchorPointInfo);
+                anchorPoints.add(new LocatedBlock(state, te, pos));
             }
         } else if (block == ArchimedesShipMod.objects.blockEngine) {
             TileEntity te = ship.getMovingWorldChunk().getTileEntity(pos);

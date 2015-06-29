@@ -4,7 +4,7 @@ import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.client.control.ShipControllerClient;
 import darkevilmac.archimedes.common.ArchimedesConfig;
 import darkevilmac.archimedes.common.control.ShipControllerCommon;
-import darkevilmac.archimedes.common.tileentity.TileEntityAnchorPoint;
+import darkevilmac.archimedes.common.object.block.AnchorPointLocation;
 import darkevilmac.archimedes.common.tileentity.TileEntityEngine;
 import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
 import darkevilmac.movingworld.chunk.MovingWorldAssemblyInteractor;
@@ -129,11 +129,16 @@ public class EntityShip extends EntityMovingWorld {
     public boolean alignToAnchor() {
         for (int amountToIgnore = 0; amountToIgnore < 100; amountToIgnore++) {
             if (capabilities.findClosestValidAnchor(16) != null) {
-                TileEntityAnchorPoint anchorPoint = capabilities.findClosestValidAnchor(16);
-                setPosition(anchorPoint.getPos().getX() - 0, anchorPoint.getPos().getY() + 2, anchorPoint.getPos().getZ() - 0);
-            } else {
-                alignToGrid();
-                return false;
+                AnchorPointLocation anchorPointLocation = capabilities.findClosestValidAnchor(16);
+                BlockPos chunkAnchorPos = anchorPointLocation.shipAnchor.blockPos;
+                BlockPos worldAnchorPos = anchorPointLocation.worldAnchor.blockPos;
+
+                Vec3 worldPosForAnchor = new Vec3(worldAnchorPos.getX(), worldAnchorPos.getY(), worldAnchorPos.getZ());
+
+                worldPosForAnchor = worldPosForAnchor.addVector(getMovingWorldChunk().maxX() / 2, getMovingWorldChunk().minY(), getMovingWorldChunk().maxZ() / 2);
+                worldPosForAnchor = worldPosForAnchor.subtract(chunkAnchorPos.getX(), 0, chunkAnchorPos.getZ());
+
+                setPosition(worldPosForAnchor.xCoord, worldPosForAnchor.yCoord + 2, worldPosForAnchor.zCoord);
             }
         }
 
