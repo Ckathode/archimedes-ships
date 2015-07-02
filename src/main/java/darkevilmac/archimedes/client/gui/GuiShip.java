@@ -16,7 +16,7 @@ public class GuiShip extends GuiContainer {
     public final EntityShip ship;
     public final EntityPlayer player;
 
-    private GuiButton btnDisassemble, btnAlign;
+    private GuiButton btnDisassemble, btnAlign, btnSubmersible;
 
     public GuiShip(EntityShip entityship, EntityPlayer entityplayer) {
         super(new ContainerShip(entityship, entityplayer));
@@ -36,6 +36,15 @@ public class GuiShip extends GuiContainer {
 
         btnAlign = new GuiButton(2, guiLeft + 4, guiTop + 40, 100, 20, StatCollector.translateToLocal("gui.shipinv.align"));
         buttonList.add(btnAlign);
+
+        btnSubmersible = new GuiButtonSubmersible(3, guiLeft + xSize + 2, guiTop);
+
+        //if (!((ShipCapabilities) ship.getCapabilities()).canSubmerge() && buttonList.contains(btnSubmersible))
+        //    buttonList.remove(btnSubmersible);
+        //else
+
+        //if (((ShipCapabilities) ship.getCapabilities()).canSubmerge() && !buttonList.contains(btnSubmersible))
+        buttonList.add(btnSubmersible);
     }
 
     @Override
@@ -84,6 +93,9 @@ public class GuiShip extends GuiContainer {
             MovingWorld.instance.network.sendToServer(msg);
 
             ship.alignToGrid();
+        } else if (button == btnSubmersible) {
+            GuiButtonSubmersible subButton = (GuiButtonSubmersible) button;
+            subButton.submersible = !subButton.submersible;
         }
     }
 }

@@ -4,6 +4,7 @@ import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.common.object.block.AnchorPointLocation;
 import darkevilmac.archimedes.common.tileentity.TileEntityAnchorPoint;
 import darkevilmac.archimedes.common.tileentity.TileEntityEngine;
+import darkevilmac.archimedes.common.util.FloodFiller;
 import darkevilmac.movingworld.MaterialDensity;
 import darkevilmac.movingworld.chunk.LocatedBlock;
 import darkevilmac.movingworld.entity.EntityMovingWorld;
@@ -30,6 +31,9 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     private int floaters;
     private int blockCount;
     private float mass;
+
+    private boolean canSubmerge = false;
+    private boolean submerseFound = false;
 
     public ShipCapabilities(EntityMovingWorld movingWorld, boolean autoCalcMass) {
         super(movingWorld, autoCalcMass);
@@ -169,6 +173,16 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     @Override
     public boolean canFly() {
         return ArchimedesShipMod.instance.modConfig.enableAirShips && getBalloonCount() >= blockCount * ArchimedesShipMod.instance.modConfig.flyBalloonRatio;
+    }
+
+    public boolean canSubmerge() {
+        if (!submerseFound) {
+            FloodFiller floodFiller = new FloodFiller();
+            canSubmerge = blockCount >= floodFiller.floodFillMobileChunk(ship.getMovingWorldChunk()).size() * ArchimedesShipMod.instance.modConfig.flyBalloonRatio;
+            submerseFound = true;
+        }
+
+        return canSubmerge;
     }
 
     @Override
@@ -336,6 +350,8 @@ public class ShipCapabilities extends MovingWorldCapabilities {
             engines.clear();
             engines = null;
         }
+        submerseFound = false;
+        canSubmerge = false;
         clearBlockCount();
     }
 

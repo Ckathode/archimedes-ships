@@ -36,6 +36,8 @@ public class EntityShip extends EntityMovingWorld {
     private ShipControllerCommon controller;
     private MovingWorldHandlerCommon handler;
     private ShipAssemblyInteractor shipAssemblyInteractor;
+    private boolean submerged;
+
 
     public EntityShip(World world) {
         super(world);
@@ -143,6 +145,8 @@ public class EntityShip extends EntityMovingWorld {
         }
 
         alignToGrid();
+
+        ((ShipCapabilities) getCapabilities()).canSubmerge();
 
         return false;
     }

@@ -16,7 +16,6 @@ import darkevilmac.archimedes.common.network.ArchimedesShipsMessageToMessageCode
 import darkevilmac.archimedes.common.network.ArchimedesShipsPacketHandler;
 import darkevilmac.archimedes.common.network.NetworkUtil;
 import darkevilmac.archimedes.common.object.ArchimedesObjects;
-import darkevilmac.movingworld.MovingWorld;
 import net.minecraft.command.CommandBase;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
