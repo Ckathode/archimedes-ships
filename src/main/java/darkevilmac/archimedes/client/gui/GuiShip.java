@@ -1,6 +1,8 @@
 package darkevilmac.archimedes.client.gui;
 
+import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.common.entity.EntityShip;
+import darkevilmac.archimedes.common.network.ClientChangeSubmerseMessage;
 import darkevilmac.movingworld.MovingWorld;
 import darkevilmac.movingworld.network.MovingWorldClientActionMessage;
 import net.minecraft.client.gui.GuiButton;
@@ -37,14 +39,10 @@ public class GuiShip extends GuiContainer {
         btnAlign = new GuiButton(2, guiLeft + 4, guiTop + 40, 100, 20, StatCollector.translateToLocal("gui.shipinv.align"));
         buttonList.add(btnAlign);
 
-        btnSubmersible = new GuiButtonSubmersible(3, guiLeft + xSize + 2, guiTop);
-
-        //if (!((ShipCapabilities) ship.getCapabilities()).canSubmerge() && buttonList.contains(btnSubmersible))
-        //    buttonList.remove(btnSubmersible);
-        //else
-
-        //if (((ShipCapabilities) ship.getCapabilities()).canSubmerge() && !buttonList.contains(btnSubmersible))
-        buttonList.add(btnSubmersible);
+        if (ship.canSubmerge()) {
+            btnSubmersible = new GuiButtonSubmersible(3, guiLeft + xSize + 2, guiTop);
+            buttonList.add(btnSubmersible);
+        }
     }
 
     @Override
@@ -95,7 +93,10 @@ public class GuiShip extends GuiContainer {
             ship.alignToGrid();
         } else if (button == btnSubmersible) {
             GuiButtonSubmersible subButton = (GuiButtonSubmersible) button;
+            ClientChangeSubmerseMessage msg = new ClientChangeSubmerseMessage(ship, !subButton.submersible);
+
             subButton.submersible = !subButton.submersible;
+            ArchimedesShipMod.instance.network.sendToServer(msg);
         }
     }
 }

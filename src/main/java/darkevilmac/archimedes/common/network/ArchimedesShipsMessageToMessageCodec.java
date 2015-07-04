@@ -25,6 +25,7 @@ public class ArchimedesShipsMessageToMessageCodec extends FMLIndexedMessageToMes
         addDiscriminator(ClientRenameShipMessage.class);
         addDiscriminator(ControlInputMessage.class);
         addDiscriminator(TranslatedChatMessage.class);
+        addDiscriminator(ClientChangeSubmerseMessage.class);
     }
 
     public FMLIndexedMessageToMessageCodec<ArchimedesShipsMessage> addDiscriminator(Class<? extends ArchimedesShipsMessage> type) {

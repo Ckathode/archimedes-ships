@@ -20,6 +20,8 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
@@ -36,31 +38,45 @@ public class EntityShip extends EntityMovingWorld {
     private ShipControllerCommon controller;
     private MovingWorldHandlerCommon handler;
     private ShipAssemblyInteractor shipAssemblyInteractor;
-    private boolean submerged;
-
+    private boolean submerge;
 
     public EntityShip(World world) {
         super(world);
         capabilities = new ShipCapabilities(this, true);
+        submerge = false;
     }
 
     @Override
     public void onEntityUpdate() {
         super.onEntityUpdate();
 
-        if (worldObj != null && !worldObj.isRemote) {
-            boolean hasEngines = false;
-            if (capabilities.getEngines() != null) {
-                if (capabilities.getEngines().isEmpty())
-                    hasEngines = false;
-                else {
-                    hasEngines = capabilities.getEnginePower() > 0;
+        if (worldObj != null) {
+            if (!worldObj.isRemote) {
+                boolean hasEngines = false;
+                if (capabilities.getEngines() != null) {
+                    if (capabilities.getEngines().isEmpty())
+                        hasEngines = false;
+                    else {
+                        hasEngines = capabilities.getEnginePower() > 0;
+                    }
+                }
+                if (ArchimedesShipMod.instance.modConfig.enginesMandatory)
+                    getDataWatcher().updateObject(28, new Byte(hasEngines ? (byte) 1 : (byte) 0));
+                else
+                    getDataWatcher().updateObject(28, new Byte((byte) 1));
+            }
+            if (worldObj.isRemote) {
+                if (dataWatcher != null && !dataWatcher.getIsBlank() && dataWatcher.hasObjectChanged()) {
+                    submerge = dataWatcher.getWatchableObjectByte(26) == new Byte((byte) 1);
                 }
             }
-            if (ArchimedesShipMod.instance.modConfig.enginesMandatory)
-                getDataWatcher().updateObject(28, new Byte(hasEngines ? (byte) 1 : (byte) 0));
-            else
-                getDataWatcher().updateObject(28, new Byte((byte) 1));
+        }
+    }
+
+    public void setSubmerge(boolean submerge) {
+        this.submerge = submerge;
+        if (worldObj != null && !worldObj.isRemote) {
+            dataWatcher.updateObject(26, submerge ? new Byte((byte) 1) : new Byte((byte) 0));
         }
     }
 
@@ -93,9 +109,10 @@ public class EntityShip extends EntityMovingWorld {
 
     @Override
     public void initMovingWorld() {
-        getCapabilities();
         dataWatcher.addObject(29, 0F); // Engine power
         dataWatcher.addObject(28, new Byte((byte) 0)); // Do we have any engines
+        dataWatcher.addObject(27, new Byte((byte) 0)); // Can we be submerged if wanted?
+        dataWatcher.addObject(26, new Byte((byte) 0)); // Are we submerged?
     }
 
     @Override
@@ -141,13 +158,12 @@ public class EntityShip extends EntityMovingWorld {
                 worldPosForAnchor = worldPosForAnchor.subtract(chunkAnchorPos.getX(), 0, chunkAnchorPos.getZ());
 
                 setPosition(worldPosForAnchor.xCoord, worldPosForAnchor.yCoord + 2, worldPosForAnchor.zCoord);
+            } else {
+                break;
             }
         }
 
         alignToGrid();
-
-        ((ShipCapabilities) getCapabilities()).canSubmerge();
-
         return false;
     }
 
@@ -207,6 +223,16 @@ public class EntityShip extends EntityMovingWorld {
     }
 
     @Override
+    public void updateRiderPosition(Entity entity, BlockPos riderDestination, int flags) {
+        super.updateRiderPosition(entity, riderDestination, flags);
+
+        if (submerge && entity != null && entity instanceof EntityLivingBase && worldObj != null && !worldObj.isRemote) {
+            ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.nightVision.id, 1, 1));
+            ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.waterBreathing.id, 1, 1));
+        }
+    }
+
+    @Override
     @SideOnly(Side.CLIENT)
     public void spawnParticles(double horvel) {
         if (capabilities.getEngines() != null) {
@@ -225,17 +251,60 @@ public class EntityShip extends EntityMovingWorld {
     }
 
     @Override
+    public void handleServerUpdate(double horvel) {
+        float gravity = 0.5F;
+
+        byte b0 = 5;
+        int blocksPerMeter = (int) (b0 * (getMovingWorldCollBox().maxY - getMovingWorldCollBox().minY));
+        float waterVolume = 0F;
+        AxisAlignedBB axisalignedbb = new AxisAlignedBB(0D, 0D, 0D, 0D, 0D, 0D);
+        int belowWater = 0;
+        for (; belowWater < blocksPerMeter; belowWater++) {
+            double d1 = getMovingWorldCollBox().minY + (getMovingWorldCollBox().maxY - getMovingWorldCollBox().minY) * belowWater / blocksPerMeter;
+            double d2 = getMovingWorldCollBox().minY + (getMovingWorldCollBox().maxY - getMovingWorldCollBox().minY) * (belowWater + 1) / blocksPerMeter;
+            axisalignedbb = new AxisAlignedBB(getMovingWorldCollBox().minX, d1, getMovingWorldCollBox().minZ, getMovingWorldCollBox().maxX, d2, getMovingWorldCollBox().maxZ);
+
+            if (!isAABBInLiquidNotFall(worldObj, axisalignedbb)) {
+                break;
+            }
+        }
+        if (belowWater > 0 && layeredBlockVolumeCount != null) {
+            int k = belowWater / b0;
+            for (int y = 0; y <= k && y < layeredBlockVolumeCount.length; y++) {
+                if (y == k) {
+                    waterVolume += layeredBlockVolumeCount[y] * (belowWater % b0) * 1F / b0;
+                } else {
+                    waterVolume += layeredBlockVolumeCount[y] * 1F;
+                }
+            }
+        }
+
+        if (onGround && !submerge) {
+            isFlying = false;
+        }
+
+        if (waterVolume > 0F && !submerge) {
+            isFlying = false;
+            float buoyancyForce = 1F * waterVolume * gravity; //F = rho * V * g (Archimedes' principle)
+            float mass = getCapabilities().getMass();
+            motionY += buoyancyForce / mass;
+        }
+
+        super.handleServerUpdate(horvel);
+    }
+
+    @Override
     public void handleServerUpdatePreRotation() {
         if (ArchimedesShipMod.instance.modConfig.shipControlType == ArchimedesConfig.CONTROL_TYPE_VANILLA) {
-            double newyaw = rotationYaw;
+            double newYaw = rotationYaw;
             double dx = prevPosX - posX;
             double dz = prevPosZ - posZ;
 
             if (riddenByEntity != null && !isBraking() && dx * dx + dz * dz > 0.01D) {
-                newyaw = 270F - Math.toDegrees(Math.atan2(dz, dx)) + frontDirection.getHorizontalIndex() * 90F;
+                newYaw = 270F - Math.toDegrees(Math.atan2(dz, dx)) + frontDirection.getHorizontalIndex() * 90F;
             }
 
-            double deltayaw = MathHelper.wrapAngleTo180_double(newyaw - rotationYaw);
+            double deltayaw = MathHelper.wrapAngleTo180_double(newYaw - rotationYaw);
             double maxyawspeed = 2D;
             if (deltayaw > maxyawspeed) {
                 deltayaw = maxyawspeed;
@@ -336,7 +405,7 @@ public class EntityShip extends EntityMovingWorld {
 
     @Override
     public boolean isFlying() {
-        return capabilities.canFly() && (isFlying || controller.getShipControl() == 2);
+        return (capabilities.canFly() && (isFlying || controller.getShipControl() == 2)) || submerge;
     }
 
     @Override
@@ -378,5 +447,9 @@ public class EntityShip extends EntityMovingWorld {
 
     public ShipControllerCommon getController() {
         return controller;
+    }
+
+    public boolean canSubmerge() {
+        return !dataWatcher.getIsBlank() ? dataWatcher.getWatchableObjectByte(27) == new Byte((byte) 1) : false;
     }
 }

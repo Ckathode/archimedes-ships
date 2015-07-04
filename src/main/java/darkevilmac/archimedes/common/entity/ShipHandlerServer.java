@@ -41,6 +41,7 @@ public class ShipHandlerServer extends MovingWorldHandlerServer {
         super.onChunkUpdate();
         if (firstChunkUpdate) {
             ((ShipCapabilities) movingWorld.getCapabilities()).spawnSeatEntities();
+            movingWorld.getDataWatcher().updateObject(27, ((ShipCapabilities) movingWorld.getCapabilities()).canSubmerge() ? new Byte((byte) 1) : new Byte((byte) 0));
         }
     }
 }

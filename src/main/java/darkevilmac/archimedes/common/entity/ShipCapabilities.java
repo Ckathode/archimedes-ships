@@ -9,6 +9,7 @@ import darkevilmac.movingworld.MaterialDensity;
 import darkevilmac.movingworld.chunk.LocatedBlock;
 import darkevilmac.movingworld.entity.EntityMovingWorld;
 import darkevilmac.movingworld.entity.MovingWorldCapabilities;
+import darkevilmac.movingworld.util.LocatedBlockList;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -178,7 +179,9 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     public boolean canSubmerge() {
         if (!submerseFound) {
             FloodFiller floodFiller = new FloodFiller();
-            canSubmerge = blockCount >= floodFiller.floodFillMobileChunk(ship.getMovingWorldChunk()).size() * ArchimedesShipMod.instance.modConfig.flyBalloonRatio;
+            LocatedBlockList locatedBlocks = floodFiller.floodFillMobileChunk(ship.getMovingWorldChunk());
+
+            canSubmerge = locatedBlocks.size() < this.blockCount;
             submerseFound = true;
         }
 
