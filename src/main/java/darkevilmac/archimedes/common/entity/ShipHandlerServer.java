@@ -1,7 +1,7 @@
 package darkevilmac.archimedes.common.entity;
 
-import darkevilmac.movingworld.entity.EntityMovingWorld;
-import darkevilmac.movingworld.entity.MovingWorldHandlerServer;
+import darkevilmac.movingworld.common.entity.EntityMovingWorld;
+import darkevilmac.movingworld.common.entity.MovingWorldHandlerServer;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class ShipHandlerServer extends MovingWorldHandlerServer {

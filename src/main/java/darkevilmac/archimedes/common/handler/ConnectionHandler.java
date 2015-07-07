@@ -3,7 +3,7 @@ package darkevilmac.archimedes.common.handler;
 import darkevilmac.archimedes.common.entity.EntityParachute;
 import darkevilmac.archimedes.common.entity.EntitySeat;
 import darkevilmac.archimedes.common.entity.EntityShip;
-import darkevilmac.movingworld.util.Vec3Mod;
+import darkevilmac.movingworld.common.util.Vec3Mod;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;

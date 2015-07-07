@@ -1,8 +1,8 @@
 package darkevilmac.archimedes.common.tileentity;
 
 import darkevilmac.archimedes.common.entity.EntityShip;
-import darkevilmac.movingworld.entity.EntityMovingWorld;
-import darkevilmac.movingworld.tile.IMovingWorldTileEntity;
+import darkevilmac.movingworld.common.entity.EntityMovingWorld;
+import darkevilmac.movingworld.common.tile.IMovingWorldTileEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;

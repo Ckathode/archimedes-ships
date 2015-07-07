@@ -1,6 +1,6 @@
 package darkevilmac.archimedes.common.entity;
 
-import darkevilmac.movingworld.util.Vec3Mod;
+import darkevilmac.movingworld.common.util.Vec3Mod;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;

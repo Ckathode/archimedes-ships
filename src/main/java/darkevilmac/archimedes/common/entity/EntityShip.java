@@ -7,13 +7,13 @@ import darkevilmac.archimedes.common.control.ShipControllerCommon;
 import darkevilmac.archimedes.common.object.block.AnchorPointLocation;
 import darkevilmac.archimedes.common.tileentity.TileEntityEngine;
 import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
-import darkevilmac.movingworld.chunk.MovingWorldAssemblyInteractor;
-import darkevilmac.movingworld.chunk.assembly.AssembleResult;
-import darkevilmac.movingworld.chunk.assembly.ChunkDisassembler;
-import darkevilmac.movingworld.entity.EntityMovingWorld;
-import darkevilmac.movingworld.entity.MovingWorldCapabilities;
-import darkevilmac.movingworld.entity.MovingWorldHandlerCommon;
-import darkevilmac.movingworld.util.Vec3Mod;
+import darkevilmac.movingworld.common.chunk.MovingWorldAssemblyInteractor;
+import darkevilmac.movingworld.common.chunk.assembly.AssembleResult;
+import darkevilmac.movingworld.common.chunk.assembly.ChunkDisassembler;
+import darkevilmac.movingworld.common.entity.EntityMovingWorld;
+import darkevilmac.movingworld.common.entity.MovingWorldCapabilities;
+import darkevilmac.movingworld.common.entity.MovingWorldHandlerCommon;
+import darkevilmac.movingworld.common.util.Vec3Mod;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -129,7 +129,7 @@ public class EntityShip extends EntityMovingWorld {
     }
 
     public boolean areSubmerged() {
-        return isAABBInLiquidNotFall(worldObj, getMovingWorldCollBox().contract(0, 0.5, 0)) && dataWatcher.getWatchableObjectByte(26) == (byte) 1;
+        return getBelowWater() > 0 && getSubmerge();
     }
 
     @Override
@@ -209,7 +209,7 @@ public class EntityShip extends EntityMovingWorld {
     }
 
     @Override
-    public void handleControl(double horvel) {
+    public void handleControl(double horizontalVelocity) {
         capabilities.updateEngines();
 
         if (riddenByEntity == null) {
@@ -269,13 +269,9 @@ public class EntityShip extends EntityMovingWorld {
         }
     }
 
-    @Override
-    public void handleServerUpdate(double horvel) {
-        float gravity = 0.5F;
-
+    private int getBelowWater() {
         byte b0 = 5;
         int blocksPerMeter = (int) (b0 * (getMovingWorldCollBox().maxY - getMovingWorldCollBox().minY));
-        float waterVolume = 0F;
         AxisAlignedBB axisalignedbb = new AxisAlignedBB(0D, 0D, 0D, 0D, 0D, 0D);
         int belowWater = 0;
         for (; belowWater < blocksPerMeter; belowWater++) {
@@ -287,6 +283,17 @@ public class EntityShip extends EntityMovingWorld {
                 break;
             }
         }
+
+        return belowWater;
+    }
+
+    @Override
+    public void handleServerUpdate(double horizontalVelocity) {
+        float gravity = 0.5F;
+
+        byte b0 = 5;
+        float waterVolume = 0F;
+        int belowWater = getBelowWater();
         if (belowWater > 0 && layeredBlockVolumeCount != null) {
             int k = belowWater / b0;
             for (int y = 0; y <= k && y < layeredBlockVolumeCount.length; y++) {
@@ -309,7 +316,7 @@ public class EntityShip extends EntityMovingWorld {
             motionY += buoyancyForce / mass;
         }
 
-        super.handleServerUpdate(horvel);
+        super.handleServerUpdate(horizontalVelocity);
     }
 
     @Override

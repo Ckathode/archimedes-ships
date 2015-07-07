@@ -3,7 +3,7 @@ package darkevilmac.archimedes.client.handler;
 import darkevilmac.archimedes.common.entity.EntityShip;
 import darkevilmac.archimedes.common.handler.CommonHookContainer;
 import darkevilmac.movingworld.MovingWorld;
-import darkevilmac.movingworld.network.RequestMovingWorldDataMessage;
+import darkevilmac.movingworld.common.network.RequestMovingWorldDataMessage;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;

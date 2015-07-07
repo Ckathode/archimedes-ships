@@ -5,7 +5,7 @@ import darkevilmac.archimedes.common.ArchimedesConfig;
 import darkevilmac.archimedes.common.entity.EntityShip;
 import darkevilmac.archimedes.common.network.ClientOpenGuiMessage;
 import darkevilmac.movingworld.MovingWorld;
-import darkevilmac.movingworld.network.MovingWorldClientActionMessage;
+import darkevilmac.movingworld.common.network.MovingWorldClientActionMessage;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;

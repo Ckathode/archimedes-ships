@@ -1,7 +1,7 @@
 package darkevilmac.archimedes.common.entity;
 
-import darkevilmac.movingworld.entity.EntityMovingWorld;
-import darkevilmac.movingworld.entity.MovingWorldHandlerClient;
+import darkevilmac.movingworld.common.entity.EntityMovingWorld;
+import darkevilmac.movingworld.common.entity.MovingWorldHandlerClient;
 
 public class ShipHandlerClient extends MovingWorldHandlerClient {
 

@@ -4,7 +4,7 @@ import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.common.entity.EntityShip;
 import darkevilmac.archimedes.common.network.ClientChangeSubmerseMessage;
 import darkevilmac.movingworld.MovingWorld;
-import darkevilmac.movingworld.network.MovingWorldClientActionMessage;
+import darkevilmac.movingworld.common.network.MovingWorldClientActionMessage;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;

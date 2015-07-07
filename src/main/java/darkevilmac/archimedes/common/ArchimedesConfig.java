@@ -2,8 +2,8 @@ package darkevilmac.archimedes.common;
 
 import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.common.object.ArchimedesObjects;
-import darkevilmac.movingworld.MaterialDensity;
 import darkevilmac.movingworld.MovingWorld;
+import darkevilmac.movingworld.common.util.MaterialDensity;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
@@ -25,10 +25,12 @@ public class ArchimedesConfig {
     public static final int CONTROL_TYPE_VANILLA = 0, CONTROL_TYPE_ARCHIMEDES = 1;
     //Settings
     public boolean enableAirShips;
+    public boolean enableSubmersibles;
     public int shipEntitySyncRate;
     //Mobile Chunk
     public int maxShipChunkBlocks;
     public float flyBalloonRatio;
+    public float submersibleFillRatio;
     public boolean useNewAlgorithm;
     //Control
     public int shipControlType;
@@ -59,6 +61,7 @@ public class ArchimedesConfig {
 
         shipEntitySyncRate = config.get("settings", "sync_rate", 20, "The amount of ticks between a server-client synchronization. Higher numbers reduce network traffic. Lower numbers increase multiplayer experience. 20 ticks = 1 second").getInt();
         enableAirShips = config.get("settings", "enable_air_ships", true, "Enable or disable air ships.").getBoolean(true);
+        enableSubmersibles = config.get("settings", "enable_submersibles", true, "Enable or disable the ability to submerse ships.").getBoolean(true);
         useNewAlgorithm = config.get("settings", "use_iterative_assemble_algorithm", false, "New assemble algorithm implemented in v1.6.2. Allows for larger ships but is a heavier load for CPU.").getBoolean(false);
         bankingMultiplier = (float) config.get("settings", "banking_multiplier", 3d, "A multiplier for how much ships bank while making turns. Set a positive value for passive banking or a negative value for active banking. 0 disables banking.").getDouble(3d);
         enginesMandatory = config.get("settings", "mandatory_engines", false, "Are engines required for a ship to move?").getBoolean();
@@ -72,6 +75,7 @@ public class ArchimedesConfig {
         maxShipChunkBlocks = config.get("mobile_chunk", "max_chunk_blocks", 2048, "The maximum amount of objects that a mobile ship chunk may contain.").getInt();
         //maxShipChunkBlocks = Math.min(maxShipChunkBlocks, 3400);
         flyBalloonRatio = (float) config.get("mobile_chunk", "airship_balloon_ratio", 0.4D, "The part of the total amount of objects that should be balloon objects in order to make an airship.").getDouble(0.4D);
+        submersibleFillRatio = (float) config.get("mobile_chunk", "submersible_fill_ratio", 0.3D, "The part of the ship that needs to not be water fillable for it to be considered submersible.").getDouble(0.9D);
 
         loadedBlockDensities = config.get("mobile_chunk", "block_densities", defaultBlockDensities, "A list of pairs of a block with a density value. This list overrides the 'material_densities' list.").getStringList();
         loadedMaterialDensities = config.get("mobile_chunk", "material_densities", defaultMaterialDensities, "A list of pairs of a material with a density value. The first value is the name of a block. All objects with the same material will get this density value, unless overridden.").getStringList();

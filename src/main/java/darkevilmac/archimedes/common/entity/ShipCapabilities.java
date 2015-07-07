@@ -5,13 +5,14 @@ import darkevilmac.archimedes.common.object.block.AnchorPointLocation;
 import darkevilmac.archimedes.common.tileentity.TileEntityAnchorPoint;
 import darkevilmac.archimedes.common.tileentity.TileEntityEngine;
 import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
-import darkevilmac.archimedes.common.util.FloodFiller;
-import darkevilmac.movingworld.MaterialDensity;
-import darkevilmac.movingworld.chunk.LocatedBlock;
-import darkevilmac.movingworld.entity.EntityMovingWorld;
-import darkevilmac.movingworld.entity.MovingWorldCapabilities;
-import darkevilmac.movingworld.util.LocatedBlockList;
+import darkevilmac.movingworld.common.chunk.LocatedBlock;
+import darkevilmac.movingworld.common.entity.EntityMovingWorld;
+import darkevilmac.movingworld.common.entity.MovingWorldCapabilities;
+import darkevilmac.movingworld.common.util.FloodFiller;
+import darkevilmac.movingworld.common.util.LocatedBlockList;
+import darkevilmac.movingworld.common.util.MaterialDensity;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockAir;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -32,6 +33,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     private int balloonCount;
     private int floaters;
     private int blockCount;
+    private int nonAirBlockCount;
 
     private boolean canSubmerge = false;
     private boolean submerseFound = false;
@@ -174,15 +176,22 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     @Override
     public boolean canFly() {
         return (ArchimedesShipMod.instance.modConfig.enableAirShips && getBalloonCount() >= blockCount * ArchimedesShipMod.instance.modConfig.flyBalloonRatio)
-                || canSubmerge() && ship.areSubmerged();
+                || ship.areSubmerged();
     }
 
     public boolean canSubmerge() {
         if (!submerseFound) {
             FloodFiller floodFiller = new FloodFiller();
-            LocatedBlockList locatedBlocks = floodFiller.floodFillMobileChunk(ship.getMobileChunk());
+            LocatedBlockList filledBlocks = floodFiller.floodFillMobileChunk(ship.getMobileChunk());
+            int filledBlockCount = filledBlocks.size();
 
-            canSubmerge = locatedBlocks.size() < this.blockCount;
+            canSubmerge = false;
+            if (ArchimedesShipMod.instance.modConfig.enableSubmersibles)
+                canSubmerge =
+                        filledBlockCount < (nonAirBlockCount * ArchimedesShipMod.instance.modConfig.submersibleFillRatio);
+
+            System.out.println(filledBlockCount + " | " + nonAirBlockCount * ArchimedesShipMod.instance.modConfig.submersibleFillRatio);
+
             submerseFound = true;
         }
 
@@ -239,11 +248,17 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     @Override
     public void onChunkBlockAdded(IBlockState state, BlockPos pos) {
         blockCount++;
+        nonAirBlockCount++;
         mass += MaterialDensity.getDensity(state);
 
         Block block = state.getBlock();
-        if (block == null)
+        if (block == null) {
+            nonAirBlockCount--;
             return;
+        }
+
+        if (block instanceof BlockAir)
+            nonAirBlockCount--;
 
         if (ArchimedesShipMod.instance.modConfig.isBalloon(block)) {
             balloonCount++;

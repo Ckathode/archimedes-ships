@@ -5,7 +5,7 @@ import darkevilmac.archimedes.common.entity.ShipAssemblyInteractor;
 import darkevilmac.archimedes.common.network.ClientHelmActionMessage;
 import darkevilmac.archimedes.common.network.ClientRenameShipMessage;
 import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
-import darkevilmac.movingworld.chunk.assembly.AssembleResult;
+import darkevilmac.movingworld.common.chunk.assembly.AssembleResult;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;

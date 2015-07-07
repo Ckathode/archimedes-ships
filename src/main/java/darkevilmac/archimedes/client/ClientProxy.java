@@ -10,7 +10,7 @@ import darkevilmac.archimedes.common.CommonProxy;
 import darkevilmac.archimedes.common.entity.EntityParachute;
 import darkevilmac.archimedes.common.entity.EntityShip;
 import darkevilmac.archimedes.common.tileentity.TileEntityGauge;
-import darkevilmac.movingworld.render.RenderMovingWorld;
+import darkevilmac.movingworld.client.render.RenderMovingWorld;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
