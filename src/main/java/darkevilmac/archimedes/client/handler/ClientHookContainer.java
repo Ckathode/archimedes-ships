@@ -15,7 +15,7 @@ public class ClientHookContainer extends CommonHookContainer {
     @SubscribeEvent
     public void onEntitySpawn(EntityJoinWorldEvent event) {
         if (event.world.isRemote && event.entity instanceof EntityShip) {
-            if (((EntityShip) event.entity).getMovingWorldChunk().chunkTileEntityMap.isEmpty()) {
+            if (((EntityShip) event.entity).getMobileChunk().chunkTileEntityMap.isEmpty()) {
                 return;
             }
 

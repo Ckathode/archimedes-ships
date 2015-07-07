@@ -26,7 +26,7 @@ public class ConnectionHandler {
                 if (ship != null && seat.getPos() != null) {
                     NBTTagCompound nbt = new NBTTagCompound();
 
-                    Vec3Mod vec = new Vec3Mod(seat.getPos().getX() - ship.getMovingWorldChunk().getCenterX(), seat.getPos().getY() - ship.getMovingWorldChunk().minY(), seat.getPos().getZ() - ship.getMovingWorldChunk().getCenterZ());
+                    Vec3Mod vec = new Vec3Mod(seat.getPos().getX() - ship.getMobileChunk().getCenterX(), seat.getPos().getY() - ship.getMobileChunk().minY(), seat.getPos().getZ() - ship.getMobileChunk().getCenterZ());
                     vec = vec.rotateAroundY((float) Math.toRadians(ship.rotationYaw));
 
                     nbt.setDouble("vecX", vec.xCoord);

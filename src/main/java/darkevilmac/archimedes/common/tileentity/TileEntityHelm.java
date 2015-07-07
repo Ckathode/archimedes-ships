@@ -10,10 +10,12 @@ import darkevilmac.movingworld.entity.EntityMovingWorld;
 import darkevilmac.movingworld.entity.MovingWorldInfo;
 import darkevilmac.movingworld.tile.TileMovingWorldMarkingBlock;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public class TileEntityHelm extends TileMovingWorldMarkingBlock {
+    public boolean submerge;
     private ShipAssemblyInteractor interactor;
     private EntityShip activeShip;
     private MovingWorldInfo info;
@@ -112,5 +114,17 @@ public class TileEntityHelm extends TileMovingWorldMarkingBlock {
             AssembleResultMessage message = new AssembleResultMessage(res, prev);
             ArchimedesShipMod.instance.network.sendToDimension(message, player.worldObj.provider.getDimensionId());
         }
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound tagCompound) {
+        super.writeToNBT(tagCompound);
+        tagCompound.setBoolean("submergeShipOnAssemble", submerge);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tagCompound) {
+        super.readFromNBT(tagCompound);
+        submerge = tagCompound.getBoolean("submergeShipOnAssemble");
     }
 }

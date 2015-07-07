@@ -43,7 +43,11 @@ public class EntityShip extends EntityMovingWorld {
     public EntityShip(World world) {
         super(world);
         capabilities = new ShipCapabilities(this, true);
-        submerge = false;
+    }
+
+    @Override
+    public void assembleResultEntity() {
+        super.assembleResultEntity();
     }
 
     @Override
@@ -73,10 +77,19 @@ public class EntityShip extends EntityMovingWorld {
         }
     }
 
+    public boolean getSubmerge() {
+        return !dataWatcher.getIsBlank() ? (dataWatcher.getWatchableObjectByte(26) == (byte) 1) : false;
+    }
+
     public void setSubmerge(boolean submerge) {
         this.submerge = submerge;
         if (worldObj != null && !worldObj.isRemote) {
             dataWatcher.updateObject(26, submerge ? new Byte((byte) 1) : new Byte((byte) 0));
+            if (getMobileChunk().marker != null && getMobileChunk().marker.tileEntity != null && getMobileChunk().marker.tileEntity instanceof TileEntityHelm) {
+                TileEntityHelm helm = (TileEntityHelm) getMobileChunk().marker.tileEntity;
+
+                helm.submerge = submerge;
+            }
         }
     }
 
@@ -113,6 +126,10 @@ public class EntityShip extends EntityMovingWorld {
         dataWatcher.addObject(28, new Byte((byte) 0)); // Do we have any engines
         dataWatcher.addObject(27, new Byte((byte) 0)); // Can we be submerged if wanted?
         dataWatcher.addObject(26, new Byte((byte) 0)); // Are we submerged?
+    }
+
+    public boolean areSubmerged() {
+        return isAABBInLiquidNotFall(worldObj, getMovingWorldCollBox().contract(0, 0.5, 0)) && dataWatcher.getWatchableObjectByte(26) == (byte) 1;
     }
 
     @Override
@@ -154,7 +171,7 @@ public class EntityShip extends EntityMovingWorld {
 
                 Vec3 worldPosForAnchor = new Vec3(worldAnchorPos.getX(), worldAnchorPos.getY(), worldAnchorPos.getZ());
 
-                worldPosForAnchor = worldPosForAnchor.addVector(getMovingWorldChunk().maxX() / 2, getMovingWorldChunk().minY(), getMovingWorldChunk().maxZ() / 2);
+                worldPosForAnchor = worldPosForAnchor.addVector(getMobileChunk().maxX() / 2, getMobileChunk().minY(), getMobileChunk().maxZ() / 2);
                 worldPosForAnchor = worldPosForAnchor.subtract(chunkAnchorPos.getX(), 0, chunkAnchorPos.getZ());
 
                 setPosition(worldPosForAnchor.xCoord, worldPosForAnchor.yCoord + 2, worldPosForAnchor.zCoord);
@@ -179,10 +196,12 @@ public class EntityShip extends EntityMovingWorld {
 
     @Override
     public void writeMovingWorldNBT(NBTTagCompound compound) {
+        compound.setBoolean("submerge", submerge);
     }
 
     @Override
     public void readMovingWorldNBT(NBTTagCompound compound) {
+        setSubmerge(compound.getBoolean("submerge"));
     }
 
     @Override
@@ -227,8 +246,8 @@ public class EntityShip extends EntityMovingWorld {
         super.updateRiderPosition(entity, riderDestination, flags);
 
         if (submerge && entity != null && entity instanceof EntityLivingBase && worldObj != null && !worldObj.isRemote) {
-            ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.nightVision.id, 1, 1));
-            ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.waterBreathing.id, 1, 1));
+            if (!((EntityLivingBase) entity).isPotionActive(Potion.waterBreathing))
+                ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.waterBreathing.id, 20, 1));
         }
     }
 
@@ -240,9 +259,9 @@ public class EntityShip extends EntityMovingWorld {
             float yaw = (float) Math.toRadians(rotationYaw);
             for (TileEntityEngine engine : capabilities.getEngines()) {
                 if (engine.isRunning()) {
-                    vec = vec.setX(engine.getPos().getX() - getMovingWorldChunk().getCenterX() + 0.5f);
+                    vec = vec.setX(engine.getPos().getX() - getMobileChunk().getCenterX() + 0.5f);
                     vec = vec.setY(engine.getPos().getY());
-                    vec = vec.setZ(engine.getPos().getZ() - getMovingWorldChunk().getCenterZ() + 0.5f);
+                    vec = vec.setZ(engine.getPos().getZ() - getMobileChunk().getCenterZ() + 0.5f);
                     vec = vec.rotateAroundY(yaw);
                     worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX + vec.xCoord, posY + vec.yCoord + 1d, posZ + vec.zCoord, 0d, 0d, 0d);
                 }
@@ -279,11 +298,11 @@ public class EntityShip extends EntityMovingWorld {
             }
         }
 
-        if (onGround && !submerge) {
+        if (onGround && !areSubmerged()) {
             isFlying = false;
         }
 
-        if (waterVolume > 0F && !submerge) {
+        if (waterVolume > 0F && !areSubmerged()) {
             isFlying = false;
             float buoyancyForce = 1F * waterVolume * gravity; //F = rho * V * g (Archimedes' principle)
             float mass = getCapabilities().getMass();
@@ -405,7 +424,7 @@ public class EntityShip extends EntityMovingWorld {
 
     @Override
     public boolean isFlying() {
-        return (capabilities.canFly() && (isFlying || controller.getShipControl() == 2)) || submerge;
+        return (capabilities.canFly() && (isFlying || controller.getShipControl() == 2)) || areSubmerged();
     }
 
     @Override

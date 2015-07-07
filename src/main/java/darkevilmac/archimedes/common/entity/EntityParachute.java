@@ -19,7 +19,7 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 
     public EntityParachute(World world, EntityShip ship, BlockPos pos) {
         this(world);
-        Vec3Mod vec = new Vec3Mod(pos.getX() - ship.getMovingWorldChunk().getCenterX(), pos.getY() - ship.getMovingWorldChunk().minY(), pos.getZ() - ship.getMovingWorldChunk().getCenterZ());
+        Vec3Mod vec = new Vec3Mod(pos.getX() - ship.getMobileChunk().getCenterX(), pos.getY() - ship.getMobileChunk().minY(), pos.getZ() - ship.getMobileChunk().getCenterZ());
         vec = vec.rotateAroundY((float) Math.toRadians(ship.rotationYaw));
 
         setLocationAndAngles(ship.posX + vec.xCoord, ship.posY + vec.yCoord - 2D, ship.posZ + vec.zCoord, 0F, 0F);

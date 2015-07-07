@@ -42,6 +42,7 @@ public class GuiShip extends GuiContainer {
         if (ship.canSubmerge()) {
             btnSubmersible = new GuiButtonSubmersible(3, guiLeft + xSize + 2, guiTop);
             buttonList.add(btnSubmersible);
+            ((GuiButtonSubmersible) btnSubmersible).submerse = ship.getSubmerge();
         }
     }
 
@@ -93,9 +94,9 @@ public class GuiShip extends GuiContainer {
             ship.alignToGrid();
         } else if (button == btnSubmersible) {
             GuiButtonSubmersible subButton = (GuiButtonSubmersible) button;
-            ClientChangeSubmerseMessage msg = new ClientChangeSubmerseMessage(ship, !subButton.submersible);
+            ClientChangeSubmerseMessage msg = new ClientChangeSubmerseMessage(ship, !subButton.submerse);
 
-            subButton.submersible = !subButton.submersible;
+            subButton.submerse = !subButton.submerse;
             ArchimedesShipMod.instance.network.sendToServer(msg);
         }
     }

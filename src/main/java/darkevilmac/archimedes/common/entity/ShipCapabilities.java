@@ -4,6 +4,7 @@ import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.common.object.block.AnchorPointLocation;
 import darkevilmac.archimedes.common.tileentity.TileEntityAnchorPoint;
 import darkevilmac.archimedes.common.tileentity.TileEntityEngine;
+import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
 import darkevilmac.archimedes.common.util.FloodFiller;
 import darkevilmac.movingworld.MaterialDensity;
 import darkevilmac.movingworld.chunk.LocatedBlock;
@@ -31,13 +32,12 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     private int balloonCount;
     private int floaters;
     private int blockCount;
-    private float mass;
 
     private boolean canSubmerge = false;
     private boolean submerseFound = false;
 
     public ShipCapabilities(EntityMovingWorld movingWorld, boolean autoCalcMass) {
-        super(movingWorld, autoCalcMass);
+        super(movingWorld, true);
         ship = (EntityShip) movingWorld;
     }
 
@@ -173,13 +173,14 @@ public class ShipCapabilities extends MovingWorldCapabilities {
 
     @Override
     public boolean canFly() {
-        return ArchimedesShipMod.instance.modConfig.enableAirShips && getBalloonCount() >= blockCount * ArchimedesShipMod.instance.modConfig.flyBalloonRatio;
+        return (ArchimedesShipMod.instance.modConfig.enableAirShips && getBalloonCount() >= blockCount * ArchimedesShipMod.instance.modConfig.flyBalloonRatio)
+                || canSubmerge() && ship.areSubmerged();
     }
 
     public boolean canSubmerge() {
         if (!submerseFound) {
             FloodFiller floodFiller = new FloodFiller();
-            LocatedBlockList locatedBlocks = floodFiller.floodFillMobileChunk(ship.getMovingWorldChunk());
+            LocatedBlockList locatedBlocks = floodFiller.floodFillMobileChunk(ship.getMobileChunk());
 
             canSubmerge = locatedBlocks.size() < this.blockCount;
             submerseFound = true;
@@ -249,7 +250,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
         } else if (block == ArchimedesShipMod.objects.blockFloater) {
             floaters++;
         } else if (block == ArchimedesShipMod.objects.blockAnchorPoint) {
-            TileEntity te = ship.getMovingWorldChunk().getTileEntity(pos);
+            TileEntity te = ship.getMobileChunk().getTileEntity(pos);
             if (te != null && te instanceof TileEntityAnchorPoint && ((TileEntityAnchorPoint) te).anchorPointInfo != null && ((TileEntityAnchorPoint) te).anchorPointInfo.forShip) {
                 if (anchorPoints == null) {
                     anchorPoints = new ArrayList<LocatedBlock>();
@@ -257,7 +258,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
                 anchorPoints.add(new LocatedBlock(state, te, pos));
             }
         } else if (block == ArchimedesShipMod.objects.blockEngine) {
-            TileEntity te = ship.getMovingWorldChunk().getTileEntity(pos);
+            TileEntity te = ship.getMobileChunk().getTileEntity(pos);
             if (te instanceof TileEntityEngine) {
                 if (engines == null) {
                     engines = new ArrayList<TileEntityEngine>(4);
@@ -282,6 +283,15 @@ public class ShipCapabilities extends MovingWorldCapabilities {
                 EntitySeat seat = new EntitySeat(ship.worldObj);
                 seat.setParentShip(ship, pos);
                 addAttachments(seat);
+            }
+        }
+    }
+
+    @Override
+    public void postBlockAdding() {
+        if (ship.getMobileChunk() != null && ship.getMobileChunk().marker != null && ship.getMobileChunk().marker.tileEntity != null && ship.getMobileChunk().marker.tileEntity instanceof TileEntityHelm) {
+            if (((TileEntityHelm) ship.getMobileChunk().marker.tileEntity).submerge && canSubmerge()) {
+                ship.setSubmerge(true);
             }
         }
     }
