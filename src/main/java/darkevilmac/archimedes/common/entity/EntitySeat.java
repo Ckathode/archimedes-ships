@@ -107,7 +107,7 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     public void killedBy(ShipCapabilities capabilities) {
         if (riddenByEntity != null && ship != null && ship.isFlying()) {
             EntityParachute parachute = new EntityParachute(worldObj, ship, pos);
-            if (worldObj.spawnEntityInWorld(parachute)) {
+            if (prevRiddenByEntity != null && worldObj.spawnEntityInWorld(parachute)) {
                 prevRiddenByEntity.mountEntity(parachute);
                 prevRiddenByEntity.setSneaking(false);
             }
