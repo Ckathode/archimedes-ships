@@ -1,5 +1,5 @@
 {
-  "parent": "archimedesshipsplus:block/helm",
+  "parent": "archimedesshipsplus:block/helmFull",
   "display": {
     "thirdperson": {
       "rotation": [

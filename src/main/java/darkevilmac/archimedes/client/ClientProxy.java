@@ -5,11 +5,13 @@ import darkevilmac.archimedes.client.control.ShipKeyHandler;
 import darkevilmac.archimedes.client.handler.ClientHookContainer;
 import darkevilmac.archimedes.client.render.RenderParachute;
 import darkevilmac.archimedes.client.render.TileEntityGaugeRenderer;
+import darkevilmac.archimedes.client.render.TileEntityHelmRenderer;
 import darkevilmac.archimedes.common.ArchimedesConfig;
 import darkevilmac.archimedes.common.CommonProxy;
 import darkevilmac.archimedes.common.entity.EntityParachute;
 import darkevilmac.archimedes.common.entity.EntityShip;
 import darkevilmac.archimedes.common.tileentity.TileEntityGauge;
+import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
 import darkevilmac.movingworld.client.render.RenderMovingWorld;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -59,6 +61,7 @@ public class ClientProxy extends CommonProxy {
 
     public void registerTileEntitySpeacialRenderers() {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGauge.class, new TileEntityGaugeRenderer());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHelm.class, new TileEntityHelmRenderer());
     }
 
     public void registerRendererVariants() {
