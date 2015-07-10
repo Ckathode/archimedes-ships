@@ -189,9 +189,6 @@ public class ShipCapabilities extends MovingWorldCapabilities {
             if (ArchimedesShipMod.instance.modConfig.enableSubmersibles)
                 canSubmerge =
                         filledBlockCount < (nonAirBlockCount * ArchimedesShipMod.instance.modConfig.submersibleFillRatio);
-
-            System.out.println(filledBlockCount + " | " + nonAirBlockCount * ArchimedesShipMod.instance.modConfig.submersibleFillRatio);
-
             submerseFound = true;
         }
 
