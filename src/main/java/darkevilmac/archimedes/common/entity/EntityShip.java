@@ -128,10 +128,6 @@ public class EntityShip extends EntityMovingWorld {
         dataWatcher.addObject(26, new Byte((byte) 0)); // Are we submerged?
     }
 
-    public boolean areSubmerged() {
-        return getBelowWater() > 0 && getSubmerge();
-    }
-
     @Override
     @SideOnly(Side.CLIENT)
     public void initMovingWorldClient() {
@@ -251,6 +247,14 @@ public class EntityShip extends EntityMovingWorld {
         }
     }
 
+    protected String getHurtSound() {
+        return "mob.irongolem.hit";
+    }
+
+    protected String getDeathSound() {
+        return "mob.irongolem.death";
+    }
+
     @Override
     @SideOnly(Side.CLIENT)
     public void spawnParticles(double horvel) {
@@ -289,11 +293,22 @@ public class EntityShip extends EntityMovingWorld {
 
     @Override
     public void handleServerUpdate(double horizontalVelocity) {
-        float gravity = 0.5F;
+        boolean submergeMode = getSubmerge();
 
         byte b0 = 5;
+        int blocksPerMeter = (int) (b0 * (getMovingWorldCollBox().maxY - getMovingWorldCollBox().minY));
         float waterVolume = 0F;
-        int belowWater = getBelowWater();
+        AxisAlignedBB axisalignedbb = new AxisAlignedBB(0D, 0D, 0D, 0D, 0D, 0D);
+        int belowWater = 0;
+        for (; belowWater < blocksPerMeter; belowWater++) {
+            double d1 = getMovingWorldCollBox().minY + (getMovingWorldCollBox().maxY - getMovingWorldCollBox().minY) * belowWater / blocksPerMeter;
+            double d2 = getMovingWorldCollBox().minY + (getMovingWorldCollBox().maxY - getMovingWorldCollBox().minY) * (belowWater + 1) / blocksPerMeter;
+            axisalignedbb = new AxisAlignedBB(getMovingWorldCollBox().minX, d1, getMovingWorldCollBox().minZ, getMovingWorldCollBox().maxX, d2, getMovingWorldCollBox().maxZ);
+
+            if (!isAABBInLiquidNotFall(worldObj, axisalignedbb)) {
+                break;
+            }
+        }
         if (belowWater > 0 && layeredBlockVolumeCount != null) {
             int k = belowWater / b0;
             for (int y = 0; y <= k && y < layeredBlockVolumeCount.length; y++) {
@@ -305,15 +320,19 @@ public class EntityShip extends EntityMovingWorld {
             }
         }
 
-        if (onGround && !areSubmerged()) {
+        if (onGround) {
             isFlying = false;
         }
 
-        if (waterVolume > 0F && !areSubmerged()) {
+        float gravity = 0.05F;
+        if (waterVolume > 0F && !submergeMode) {
             isFlying = false;
-            float buoyancyForce = 1F * waterVolume * gravity; //F = rho * V * g (Archimedes' principle)
+            float buoyancyforce = 1F * waterVolume * gravity; //F = rho * V * g (Archimedes' principle)
             float mass = getCapabilities().getMass();
-            motionY += buoyancyForce / mass;
+            motionY += buoyancyforce / mass;
+        }
+        if (!isFlying()) {
+            motionY -= gravity;
         }
 
         super.handleServerUpdate(horizontalVelocity);
@@ -431,7 +450,7 @@ public class EntityShip extends EntityMovingWorld {
 
     @Override
     public boolean isFlying() {
-        return (capabilities.canFly() && (isFlying || controller.getShipControl() == 2)) || areSubmerged();
+        return (capabilities.canFly() && (isFlying || controller.getShipControl() == 2)) || getSubmerge();
     }
 
     @Override
