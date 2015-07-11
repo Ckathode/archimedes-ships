@@ -27,6 +27,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     private final EntityShip ship;
     public float speedMultiplier, rotationMultiplier, liftMultiplier;
     public float brakeMult;
+    private float mass;
     private List<LocatedBlock> anchorPoints;
     private List<EntitySeat> seats;
     private List<TileEntityEngine> engines;
@@ -39,8 +40,17 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     private boolean submerseFound = false;
 
     public ShipCapabilities(EntityMovingWorld movingWorld, boolean autoCalcMass) {
-        super(movingWorld, true);
+        super(movingWorld, autoCalcMass);
         ship = (EntityShip) movingWorld;
+    }
+
+    @Override
+    public float getMass() {
+        return mass;
+    }
+
+    public void setMass(float mass) {
+        this.mass = mass;
     }
 
     public float getSpeedMult() {
@@ -176,7 +186,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     @Override
     public boolean canFly() {
         return (ArchimedesShipMod.instance.modConfig.enableAirShips && getBalloonCount() >= blockCount * ArchimedesShipMod.instance.modConfig.flyBalloonRatio)
-                || ship.areSubmerged();
+                || ship.canSubmerge();
     }
 
     public boolean canSubmerge() {
@@ -212,15 +222,6 @@ public class ShipCapabilities extends MovingWorldCapabilities {
         return floaters;
     }
 
-    @Override
-    public float getMass() {
-        return mass;
-    }
-
-    public void setMass(float mass) {
-        this.mass = mass;
-    }
-
     public void addAttachments(EntitySeat entity) {
         if (seats == null) seats = new ArrayList<EntitySeat>();
         if (entity != null && entity instanceof EntitySeat) seats.add(entity);
@@ -244,9 +245,10 @@ public class ShipCapabilities extends MovingWorldCapabilities {
 
     @Override
     public void onChunkBlockAdded(IBlockState state, BlockPos pos) {
+        mass += MaterialDensity.getDensity(state);
+
         blockCount++;
         nonAirBlockCount++;
-        mass += MaterialDensity.getDensity(state);
 
         Block block = state.getBlock();
         if (block == null) {
