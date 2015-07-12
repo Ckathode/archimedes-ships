@@ -331,7 +331,8 @@ public class EntityShip extends EntityMovingWorld {
             float mass = getCapabilities().getMass();
             motionY += buoyancyforce / mass;
         }
-        if (!isFlying()) {
+
+        if (!isFlying() || (submergeMode && belowWater <= (getMobileChunk().maxY() * 5 / 3 * 2))) {
             motionY -= gravity;
         }
 
@@ -451,6 +452,12 @@ public class EntityShip extends EntityMovingWorld {
     @Override
     public boolean isFlying() {
         return (capabilities.canFly() && (isFlying || controller.getShipControl() == 2)) || getSubmerge();
+    }
+
+    public boolean areSubmerged() {
+        int belowWater = getBelowWater();
+
+        return getSubmerge() && belowWater > 0;
     }
 
     @Override

@@ -186,7 +186,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     @Override
     public boolean canFly() {
         return (ArchimedesShipMod.instance.modConfig.enableAirShips && getBalloonCount() >= blockCount * ArchimedesShipMod.instance.modConfig.flyBalloonRatio)
-                || ship.canSubmerge();
+                || ship.areSubmerged();
     }
 
     public boolean canSubmerge() {
