@@ -98,6 +98,7 @@ public class ArchimedesShipMod {
 
     @Mod.EventHandler
     public void postInitMod(FMLPostInitializationEvent event) {
+        proxy.registerRenderers(event.getModState());
     }
 
     @Mod.EventHandler

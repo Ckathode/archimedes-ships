@@ -52,6 +52,10 @@ public class ClientProxy extends CommonProxy {
             registerTileEntitySpeacialRenderers();
             registerItemRenderers();
         }
+
+        if (state == LoaderState.ModState.POSTINITIALIZED) {
+
+        }
     }
 
     public void registerEntityRenderers() {

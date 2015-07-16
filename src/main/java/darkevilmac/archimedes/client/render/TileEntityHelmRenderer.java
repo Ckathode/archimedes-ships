@@ -23,10 +23,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.*;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 public class TileEntityHelmRenderer extends TileEntitySpecialRenderer {
 
+    static HashMap<EnumFacing, IFlexibleBakedModel> helmModels;
     Function<ResourceLocation, TextureAtlasSprite> textureGetter = new Function<ResourceLocation, TextureAtlasSprite>() {
         public TextureAtlasSprite apply(ResourceLocation location) {
             return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
@@ -35,6 +37,25 @@ public class TileEntityHelmRenderer extends TileEntitySpecialRenderer {
 
     @Override
     public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage) {
+        if (helmModels == null)
+            helmModels = new HashMap<EnumFacing, IFlexibleBakedModel>();
+        if (helmModels.keySet().isEmpty()) {
+            IModel model = null;
+
+            try {
+                model = ModelLoaderRegistry.getModel(new ResourceLocation(ArchimedesShipMod.RESOURCE_DOMAIN + "block/helmWheel"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (model != null) {
+                helmModels.put(EnumFacing.NORTH, model.bake(new TRSRTransformation(ModelRotation.getModelRotation(0, 0)), Attributes.DEFAULT_BAKED_FORMAT, textureGetter));
+                helmModels.put(EnumFacing.SOUTH, model.bake(new TRSRTransformation(ModelRotation.getModelRotation(0, 180)), Attributes.DEFAULT_BAKED_FORMAT, textureGetter));
+                helmModels.put(EnumFacing.WEST, model.bake(new TRSRTransformation(ModelRotation.getModelRotation(0, -90)), Attributes.DEFAULT_BAKED_FORMAT, textureGetter));
+                helmModels.put(EnumFacing.EAST, model.bake(new TRSRTransformation(ModelRotation.getModelRotation(0, 90)), Attributes.DEFAULT_BAKED_FORMAT, textureGetter));
+            }
+        }
+
         try {
             renderHelm((TileEntityHelm) te, x, y, z, partialTicks);
         } catch (IOException e) {
@@ -55,7 +76,6 @@ public class TileEntityHelmRenderer extends TileEntitySpecialRenderer {
 
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldRenderer = tessellator.getWorldRenderer();
-        bindTexture(TextureMap.locationBlocksTexture);
         RenderHelper.disableStandardItemLighting();
         GlStateManager.blendFunc(770, 771);
         GlStateManager.enableBlend();
@@ -74,26 +94,15 @@ public class TileEntityHelmRenderer extends TileEntitySpecialRenderer {
         newY = (float) y;
         newZ = (float) z;
 
-        int rotDeg = 0;
-        if (blockStateFacing == EnumFacing.SOUTH) {
-            rotDeg = 180;
-        } else if (blockStateFacing == EnumFacing.WEST) {
-            rotDeg = -90;
-        } else if (blockStateFacing == EnumFacing.EAST) {
-            rotDeg = 90;
+        IFlexibleBakedModel modelBaked = null;
+        if (helmModels.containsKey(blockStateFacing)) {
+            bindTexture(TextureMap.locationBlocksTexture);
+            modelBaked = helmModels.get(blockStateFacing);
         }
-
+        worldRenderer.startDrawingQuads();
         GlStateManager.translate(newX, newY, newZ);
 
-        worldRenderer.startDrawingQuads();
-
-        IModel model;
-        model = ModelLoaderRegistry.getModel(new ResourceLocation(ArchimedesShipMod.RESOURCE_DOMAIN + "block/helmWheel"));
-
-        if (model != null) {
-            TRSRTransformation trsrTransformation = new TRSRTransformation(ModelRotation.getModelRotation(0, rotDeg));
-
-            IFlexibleBakedModel modelBaked = model.bake(trsrTransformation, Attributes.DEFAULT_BAKED_FORMAT, textureGetter);
+        if (modelBaked != null) {
             List<BakedQuad> generalQuads = modelBaked.getGeneralQuads();
 
             float shipPitch = 0;
