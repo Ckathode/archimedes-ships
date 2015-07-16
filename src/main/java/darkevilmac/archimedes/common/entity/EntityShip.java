@@ -5,7 +5,7 @@ import darkevilmac.archimedes.client.control.ShipControllerClient;
 import darkevilmac.archimedes.common.ArchimedesConfig;
 import darkevilmac.archimedes.common.control.ShipControllerCommon;
 import darkevilmac.archimedes.common.object.block.AnchorPointLocation;
-import darkevilmac.archimedes.common.tileentity.TileEntityEngine;
+import darkevilmac.archimedes.common.tileentity.ITileEngineModifier;
 import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
 import darkevilmac.movingworld.common.chunk.MovingWorldAssemblyInteractor;
 import darkevilmac.movingworld.common.chunk.assembly.AssembleResult;
@@ -261,11 +261,11 @@ public class EntityShip extends EntityMovingWorld {
         if (capabilities.getEngines() != null) {
             Vec3Mod vec = Vec3Mod.getOrigin();
             float yaw = (float) Math.toRadians(rotationYaw);
-            for (TileEntityEngine engine : capabilities.getEngines()) {
-                if (engine.isRunning()) {
-                    vec = vec.setX(engine.getPos().getX() - getMobileChunk().getCenterX() + 0.5f);
-                    vec = vec.setY(engine.getPos().getY());
-                    vec = vec.setZ(engine.getPos().getZ() - getMobileChunk().getCenterZ() + 0.5f);
+            for (ITileEngineModifier engine : capabilities.getEngines()) {
+                if (engine.getPowerIncrement(capabilities) != 0F) {
+                    vec = vec.setX(((TileEntity) engine).getPos().getX() - getMobileChunk().getCenterX() + 0.5f);
+                    vec = vec.setY(((TileEntity) engine).getPos().getY());
+                    vec = vec.setZ(((TileEntity) engine).getPos().getZ() - getMobileChunk().getCenterZ() + 0.5f);
                     vec = vec.rotateAroundY(yaw);
                     worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX + vec.xCoord, posY + vec.yCoord + 1d, posZ + vec.zCoord, 0d, 0d, 0d);
                 }
@@ -273,7 +273,7 @@ public class EntityShip extends EntityMovingWorld {
         }
     }
 
-    private int getBelowWater() {
+    public int getBelowWater() {
         byte b0 = 5;
         int blocksPerMeter = (int) (b0 * (getMovingWorldCollBox().maxY - getMovingWorldCollBox().minY));
         AxisAlignedBB axisalignedbb = new AxisAlignedBB(0D, 0D, 0D, 0D, 0D, 0D);

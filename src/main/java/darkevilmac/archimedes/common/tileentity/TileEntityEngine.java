@@ -1,5 +1,8 @@
 package darkevilmac.archimedes.common.tileentity;
 
+import darkevilmac.archimedes.common.entity.ShipCapabilities;
+import darkevilmac.movingworld.common.chunk.mobilechunk.MobileChunk;
+import darkevilmac.movingworld.common.entity.EntityMovingWorld;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -10,10 +13,11 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
 
-public class TileEntityEngine extends TileEntity implements IInventory {
+public class TileEntityEngine extends TileEntity implements IInventory, ITileEngineModifier {
     public float enginePower;
     public int engineFuelConsumption;
     ItemStack[] itemStacks;
@@ -83,10 +87,6 @@ public class TileEntityEngine extends TileEntity implements IInventory {
 
     public int getBurnTime() {
         return burnTime;
-    }
-
-    public void updateRunning() {
-        running = consumeFuel(engineFuelConsumption);
     }
 
     public boolean consumeFuel(int f) {
@@ -212,5 +212,30 @@ public class TileEntityEngine extends TileEntity implements IInventory {
     @Override
     public IChatComponent getDisplayName() {
         return new ChatComponentText("Engine Inventory");
+    }
+
+    @Override
+    public float getPowerIncrement(ShipCapabilities shipCapabilities) {
+        return isRunning() ? enginePower : 0;
+    }
+
+    @Override
+    public void setParentMovingWorld(BlockPos pos, EntityMovingWorld entityMovingWorld) {
+        // We don't bother with our parent.
+    }
+
+    @Override
+    public EntityMovingWorld getParentMovingWorld() {
+        return null;
+    }
+
+    @Override
+    public void setParentMovingWorld(EntityMovingWorld entityMovingWorld) {
+        // We don't bother with our parent.
+    }
+
+    @Override
+    public void tick(MobileChunk mobileChunk) {
+        running = consumeFuel(engineFuelConsumption);
     }
 }

@@ -6,6 +6,7 @@ import darkevilmac.archimedes.common.entity.ShipAssemblyInteractor;
 import darkevilmac.archimedes.common.network.AssembleResultMessage;
 import darkevilmac.movingworld.common.chunk.MovingWorldAssemblyInteractor;
 import darkevilmac.movingworld.common.chunk.assembly.AssembleResult;
+import darkevilmac.movingworld.common.chunk.mobilechunk.MobileChunk;
 import darkevilmac.movingworld.common.entity.EntityMovingWorld;
 import darkevilmac.movingworld.common.entity.MovingWorldInfo;
 import darkevilmac.movingworld.common.tile.TileMovingWorldMarkingBlock;
@@ -45,6 +46,11 @@ public class TileEntityHelm extends TileMovingWorldMarkingBlock {
     @Override
     public void setParentMovingWorld(EntityMovingWorld entityMovingWorld) {
         setParentMovingWorld(new BlockPos(BlockPos.ORIGIN), entityMovingWorld);
+    }
+
+    @Override
+    public void tick(MobileChunk mobileChunk) {
+        // No implementation
     }
 
     @Override

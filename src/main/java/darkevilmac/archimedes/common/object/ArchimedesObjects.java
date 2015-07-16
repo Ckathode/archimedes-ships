@@ -73,7 +73,7 @@ public class ArchimedesObjects {
         blockStickyBuffer.setStepSound(Block.soundTypeMetal);
         registerBlock("stickyBuffer", blockStickyBuffer);
 
-        blockEngine = new BlockEngine(Material.iron, 1f, 10).setHardness(2F).setResistance(3F).setCreativeTab(CreativeTabs.tabTransport);
+        blockEngine = new BlockEngine(Material.iron, 1F, 10).setHardness(2F).setResistance(3F).setCreativeTab(CreativeTabs.tabTransport);
         blockEngine.setStepSound(Block.soundTypeMetal);
         registerBlock("engine", blockEngine);
 

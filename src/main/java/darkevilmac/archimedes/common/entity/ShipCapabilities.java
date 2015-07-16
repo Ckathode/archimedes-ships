@@ -2,8 +2,8 @@ package darkevilmac.archimedes.common.entity;
 
 import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.common.object.block.AnchorPointLocation;
+import darkevilmac.archimedes.common.tileentity.ITileEngineModifier;
 import darkevilmac.archimedes.common.tileentity.TileEntityAnchorPoint;
-import darkevilmac.archimedes.common.tileentity.TileEntityEngine;
 import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
 import darkevilmac.movingworld.common.chunk.LocatedBlock;
 import darkevilmac.movingworld.common.entity.EntityMovingWorld;
@@ -30,7 +30,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     private float mass;
     private List<LocatedBlock> anchorPoints;
     private List<EntitySeat> seats;
-    private List<TileEntityEngine> engines;
+    private List<ITileEngineModifier> engines;
     private int balloonCount;
     private int floaters;
     private int blockCount;
@@ -54,7 +54,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     }
 
     public float getSpeedMult() {
-        return speedMultiplier + getEnginePower() * 0.5f;
+        return speedMultiplier + getEnginePower() * 0.5F;
     }
 
     public float getRotationMult() {
@@ -172,11 +172,8 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     public void updateEngines() {
         float ePower = 0;
         if (engines != null) {
-            for (TileEntityEngine te : engines) {
-                te.updateRunning();
-                if (te.isRunning()) {
-                    ePower += te.enginePower;
-                }
+            for (ITileEngineModifier te : engines) {
+                ePower += te.getPowerIncrement(this);
             }
         }
         if (!ship.worldObj.isRemote)
@@ -235,7 +232,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
         return seats;
     }
 
-    public List<TileEntityEngine> getEngines() {
+    public List<ITileEngineModifier> getEngines() {
         return engines;
     }
 
@@ -273,11 +270,11 @@ public class ShipCapabilities extends MovingWorldCapabilities {
             }
         } else if (block == ArchimedesShipMod.objects.blockEngine) {
             TileEntity te = ship.getMobileChunk().getTileEntity(pos);
-            if (te instanceof TileEntityEngine) {
+            if (te instanceof ITileEngineModifier) {
                 if (engines == null) {
-                    engines = new ArrayList<TileEntityEngine>(4);
+                    engines = new ArrayList<ITileEngineModifier>(4);
                 }
-                engines.add((TileEntityEngine) te);
+                engines.add((ITileEngineModifier) te);
             }
         } else if (block == ArchimedesShipMod.objects.blockSeat && !ship.worldObj.isRemote) {
             int x1 = ship.riderDestination.getX(), y1 = ship.riderDestination.getY(), z1 = ship.riderDestination.getZ();

@@ -1,6 +1,7 @@
 package darkevilmac.archimedes.common.tileentity;
 
 import darkevilmac.archimedes.common.entity.EntityShip;
+import darkevilmac.movingworld.common.chunk.mobilechunk.MobileChunk;
 import darkevilmac.movingworld.common.entity.EntityMovingWorld;
 import darkevilmac.movingworld.common.tile.IMovingWorldTileEntity;
 import net.minecraft.entity.Entity;
@@ -38,6 +39,11 @@ public class TileEntityCrate extends TileEntity implements IMovingWorldTileEntit
     @Override
     public void setParentMovingWorld(EntityMovingWorld entityMovingWorld) {
         setParentMovingWorld(new BlockPos(BlockPos.ORIGIN), entityMovingWorld);
+    }
+
+    @Override
+    public void tick(MobileChunk mobileChunk) {
+        // No implementation.
     }
 
     public boolean canCatchEntity() {
