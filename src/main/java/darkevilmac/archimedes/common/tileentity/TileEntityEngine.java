@@ -1,5 +1,6 @@
 package darkevilmac.archimedes.common.tileentity;
 
+import darkevilmac.archimedes.common.api.tileentity.ITileEngineModifier;
 import darkevilmac.archimedes.common.entity.ShipCapabilities;
 import darkevilmac.movingworld.common.chunk.mobilechunk.MobileChunk;
 import darkevilmac.movingworld.common.entity.EntityMovingWorld;

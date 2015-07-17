@@ -1,4 +1,4 @@
-package darkevilmac.archimedes.common.tileentity;
+package darkevilmac.archimedes.common.api.tileentity;
 
 import darkevilmac.archimedes.common.entity.ShipCapabilities;
 import darkevilmac.movingworld.common.tile.IMovingWorldTileEntity;

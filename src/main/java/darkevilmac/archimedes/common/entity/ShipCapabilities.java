@@ -1,8 +1,10 @@
 package darkevilmac.archimedes.common.entity;
 
 import darkevilmac.archimedes.ArchimedesShipMod;
+import darkevilmac.archimedes.common.api.block.IBlockBalloon;
+import darkevilmac.archimedes.common.api.block.IBlockCustomMass;
+import darkevilmac.archimedes.common.api.tileentity.ITileEngineModifier;
 import darkevilmac.archimedes.common.object.block.AnchorPointLocation;
-import darkevilmac.archimedes.common.tileentity.ITileEngineModifier;
 import darkevilmac.archimedes.common.tileentity.TileEntityAnchorPoint;
 import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
 import darkevilmac.movingworld.common.chunk.LocatedBlock;
@@ -256,8 +258,18 @@ public class ShipCapabilities extends MovingWorldCapabilities {
         if (block instanceof BlockAir)
             nonAirBlockCount--;
 
-        if (ArchimedesShipMod.instance.modConfig.isBalloon(block)) {
-            balloonCount++;
+        if (block instanceof IBlockCustomMass) {
+            mass -= MaterialDensity.getDensity(state); // Custom mass found, remove the mass assumed and substitute with custom mass.
+            mass += ((IBlockCustomMass) block).getCustomMass();
+        }
+
+        if (ArchimedesShipMod.instance.modConfig.isBalloon(block) || block instanceof IBlockBalloon) {
+            if (block instanceof IBlockBalloon) {
+                //IBlockBalloon takes priority.
+                balloonCount += ((IBlockBalloon) block).getBalloonWorth();
+            } else {
+                balloonCount++;
+            }
         } else if (block == ArchimedesShipMod.objects.blockFloater) {
             floaters++;
         } else if (block == ArchimedesShipMod.objects.blockAnchorPoint) {
