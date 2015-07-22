@@ -1,17 +1,9 @@
 {
   "variants": {
-    "facing=north": {"model": "archimedesshipsplus:crate_wood"},
-    "facing=south": {
-      "model": "archimedesshipsplus:crate_wood",
-      "y": 180
-    },
-    "facing=west": {
-      "model": "archimedesshipsplus:crate_wood",
-      "y": 270
-    },
-    "facing=east": {
+    "axis=z": {
       "model": "archimedesshipsplus:crate_wood",
       "y": 90
-    }
+    },
+    "axis=x": {"model": "archimedesshipsplus:crate_wood"}
   }
 }

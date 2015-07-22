@@ -17,6 +17,7 @@ import darkevilmac.archimedes.common.network.ArchimedesShipsPacketHandler;
 import darkevilmac.archimedes.common.network.NetworkUtil;
 import darkevilmac.archimedes.common.object.ArchimedesObjects;
 import net.minecraft.command.CommandBase;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -42,6 +43,13 @@ public class ArchimedesShipMod {
     public static final String MOD_NAME = "Archimedes' Ships Plus";
     public static final String RESOURCE_DOMAIN = "archimedesshipsplus:";
     public static final String MOD_GUIFACTORY = "darkevilmac.archimedes.client.gui.ArchimedesGUIFactory";
+
+    public static CreativeTabs creativeTab = new CreativeTabs("archimedesTab") {
+        @Override
+        public Item getTabIconItem() {
+            return Item.getItemFromBlock(ArchimedesObjects.blockMarkShip);
+        }
+    };
 
     @Mod.Instance(MOD_ID)
     public static ArchimedesShipMod instance;

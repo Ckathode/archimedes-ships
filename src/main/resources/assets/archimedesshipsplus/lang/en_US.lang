@@ -8,6 +8,8 @@ common.tile.anchor.changeModeGround=This Anchor is now set for use on the ground
 common.tile.anchor.changeModeShip=This Anchor is now set for use on ships.
 common.tile.anchor.noGroundLink=You must activate a ground anchor to link with this ship anchor.
 
+itemGroup.archimedesTab=Archimedes's Ships
+
 tile.archimedes.marker.name=Ship's Helm
 tile.archimedes.floater.name=Floater
 tile.archimedes.balloon.name=Air Balloon

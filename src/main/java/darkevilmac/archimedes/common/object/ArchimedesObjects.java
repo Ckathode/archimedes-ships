@@ -1,5 +1,6 @@
 package darkevilmac.archimedes.common.object;
 
+import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.common.object.block.*;
 import darkevilmac.archimedes.common.object.item.ItemGaugeBlock;
 import darkevilmac.archimedes.common.tileentity.*;
@@ -45,43 +46,43 @@ public class ArchimedesObjects {
 
         materialFloater = new Material(MapColor.clothColor);
 
-        blockMarkShip = (BlockHelm) new BlockHelm().setCreativeTab(CreativeTabs.tabTransport);
+        blockMarkShip = (BlockHelm) new BlockHelm().setCreativeTab(ArchimedesShipMod.creativeTab);
         blockMarkShip.setStepSound(Block.soundTypeWood).setHardness(1F).setResistance(1F);
         registerBlock("marker", blockMarkShip);
 
-        blockFloater = new BlockAS(materialFloater).setCreativeTab(CreativeTabs.tabTransport);
+        blockFloater = new BlockAS(materialFloater).setCreativeTab(ArchimedesShipMod.creativeTab);
         blockFloater.setStepSound(Block.soundTypeWood).setHardness(1F).setResistance(1F);
         registerBlock("floater", blockFloater);
 
-        blockBalloon = new BlockRecolourable(Material.cloth).setCreativeTab(CreativeTabs.tabTransport);
+        blockBalloon = new BlockRecolourable(Material.cloth).setCreativeTab(ArchimedesShipMod.creativeTab);
         blockBalloon.setStepSound(Block.soundTypeCloth).setHardness(0.35F).setResistance(1F);
         registerBlock("balloon", blockBalloon, ItemCloth.class);
 
-        blockGauge = (BlockGauge) new BlockGauge().setCreativeTab(CreativeTabs.tabTransport);
+        blockGauge = (BlockGauge) new BlockGauge().setCreativeTab(ArchimedesShipMod.creativeTab);
         blockGauge.setStepSound(Block.soundTypeMetal).setHardness(1F).setResistance(1F);
         registerBlock("gauge", blockGauge, ItemGaugeBlock.class);
 
-        blockSeat = (BlockSeat) new BlockSeat().setHardness(1F).setResistance(1F).setCreativeTab(CreativeTabs.tabTransport);
+        blockSeat = (BlockSeat) new BlockSeat().setHardness(1F).setResistance(1F).setCreativeTab(ArchimedesShipMod.creativeTab);
         blockSeat.setStepSound(Block.soundTypeCloth);
         registerBlock("seat", blockSeat);
 
-        blockBuffer = new BlockAS(Material.cloth).setHardness(1F).setResistance(1F).setCreativeTab(CreativeTabs.tabTransport);
+        blockBuffer = new BlockAS(Material.cloth).setHardness(1F).setResistance(1F).setCreativeTab(ArchimedesShipMod.creativeTab);
         blockBuffer.setStepSound(Block.soundTypeWood);
         registerBlock("buffer", blockBuffer);
 
-        blockStickyBuffer = new BlockAS(Material.cloth).setHardness(1F).setResistance(1F).setCreativeTab(CreativeTabs.tabTransport);
+        blockStickyBuffer = new BlockAS(Material.cloth).setHardness(1F).setResistance(1F).setCreativeTab(ArchimedesShipMod.creativeTab);
         blockStickyBuffer.setStepSound(Block.soundTypeMetal);
         registerBlock("stickyBuffer", blockStickyBuffer);
 
-        blockEngine = new BlockEngine(Material.iron, 1F, 10).setHardness(2F).setResistance(3F).setCreativeTab(CreativeTabs.tabTransport);
+        blockEngine = new BlockEngine(Material.iron, 1F, 10).setHardness(2F).setResistance(3F).setCreativeTab(ArchimedesShipMod.creativeTab);
         blockEngine.setStepSound(Block.soundTypeMetal);
         registerBlock("engine", blockEngine);
 
-        blockCrateWood = new BlockCrate(Material.wood).setHardness(1f).setResistance(1f).setCreativeTab(CreativeTabs.tabTransport);
+        blockCrateWood = new BlockCrate(Material.wood).setHardness(1f).setResistance(1f).setCreativeTab(ArchimedesShipMod.creativeTab);
         blockCrateWood.setStepSound(Block.soundTypeWood);
         registerBlock("crate_wood", blockCrateWood);
 
-        blockAnchorPoint = new BlockAnchorPoint(Material.wood).setHardness(1f).setResistance(1F).setCreativeTab(CreativeTabs.tabTransport);
+        blockAnchorPoint = new BlockAnchorPoint(Material.wood).setHardness(1f).setResistance(1F).setCreativeTab(ArchimedesShipMod.creativeTab);
         blockAnchorPoint.setStepSound(Block.soundTypePiston);
         registerBlock("anchorPoint", blockAnchorPoint);
     }
