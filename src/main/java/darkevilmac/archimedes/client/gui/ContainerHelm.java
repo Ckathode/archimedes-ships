@@ -16,15 +16,7 @@ public class ContainerHelm extends Container {
         tileEntity = te;
         player = entityplayer;
 
-		/*for (int i = 0; i < 3; i++)
-        {
-			for (int j = 0; j < 3; j++)
-			{
-				addSlotToContainer(new Slot(tileEntity, j + i * 3, 62 + j * 18, 17 + i * 18));
-			}
-		}*/
-
-        //bindPlayerInventory(entityplayer.inventory);
+        bindPlayerInventory(entityplayer.inventory);
     }
 
     @Override
@@ -35,12 +27,16 @@ public class ContainerHelm extends Container {
     protected void bindPlayerInventory(InventoryPlayer inventoryPlayer) {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
-                addSlotToContainer(new Slot(inventoryPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+                int xOff = 40;
+                int yOff  = 90;
+                addSlotToContainer(new Slot(inventoryPlayer, j + i * 9 + 9, 8 + j * 18 + xOff, 84 + i * 18 + yOff));
             }
         }
 
         for (int i = 0; i < 9; i++) {
-            addSlotToContainer(new Slot(inventoryPlayer, i, 8 + i * 18, 142));
+            int xOff = 40;
+            int yOff  = 90;
+            addSlotToContainer(new Slot(inventoryPlayer, i, 8 + i * 18 + xOff, 142 + yOff));
         }
     }
 

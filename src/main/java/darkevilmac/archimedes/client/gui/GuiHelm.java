@@ -34,6 +34,7 @@ public class GuiHelm extends GuiContainer {
         player = entityplayer;
 
         xSize = 256;
+        ySize = 256;
     }
 
     @SuppressWarnings("unchecked")
