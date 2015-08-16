@@ -34,3 +34,4 @@ ArchimedesShips.iws
 gradle-app.setting
 ui/native/19/windows-amd64/native-platform.dll.lock
 Compilation
+src/main/resources/referenceassets/
