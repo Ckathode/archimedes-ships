@@ -49,6 +49,8 @@ gui.shipstatus.compilerresult=Statut
 gui.shipstatus.count.block=Blocs
 gui.shipstatus.count.balloon=Montgolfière
 gui.shipstatus.count.tileentity=Entités de tuile
+gui.shipstatus.mass=Masse
+gui.shipstatus.massunit=Kg
 
 gui.shipstatus.result.none=Non assemblé
 gui.shipstatus.result.ok=OK
