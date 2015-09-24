@@ -1,0 +1,22 @@
+{
+    "ambientocclusion": true,
+    "textures": {
+        "crate": "archimedes:blocks/crate_wood",
+        "particle": "archimedes:blocks/crate_wood",
+        "frame": "blocks/planks_oak"
+    },
+    "elements": [
+        {
+            "from": [0,0,0],
+            "to": [16,1,16],
+            "faces": {
+                "up": { "texture": "#crate" },
+                "down": { "texture": "#frame", "cullface": "down" },
+                "west": { "texture": "#frame", "cullface": "west" },
+                "east": { "texture": "#frame", "cullface": "east" },
+                "north": { "texture": "#frame", "cullface": "north" },
+                "south": { "texture": "#frame", "cullface": "south" }
+            }
+        }
+    ]
+}
