@@ -48,7 +48,7 @@ public class GuiShip extends GuiContainer {
 
     @Override
     public void updateScreen() {
-        super.updateScreen();
+        if (this.mc != null && this.mc.thePlayer != null) super.updateScreen();
 
         if (btnDisassemble == null || btnAlign == null) {
             return;
