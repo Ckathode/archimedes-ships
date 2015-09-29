@@ -3,6 +3,7 @@ package darkevilmac.archimedes.common.entity;
 import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.common.object.ArchimedesObjects;
 import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
+import darkevilmac.archimedes.common.tileentity.TileEntitySecuredBed;
 import darkevilmac.movingworld.common.chunk.LocatedBlock;
 import darkevilmac.movingworld.common.chunk.MovingWorldAssemblyInteractor;
 import darkevilmac.movingworld.common.chunk.assembly.AssembleResult;
@@ -50,6 +51,20 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
     public void blockAssembled(LocatedBlock locatedBlock) {
         if (ArchimedesShipMod.instance.modConfig.isBalloon(locatedBlock.blockState.getBlock())) {
             balloonCount++;
+        }
+    }
+
+    @Override
+    public void blockDisassembled(LocatedBlock locatedBlock) {
+        super.blockDisassembled(locatedBlock); // Currently unimplemented but leaving there just in case.
+
+        if (locatedBlock.tileEntity != null && locatedBlock.tileEntity.getWorld() != null && !locatedBlock.tileEntity.getWorld().isRemote) {
+            if (locatedBlock.tileEntity instanceof TileEntitySecuredBed) {
+                TileEntitySecuredBed securedBed = (TileEntitySecuredBed) locatedBlock.tileEntity;
+
+                securedBed.doMove = true;
+                securedBed.moveBed(locatedBlock.blockPos);
+            }
         }
     }
 

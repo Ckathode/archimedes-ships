@@ -7,7 +7,6 @@ import darkevilmac.archimedes.common.tileentity.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemBlock;
@@ -37,6 +36,7 @@ public class ArchimedesObjects {
     public static Block blockEngine;
     public static Block blockCrateWood;
     public static Block blockAnchorPoint;
+    public static Block blockSecuredBed;
 
     public static Material materialFloater;
     public static HashMap<String, Block> registeredBlocks;
@@ -85,6 +85,10 @@ public class ArchimedesObjects {
         blockAnchorPoint = new BlockAnchorPoint(Material.wood).setHardness(1f).setResistance(1F).setCreativeTab(ArchimedesShipMod.creativeTab);
         blockAnchorPoint.setStepSound(Block.soundTypePiston);
         registerBlock("anchorPoint", blockAnchorPoint);
+
+        blockSecuredBed = new BlockSecuredBed().setHardness(0.2F).setCreativeTab(ArchimedesShipMod.creativeTab);
+        blockSecuredBed.setStepSound(Block.soundTypeWood);
+        registerBlock("securedBed", blockSecuredBed);
     }
 
     public void init(FMLInitializationEvent e) {
@@ -121,6 +125,9 @@ public class ArchimedesObjects {
 
         GameRegistry.addRecipe(new ItemStack(blockAnchorPoint, 1), "XYX", "XXX", "ZZZ", Character.valueOf('X'), Blocks.planks, Character.valueOf('Y'), Blocks.redstone_torch, Character.valueOf('Z'), Items.redstone);
         GameRegistry.registerTileEntity(TileEntityAnchorPoint.class, "archiAnchor");
+
+        GameRegistry.addShapelessRecipe(new ItemStack(blockSecuredBed), Blocks.bed, Items.iron_ingot);
+        GameRegistry.registerTileEntity(TileEntitySecuredBed.class, "archiSecuredBed");
     }
 
     public void postInit(FMLPostInitializationEvent e) {
