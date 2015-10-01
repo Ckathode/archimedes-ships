@@ -38,13 +38,10 @@ public class ConnectionHandler {
     }
 
     private void handleBedLogin(PlayerEvent.PlayerLoggedInEvent event) {
-        if (event.player.getGameProfile() != null && event.player.getGameProfile().getId() != null) {
-            if (playerBedMap.containsKey(event.player.getGameProfile().getId())) {
-                TileEntitySecuredBed bed = playerBedMap.get(event.player.getGameProfile().getId());
-
-                if (bed.doMove)
-                    bed.moveBed(bed.getPos());
-            }
+        if (playerBedMap.containsKey(event.player.getGameProfile().getId())) {
+            TileEntitySecuredBed bed = playerBedMap.get(event.player.getGameProfile().getId());
+            if (bed.doMove)
+                bed.moveBed(bed.getPos());
         }
     }
 

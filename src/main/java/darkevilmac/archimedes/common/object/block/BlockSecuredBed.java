@@ -1,14 +1,25 @@
 package darkevilmac.archimedes.common.object.block;
 
+import darkevilmac.archimedes.common.object.ArchimedesObjects;
 import darkevilmac.archimedes.common.tileentity.TileEntitySecuredBed;
 import net.minecraft.block.BlockBed;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Iterator;
+import java.util.Random;
 
 public class BlockSecuredBed extends BlockBed implements ITileEntityProvider {
 
@@ -18,33 +29,103 @@ public class BlockSecuredBed extends BlockBed implements ITileEntityProvider {
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (worldIn == null || (worldIn != null && worldIn.isRemote))
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, final EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
+        if (worldIn.isRemote) {
             return true;
+        } else {
+            EntityPlayer bedUser = null;
 
-        if (state.getValue(PART) != BlockBed.EnumPartType.HEAD) {
-            pos = pos.offset((EnumFacing) state.getValue(FACING));
-            state = worldIn.getBlockState(pos);
+            if (state.getValue(PART) != BlockBed.EnumPartType.HEAD) {
+                pos = pos.offset((EnumFacing) state.getValue(FACING));
+                state = worldIn.getBlockState(pos);
 
-            if (state.getBlock() != this) {
+                if (state.getBlock() != this) {
+                    return true;
+                }
+            }
+
+            if (worldIn.provider.canRespawnHere() && worldIn.getBiomeGenForCoords(pos) != BiomeGenBase.hell) {
+                if (((Boolean) state.getValue(OCCUPIED)).booleanValue()) {
+                    EntityPlayer entityplayer1 = this.getPlayerInBed(worldIn, pos);
+
+                    if (entityplayer1 != null) {
+                        playerIn.addChatComponentMessage(new ChatComponentTranslation("tile.bed.occupied", new Object[0]));
+
+                        bedUser = entityplayer1;
+                    }
+                }
+
+                if (bedUser == null) {
+                    state = state.withProperty(OCCUPIED, Boolean.valueOf(false));
+                    worldIn.setBlockState(pos, state, 4);
+
+                    EntityPlayer.EnumStatus enumstatus = playerIn.trySleep(pos);
+
+                    if (enumstatus == EntityPlayer.EnumStatus.OK) {
+                        state = state.withProperty(OCCUPIED, Boolean.valueOf(true));
+                        worldIn.setBlockState(pos, state, 4);
+
+                        bedUser = playerIn;
+                    } else {
+                        if (enumstatus == EntityPlayer.EnumStatus.NOT_POSSIBLE_NOW) {
+                            playerIn.addChatComponentMessage(new ChatComponentTranslation("tile.bed.noSleep", new Object[0]));
+                        } else if (enumstatus == EntityPlayer.EnumStatus.NOT_SAFE) {
+                            playerIn.addChatComponentMessage(new ChatComponentTranslation("tile.bed.notSafe", new Object[0]));
+                        }
+                    }
+                }
+
+                if (bedUser != null) {
+                    if (worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos) instanceof TileEntitySecuredBed) {
+                        TileEntitySecuredBed tile = (TileEntitySecuredBed) worldIn.getTileEntity(pos);
+
+                        tile.setPlayer(bedUser);
+                    }
+                }
+            } else {
+                worldIn.setBlockToAir(pos);
+                BlockPos blockpos1 = pos.offset(((EnumFacing) state.getValue(FACING)).getOpposite());
+
+                if (worldIn.getBlockState(blockpos1).getBlock() == this) {
+                    worldIn.setBlockToAir(blockpos1);
+                }
+
+                worldIn.newExplosion(null, (double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D, 5.0F, true, true);
                 return true;
             }
         }
 
-        boolean occupiedPre = ((Boolean) state.getValue(OCCUPIED)).booleanValue();
-        super.onBlockActivated(worldIn, pos, state, playerIn, side, hitX, hitY, hitZ);
-        boolean occupiedPost = ((Boolean) state.getValue(OCCUPIED)).booleanValue();
-
-        if (!occupiedPre && occupiedPost) {
-            // We have a new bed user.
-            if (worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos) instanceof TileEntitySecuredBed) {
-                TileEntitySecuredBed bed = (TileEntitySecuredBed) worldIn.getTileEntity(pos);
-
-                bed.setPlayer(playerIn);
-            }
-        }
-
         return true;
+    }
+
+    protected EntityPlayer getPlayerInBed(World worldIn, BlockPos pos) {
+        Iterator iterator = worldIn.playerEntities.iterator();
+        EntityPlayer entityplayer;
+
+        do {
+            if (!iterator.hasNext()) {
+                return null;
+            }
+
+            entityplayer = (EntityPlayer) iterator.next();
+        }
+        while (!entityplayer.isPlayerSleeping() || !entityplayer.playerLocation.equals(pos));
+
+        return entityplayer;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public Item getItem(World worldIn, BlockPos pos) {
+        return ArchimedesObjects.itemSecuredBed;
+    }
+
+    public boolean isBed(IBlockAccess world, BlockPos pos, Entity player) {
+        return this instanceof BlockBed;
+    }
+
+    @Override
+    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+        return state.getValue(PART) == BlockBed.EnumPartType.HEAD ? null : ArchimedesObjects.itemSecuredBed;
     }
 
     @Override

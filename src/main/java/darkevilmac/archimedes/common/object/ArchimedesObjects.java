@@ -3,16 +3,14 @@ package darkevilmac.archimedes.common.object;
 import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.common.object.block.*;
 import darkevilmac.archimedes.common.object.item.ItemGaugeBlock;
+import darkevilmac.archimedes.common.object.item.ItemSecuredBed;
 import darkevilmac.archimedes.common.tileentity.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemCloth;
-import net.minecraft.item.ItemDye;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -38,13 +36,20 @@ public class ArchimedesObjects {
     public static Block blockAnchorPoint;
     public static Block blockSecuredBed;
 
+    public static Item itemSecuredBed;
+
     public static Material materialFloater;
     public static HashMap<String, Block> registeredBlocks;
+    private static HashMap<String, Item> registeredItems;
 
     public void preInit(FMLPreInitializationEvent e) {
         registeredBlocks = new HashMap<String, Block>();
+        registeredItems = new HashMap<String, Item>();
 
         materialFloater = new Material(MapColor.clothColor);
+
+        itemSecuredBed = new ItemSecuredBed().setMaxStackSize(1);
+        registerItem("securedBed", itemSecuredBed);
 
         blockMarkShip = (BlockHelm) new BlockHelm().setCreativeTab(ArchimedesShipMod.creativeTab);
         blockMarkShip.setStepSound(Block.soundTypeWood).setHardness(1F).setResistance(1F);
@@ -86,9 +91,9 @@ public class ArchimedesObjects {
         blockAnchorPoint.setStepSound(Block.soundTypePiston);
         registerBlock("anchorPoint", blockAnchorPoint);
 
-        blockSecuredBed = new BlockSecuredBed().setHardness(0.2F).setCreativeTab(ArchimedesShipMod.creativeTab);
+        blockSecuredBed = new BlockSecuredBed().setHardness(0.2F);
         blockSecuredBed.setStepSound(Block.soundTypeWood);
-        registerBlock("securedBed", blockSecuredBed);
+        registerBlockNoItemBlock("securedBed", blockSecuredBed);
     }
 
     public void init(FMLInitializationEvent e) {
@@ -133,13 +138,27 @@ public class ArchimedesObjects {
     public void postInit(FMLPostInitializationEvent e) {
     }
 
+    private void registerBlockNoItemBlock(String id, Block block) {
+        block.setUnlocalizedName("archimedes." + id);
+        GameRegistry.registerBlock(block, null, id);
+        ArchimedesObjects.registeredBlocks.put(id, block);
+    }
+
     private void registerBlock(String id, Block block) {
-        registerBlock(id, block, ItemBlock.class);
+        block.setUnlocalizedName("archimedes." + id);
+        GameRegistry.registerBlock(block, id);
+        ArchimedesObjects.registeredBlocks.put(id, block);
     }
 
     private void registerBlock(String id, Block block, Class<? extends ItemBlock> itemBlockClass) {
         block.setUnlocalizedName("archimedes." + id);
         GameRegistry.registerBlock(block, itemBlockClass, id);
         ArchimedesObjects.registeredBlocks.put(id, block);
+    }
+
+    private void registerItem(String id, Item item) {
+        item.setUnlocalizedName("archimedes." + id);
+        GameRegistry.registerItem(item, id);
+        ArchimedesObjects.registeredItems.put(id, item);
     }
 }

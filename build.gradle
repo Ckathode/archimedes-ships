@@ -10,17 +10,13 @@ buildscript {
             name = 'sonatype-snapshots'
             url = 'https://oss.sonatype.org/content/repositories/snapshots'
         }
-    }
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
-    }
-}
-
-repositories {
-    mavenCentral()
-    maven {
-        url 'http://repo.spongepowered.org/maven'
-    }
+		maven {
+			url 'http://repo.spongepowered.org/maven'
+		}
+		dependencies {
+			classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+		}
+	}	
 }
 
 apply plugin: 'forge'
@@ -30,7 +26,7 @@ group = "darkevilmac.archimedesshipsplus" // http://maven.apache.org/guides/mini
 archivesBaseName = "archimedesshipsplus"
 
 minecraft {
-    version = "1.8-11.14.3.1486"
+    version = "1.8-11.14.3.1502"
     runDir = "run"
 
     replace '@AS+VER@', project.version
