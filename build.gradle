@@ -14,50 +14,41 @@ buildscript {
 			url 'http://repo.spongepowered.org/maven'
 		}
 		dependencies {
-			classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+			classpath 'net.minecraftforge.gradle:ForgeGradle:2.0-SNAPSHOT'
 		}
-	}	
+	}
 }
 
-apply plugin: 'forge'
+apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "MC1.8-V1.8"
-group = "darkevilmac.archimedesshipsplus" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "archimedesshipsplus"
+version = 'MC1.8-V1.8'
+group = 'darkevilmac.archimedesshipsplus'
+archivesBaseName = 'archimedesshipsplus'
 
 minecraft {
-    version = "1.8-11.14.3.1502"
-    runDir = "run"
+    version = '1.8-11.14.3.1520'
+    runDir = 'run'
 
     replace '@AS+VER@', project.version
 
-    // the mappings can be changed at any time, and must be in the following format.
-    // snapshot_YYYYMMDD   snapshot are built nightly.
-    // stable_#            stables are built at the discretion of the MCP team.
-    // Use non-default mappings at your own risk. they may not always work.
-    // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "snapshot_20150602"
+    mappings = 'snapshot_20150602'
 }
 
 dependencies {
-    compile project(":MovingWorld")
+    compile project(':MovingWorld')
 }
 
 processResources
         {
-            // this will ensure that this task is redone when the versions change.
-            inputs.property "version", project.version
-            inputs.property "mcversion", project.minecraft.version
+            inputs.property 'version', project.version
+            inputs.property 'mcversion', project.minecraft.version
 
-            // replace stuff in mcmod.info, nothing else
             from(sourceSets.main.resources.srcDirs) {
                 include 'mcmod.info'
 
-                // replace version and mcversion
                 expand 'version': project.version, 'mcversion': project.minecraft.version
             }
 
-            // copy everything else, thats not the mcmod.info
             from(sourceSets.main.resources.srcDirs) {
                 exclude 'mcmod.info'
             }
