@@ -10,13 +10,10 @@ buildscript {
             name = 'sonatype-snapshots'
             url = 'https://oss.sonatype.org/content/repositories/snapshots'
         }
-		maven {
-			url 'http://repo.spongepowered.org/maven'
-		}
-		dependencies {
-			classpath 'net.minecraftforge.gradle:ForgeGradle:2.0-SNAPSHOT'
-		}
-	}
+        dependencies {
+            classpath 'net.minecraftforge.gradle:ForgeGradle:2.0-SNAPSHOT'
+        }
+    }
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -54,6 +51,16 @@ processResources
             }
         }
 
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'http://repo.spongepowered.org/maven'
+    }
+    maven {
+        url 'https://oss.sonatype.org/content/groups/public'
+    }
+}
 idea {
     workspace {
         iws.withXml { xmlFile ->

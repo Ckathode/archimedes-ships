@@ -43,7 +43,26 @@ public class TileEntityCrate extends TileEntity implements IMovingWorldTileEntit
 
     @Override
     public void tick(MobileChunk mobileChunk) {
-        // No implementation.
+        // We'll try using this experimental tick function (sort of experimental) to keep the entity on the ship...?
+        if (containedEntity == null) {
+            if (refreshTime > 0) {
+                refreshTime--;
+            }
+        } else if (containedEntity.isDead) {
+            setContainedEntity(null);
+        } else {
+            containedEntity.motionX = containedEntity.motionY = containedEntity.motionZ = 0d;
+            if (parentShip == null) {
+                containedEntity.setPosition(pos.getX() + 0.5d, pos.getY() + 0.15f + containedEntity.getYOffset(), pos.getZ() + 0.5d);
+            } else {
+                parentShip.updateRiderPosition(containedEntity, pos, 2);
+            }
+
+            if (containedEntity.hurtResistantTime > 0 || containedEntity.isSneaking()) {
+                containedEntity.posY += 1d;
+                releaseEntity();
+            }
+        }
     }
 
     public boolean canCatchEntity() {

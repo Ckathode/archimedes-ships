@@ -1,6 +1,7 @@
 package darkevilmac.archimedes.common.entity;
 
 import darkevilmac.archimedes.ArchimedesShipMod;
+import darkevilmac.archimedes.common.handler.ConnectionHandler;
 import darkevilmac.archimedes.common.object.ArchimedesObjects;
 import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
 import darkevilmac.archimedes.common.tileentity.TileEntitySecuredBed;
@@ -63,6 +64,8 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
                 TileEntitySecuredBed securedBed = (TileEntitySecuredBed) locatedBlock.tileEntity;
 
                 securedBed.doMove = true;
+                ConnectionHandler.playerBedMap.remove(securedBed.playerID);
+                securedBed.addToConnectionMap(securedBed.playerID);
                 securedBed.moveBed(locatedBlock.blockPos);
             }
         }

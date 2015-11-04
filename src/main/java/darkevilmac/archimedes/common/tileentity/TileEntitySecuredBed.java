@@ -1,7 +1,6 @@
 package darkevilmac.archimedes.common.tileentity;
 
 import darkevilmac.archimedes.common.handler.ConnectionHandler;
-import darkevilmac.archimedes.common.util.NBTTagUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -14,12 +13,13 @@ public class TileEntitySecuredBed extends TileEntity {
     public UUID playerID;
     public boolean doMove;
 
-    public BlockPos previousPosition;
-
     public TileEntitySecuredBed() {
     }
 
     public void setPlayer(EntityPlayer player) {
+        if (worldObj != null && worldObj.isRemote)
+            return;
+
         if (player != null) {
             this.playerID = player.getGameProfile().getId();
             addToConnectionMap(playerID);
@@ -29,10 +29,12 @@ public class TileEntitySecuredBed extends TileEntity {
         doMove = false;
     }
 
-    private void addToConnectionMap(UUID playerID) {
+    public void addToConnectionMap(UUID playerID) {
+        if (worldObj != null && worldObj.isRemote)
+            return;
+
         if (!ConnectionHandler.playerBedMap.containsKey(playerID)) {
             if ((ConnectionHandler.playerBedMap.containsKey(playerID) && ConnectionHandler.playerBedMap.get(playerID) != this)) {
-                EntityPlayer player = worldObj.getPlayerEntityByUUID(playerID);
                 TileEntitySecuredBed prevBed = ConnectionHandler.playerBedMap.get(playerID);
 
                 prevBed.setPlayer(null);
@@ -44,27 +46,38 @@ public class TileEntitySecuredBed extends TileEntity {
     }
 
     public void moveBed(BlockPos newPos) {
-        if (playerID != null && doMove) {
+        if (worldObj != null && worldObj.isRemote)
+            return;
+
+        if (playerID != null) {
+            addToConnectionMap(playerID);
+
+            if (!doMove)
+                return;
+
             if (worldObj.getPlayerEntityByUUID(playerID) != null) {
                 worldObj.getPlayerEntityByUUID(playerID).setSpawnPoint(newPos, true);
                 doMove = false;
-            } else {
-                doMove = true;
             }
         }
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
+        if (worldObj != null && worldObj.isRemote)
+            return;
+
         if (playerID != null)
             tag.setString("uuid", playerID.toString());
 
         tag.setBoolean("doMove", doMove);
-        NBTTagUtils.writeVec3iToNBT(tag, "previousPosition", previousPosition);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
+        if (worldObj != null && worldObj.isRemote)
+            return;
+
         if (tag.hasKey("uuid"))
             playerID = UUID.fromString(tag.getString("uuid"));
 
@@ -73,6 +86,5 @@ public class TileEntitySecuredBed extends TileEntity {
         if (playerID != null && !ConnectionHandler.playerBedMap.containsKey(playerID) && doMove) {
             ConnectionHandler.playerBedMap.put(playerID, this);
         }
-        previousPosition = new BlockPos(NBTTagUtils.readVec3iFromNBT(tag, "previousPosition"));
     }
 }

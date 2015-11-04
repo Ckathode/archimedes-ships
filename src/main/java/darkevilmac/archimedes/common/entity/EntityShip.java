@@ -258,7 +258,7 @@ public class EntityShip extends EntityMovingWorld {
     @Override
     @SideOnly(Side.CLIENT)
     public void spawnParticles(double horvel) {
-        if (capabilities.getEngines() != null) {
+        if (capabilities.getEngines() != null && !capabilities.getEngines().isEmpty()) {
             Vec3Mod vec = Vec3Mod.getOrigin();
             float yaw = (float) Math.toRadians(rotationYaw);
             for (ITileEngineModifier engine : capabilities.getEngines()) {

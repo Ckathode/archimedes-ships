@@ -40,8 +40,8 @@ public class ConnectionHandler {
     private void handleBedLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (playerBedMap.containsKey(event.player.getGameProfile().getId())) {
             TileEntitySecuredBed bed = playerBedMap.get(event.player.getGameProfile().getId());
-            if (bed.doMove)
-                bed.moveBed(bed.getPos());
+            bed.playerID = event.player.getGameProfile().getId();
+            bed.moveBed(bed.getPos());
         }
     }
 
