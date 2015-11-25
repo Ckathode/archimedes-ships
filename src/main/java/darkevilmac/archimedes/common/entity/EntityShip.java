@@ -64,7 +64,7 @@ public class EntityShip extends EntityMovingWorld {
                         hasEngines = capabilities.getEnginePower() > 0;
                     }
                 }
-                if (ArchimedesShipMod.instance.modConfig.enginesMandatory)
+                if (ArchimedesShipMod.instance.getConfig().enginesMandatory)
                     getDataWatcher().updateObject(28, new Byte(hasEngines ? (byte) 1 : (byte) 0));
                 else
                     getDataWatcher().updateObject(28, new Byte((byte) 1));
@@ -210,7 +210,7 @@ public class EntityShip extends EntityMovingWorld {
 
         if (riddenByEntity == null) {
             if (prevRiddenByEntity != null) {
-                if (ArchimedesShipMod.instance.modConfig.disassembleOnDismount) {
+                if (ArchimedesShipMod.instance.getConfig().disassembleOnDismount) {
                     alignToAnchor();
                     updateRiderPosition(prevRiddenByEntity, riderDestination, 1);
                     disassemble(false);
@@ -332,8 +332,12 @@ public class EntityShip extends EntityMovingWorld {
             motionY += buoyancyforce / mass;
         }
 
-        if (!isFlying() || (submergeMode && belowWater <= (getMobileChunk().maxY() * 5 / 3 * 2))) {
-            motionY -= gravity;
+        if (ArchimedesShipMod.instance.getConfig().enableShipDownfall) {
+            if (!isFlying() || (submergeMode && belowWater <= (getMobileChunk().maxY() * 5 / 3 * 2)))
+                motionY -= gravity;
+        } else {
+            if (!capabilities.canFly() && !capabilities.canSubmerge())
+                motionY -= gravity;
         }
 
         super.handleServerUpdate(horizontalVelocity);
@@ -341,7 +345,7 @@ public class EntityShip extends EntityMovingWorld {
 
     @Override
     public void handleServerUpdatePreRotation() {
-        if (ArchimedesShipMod.instance.modConfig.shipControlType == ArchimedesConfig.CONTROL_TYPE_VANILLA) {
+        if (ArchimedesShipMod.instance.getConfig().shipControlType == ArchimedesConfig.CONTROL_TYPE_VANILLA) {
             double newYaw = rotationYaw;
             double dx = prevPosX - posX;
             double dz = prevPosZ - posZ;
@@ -399,13 +403,13 @@ public class EntityShip extends EntityMovingWorld {
                 throttle *= 0.5D;
             }
 
-            if (ArchimedesShipMod.instance.modConfig.shipControlType == ArchimedesConfig.CONTROL_TYPE_ARCHIMEDES) {
+            if (ArchimedesShipMod.instance.getConfig().shipControlType == ArchimedesConfig.CONTROL_TYPE_ARCHIMEDES) {
                 Vec3Mod vec = new Vec3Mod(riddenByEntity.motionX, 0D, riddenByEntity.motionZ);
                 vec.rotateAroundY((float) Math.toRadians(riddenByEntity.rotationYaw));
 
                 double steer = ((EntityLivingBase) riddenByEntity).moveStrafing;
 
-                motionYaw += steer * BASE_TURN_SPEED * capabilities.getRotationMult() * ArchimedesShipMod.instance.modConfig.turnSpeed;
+                motionYaw += steer * BASE_TURN_SPEED * capabilities.getRotationMult() * ArchimedesShipMod.instance.getConfig().turnSpeed;
 
                 float yaw = (float) Math.toRadians(180F - rotationYaw + frontDirection.getHorizontalIndex() * 90F);
                 vec = vec.setX(motionX);
@@ -417,7 +421,7 @@ public class EntityShip extends EntityMovingWorld {
 
                 motionX = vec.xCoord;
                 motionZ = vec.zCoord;
-            } else if (ArchimedesShipMod.instance.modConfig.shipControlType == ArchimedesConfig.CONTROL_TYPE_VANILLA) {
+            } else if (ArchimedesShipMod.instance.getConfig().shipControlType == ArchimedesConfig.CONTROL_TYPE_VANILLA) {
                 if (throttle > 0.0D) {
                     double dsin = -Math.sin(Math.toRadians(riddenByEntity.rotationYaw));
                     double dcos = Math.cos(Math.toRadians(riddenByEntity.rotationYaw));

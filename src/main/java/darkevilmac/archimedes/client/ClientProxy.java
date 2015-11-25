@@ -30,6 +30,8 @@ import java.util.ArrayList;
 public class ClientProxy extends CommonProxy {
     public ShipKeyHandler shipKeyHandler;
 
+    public ArchimedesConfig syncedConfig;
+
     @Override
     public ClientHookContainer getHookContainer() {
         return new ClientHookContainer();

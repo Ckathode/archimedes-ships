@@ -1,11 +1,14 @@
 package darkevilmac.archimedes.common.handler;
 
+import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.common.entity.EntityParachute;
 import darkevilmac.archimedes.common.entity.EntitySeat;
 import darkevilmac.archimedes.common.entity.EntityShip;
+import darkevilmac.archimedes.common.network.ConfigMessage;
 import darkevilmac.archimedes.common.tileentity.TileEntitySecuredBed;
 import darkevilmac.movingworld.common.util.Vec3Mod;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -24,6 +27,7 @@ public class ConnectionHandler {
             return;
         if (event.player != null && event.player.worldObj != null && !event.player.worldObj.isRemote) {
             handleParachuteLogout(event);
+            handleConfigDesync(event);
         }
     }
 
@@ -34,7 +38,18 @@ public class ConnectionHandler {
         if (event.player != null && event.player.worldObj != null && !event.player.worldObj.isRemote) {
             handleParachuteLogin(event);
             handleBedLogin(event);
+            handlerConfigSync(event);
         }
+    }
+
+    private void handlerConfigSync(PlayerEvent.PlayerLoggedInEvent event) {
+        if (event.player instanceof EntityPlayerMP)
+            ArchimedesShipMod.instance.network.sendTo(new ConfigMessage(ArchimedesShipMod.instance.getConfig()), (EntityPlayerMP) event.player);
+    }
+
+    private void handleConfigDesync(PlayerEvent.PlayerLoggedOutEvent event) {
+        if (event.player instanceof EntityPlayerMP)
+            ArchimedesShipMod.instance.network.sendTo(new ConfigMessage(), (EntityPlayerMP) event.player);
     }
 
     private void handleBedLogin(PlayerEvent.PlayerLoggedInEvent event) {

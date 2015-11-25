@@ -2,6 +2,7 @@ package darkevilmac.archimedes;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ListMultimap;
+import darkevilmac.archimedes.client.ClientProxy;
 import darkevilmac.archimedes.common.ArchimedesConfig;
 import darkevilmac.archimedes.common.CommonProxy;
 import darkevilmac.archimedes.common.command.CommandASHelp;
@@ -61,11 +62,19 @@ public class ArchimedesShipMod {
 
     public static Logger modLog;
 
-    public ArchimedesConfig modConfig;
+    private ArchimedesConfig modConfig;
     public NetworkUtil network;
 
     public ArchimedesShipMod() {
         network = new NetworkUtil();
+    }
+
+    public ArchimedesConfig getConfig() {
+        if (FMLCommonHandler.instance().getSide().isClient()) {
+            if (((ClientProxy) proxy).syncedConfig != null)
+                return ((ClientProxy) proxy).syncedConfig;
+        }
+        return modConfig;
     }
 
     @Mod.EventHandler
