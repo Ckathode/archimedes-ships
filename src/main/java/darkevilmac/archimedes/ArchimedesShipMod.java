@@ -69,7 +69,7 @@ public class ArchimedesShipMod {
         network = new NetworkUtil();
     }
 
-    public ArchimedesConfig getConfig() {
+    public ArchimedesConfig getNetworkConfig() {
         if (FMLCommonHandler.instance().getSide().isClient()) {
             if (((ClientProxy) proxy).syncedConfig != null)
                 return ((ClientProxy) proxy).syncedConfig;

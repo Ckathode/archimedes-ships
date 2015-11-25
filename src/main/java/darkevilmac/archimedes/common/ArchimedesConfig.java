@@ -31,7 +31,6 @@ public class ArchimedesConfig {
     public int maxShipChunkBlocks;
     public float flyBalloonRatio;
     public float submersibleFillRatio;
-    public boolean useNewAlgorithm;
     //Control
     public int shipControlType;
     public float turnSpeed;
@@ -63,7 +62,6 @@ public class ArchimedesConfig {
         shipEntitySyncRate = config.get("settings", "sync_rate", 20, "The amount of ticks between a server-client synchronization. Higher numbers reduce network traffic. Lower numbers increase multiplayer experience. 20 ticks = 1 second").getInt();
         enableAirShips = config.get("settings", "enable_air_ships", true, "Enable or disable air ships.").getBoolean(true);
         enableSubmersibles = config.get("settings", "enable_submersibles", true, "Enable or disable the ability to submerse ships.").getBoolean(true);
-        useNewAlgorithm = config.get("settings", "use_iterative_assemble_algorithm", false, "New assemble algorithm implemented in v1.6.2. Allows for larger ships but is a heavier load for CPU.").getBoolean(false);
         bankingMultiplier = (float) config.get("settings", "banking_multiplier", 3d, "A multiplier for how much ships bank while making turns. Set a positive value for passive banking or a negative value for active banking. 0 disables banking.").getDouble(3d);
         enginesMandatory = config.get("settings", "mandatory_engines", false, "Are engines required for a ship to move?").getBoolean();
         enableShipDownfall = config.get("settings", "ship_fall", true, "Do ships slowly fall?").getBoolean();

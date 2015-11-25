@@ -32,7 +32,7 @@ public class ConfigMessage extends ArchimedesShipsMessage {
             return;
 
         if (config != null) {
-            String jsonCfg = new Gson().toJson(ArchimedesShipMod.instance.getConfig(), ArchimedesConfig.class);
+            String jsonCfg = new Gson().toJson(ArchimedesShipMod.instance.getNetworkConfig(), ArchimedesConfig.class);
             ByteBufUtils.writeUTF8String(buf, jsonCfg);
         } else {
             ByteBufUtils.writeUTF8String(buf, "N");

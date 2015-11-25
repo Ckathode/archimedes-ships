@@ -14,15 +14,15 @@ public class ArchimedesConfigGUI extends GuiConfig {
 
     public ArchimedesConfigGUI(GuiScreen parentScreen) {
         super(parentScreen, generateConfigList(), "ArchimedesShipsPlus",
-                false, false, GuiConfig.getAbridgedConfigPath(ArchimedesShipMod.instance.modConfig.getConfig().toString()));
+                false, false, GuiConfig.getAbridgedConfigPath(ArchimedesShipMod.instance.getNetworkConfig().getConfig().toString()));
     }
 
     public static List<IConfigElement> generateConfigList() {
 
         ArrayList<IConfigElement> elements = new ArrayList<IConfigElement>();
 
-        for (String name : ArchimedesShipMod.instance.modConfig.getConfig().getCategoryNames())
-            elements.add(new ConfigElement(ArchimedesShipMod.instance.modConfig.getConfig().getCategory(name)));
+        for (String name : ArchimedesShipMod.instance.getNetworkConfig().getConfig().getCategoryNames())
+            elements.add(new ConfigElement(ArchimedesShipMod.instance.getNetworkConfig().getConfig().getCategory(name)));
 
         return elements;
     }

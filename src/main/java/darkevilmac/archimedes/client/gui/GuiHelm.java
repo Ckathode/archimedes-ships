@@ -175,7 +175,7 @@ public class GuiHelm extends GuiContainer {
         if (rblocks == 0) {
             fontRendererObj.drawString(StatCollector.translateToLocal("gui.shipstatus.type.unknown"), col1, row, color);
         } else {
-            fontRendererObj.drawString(StatCollector.translateToLocal(balloonratio > ArchimedesShipMod.instance.modConfig.flyBalloonRatio ? "gui.shipstatus.type.airship" : "gui.shipstatus.type.boat"), col1, row, color);
+            fontRendererObj.drawString(StatCollector.translateToLocal(balloonratio > ArchimedesShipMod.instance.getNetworkConfig().flyBalloonRatio ? "gui.shipstatus.type.airship" : "gui.shipstatus.type.boat"), col1, row, color);
         }
 
         fontRendererObj.drawString(StatCollector.translateToLocal("gui.shipstatus.count.block"), col0, row += 10, color);

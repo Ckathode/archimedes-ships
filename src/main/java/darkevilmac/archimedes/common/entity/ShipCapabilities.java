@@ -184,7 +184,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
 
     @Override
     public boolean canFly() {
-        return (ArchimedesShipMod.instance.modConfig.enableAirShips && getBalloonCount() >= blockCount * ArchimedesShipMod.instance.modConfig.flyBalloonRatio)
+        return (ArchimedesShipMod.instance.getNetworkConfig().enableAirShips && getBalloonCount() >= blockCount * ArchimedesShipMod.instance.getNetworkConfig().flyBalloonRatio)
                 || ship.areSubmerged();
     }
 
@@ -195,9 +195,9 @@ public class ShipCapabilities extends MovingWorldCapabilities {
             int filledBlockCount = filledBlocks.size();
 
             canSubmerge = false;
-            if (ArchimedesShipMod.instance.modConfig.enableSubmersibles)
+            if (ArchimedesShipMod.instance.getNetworkConfig().enableSubmersibles)
                 canSubmerge =
-                        filledBlockCount < (nonAirBlockCount * ArchimedesShipMod.instance.modConfig.submersibleFillRatio);
+                        filledBlockCount < (nonAirBlockCount * ArchimedesShipMod.instance.getNetworkConfig().submersibleFillRatio);
             submerseFound = true;
         }
 
@@ -263,7 +263,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
             mass += ((IBlockCustomMass) block).getCustomMass();
         }
 
-        if (ArchimedesShipMod.instance.modConfig.isBalloon(block) || block instanceof IBlockBalloon) {
+        if (ArchimedesShipMod.instance.getNetworkConfig().isBalloon(block) || block instanceof IBlockBalloon) {
             if (block instanceof IBlockBalloon) {
                 //IBlockBalloon takes priority.
                 balloonCount += ((IBlockBalloon) block).getBalloonWorth();
@@ -393,12 +393,12 @@ public class ShipCapabilities extends MovingWorldCapabilities {
 
     @Override
     public float getSpeedLimit() {
-        return ArchimedesShipMod.instance.modConfig.speedLimit;
+        return ArchimedesShipMod.instance.getNetworkConfig().speedLimit;
     }
 
     @Override
     public float getBankingMultiplier() {
-        return ArchimedesShipMod.instance.modConfig.bankingMultiplier;
+        return ArchimedesShipMod.instance.getNetworkConfig().bankingMultiplier;
     }
 
 
