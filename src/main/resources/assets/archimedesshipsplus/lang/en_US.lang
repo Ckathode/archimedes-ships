@@ -38,6 +38,8 @@ tile.archimedes.engine.name=Steam Engine
 tile.archimedes.crate_wood.name=Wooden Crate
 tile.archimedes.anchorPoint.name=Anchor Point
 
+item.archimedes.securedBed.name=Secured Bed
+
 key.archimedes.up=Ascent
 key.archimedes.down=Descent
 key.archimedes.brake=Brake

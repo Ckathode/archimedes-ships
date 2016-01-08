@@ -11,7 +11,7 @@ buildscript {
             url = 'https://oss.sonatype.org/content/repositories/snapshots'
         }
         dependencies {
-            classpath 'net.minecraftforge.gradle:ForgeGradle:2.0-SNAPSHOT'
+            classpath 'net.minecraftforge.gradle:ForgeGradle:2.0-20151205.212842-160'
         }
     }
 }
@@ -23,7 +23,7 @@ group = 'darkevilmac.archimedesshipsplus'
 archivesBaseName = 'archimedesshipsplus'
 
 minecraft {
-    version = '1.8-11.14.3.1520'
+    version = '1.8-11.14.4.1577'
     runDir = 'run'
 
     replace '@AS+VER@', project.version

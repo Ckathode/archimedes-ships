@@ -1,7 +1,6 @@
 package darkevilmac.archimedes.common.object.item;
 
 
-import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.common.object.ArchimedesObjects;
 import darkevilmac.archimedes.common.object.block.BlockSecuredBed;
 import net.minecraft.block.Block;
@@ -17,7 +16,7 @@ import net.minecraft.world.World;
 public class ItemSecuredBed extends Item {
 
     public ItemSecuredBed() {
-        this.setCreativeTab(ArchimedesShipMod.creativeTab);
+        super();
     }
 
     /**

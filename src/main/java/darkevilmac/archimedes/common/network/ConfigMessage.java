@@ -1,6 +1,7 @@
 package darkevilmac.archimedes.common.network;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.client.ClientProxy;
 import darkevilmac.archimedes.common.ArchimedesConfig;
@@ -16,41 +17,45 @@ import net.minecraftforge.fml.relauncher.Side;
  */
 public class ConfigMessage extends ArchimedesShipsMessage {
 
-    public ArchimedesConfig config;
+    public ArchimedesConfig.SharedConfig config;
 
     public ConfigMessage() {
         config = null;
     }
 
-    public ConfigMessage(ArchimedesConfig cfg) {
+    public ConfigMessage(ArchimedesConfig.SharedConfig cfg) {
         this.config = cfg;
     }
 
     @Override
     public void encodeInto(ChannelHandlerContext ctx, ByteBuf buf, Side side) {
-        if (!FMLCommonHandler.instance().getSide().isServer())
-            return;
-
-        if (config != null) {
-            String jsonCfg = new Gson().toJson(ArchimedesShipMod.instance.getNetworkConfig(), ArchimedesConfig.class);
-            ByteBufUtils.writeUTF8String(buf, jsonCfg);
-        } else {
-            ByteBufUtils.writeUTF8String(buf, "N");
+        if (FMLCommonHandler.instance().getSide().isServer()) {
+            if (config != null) {
+                GsonBuilder builder = new GsonBuilder();
+                String jsonCfg = builder.create().toJson(ArchimedesShipMod.instance.getNetworkConfig().getShared(), ArchimedesConfig.SharedConfig.class);
+                ByteBufUtils.writeUTF8String(buf, jsonCfg);
+            } else {
+                ByteBufUtils.writeUTF8String(buf, "N");
+            }
         }
     }
 
     @Override
     public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf, EntityPlayer player, Side side) {
-        String msg = ByteBufUtils.readUTF8String(buf);
-        if (!msg.equals("N"))
-            config = new Gson().fromJson(msg, ArchimedesConfig.class);
-        else
-            config = null;
+        if (FMLCommonHandler.instance().getSide().isClient() && !buf.toString().contains("Empty")) {
+            String msg = ByteBufUtils.readUTF8String(buf);
+            if (!msg.equals("N")) {
+                config = new Gson().fromJson(msg, ArchimedesConfig.SharedConfig.class);
+            } else config = null;
+        }
     }
 
     @Override
     public void handleClientSide(EntityPlayer player) {
-        ((ClientProxy) ArchimedesShipMod.proxy).syncedConfig = this.config;
+        if (config != null) {
+            ((ClientProxy) ArchimedesShipMod.proxy).syncedConfig = ArchimedesShipMod.instance.getLocalConfig();
+            ((ClientProxy) ArchimedesShipMod.proxy).syncedConfig.setShared(config);
+        }
     }
 
     @Override

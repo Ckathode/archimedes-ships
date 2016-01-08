@@ -80,7 +80,10 @@ public class TileEntityHelm extends TileMovingWorldMarkingBlock {
 
     @Override
     public int getMaxBlocks() {
-        return ArchimedesShipMod.instance.getNetworkConfig().maxShipChunkBlocks;
+        return ArchimedesShipMod.instance.
+                getNetworkConfig().
+                getShared()
+                .maxShipChunkBlocks;
     }
 
     @Override

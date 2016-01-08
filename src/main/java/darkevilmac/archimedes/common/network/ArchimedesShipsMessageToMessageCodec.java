@@ -12,7 +12,6 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-
 public class ArchimedesShipsMessageToMessageCodec extends FMLIndexedMessageToMessageCodec<ArchimedesShipsMessage> {
 
     private int index;
@@ -26,6 +25,7 @@ public class ArchimedesShipsMessageToMessageCodec extends FMLIndexedMessageToMes
         addDiscriminator(ControlInputMessage.class);
         addDiscriminator(TranslatedChatMessage.class);
         addDiscriminator(ClientChangeSubmerseMessage.class);
+        addDiscriminator(ConfigMessage.class);
     }
 
     public FMLIndexedMessageToMessageCodec<ArchimedesShipsMessage> addDiscriminator(Class<? extends ArchimedesShipsMessage> type) {

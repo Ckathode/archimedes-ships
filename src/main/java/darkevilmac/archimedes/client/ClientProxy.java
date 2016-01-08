@@ -90,7 +90,6 @@ public class ClientProxy extends CommonProxy {
         }
 
         ModelBakery.addVariantName(itemToRegister, variantsArray);
-
         ModelBakery.addVariantName(Item.getItemFromBlock(ArchimedesShipMod.objects.blockGauge), ArchimedesShipMod.RESOURCE_DOMAIN + "gauge", ArchimedesShipMod.RESOURCE_DOMAIN + "gauge_ext");
     }
 
@@ -101,11 +100,16 @@ public class ClientProxy extends CommonProxy {
         ItemModelMesher modelMesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
 
         // Do some general render registrations for objects, not considering meta.
-
         for (int i = 0; i < ArchimedesShipMod.objects.registeredBlocks.size(); i++) {
             modelResourceLocation = new ModelResourceLocation(ArchimedesShipMod.RESOURCE_DOMAIN + ArchimedesShipMod.objects.registeredBlocks.keySet().toArray()[i], "inventory");
             itemToRegister = Item.getItemFromBlock((Block) ArchimedesShipMod.objects.registeredBlocks.values().toArray()[i]);
 
+            modelMesher.register(itemToRegister, 0, modelResourceLocation);
+        }
+
+        for (int i = 0; i < ArchimedesShipMod.objects.registeredItems.size(); i++) {
+            modelResourceLocation = new ModelResourceLocation(ArchimedesShipMod.RESOURCE_DOMAIN + ArchimedesShipMod.objects.registeredItems.keySet().toArray()[i], "inventory");
+            itemToRegister = (Item) ArchimedesShipMod.objects.registeredItems.values().toArray()[i];
             modelMesher.register(itemToRegister, 0, modelResourceLocation);
         }
 
@@ -122,6 +126,8 @@ public class ClientProxy extends CommonProxy {
             modelResourceLocation = new ModelResourceLocation(ArchimedesShipMod.RESOURCE_DOMAIN + "balloon_" + color.getName(), "inventory");
             modelMesher.register(itemToRegister, color.getMetadata(), modelResourceLocation);
         }
+
+
     }
 
 }

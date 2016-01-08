@@ -184,7 +184,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
 
     @Override
     public boolean canFly() {
-        return (ArchimedesShipMod.instance.getNetworkConfig().enableAirShips && getBalloonCount() >= blockCount * ArchimedesShipMod.instance.getNetworkConfig().flyBalloonRatio)
+        return (ArchimedesShipMod.instance.getNetworkConfig().getShared().enableAirShips && getBalloonCount() >= blockCount * ArchimedesShipMod.instance.getNetworkConfig().getShared().flyBalloonRatio)
                 || ship.areSubmerged();
     }
 
@@ -195,9 +195,9 @@ public class ShipCapabilities extends MovingWorldCapabilities {
             int filledBlockCount = filledBlocks.size();
 
             canSubmerge = false;
-            if (ArchimedesShipMod.instance.getNetworkConfig().enableSubmersibles)
+            if (ArchimedesShipMod.instance.getNetworkConfig().getShared().enableSubmersibles)
                 canSubmerge =
-                        filledBlockCount < (nonAirBlockCount * ArchimedesShipMod.instance.getNetworkConfig().submersibleFillRatio);
+                        filledBlockCount < (nonAirBlockCount * ArchimedesShipMod.instance.getNetworkConfig().getShared().submersibleFillRatio);
             submerseFound = true;
         }
 
@@ -393,12 +393,12 @@ public class ShipCapabilities extends MovingWorldCapabilities {
 
     @Override
     public float getSpeedLimit() {
-        return ArchimedesShipMod.instance.getNetworkConfig().speedLimit;
+        return ArchimedesShipMod.instance.getNetworkConfig().getShared().speedLimit;
     }
 
     @Override
     public float getBankingMultiplier() {
-        return ArchimedesShipMod.instance.getNetworkConfig().bankingMultiplier;
+        return ArchimedesShipMod.instance.getNetworkConfig().getShared().bankingMultiplier;
     }
 
 

@@ -40,7 +40,7 @@ public class ArchimedesObjects {
 
     public static Material materialFloater;
     public static HashMap<String, Block> registeredBlocks;
-    private static HashMap<String, Item> registeredItems;
+    public static HashMap<String, Item> registeredItems;
 
     public void preInit(FMLPreInitializationEvent e) {
         registeredBlocks = new HashMap<String, Block>();
@@ -48,7 +48,7 @@ public class ArchimedesObjects {
 
         materialFloater = new Material(MapColor.clothColor);
 
-        itemSecuredBed = new ItemSecuredBed().setMaxStackSize(1);
+        itemSecuredBed = new ItemSecuredBed().setMaxStackSize(1).setCreativeTab(ArchimedesShipMod.creativeTab);
         registerItem("securedBed", itemSecuredBed);
 
         blockMarkShip = (BlockHelm) new BlockHelm().setCreativeTab(ArchimedesShipMod.creativeTab);

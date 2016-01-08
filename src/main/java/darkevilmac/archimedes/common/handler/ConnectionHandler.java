@@ -44,7 +44,7 @@ public class ConnectionHandler {
 
     private void handlerConfigSync(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.player instanceof EntityPlayerMP)
-            ArchimedesShipMod.instance.network.sendTo(new ConfigMessage(ArchimedesShipMod.instance.getNetworkConfig()), (EntityPlayerMP) event.player);
+            ArchimedesShipMod.instance.network.sendTo(new ConfigMessage(ArchimedesShipMod.instance.getNetworkConfig().getShared()), (EntityPlayerMP) event.player);
     }
 
     private void handleConfigDesync(PlayerEvent.PlayerLoggedOutEvent event) {

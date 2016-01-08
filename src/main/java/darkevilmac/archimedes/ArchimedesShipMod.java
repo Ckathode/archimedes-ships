@@ -61,9 +61,8 @@ public class ArchimedesShipMod {
     public static ArchimedesObjects objects;
 
     public static Logger modLog;
-
-    private ArchimedesConfig modConfig;
     public NetworkUtil network;
+    private ArchimedesConfig localConfig;
 
     public ArchimedesShipMod() {
         network = new NetworkUtil();
@@ -74,7 +73,11 @@ public class ArchimedesShipMod {
             if (((ClientProxy) proxy).syncedConfig != null)
                 return ((ClientProxy) proxy).syncedConfig;
         }
-        return modConfig;
+        return localConfig;
+    }
+
+    public ArchimedesConfig getLocalConfig() {
+        return localConfig;
     }
 
     @Mod.EventHandler
@@ -86,10 +89,10 @@ public class ArchimedesShipMod {
 
         objects.preInit(event);
 
-        modConfig = new ArchimedesConfig(new Configuration(event.getSuggestedConfigurationFile()));
-        modConfig.loadAndSave();
+        localConfig = new ArchimedesConfig(new Configuration(event.getSuggestedConfigurationFile()));
+        localConfig.loadAndSave();
 
-        modConfig.postLoad();
+        localConfig.postLoad();
         proxy.registerRenderers(event.getModState());
     }
 
@@ -102,15 +105,15 @@ public class ArchimedesShipMod {
         MinecraftForge.EVENT_BUS.register(new ConnectionHandler());
         FMLCommonHandler.instance().bus().register(new ConnectionHandler());
 
-        EntityRegistry.registerModEntity(EntityShip.class, "shipmod", 1, this, 64, modConfig.shipEntitySyncRate, true);
+        EntityRegistry.registerModEntity(EntityShip.class, "shipmod", 1, this, 64, localConfig.getShared().shipEntitySyncRate, true);
         EntityRegistry.registerModEntity(EntitySeat.class, "attachment.seat", 2, this, 64, 100, false);
-        EntityRegistry.registerModEntity(EntityParachute.class, "parachute", 3, this, 32, modConfig.shipEntitySyncRate, true);
+        EntityRegistry.registerModEntity(EntityParachute.class, "parachute", 3, this, 32, localConfig.getShared().shipEntitySyncRate, true);
 
-        proxy.registerKeyHandlers(modConfig);
+        proxy.registerKeyHandlers(localConfig);
         proxy.registerEventHandlers();
         proxy.registerRenderers(event.getModState());
 
-        modConfig.addBlacklistWhitelistEntries();
+        localConfig.addBlacklistWhitelistEntries();
     }
 
     @Mod.EventHandler

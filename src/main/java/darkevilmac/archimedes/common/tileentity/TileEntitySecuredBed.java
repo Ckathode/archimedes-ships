@@ -64,6 +64,7 @@ public class TileEntitySecuredBed extends TileEntity {
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
+        super.writeToNBT(tag);
         if (worldObj != null && worldObj.isRemote)
             return;
 
@@ -75,6 +76,7 @@ public class TileEntitySecuredBed extends TileEntity {
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
+        super.readFromNBT(tag);
         if (worldObj != null && worldObj.isRemote)
             return;
 
