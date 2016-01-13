@@ -87,7 +87,7 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
     }
 
     @Override
-    public AxisAlignedBB getBoundingBox() {
+    public AxisAlignedBB getEntityBoundingBox() {
         return null;
     }
 

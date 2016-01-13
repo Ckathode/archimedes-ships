@@ -21,6 +21,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.*;
+import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -99,7 +100,7 @@ public class TileEntityHelmRenderer extends TileEntitySpecialRenderer {
             bindTexture(TextureMap.locationBlocksTexture);
             modelBaked = helmModels.get(blockStateFacing);
         }
-        worldRenderer.startDrawingQuads();
+        worldRenderer.begin(GL11.GL_QUADS,Attributes.DEFAULT_BAKED_FORMAT);
         GlStateManager.translate(newX, newY, newZ);
 
         if (modelBaked != null) {
@@ -126,8 +127,7 @@ public class TileEntityHelmRenderer extends TileEntitySpecialRenderer {
 
             for (BakedQuad q : generalQuads) {
                 int[] vd = q.getVertexData();
-                worldRenderer.setVertexFormat(Attributes.DEFAULT_BAKED_FORMAT);
-                worldRenderer.setColorOpaque_F(1.0F, 1.0F, 1.0F);
+                worldRenderer.color(1.0F, 1.0F, 1.0F, 1.0F);
                 worldRenderer.addVertexData(vd);
             }
 

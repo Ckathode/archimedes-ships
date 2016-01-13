@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
@@ -72,13 +73,13 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
         GlStateManager.translate(-0.28125F, 0.02F, -0.28125F);
         GlStateManager.rotate(northGaugeAngle, 0F, 1F, 0F);
 
-        worldRenderer.startDrawing(GL11.GL_LINES);
-        worldRenderer.setColorOpaque_F(1F, 0F, 0F);
-        worldRenderer.addVertex(0D, 0D, 0D);
-        worldRenderer.addVertex(0D, 0D, 0.15D);
-        worldRenderer.setColorOpaque_F(1F, 1F, 1F);
-        worldRenderer.addVertex(0D, 0D, 0D);
-        worldRenderer.addVertex(0D, 0D, -0.15D);
+        worldRenderer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+        worldRenderer.color(1F, 0F, 0F, 1F);
+        worldRenderer.pos(0D, 0D, 0D).endVertex();
+        worldRenderer.pos(0D, 0D, 0.15D).endVertex();
+        worldRenderer.color(1F, 1F, 1F, 1F);
+        worldRenderer.pos(0D, 0D, 0D).endVertex();
+        worldRenderer.pos(0D, 0D, -0.15D).endVertex();
         tess.draw();
         GlStateManager.popMatrix();
 
@@ -87,10 +88,10 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
         GlStateManager.translate(0.25F, 0.02F, -0.25F);
         GlStateManager.rotate(velGaugeAngle, 0F, 1F, 0F);
 
-        worldRenderer.startDrawing(GL11.GL_LINES);
-        worldRenderer.setColorOpaque_F(0F, 0F, 0.5F);
-        worldRenderer.addVertex(0D, 0D, 0D);
-        worldRenderer.addVertex(0D, 0D, 0.2D);
+        worldRenderer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+        worldRenderer.color(0F, 0F, 0.5F, 1F);
+        worldRenderer.pos(0D, 0D, 0D).endVertex();
+        worldRenderer.pos(0D, 0D, 0.2D).endVertex();
         tess.draw();
         GlStateManager.popMatrix();
 
@@ -111,10 +112,10 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
             GlStateManager.translate(0.25F, 0.02F, 0.25F);
             GlStateManager.rotate(vertGaugeAng, 0F, 1F, 0F);
 
-            worldRenderer.startDrawing(GL11.GL_LINES);
-            worldRenderer.setColorOpaque_F(0F, 0F, 0.5F);
-            worldRenderer.addVertex(0D, 0D, 0D);
-            worldRenderer.addVertex(0.2D, 0D, 0D);
+            worldRenderer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+            worldRenderer.color(0F, 0F, 0.5F, 1F);
+            worldRenderer.pos(0D, 0D, 0D).endVertex();
+            worldRenderer.pos(0.2D, 0D, 0D).endVertex();
             tess.draw();
             GlStateManager.popMatrix();
 
@@ -124,19 +125,19 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
             GlStateManager.pushMatrix();
             GlStateManager.rotate(heightGaugeLongAng, 0F, 1F, 0F);
 
-            worldRenderer.startDrawing(GL11.GL_LINES);
-            worldRenderer.setColorOpaque_F(0.9F, 0.9F, 0F);
-            worldRenderer.addVertex(0D, 0D, 0D);
-            worldRenderer.addVertex(0D, 0D, -0.2D);
+            worldRenderer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+            worldRenderer.color(0.9F, 0.9F, 0F, 1F);
+            worldRenderer.pos(0D, 0D, 0D).endVertex();
+            worldRenderer.pos(0D, 0D, -0.2D).endVertex();
             tess.draw();
             GlStateManager.popMatrix();
 
             GlStateManager.rotate(heightGaugeShortAng, 0F, 1F, 0F);
 
-            worldRenderer.startDrawing(GL11.GL_LINES);
-            worldRenderer.setColorOpaque_F(0.7F, 0.7F, 0F);
-            worldRenderer.addVertex(0D, -0.01D, 0D);
-            worldRenderer.addVertex(0D, -0.01, -0.15D);
+            worldRenderer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+            worldRenderer.color(0.7F, 0.7F, 0F, 1F);
+            worldRenderer.pos(0D, -0.01D, 0D).endVertex();
+            worldRenderer.pos(0D, -0.01, -0.15D).endVertex();
             tess.draw();
 
             GlStateManager.popMatrix();

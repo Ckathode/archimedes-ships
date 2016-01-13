@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -38,18 +39,18 @@ public class RenderParachute extends Render {
         GL11.glLineWidth(4F);
         Tessellator tess = Tessellator.getInstance();
         WorldRenderer worldRenderer = tess.getWorldRenderer();
-        worldRenderer.startDrawing(GL11.GL_LINES);
-        worldRenderer.addVertex(0D, -3D, 0D);
-        worldRenderer.addVertex(-1D, 0D, 1D);
+        worldRenderer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+        worldRenderer.pos(0D, -3D, 0D).endVertex();
+        worldRenderer.pos(-1D, 0D, 1D).endVertex();
 
-        worldRenderer.addVertex(0D, -3D, 0D);
-        worldRenderer.addVertex(-1D, 0D, -1D);
+        worldRenderer.pos(0D, -3D, 0D).endVertex();
+        worldRenderer.pos(-1D, 0D, -1D).endVertex();
 
-        worldRenderer.addVertex(0D, -3D, 0D);
-        worldRenderer.addVertex(1D, 0D, 1D);
+        worldRenderer.pos(0D, -3D, 0D).endVertex();
+        worldRenderer.pos(1D, 0D, 1D).endVertex();
 
-        worldRenderer.addVertex(0D, -3D, 0D);
-        worldRenderer.addVertex(1D, 0D, -1D);
+        worldRenderer.pos(0D, -3D, 0D).endVertex();
+        worldRenderer.pos(1D, 0D, -1D).endVertex();
         tess.draw();
         worldRenderer.setTranslation(0F, 0F, 0F);
 

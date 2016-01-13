@@ -7,6 +7,7 @@ import darkevilmac.movingworld.common.util.MaterialDensity;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -35,7 +36,7 @@ public class ArchimedesConfig {
         config = configuration;
         shared.balloonAlternatives = new HashSet<String>();
 
-        FMLCommonHandler.instance().bus().register(this); // For in game config reloads.
+        MinecraftForge.EVENT_BUS.register(this); // For in game config reloads.
     }
 
     public void loadAndSave() {

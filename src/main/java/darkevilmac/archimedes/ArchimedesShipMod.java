@@ -103,7 +103,7 @@ public class ArchimedesShipMod {
         objects.init(event);
 
         MinecraftForge.EVENT_BUS.register(new ConnectionHandler());
-        FMLCommonHandler.instance().bus().register(new ConnectionHandler());
+        MinecraftForge.EVENT_BUS.register(new ConnectionHandler());
 
         EntityRegistry.registerModEntity(EntityShip.class, "shipmod", 1, this, 64, localConfig.getShared().shipEntitySyncRate, true);
         EntityRegistry.registerModEntity(EntitySeat.class, "attachment.seat", 2, this, 64, 100, false);

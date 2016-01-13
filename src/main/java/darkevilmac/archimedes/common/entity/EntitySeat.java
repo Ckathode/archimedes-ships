@@ -198,7 +198,7 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     }
 
     @Override
-    public AxisAlignedBB getBoundingBox() {
+    public AxisAlignedBB getEntityBoundingBox() {
         return null;
     }
 

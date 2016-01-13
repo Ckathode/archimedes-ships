@@ -140,8 +140,10 @@ public class TileEntityEngine extends TileEntity implements IInventory, ITileEng
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int i) {
-        return getStackInSlot(i);
+    public ItemStack removeStackFromSlot(int i) {
+        ItemStack content = itemStacks[i].copy();
+        itemStacks[i] = null;
+        return content;
     }
 
     @Override
@@ -201,7 +203,7 @@ public class TileEntityEngine extends TileEntity implements IInventory, ITileEng
     }
 
     @Override
-    public String getCommandSenderName() {
+    public String getName() {
         return "container.shipEngine";
     }
 

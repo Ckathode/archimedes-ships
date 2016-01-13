@@ -10,19 +10,24 @@ import darkevilmac.archimedes.common.ArchimedesConfig;
 import darkevilmac.archimedes.common.CommonProxy;
 import darkevilmac.archimedes.common.entity.EntityParachute;
 import darkevilmac.archimedes.common.entity.EntityShip;
+import darkevilmac.archimedes.common.object.ArchimedesObjects;
 import darkevilmac.archimedes.common.tileentity.TileEntityGauge;
 import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
 import darkevilmac.movingworld.client.render.RenderMovingWorld;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.LoaderState;
 
 import java.util.ArrayList;
@@ -40,7 +45,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void registerKeyHandlers(ArchimedesConfig cfg) {
         shipKeyHandler = new ShipKeyHandler(cfg);
-        FMLCommonHandler.instance().bus().register(shipKeyHandler);
+        MinecraftForge.EVENT_BUS.register(shipKeyHandler);
     }
 
     @Override
@@ -61,8 +66,19 @@ public class ClientProxy extends CommonProxy {
     }
 
     public void registerEntityRenderers() {
-        RenderingRegistry.registerEntityRenderingHandler(EntityShip.class, new RenderMovingWorld(Minecraft.getMinecraft().getRenderManager()));
-        RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, new RenderParachute(Minecraft.getMinecraft().getRenderManager()));
+        RenderingRegistry.registerEntityRenderingHandler(EntityShip.class, new IRenderFactory<EntityShip>() {
+            @Override
+            public Render<? super EntityShip> createRenderFor(RenderManager manager) {
+                return new RenderMovingWorld(manager);
+            }
+        });
+
+        RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, new IRenderFactory<EntityParachute>() {
+            @Override
+            public Render<? super EntityParachute> createRenderFor(RenderManager manager) {
+                return new RenderParachute(manager);
+            }
+        });
     }
 
     public void registerTileEntitySpeacialRenderers() {
@@ -72,25 +88,27 @@ public class ClientProxy extends CommonProxy {
 
     public void registerRendererVariants() {
         Item itemToRegister = null;
-        ArrayList<String> variants = null;
+        ArrayList<ResourceLocation> variants = null;
 
-        itemToRegister = Item.getItemFromBlock(ArchimedesShipMod.objects.blockBalloon);
-        variants = new ArrayList<String>();
+        itemToRegister = Item.getItemFromBlock(ArchimedesObjects.blockBalloon);
+        variants = new ArrayList<ResourceLocation>();
 
         for (EnumDyeColor color : EnumDyeColor.values()) {
-            variants.add(ArchimedesShipMod.RESOURCE_DOMAIN + "balloon_" + color.getName());
+            variants.add(new ResourceLocation(ArchimedesShipMod.RESOURCE_DOMAIN + "balloon_" + color.getName()));
         }
 
-        String[] variantsArray = new String[variants.size()];
+        ResourceLocation[] variantsArray = new ResourceLocation[variants.size()];
         int index = 0;
 
-        for (String str : variants) {
+        for (ResourceLocation str : variants) {
             variantsArray[index] = str;
             index++;
         }
 
-        ModelBakery.addVariantName(itemToRegister, variantsArray);
-        ModelBakery.addVariantName(Item.getItemFromBlock(ArchimedesShipMod.objects.blockGauge), ArchimedesShipMod.RESOURCE_DOMAIN + "gauge", ArchimedesShipMod.RESOURCE_DOMAIN + "gauge_ext");
+        ModelBakery.registerItemVariants(itemToRegister, variantsArray);
+        ModelBakery.registerItemVariants(Item.getItemFromBlock(ArchimedesObjects.blockGauge),
+                new ResourceLocation(ArchimedesShipMod.RESOURCE_DOMAIN + "gauge"),
+                new ResourceLocation(ArchimedesShipMod.RESOURCE_DOMAIN + "gauge_ext"));
     }
 
     public void registerItemRenderers() {
@@ -100,26 +118,26 @@ public class ClientProxy extends CommonProxy {
         ItemModelMesher modelMesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
 
         // Do some general render registrations for objects, not considering meta.
-        for (int i = 0; i < ArchimedesShipMod.objects.registeredBlocks.size(); i++) {
-            modelResourceLocation = new ModelResourceLocation(ArchimedesShipMod.RESOURCE_DOMAIN + ArchimedesShipMod.objects.registeredBlocks.keySet().toArray()[i], "inventory");
-            itemToRegister = Item.getItemFromBlock((Block) ArchimedesShipMod.objects.registeredBlocks.values().toArray()[i]);
+        for (int i = 0; i < ArchimedesObjects.registeredBlocks.size(); i++) {
+            modelResourceLocation = new ModelResourceLocation(ArchimedesShipMod.RESOURCE_DOMAIN + ArchimedesObjects.registeredBlocks.keySet().toArray()[i], "inventory");
+            itemToRegister = Item.getItemFromBlock((Block) ArchimedesObjects.registeredBlocks.values().toArray()[i]);
 
             modelMesher.register(itemToRegister, 0, modelResourceLocation);
         }
 
-        for (int i = 0; i < ArchimedesShipMod.objects.registeredItems.size(); i++) {
-            modelResourceLocation = new ModelResourceLocation(ArchimedesShipMod.RESOURCE_DOMAIN + ArchimedesShipMod.objects.registeredItems.keySet().toArray()[i], "inventory");
-            itemToRegister = (Item) ArchimedesShipMod.objects.registeredItems.values().toArray()[i];
+        for (int i = 0; i < ArchimedesObjects.registeredItems.size(); i++) {
+            modelResourceLocation = new ModelResourceLocation(ArchimedesShipMod.RESOURCE_DOMAIN + ArchimedesObjects.registeredItems.keySet().toArray()[i], "inventory");
+            itemToRegister = (Item) ArchimedesObjects.registeredItems.values().toArray()[i];
             modelMesher.register(itemToRegister, 0, modelResourceLocation);
         }
 
         // Some specific meta registrations for objects, like for extended gauges.
-        itemToRegister = Item.getItemFromBlock(ArchimedesShipMod.objects.blockGauge);
+        itemToRegister = Item.getItemFromBlock(ArchimedesObjects.blockGauge);
         modelResourceLocation = new ModelResourceLocation(ArchimedesShipMod.RESOURCE_DOMAIN + "gauge_ext", "inventory");
 
         modelMesher.register(itemToRegister, 1, modelResourceLocation);
 
-        itemToRegister = Item.getItemFromBlock(ArchimedesShipMod.objects.blockBalloon);
+        itemToRegister = Item.getItemFromBlock(ArchimedesObjects.blockBalloon);
         modelResourceLocation = null;
 
         for (EnumDyeColor color : EnumDyeColor.values()) {

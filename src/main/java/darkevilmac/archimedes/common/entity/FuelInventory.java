@@ -51,8 +51,11 @@ public class FuelInventory implements IInventory {
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int i) {
-        return getStackInSlot(i);
+    public ItemStack removeStackFromSlot(int i) {
+        ItemStack content = itemstacks[i].copy();
+        itemstacks[i] = null;
+
+        return content;
     }
 
     @Override
@@ -62,8 +65,9 @@ public class FuelInventory implements IInventory {
         }
     }
 
+
     @Override
-    public String getCommandSenderName() {
+    public String getName() {
         return "Engine Inventory";
     }
 

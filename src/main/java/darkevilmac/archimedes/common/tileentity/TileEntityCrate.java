@@ -9,11 +9,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.ITickable;
 
-public class TileEntityCrate extends TileEntity implements IMovingWorldTileEntity, IUpdatePlayerListBox {
+public class TileEntityCrate extends TileEntity implements IMovingWorldTileEntity, ITickable {
     private EntityShip parentShip;
     private int containedEntityId;
     private Entity containedEntity;
