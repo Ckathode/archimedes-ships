@@ -51,11 +51,11 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void registerRenderers(LoaderState.ModState state) {
         if (state == LoaderState.ModState.PREINITIALIZED) {
+            registerEntityRenderers();
             registerRendererVariants();
         }
 
         if (state == LoaderState.ModState.INITIALIZED) {
-            registerEntityRenderers();
             registerTileEntitySpeacialRenderers();
             registerItemRenderers();
         }
