@@ -4,6 +4,7 @@ import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.common.api.block.IBlockBalloon;
 import darkevilmac.archimedes.common.api.block.IBlockCustomMass;
 import darkevilmac.archimedes.common.api.tileentity.ITileEngineModifier;
+import darkevilmac.archimedes.common.object.ArchimedesObjects;
 import darkevilmac.archimedes.common.object.block.AnchorPointLocation;
 import darkevilmac.archimedes.common.tileentity.TileEntityAnchorPoint;
 import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
@@ -270,9 +271,9 @@ public class ShipCapabilities extends MovingWorldCapabilities {
             } else {
                 balloonCount++;
             }
-        } else if (block == ArchimedesShipMod.objects.blockFloater) {
+        } else if (block == ArchimedesObjects.blockFloater) {
             floaters++;
-        } else if (block == ArchimedesShipMod.objects.blockAnchorPoint) {
+        } else if (block == ArchimedesObjects.blockAnchorPoint) {
             TileEntity te = ship.getMobileChunk().getTileEntity(pos);
             if (te != null && te instanceof TileEntityAnchorPoint && ((TileEntityAnchorPoint) te).anchorPointInfo != null && ((TileEntityAnchorPoint) te).anchorPointInfo.forShip) {
                 if (anchorPoints == null) {
@@ -280,7 +281,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
                 }
                 anchorPoints.add(new LocatedBlock(state, te, pos));
             }
-        } else if (block == ArchimedesShipMod.objects.blockEngine) {
+        } else if (block == ArchimedesObjects.blockEngine) {
             TileEntity te = ship.getMobileChunk().getTileEntity(pos);
             if (te instanceof ITileEngineModifier) {
                 if (engines == null) {
@@ -288,7 +289,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
                 }
                 engines.add((ITileEngineModifier) te);
             }
-        } else if (block == ArchimedesShipMod.objects.blockSeat && !ship.worldObj.isRemote) {
+        } else if (block == ArchimedesObjects.blockSeat && !ship.worldObj.isRemote) {
             int x1 = ship.riderDestination.getX(), y1 = ship.riderDestination.getY(), z1 = ship.riderDestination.getZ();
             int frontDir = ship.frontDirection.getHorizontalIndex();
 

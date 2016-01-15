@@ -379,7 +379,7 @@ public class EntityShip extends EntityMovingWorld {
         if (!disassembler.canDisassemble(getNewAssemblyInteractor())) {
             if (prevRiddenByEntity instanceof EntityPlayer) {
                 ChatComponentText c = new ChatComponentText("Cannot disassemble ship here");
-                ((EntityPlayer) prevRiddenByEntity).addChatMessage(c);
+                prevRiddenByEntity.addChatMessage(c);
             }
             return false;
         }

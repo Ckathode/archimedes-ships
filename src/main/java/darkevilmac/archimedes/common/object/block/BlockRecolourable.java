@@ -25,7 +25,7 @@ public class BlockRecolourable extends BlockColored {
             if (blockState == null || heldItem == null) return false;
 
             if (heldItem.getItem() != null && heldItem.getItem() instanceof ItemDye) {
-                if (EnumDyeColor.byDyeDamage(heldItem.getItemDamage()).getMapColor() != ((EnumDyeColor) blockState.getValue(COLOR)).getMapColor()) {
+                if (EnumDyeColor.byDyeDamage(heldItem.getItemDamage()).getMapColor() != blockState.getValue(COLOR).getMapColor()) {
                     if (!world.isRemote) {
                         blockState = blockState.withProperty(BlockColored.COLOR, EnumDyeColor.byDyeDamage(playerIn.getHeldItem().getItemDamage()));
                         world.setBlockState(pos, blockState);

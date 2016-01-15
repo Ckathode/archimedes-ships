@@ -69,7 +69,7 @@ public class TileEntityHelmRenderer extends TileEntitySpecialRenderer {
         IBlockState blockState = getWorld().getBlockState(helm.getPos());
         EnumFacing blockStateFacing = EnumFacing.UP;
         if (blockState.getBlock() instanceof BlockHelm)
-            blockStateFacing = (EnumFacing) blockState.getValue(BlockHelm.FACING);
+            blockStateFacing = blockState.getValue(BlockHelm.FACING);
 
         if (((IMovingWorldTileEntity) helm).getParentMovingWorld() != null && ((IMovingWorldTileEntity) helm).getParentMovingWorld() instanceof EntityShip) {
             ship = (EntityShip) ((IMovingWorldTileEntity) helm).getParentMovingWorld();

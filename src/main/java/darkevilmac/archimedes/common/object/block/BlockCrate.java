@@ -23,7 +23,7 @@ import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.world.World;
 
 public class BlockCrate extends BlockContainer {
-    public static final PropertyEnum AXIS = PropertyEnum.create("axis", EnumFacing.Axis.class, new EnumFacing.Axis[]{EnumFacing.Axis.X, EnumFacing.Axis.Z});
+    public static final PropertyEnum AXIS = PropertyEnum.create("axis", EnumFacing.Axis.class, EnumFacing.Axis.X, EnumFacing.Axis.Z);
 
 
     public BlockCrate(Material material) {
@@ -67,7 +67,7 @@ public class BlockCrate extends BlockContainer {
 
     @Override
     protected BlockState createBlockState() {
-        return new BlockState(this, new IProperty[]{AXIS});
+        return new BlockState(this, AXIS);
     }
 
     @Override

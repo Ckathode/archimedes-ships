@@ -22,7 +22,7 @@ import net.minecraft.world.World;
 
 public class BlockAnchorPoint extends BlockContainer {
 
-    public static final PropertyEnum AXIS = PropertyEnum.create("axis", EnumFacing.Axis.class, new EnumFacing.Axis[]{EnumFacing.Axis.X, EnumFacing.Axis.Z});
+    public static final PropertyEnum AXIS = PropertyEnum.create("axis", EnumFacing.Axis.class, EnumFacing.Axis.X, EnumFacing.Axis.Z);
 
     public BlockAnchorPoint(Material material) {
         super(material);
@@ -76,7 +76,7 @@ public class BlockAnchorPoint extends BlockContainer {
 
     @Override
     protected BlockState createBlockState() {
-        return new BlockState(this, new IProperty[]{AXIS});
+        return new BlockState(this, AXIS);
     }
 
     @Override

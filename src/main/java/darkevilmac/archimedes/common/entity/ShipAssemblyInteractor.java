@@ -74,7 +74,7 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
     @Override
     public boolean isBlockMovingWorldMarker(Block block) {
         if (block != null)
-            return block.getUnlocalizedName() == ArchimedesShipMod.objects.blockMarkShip.getUnlocalizedName();
+            return block.getUnlocalizedName() == ArchimedesObjects.blockMarkShip.getUnlocalizedName();
         else
             return false;
     }

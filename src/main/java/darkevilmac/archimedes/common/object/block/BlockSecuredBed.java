@@ -36,7 +36,7 @@ public class BlockSecuredBed extends BlockBed implements ITileEntityProvider {
             EntityPlayer bedUser = null;
 
             if (state.getValue(PART) != BlockBed.EnumPartType.HEAD) {
-                pos = pos.offset((EnumFacing) state.getValue(FACING));
+                pos = pos.offset(state.getValue(FACING));
                 state = worldIn.getBlockState(pos);
 
                 if (state.getBlock() != this) {
@@ -45,11 +45,11 @@ public class BlockSecuredBed extends BlockBed implements ITileEntityProvider {
             }
 
             if (worldIn.provider.canRespawnHere() && worldIn.getBiomeGenForCoords(pos) != BiomeGenBase.hell) {
-                if (((Boolean) state.getValue(OCCUPIED)).booleanValue()) {
+                if (state.getValue(OCCUPIED).booleanValue()) {
                     EntityPlayer entityplayer1 = this.getPlayerInBed(worldIn, pos);
 
                     if (entityplayer1 != null) {
-                        playerIn.addChatComponentMessage(new ChatComponentTranslation("tile.bed.occupied", new Object[0]));
+                        playerIn.addChatComponentMessage(new ChatComponentTranslation("tile.bed.occupied"));
 
                         bedUser = entityplayer1;
                     }
@@ -68,9 +68,9 @@ public class BlockSecuredBed extends BlockBed implements ITileEntityProvider {
                         bedUser = playerIn;
                     } else {
                         if (enumstatus == EntityPlayer.EnumStatus.NOT_POSSIBLE_NOW) {
-                            playerIn.addChatComponentMessage(new ChatComponentTranslation("tile.bed.noSleep", new Object[0]));
+                            playerIn.addChatComponentMessage(new ChatComponentTranslation("tile.bed.noSleep"));
                         } else if (enumstatus == EntityPlayer.EnumStatus.NOT_SAFE) {
-                            playerIn.addChatComponentMessage(new ChatComponentTranslation("tile.bed.notSafe", new Object[0]));
+                            playerIn.addChatComponentMessage(new ChatComponentTranslation("tile.bed.notSafe"));
                         }
                     }
                 }
@@ -84,7 +84,7 @@ public class BlockSecuredBed extends BlockBed implements ITileEntityProvider {
                 }
             } else {
                 worldIn.setBlockToAir(pos);
-                BlockPos blockpos1 = pos.offset(((EnumFacing) state.getValue(FACING)).getOpposite());
+                BlockPos blockpos1 = pos.offset(state.getValue(FACING).getOpposite());
 
                 if (worldIn.getBlockState(blockpos1).getBlock() == this) {
                     worldIn.setBlockToAir(blockpos1);

@@ -36,7 +36,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.Collections;
 import java.util.List;
 
-@Mod(modid = ArchimedesShipMod.MOD_ID, name = ArchimedesShipMod.MOD_NAME, version = ArchimedesShipMod.MOD_VERSION, dependencies = "required-after:MovingWorld@", guiFactory = ArchimedesShipMod.MOD_GUIFACTORY)
+@Mod(modid = ArchimedesShipMod.MOD_ID, name = ArchimedesShipMod.MOD_NAME, version = ArchimedesShipMod.MOD_VERSION, dependencies = "required-after:MovingWorld", guiFactory = ArchimedesShipMod.MOD_GUIFACTORY)
 public class ArchimedesShipMod {
 
     public static final String MOD_ID = "ArchimedesShipsPlus";

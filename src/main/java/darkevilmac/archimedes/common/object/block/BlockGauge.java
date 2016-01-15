@@ -77,7 +77,7 @@ public class BlockGauge extends BlockContainer {
 
     @Override
     public int damageDropped(IBlockState state) {
-        Boolean isExtended = (Boolean) state.getValue(EXTENDED);
+        Boolean isExtended = state.getValue(EXTENDED);
         return isExtended ? 1 : 0;
     }
 
@@ -121,8 +121,8 @@ public class BlockGauge extends BlockContainer {
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        EnumFacing facing = (EnumFacing) state.getValue(FACING);
-        boolean extended = (Boolean) state.getValue(EXTENDED);
+        EnumFacing facing = state.getValue(FACING);
+        boolean extended = state.getValue(EXTENDED);
         int metaResult = facing.getHorizontalIndex();
 
         if (extended) {
@@ -134,7 +134,7 @@ public class BlockGauge extends BlockContainer {
 
     @Override
     public BlockState createBlockState() {
-        return new BlockState(this, new IProperty[]{FACING, EXTENDED});
+        return new BlockState(this, FACING, EXTENDED);
     }
 
 }
