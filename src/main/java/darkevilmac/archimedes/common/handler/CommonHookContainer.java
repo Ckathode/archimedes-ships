@@ -39,14 +39,13 @@ public class CommonHookContainer {
 
         if (e.entityPlayer.getGameProfile() != null && e.entityPlayer.getGameProfile().getId() != null &&
                 ConnectionHandler.playerBedMap.containsKey(e.entityPlayer.getGameProfile().getId())) {
-            //Spawn for the player is changing and they use a secured bed, clear the map of the player and set the bed player to null.
+            //Spawn for the player is changing and they use a secured bed, clear the map of the player.
 
             TileEntitySecuredBed bed = ConnectionHandler.playerBedMap.get(e.entityPlayer.getGameProfile().getId());
 
             if (bed.getPos().equals(e.newSpawn))
                 return;
 
-            bed.setPlayer(null);
             ConnectionHandler.playerBedMap.remove(e.entityPlayer.getGameProfile().getId());
         }
     }

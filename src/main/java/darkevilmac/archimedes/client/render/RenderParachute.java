@@ -23,9 +23,9 @@ public class RenderParachute extends Render {
         model = new ModelParachute();
     }
 
-    public void renderParachute(EntityParachute entity, double x, double y, double z, float yaw, float pitch) {
+    public void renderParachute(EntityParachute entity, double x, double y, double z, float yaw, float partialTicks) {
         GlStateManager.pushMatrix();
-        GlStateManager.translate((float) x, (float) y + 4F, (float) z);
+        GlStateManager.translate((float) x, (float) y + (entity != null && entity.riddenByEntity != null ? entity.riddenByEntity.height * 2.5F : 4F), (float) z);
 
         GlStateManager.pushMatrix();
         GlStateManager.enableRescaleNormal();
@@ -39,7 +39,8 @@ public class RenderParachute extends Render {
         GL11.glLineWidth(4F);
         Tessellator tess = Tessellator.getInstance();
         WorldRenderer worldRenderer = tess.getWorldRenderer();
-        worldRenderer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+        GlStateManager.color(0, 0, 0);
+        worldRenderer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
         worldRenderer.pos(0D, -3D, 0D).endVertex();
         worldRenderer.pos(-1D, 0D, 1D).endVertex();
 

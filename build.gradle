@@ -11,14 +11,14 @@ buildscript {
             url = 'https://oss.sonatype.org/content/repositories/snapshots'
         }
         dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+            classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
         }
     }
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = 'MC1.8-V1.8'
+version = 'MC1.8.9-INDEV'
 group = 'darkevilmac.archimedesshipsplus'
 archivesBaseName = 'archimedesshipsplus'
 

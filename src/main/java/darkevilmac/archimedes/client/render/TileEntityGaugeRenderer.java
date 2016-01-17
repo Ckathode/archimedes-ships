@@ -41,13 +41,7 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
         double d = dVec.xCoord * dVec.xCoord + dVec.yCoord * dVec.yCoord + dVec.zCoord * dVec.zCoord;
         if (d > 256D) return;
 
-        float lineWidth = 8F / (float) Math.sqrt(d);
-
-        if (lineWidth > 8.5F) {
-            lineWidth = 8.25F;
-        }
-
-        GL11.glLineWidth(lineWidth);
+        GL11.glLineWidth(6);
 
         GlStateManager.disableTexture2D();
 
@@ -73,11 +67,11 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
         GlStateManager.translate(-0.28125F, 0.02F, -0.28125F);
         GlStateManager.rotate(northGaugeAngle, 0F, 1F, 0F);
 
-        worldRenderer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
-        worldRenderer.color(1F, 0F, 0F, 1F);
+        worldRenderer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
+        GlStateManager.color(1F, 0F, 0F, 1F);
         worldRenderer.pos(0D, 0D, 0D).endVertex();
         worldRenderer.pos(0D, 0D, 0.15D).endVertex();
-        worldRenderer.color(1F, 1F, 1F, 1F);
+        GlStateManager.color(1F, 1F, 1F, 1F);
         worldRenderer.pos(0D, 0D, 0D).endVertex();
         worldRenderer.pos(0D, 0D, -0.15D).endVertex();
         tess.draw();
@@ -88,8 +82,8 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
         GlStateManager.translate(0.25F, 0.02F, -0.25F);
         GlStateManager.rotate(velGaugeAngle, 0F, 1F, 0F);
 
-        worldRenderer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
-        worldRenderer.color(0F, 0F, 0.5F, 1F);
+        worldRenderer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
+        GlStateManager.color(0F, 0F, 0.5F, 1F);
         worldRenderer.pos(0D, 0D, 0D).endVertex();
         worldRenderer.pos(0D, 0D, 0.2D).endVertex();
         tess.draw();
@@ -112,8 +106,8 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
             GlStateManager.translate(0.25F, 0.02F, 0.25F);
             GlStateManager.rotate(vertGaugeAng, 0F, 1F, 0F);
 
-            worldRenderer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
-            worldRenderer.color(0F, 0F, 0.5F, 1F);
+            worldRenderer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
+            GlStateManager.color(0F, 0F, 0.5F, 1F);
             worldRenderer.pos(0D, 0D, 0D).endVertex();
             worldRenderer.pos(0.2D, 0D, 0D).endVertex();
             tess.draw();
@@ -125,8 +119,8 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
             GlStateManager.pushMatrix();
             GlStateManager.rotate(heightGaugeLongAng, 0F, 1F, 0F);
 
-            worldRenderer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
-            worldRenderer.color(0.9F, 0.9F, 0F, 1F);
+            worldRenderer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
+            GlStateManager.color(0.9F, 0.9F, 0F, 1F);
             worldRenderer.pos(0D, 0D, 0D).endVertex();
             worldRenderer.pos(0D, 0D, -0.2D).endVertex();
             tess.draw();
@@ -134,8 +128,8 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
 
             GlStateManager.rotate(heightGaugeShortAng, 0F, 1F, 0F);
 
-            worldRenderer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
-            worldRenderer.color(0.7F, 0.7F, 0F, 1F);
+            worldRenderer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
+            GlStateManager.color(0.7F, 0.7F, 0F, 1F);
             worldRenderer.pos(0D, -0.01D, 0D).endVertex();
             worldRenderer.pos(0D, -0.01, -0.15D).endVertex();
             tess.draw();

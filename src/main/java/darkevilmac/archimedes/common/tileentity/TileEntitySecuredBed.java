@@ -56,6 +56,7 @@ public class TileEntitySecuredBed extends TileEntity {
                 return;
 
             if (worldObj.getPlayerEntityByUUID(playerID) != null) {
+                worldObj.getPlayerEntityByUUID(playerID).setSpawnChunk(newPos, true, worldObj.provider.getDimensionId());
                 worldObj.getPlayerEntityByUUID(playerID).setSpawnPoint(newPos, true);
                 doMove = false;
             }

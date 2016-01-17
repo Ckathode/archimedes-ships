@@ -5,7 +5,6 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
@@ -14,7 +13,6 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 
     public EntityParachute(World world) {
         super(world);
-        setSize(1F, 1F);
     }
 
     public EntityParachute(World world, EntityShip ship, BlockPos pos) {
@@ -43,6 +41,7 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 
     @Override
     protected void entityInit() {
+        setSize(1F, 1F);
     }
 
     @Override
@@ -58,15 +57,13 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
             return;
         }
 
-        motionX *= 0.98D;
-        motionY *= 0.8D;
-        motionZ *= 0.98D;
 
         if (!worldObj.isRemote && riddenByEntity != null) {
             motionX += riddenByEntity.motionX;
             motionZ += riddenByEntity.motionZ;
         }
-        motionY -= 0.05D;
+        if (motionY > -.5)
+            motionY -= 0.025D;
 
         moveEntity(motionX, motionY, motionZ);
     }
@@ -82,18 +79,16 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
     }
 
     @Override
-    public AxisAlignedBB getCollisionBox(Entity entity) {
-        return null;
-    }
-
-    @Override
-    public AxisAlignedBB getEntityBoundingBox() {
-        return null;
-    }
-
-    @Override
     public boolean canBeCollidedWith() {
         return false;
+    }
+
+    @Override
+    protected void readEntityFromNBT(NBTTagCompound tagCompund) {
+    }
+
+    @Override
+    protected void writeEntityToNBT(NBTTagCompound tagCompound) {
     }
 
     @Override
@@ -103,15 +98,7 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 
     @Override
     public void fall(float fallDistance, float damageMult) {
-        // Do nothing
-    }
-
-    @Override
-    protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
-    }
-
-    @Override
-    protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
+        // We don't fall.
     }
 
     @Override
