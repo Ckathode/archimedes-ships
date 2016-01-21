@@ -1,8 +1,20 @@
+sudo: required
+dist: trusty
+
 language: java
+jdk:
+  - openjdk8
+  - oraclejdk8
+
+git:
+  submodules: true
+before_install:
+- git submodule update --init --recursive
+- chmod +x gradlew
+
+env: GRADLE_OPTS="-Xms1g -Xmx3g"
+install: ./gradlew setupCIWorkspace
+script: ./gradlew build
+
 notifications:
-  email: false
-install: true
-matrix:
-  include:
-  - jdk: openjdk7
-    script: gradle setupDecompWorkspace build
+  email: true
