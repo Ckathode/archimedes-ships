@@ -9,6 +9,7 @@ import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.FMLIndexedMessageToMessageCodec;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -42,7 +43,7 @@ public class ArchimedesShipsMessageToMessageCodec extends FMLIndexedMessageToMes
     @Override
     public void decodeInto(ChannelHandlerContext ctx, ByteBuf source, ArchimedesShipsMessage msg) {
         EntityPlayer player;
-        switch (FMLCommonHandler.instance().getEffectiveSide()) {
+        switch (FMLLaunchHandler.side()) {
             case CLIENT:
                 player = this.getClientPlayer();
                 msg.decodeInto(ctx, source, player, FMLCommonHandler.instance().getSide());
