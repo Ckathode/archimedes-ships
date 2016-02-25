@@ -3,10 +3,10 @@ package darkevilmac.archimedes.common;
 import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.common.object.ArchimedesObjects;
 import darkevilmac.movingworld.MovingWorld;
-import darkevilmac.movingworld.common.util.MaterialDensity;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.init.Blocks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
@@ -20,7 +20,6 @@ import org.lwjgl.input.Keyboard;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 public class ArchimedesConfig {
     public static final int CONTROL_TYPE_VANILLA = 0, CONTROL_TYPE_ARCHIMEDES = 1;
@@ -35,14 +34,13 @@ public class ArchimedesConfig {
         shared = new SharedConfig();
         config = configuration;
         shared.balloonAlternatives = new HashSet<String>();
+        shared.seats = new HashSet<String>();
+        shared.stickyObjects = new HashSet<String>();
 
         MinecraftForge.EVENT_BUS.register(this); // For in game config reloads.
     }
 
     public void loadAndSave() {
-        String[] defaultMaterialDensities = {"\"minecraft:air=0.0\"", "\"minecraft:wool=0.1\""};
-        String[] defaultBlockDensities = {"\"ArchimedesShips:floater=0.04\"", "\"ArchimedesShips:balloon=0.02\""};
-
         config.load();
 
         shared.shipEntitySyncRate = config.get("settings", "sync_rate", 20, "The amount of ticks between a server-client synchronization. Higher numbers reduce network traffic. Lower numbers increase multiplayer experience. 20 ticks = 1 second").getInt();
@@ -62,9 +60,6 @@ public class ArchimedesConfig {
         //maxShipChunkBlocks = Math.min(maxShipChunkBlocks, 3400);
         shared.flyBalloonRatio = (float) config.get("mobile_chunk", "airship_balloon_ratio", 0.4D, "The part of the total amount of objects that should be balloon objects in order to make an airship.").getDouble(0.4D);
         shared.submersibleFillRatio = (float) config.get("mobile_chunk", "submersible_fill_ratio", 0.3D, "The part of the ship that needs to not be water fillable for it to be considered submersible.").getDouble(0.9D);
-
-        shared.loadedBlockDensities = config.get("mobile_chunk", "block_densities", defaultBlockDensities, "A list of pairs of a block with a density value. This list overrides the 'material_densities' list.").getStringList();
-        shared.loadedMaterialDensities = config.get("mobile_chunk", "material_densities", defaultMaterialDensities, "A list of pairs of a material with a density value. The first value is the name of a block. All objects with the same material will get this density value, unless overridden.").getStringList();
 
         if (FMLCommonHandler.instance().getSide().isClient()) {
             loadKeybindings();
@@ -87,59 +82,20 @@ public class ArchimedesConfig {
     }
 
     public void postLoad() {
-        Pattern splitpattern = Pattern.compile("=");
-        for (int i = 0; i < shared.loadedBlockDensities.length; i++) {
-            String s = shared.loadedBlockDensities[i];
-            s = s.replace("\"", "");
-            String[] pair = splitpattern.split(s);
-            if (pair.length != 2) {
-                ArchimedesShipMod.modLog.warn("Invalid key-value pair at block_densities[" + i + "]");
-                continue;
-            }
-            String key = pair[0];
-            float density;
-            try {
-                density = Float.parseFloat(pair[1]);
-            } catch (NumberFormatException e) {
-                ArchimedesShipMod.modLog.warn("Cannot parse value " + pair[1] + " to floating point at block_densities[" + i + "]");
-                continue;
-            }
-            Block block = Block.getBlockFromName(key);
-            if (block == null) {
-                ArchimedesShipMod.modLog.warn("No block found for " + key + " at block_densities[" + i + "]");
-                continue;
-            }
-
-            MaterialDensity.addDensity(block, density);
+        Block[] defaultStickyBlocks = {ArchimedesObjects.blockStickyBuffer, Blocks.stone_button, Blocks.wooden_button, Blocks.lever};
+        String[] stickyBlockNames = new String[defaultStickyBlocks.length];
+        for (int i = 0; i < defaultStickyBlocks.length; i++) {
+            stickyBlockNames[i] = Block.blockRegistry.getNameForObject(defaultStickyBlocks[i]).toString();
         }
 
-        for (int i = 0; i < shared.loadedMaterialDensities.length; i++) {
-            String s = shared.loadedMaterialDensities[i];
-            s = s.replace("\"", "");
-            String[] pair = splitpattern.split(s);
-            if (pair.length != 2) {
-                ArchimedesShipMod.modLog.warn("Invalid key-value pair at material_densities[" + i + "]");
-                continue;
-            }
-            String key = pair[0];
-            float density;
-            try {
-                density = Float.parseFloat(pair[1]);
-            } catch (NumberFormatException e) {
-                ArchimedesShipMod.modLog.warn("Cannot parse value " + pair[1] + " to floating point at material_densities[" + i + "]");
-                continue;
-            }
-            Block block = Block.getBlockFromName(key);
-            if (block == null) {
-                ArchimedesShipMod.modLog.warn("No block found for " + key + " at material_densities[" + i + "]");
-                continue;
-            }
-
-            MaterialDensity.addDensity(block.getMaterial(), density);
+        Block[] defaultSeatBlocks = {ArchimedesObjects.blockSeat, Blocks.end_portal_frame};
+        String[] seatBlockNames = new String[defaultSeatBlocks.length];
+        for (int i = 0; i < defaultSeatBlocks.length; i++) {
+            seatBlockNames[i] = Block.blockRegistry.getNameForObject(defaultSeatBlocks[i]).toString();
         }
+
 
         Block[] defaultBalloonBlocks = {ArchimedesObjects.blockBalloon};
-
         String[] balloonBlockNames = new String[defaultBalloonBlocks.length];
         for (int i = 0; i < defaultBalloonBlocks.length; i++) {
             balloonBlockNames[i] = Block.blockRegistry.getNameForObject(defaultBalloonBlocks[i]).toString();
@@ -148,7 +104,13 @@ public class ArchimedesConfig {
         config.load();
 
         String[] balloonBlocks = config.get("mobile_chunk", "balloon_blocks", balloonBlockNames, "A list of blocks that are taken into account for ship flight capability").getStringList();
-        Collections.addAll(this.shared.balloonAlternatives, balloonBlocks);
+        Collections.addAll(shared.balloonAlternatives, balloonBlocks);
+
+        String[] seatBlocks = (config.get("settings", "seats", seatBlockNames, "Blocks that are considered seats, BlockSeat is hard coded, you can't disable it.").getStringList());
+        Collections.addAll(shared.seats, seatBlocks);
+
+        String[] stickyBlocks = config.get("settings", "stickyblocks", stickyBlockNames, "Blocks that behave like a Sticky buffer, they stop assembly when they're reached").getStringList();
+        Collections.addAll(shared.stickyObjects, stickyBlocks);
 
         config.save();
     }
@@ -172,6 +134,14 @@ public class ArchimedesConfig {
 
     public boolean isBalloon(Block block) {
         return shared.balloonAlternatives.contains(Block.blockRegistry.getNameForObject(block).toString());
+    }
+
+    public boolean isSeat(Block block) {
+        return shared.seats.contains(Block.blockRegistry.getNameForObject(block).toString());
+    }
+
+    public boolean isSticky(Block block) {
+        return shared.stickyObjects.contains(Block.blockRegistry.getNameForObject(block).toString());
     }
 
     @SubscribeEvent
@@ -212,8 +182,10 @@ public class ArchimedesConfig {
         public boolean disassembleOnDismount;
         public boolean enginesMandatory;
         public Set<String> balloonAlternatives;
+
+        public Set<String> seats;
+        public Set<String> stickyObjects;
+
         public boolean enableShipDownfall;
-        private String[] loadedBlockDensities;
-        private String[] loadedMaterialDensities;
     }
 }

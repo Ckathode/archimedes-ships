@@ -39,11 +39,15 @@ public class GuiShip extends GuiContainer {
         btnAlign = new GuiButton(2, guiLeft + 4, guiTop + 40, 100, 20, StatCollector.translateToLocal("gui.shipinv.align"));
         buttonList.add(btnAlign);
 
-        if (ship.canSubmerge()) {
-            btnSubmersible = new GuiButtonSubmersible(3, guiLeft + xSize + 2, guiTop);
-            buttonList.add(btnSubmersible);
+
+        btnSubmersible = new GuiButtonSubmersible(3, guiLeft + xSize + 2, guiTop);
+        ((GuiButtonSubmersible) btnSubmersible).canDo = ship.canSubmerge();
+        if (ship.canSubmerge())
             ((GuiButtonSubmersible) btnSubmersible).submerse = ship.getSubmerge();
-        }
+        else
+            ((GuiButtonSubmersible) btnSubmersible).submerse = false;
+        buttonList.add(btnSubmersible);
+
     }
 
     @Override
@@ -92,7 +96,7 @@ public class GuiShip extends GuiContainer {
             MovingWorld.instance.network.sendToServer(msg);
 
             ship.alignToGrid();
-        } else if (button == btnSubmersible) {
+        } else if (button == btnSubmersible && ((GuiButtonSubmersible) btnSubmersible).canDo) {
             GuiButtonSubmersible subButton = (GuiButtonSubmersible) button;
             ClientChangeSubmerseMessage msg = new ClientChangeSubmerseMessage(ship, !subButton.submerse);
 

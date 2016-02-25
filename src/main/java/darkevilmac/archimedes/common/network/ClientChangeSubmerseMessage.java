@@ -4,6 +4,7 @@ import darkevilmac.archimedes.common.entity.EntityShip;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class ClientChangeSubmerseMessage extends ShipMessage {
@@ -38,6 +39,13 @@ public class ClientChangeSubmerseMessage extends ShipMessage {
 
     @Override
     public void handleServerSide(EntityPlayer player) {
+        if (submerse && !ship.canSubmerge()) {
+            if (player != null && player instanceof EntityPlayerMP)
+                ((EntityPlayerMP) player).playerNetServerHandler.kickPlayerFromServer("Oi, stop hacking ya moron.  \n XOXO ~Archimedes");
+
+            return;
+        }
+
         ship.setSubmerge(submerse);
     }
 }

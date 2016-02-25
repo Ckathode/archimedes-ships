@@ -22,6 +22,7 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
         ship = null;
         pos = null;
         prevRiddenByEntity = null;
+        setEntityBoundingBox(new AxisAlignedBB(0, 0, 0, 0, 0, 0));
         setSize(0F, 0F);
     }
 

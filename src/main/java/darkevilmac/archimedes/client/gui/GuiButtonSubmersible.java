@@ -15,6 +15,8 @@ public class GuiButtonSubmersible extends GuiButton {
 
     public boolean submerse = false;
 
+    public boolean canDo = true;
+
     public GuiButtonSubmersible(int buttonId, int x, int y) {
         super(buttonId, x, y, 32, 32, "");
     }
@@ -25,22 +27,27 @@ public class GuiButtonSubmersible extends GuiButton {
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             boolean mouseOver = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
             int yOffset = 0;
-
-            if (mouseOver) {
-                yOffset += 32;
-            }
-
             int xOffset = 0;
 
-            if (!submerse) {
-                xOffset += 32;
+            if (canDo) {
+                if (mouseOver) {
+                    yOffset += 32;
+                }
+
+                if (!submerse) {
+                    xOffset += 32;
+                }
+            } else {
+                yOffset = 64;
+                xOffset = 0;
             }
 
             this.drawTexturedModalRect(this.xPosition, this.yPosition, xOffset, yOffset, this.width, this.height);
 
             if (mouseOver) {
-                int stringWidth = Minecraft.getMinecraft().fontRendererObj.getStringWidth((submerse ? "Submerse Ship" : "Don't Submerse Ship"));
-                drawHoveringText(Lists.newArrayList((submerse ? "Submerse Ship" : "Don't Submerse Ship")),
+                String message = !canDo ? "Can't Submerse" : (submerse ? "Submerse Ship" : "Don't Submerse Ship");
+                int stringWidth = Minecraft.getMinecraft().fontRendererObj.getStringWidth(message);
+                drawHoveringText(Lists.newArrayList(message),
                         mouseX + (stringWidth / 2) + 32, mouseY - 12, Minecraft.getMinecraft().fontRendererObj);
             }
         }

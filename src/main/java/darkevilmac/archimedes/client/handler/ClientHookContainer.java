@@ -4,6 +4,7 @@ import darkevilmac.archimedes.common.entity.EntityShip;
 import darkevilmac.archimedes.common.handler.CommonHookContainer;
 import darkevilmac.movingworld.MovingWorld;
 import darkevilmac.movingworld.common.network.RequestMovingWorldDataMessage;
+import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -22,6 +23,13 @@ public class ClientHookContainer extends CommonHookContainer {
             RequestMovingWorldDataMessage msg = new RequestMovingWorldDataMessage((EntityShip) event.entity);
             MovingWorld.instance.network.sendToServer(msg);
         }
+    }
+
+    @SubscribeEvent
+    public void onPlayerRender(RenderPlayerEvent.Post e) {
+        if (e.isCanceled())
+            return;
+
     }
 
 }

@@ -91,7 +91,7 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
     public CanAssemble isBlockAllowed(World world, Block block, BlockPos pos) {
         CanAssemble canAssemble = super.isBlockAllowed(world, block, pos);
 
-        if (block == ArchimedesObjects.blockStickyBuffer)
+        if (block == ArchimedesObjects.blockStickyBuffer || ArchimedesShipMod.instance.getNetworkConfig().isSticky(block))
             canAssemble.assembleThenCancel = true;
 
         return canAssemble;

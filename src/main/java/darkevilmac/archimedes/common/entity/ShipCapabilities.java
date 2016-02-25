@@ -289,7 +289,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
                 }
                 engines.add((ITileEngineModifier) te);
             }
-        } else if (block == ArchimedesObjects.blockSeat && !ship.worldObj.isRemote) {
+        } else if (block == ArchimedesObjects.blockSeat || ArchimedesShipMod.instance.getNetworkConfig().isSeat(block) && !ship.worldObj.isRemote) {
             int x1 = ship.riderDestination.getX(), y1 = ship.riderDestination.getY(), z1 = ship.riderDestination.getZ();
             int frontDir = ship.frontDirection.getHorizontalIndex();
 
