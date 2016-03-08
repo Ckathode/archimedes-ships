@@ -98,12 +98,12 @@ public class EntityShip extends EntityMovingWorld {
         if (entity != null) {
             if (entity instanceof EntityMovingWorld) {
                 EntityMovingWorld entityMovingWorld = (EntityMovingWorld) entity;
-                return entityMovingWorld.getMovingWorldCollBox();
+                return entityMovingWorld.getEntityBoundingBox();
             }
             if (entity instanceof EntitySeat || entity.ridingEntity instanceof EntitySeat || entity instanceof EntityLiving)
-                return null;
+                return new AxisAlignedBB(0,0,0,0,0,0);
         }
-        return null;
+        return new AxisAlignedBB(0,0,0,0,0,0);
     }
 
     @Override
@@ -275,13 +275,13 @@ public class EntityShip extends EntityMovingWorld {
 
     public int getBelowWater() {
         byte b0 = 5;
-        int blocksPerMeter = (int) (b0 * (getMovingWorldCollBox().maxY - getMovingWorldCollBox().minY));
+        int blocksPerMeter = (int) (b0 * (getEntityBoundingBox().maxY - getEntityBoundingBox().minY));
         AxisAlignedBB axisalignedbb = new AxisAlignedBB(0D, 0D, 0D, 0D, 0D, 0D);
         int belowWater = 0;
         for (; belowWater < blocksPerMeter; belowWater++) {
-            double d1 = getMovingWorldCollBox().minY + (getMovingWorldCollBox().maxY - getMovingWorldCollBox().minY) * belowWater / blocksPerMeter;
-            double d2 = getMovingWorldCollBox().minY + (getMovingWorldCollBox().maxY - getMovingWorldCollBox().minY) * (belowWater + 1) / blocksPerMeter;
-            axisalignedbb = new AxisAlignedBB(getMovingWorldCollBox().minX, d1, getMovingWorldCollBox().minZ, getMovingWorldCollBox().maxX, d2, getMovingWorldCollBox().maxZ);
+            double d1 = getEntityBoundingBox().minY + (getEntityBoundingBox().maxY - getEntityBoundingBox().minY) * belowWater / blocksPerMeter;
+            double d2 = getEntityBoundingBox().minY + (getEntityBoundingBox().maxY - getEntityBoundingBox().minY) * (belowWater + 1) / blocksPerMeter;
+            axisalignedbb = new AxisAlignedBB(getEntityBoundingBox().minX, d1, getEntityBoundingBox().minZ, getEntityBoundingBox().maxX, d2, getEntityBoundingBox().maxZ);
 
             if (!isAABBInLiquidNotFall(worldObj, axisalignedbb)) {
                 break;
@@ -296,14 +296,14 @@ public class EntityShip extends EntityMovingWorld {
         boolean submergeMode = getSubmerge();
 
         byte b0 = 5;
-        int blocksPerMeter = (int) (b0 * (getMovingWorldCollBox().maxY - getMovingWorldCollBox().minY));
+        int blocksPerMeter = (int) (b0 * (getEntityBoundingBox().maxY - getEntityBoundingBox().minY));
         float waterVolume = 0F;
         AxisAlignedBB axisalignedbb = new AxisAlignedBB(0D, 0D, 0D, 0D, 0D, 0D);
         int belowWater = 0;
         for (; belowWater < blocksPerMeter; belowWater++) {
-            double d1 = getMovingWorldCollBox().minY + (getMovingWorldCollBox().maxY - getMovingWorldCollBox().minY) * belowWater / blocksPerMeter;
-            double d2 = getMovingWorldCollBox().minY + (getMovingWorldCollBox().maxY - getMovingWorldCollBox().minY) * (belowWater + 1) / blocksPerMeter;
-            axisalignedbb = new AxisAlignedBB(getMovingWorldCollBox().minX, d1, getMovingWorldCollBox().minZ, getMovingWorldCollBox().maxX, d2, getMovingWorldCollBox().maxZ);
+            double d1 = getEntityBoundingBox().minY + (getEntityBoundingBox().maxY - getEntityBoundingBox().minY) * belowWater / blocksPerMeter;
+            double d2 = getEntityBoundingBox().minY + (getEntityBoundingBox().maxY - getEntityBoundingBox().minY) * (belowWater + 1) / blocksPerMeter;
+            axisalignedbb = new AxisAlignedBB(getEntityBoundingBox().minX, d1, getEntityBoundingBox().minZ, getEntityBoundingBox().maxX, d2, getEntityBoundingBox().maxZ);
 
             if (!isAABBInLiquidNotFall(worldObj, axisalignedbb)) {
                 break;

@@ -22,8 +22,6 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
         ship = null;
         pos = null;
         prevRiddenByEntity = null;
-        setEntityBoundingBox(new AxisAlignedBB(0, 0, 0, 0, 0, 0));
-        setSize(0F, 0F);
     }
 
     /**
@@ -46,7 +44,6 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
             return false;
         }
     }
-
 
     /**
      * Sets the parent ship as well as position.
@@ -117,10 +114,10 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
 
     @Override
     public void onUpdate() {
-        super.onUpdate();
-
         if (worldObj == null)
             return;
+
+        super.onUpdate();
 
         if (worldObj.isRemote) {
             if (!this.dataWatcher.getIsBlank() && this.dataWatcher.getWatchableObjectByte(10) == new Byte((byte) 1)) {
@@ -195,12 +192,12 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
 
     @Override
     public AxisAlignedBB getCollisionBox(Entity entity) {
-        return null;
+        return new AxisAlignedBB(0,0,0,0,0,0);
     }
 
     @Override
     public AxisAlignedBB getEntityBoundingBox() {
-        return null;
+        return new AxisAlignedBB(0,0,0,0,0,0);
     }
 
     @Override

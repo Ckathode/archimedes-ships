@@ -18,7 +18,7 @@ buildscript {
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = 'MC1.8.9-INDEV-B'
+version = 'MC1.8.9-INDEV-G'
 group = 'darkevilmac.archimedesshipsplus'
 archivesBaseName = 'archimedesshipsplus'
 

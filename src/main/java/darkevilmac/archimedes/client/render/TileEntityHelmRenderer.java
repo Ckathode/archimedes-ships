@@ -29,7 +29,7 @@ import java.util.List;
 
 public class TileEntityHelmRenderer extends TileEntitySpecialRenderer {
 
-    static HashMap<EnumFacing, IFlexibleBakedModel> helmModels;
+    public static HashMap<EnumFacing, IFlexibleBakedModel> helmModels;
     Function<ResourceLocation, TextureAtlasSprite> textureGetter = new Function<ResourceLocation, TextureAtlasSprite>() {
         public TextureAtlasSprite apply(ResourceLocation location) {
             return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());

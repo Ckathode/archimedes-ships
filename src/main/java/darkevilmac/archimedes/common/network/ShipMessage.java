@@ -5,7 +5,8 @@ import darkevilmac.archimedes.common.entity.EntityShip;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.relauncher.Side;
 
 
@@ -25,13 +26,20 @@ public abstract class ShipMessage extends ArchimedesShipsMessage {
     @Override
     public void encodeInto(ChannelHandlerContext ctx, ByteBuf buf, Side side) {
         buf.writeInt(ship.getEntityId());
+        buf.writeInt(ship.worldObj.provider.getDimensionId());
     }
 
     @Override
-    public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf, EntityPlayer player, Side side) {
+    public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf, Side side) {
         int entityID = buf.readInt();
+        int dimID = buf.readInt();
+        World theWorld = DimensionManager.getWorld(dimID);
+        if (theWorld == null) {
+            ArchimedesShipMod.instance.modLog.warn("Unable to find dimension with ID " + dimID);
+            return;
+        }
 
-        Entity entity = player.worldObj.getEntityByID(entityID);
+        Entity entity = theWorld.getEntityByID(entityID);
         if (entity instanceof EntityShip) {
             ship = (EntityShip) entity;
         } else {

@@ -32,7 +32,7 @@ public class ClientHelmActionMessage extends ArchimedesShipsMessage {
     }
 
     @Override
-    public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf, EntityPlayer player, Side side) {
+    public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf, Side side) {
         actionID = buf.readByte();
         pos = new BlockPos(buf.readInt(), buf.readInt(), buf.readInt());
     }

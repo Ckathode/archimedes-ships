@@ -28,8 +28,8 @@ public class ClientChangeSubmerseMessage extends ShipMessage {
     }
 
     @Override
-    public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf, EntityPlayer player, Side side) {
-        super.decodeInto(ctx, buf, player, side);
+    public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf, Side side) {
+        super.decodeInto(ctx, buf,  side);
         submerse = buf.readBoolean();
     }
 

@@ -1,10 +1,12 @@
 package darkevilmac.archimedes.common.entity;
 
 import darkevilmac.archimedes.ArchimedesShipMod;
+import darkevilmac.archimedes.common.api.block.IBlockBalloon;
 import darkevilmac.archimedes.common.handler.ConnectionHandler;
 import darkevilmac.archimedes.common.object.ArchimedesObjects;
 import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
 import darkevilmac.archimedes.common.tileentity.TileEntitySecuredBed;
+import darkevilmac.movingworld.MovingWorld;
 import darkevilmac.movingworld.common.chunk.LocatedBlock;
 import darkevilmac.movingworld.common.chunk.MovingWorldAssemblyInteractor;
 import darkevilmac.movingworld.common.chunk.assembly.AssembleResult;
@@ -50,7 +52,16 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
 
     @Override
     public void blockAssembled(LocatedBlock locatedBlock) {
-        if (ArchimedesShipMod.instance.getNetworkConfig().isBalloon(locatedBlock.blockState.getBlock())) {
+        Block block = locatedBlock.blockState.getBlock();
+        if (block instanceof IBlockBalloon) {
+            try {
+                balloonCount += ((IBlockBalloon) block).getBalloonWorth(locatedBlock.tileEntity);
+            } catch (NullPointerException e) {
+                MovingWorld.logger.error("IBlockBalloon didn't check if something was null or not, report to mod author. " + block.toString());
+            }
+        } else if (block == ArchimedesObjects.blockBalloon) {
+            balloonCount++;
+        } else if (ArchimedesShipMod.instance.getNetworkConfig().isBalloon(block)) {
             balloonCount++;
         }
     }

@@ -249,6 +249,9 @@ public class ShipCapabilities extends MovingWorldCapabilities {
 
         blockCount++;
         nonAirBlockCount++;
+        TileEntity tile = null;
+        if (ship != null && ship.getMobileChunk() != null)
+            tile = ship.getMobileChunk().getTileEntity(pos);
 
         Block block = state.getBlock();
         if (block == null) {
@@ -264,13 +267,12 @@ public class ShipCapabilities extends MovingWorldCapabilities {
             mass += ((IBlockCustomMass) block).getCustomMass();
         }
 
-        if (ArchimedesShipMod.instance.getNetworkConfig().isBalloon(block) || block instanceof IBlockBalloon) {
-            if (block instanceof IBlockBalloon) {
-                //IBlockBalloon takes priority.
-                balloonCount += ((IBlockBalloon) block).getBalloonWorth();
-            } else {
-                balloonCount++;
-            }
+        if (block instanceof IBlockBalloon) {
+            balloonCount += ((IBlockBalloon) block).getBalloonWorth(tile);
+        } else if (block == ArchimedesObjects.blockBalloon) {
+            balloonCount++;
+        } else if (ArchimedesShipMod.instance.getNetworkConfig().isBalloon(block)) {
+            balloonCount++;
         } else if (block == ArchimedesObjects.blockFloater) {
             floaters++;
         } else if (block == ArchimedesObjects.blockAnchorPoint) {

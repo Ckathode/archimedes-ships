@@ -41,7 +41,7 @@ public class ConfigMessage extends ArchimedesShipsMessage {
     }
 
     @Override
-    public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf, EntityPlayer player, Side side) {
+    public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf, Side side) {
         if (FMLCommonHandler.instance().getSide().isClient() && !buf.toString().contains("Empty")) {
             String msg = ByteBufUtils.readUTF8String(buf);
             if (!msg.equals("N")) {

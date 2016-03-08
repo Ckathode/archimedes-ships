@@ -26,8 +26,8 @@ public class ControlInputMessage extends ShipMessage {
     }
 
     @Override
-    public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf, EntityPlayer player, Side side) {
-        super.decodeInto(ctx, buf, player, side);
+    public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf,  Side side) {
+        super.decodeInto(ctx, buf, side);
         control = buf.readByte();
     }
 

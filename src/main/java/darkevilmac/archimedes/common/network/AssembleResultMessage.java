@@ -38,7 +38,7 @@ public class AssembleResultMessage extends ArchimedesShipsMessage {
     }
 
     @Override
-    public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf, EntityPlayer player, Side side) {
+    public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf, Side side) {
         if (side.isClient()) {
             prevFlag = buf.readBoolean();
             byte resultCode = buf.readByte();
@@ -49,7 +49,7 @@ public class AssembleResultMessage extends ArchimedesShipsMessage {
 
     @Override
     public void handleClientSide(EntityPlayer player) {
-        if (player.openContainer instanceof ContainerHelm) {
+        if (player != null && player.openContainer instanceof ContainerHelm) {
             if (prevFlag) {
                 ((ContainerHelm) player.openContainer).tileEntity.setPrevAssembleResult(result);
                 ((ContainerHelm) player.openContainer).tileEntity.getPrevAssembleResult().assemblyInteractor = result.assemblyInteractor;

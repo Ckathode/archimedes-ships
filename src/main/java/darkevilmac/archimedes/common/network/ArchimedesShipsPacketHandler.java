@@ -9,6 +9,7 @@ import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -17,7 +18,7 @@ public class ArchimedesShipsPacketHandler extends SimpleChannelInboundHandler<Ar
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ArchimedesShipsMessage msg) throws Exception {
         EntityPlayer player;
-        switch (FMLCommonHandler.instance().getSide()) {
+        switch (FMLCommonHandler.instance().getEffectiveSide()) {
             case CLIENT:
                 player = this.getClientPlayer();
                 msg.handleClientSide(player);
@@ -31,8 +32,15 @@ public class ArchimedesShipsPacketHandler extends SimpleChannelInboundHandler<Ar
     }
 
     @SideOnly(Side.CLIENT)
-    private EntityPlayer getClientPlayer() {
+    private EntityPlayer getRealClientPlayer() {
         return Minecraft.getMinecraft().thePlayer;
+    }
+
+    private EntityPlayer getClientPlayer() {
+        if (FMLLaunchHandler.side().isClient())
+            return getRealClientPlayer();
+        else
+            return null;
     }
 
     private EntityPlayer getServerPlayer(ChannelHandlerContext ctx) {

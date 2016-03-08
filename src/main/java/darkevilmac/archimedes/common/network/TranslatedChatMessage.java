@@ -26,12 +26,15 @@ public class TranslatedChatMessage extends ArchimedesShipsMessage {
     }
 
     @Override
-    public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf, EntityPlayer player, Side side) {
+    public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf, Side side) {
         message = ByteBufUtils.readUTF8String(buf);
     }
 
     @Override
     public void handleClientSide(EntityPlayer player) {
+        if (player == null)
+            return;
+
         String[] split = message.split("~");
         ChatComponentText text = new ChatComponentText("");
 

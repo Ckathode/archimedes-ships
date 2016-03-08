@@ -23,7 +23,7 @@ public class ClientOpenGuiMessage extends ArchimedesShipsMessage {
     }
 
     @Override
-    public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf, EntityPlayer player, Side side) {
+    public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf, Side side) {
         guiID = buf.readInt();
     }
 

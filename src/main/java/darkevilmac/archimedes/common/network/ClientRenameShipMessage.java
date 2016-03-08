@@ -32,7 +32,7 @@ public class ClientRenameShipMessage extends ArchimedesShipsMessage {
     }
 
     @Override
-    public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf, EntityPlayer player, Side side) {
+    public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf, Side side) {
         byte[] ab = new byte[buf.readShort()];
         buf.readBytes(ab);
         newName = new String(ab);
