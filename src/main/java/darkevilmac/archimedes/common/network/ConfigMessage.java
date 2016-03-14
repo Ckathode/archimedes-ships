@@ -52,7 +52,7 @@ public class ConfigMessage extends ArchimedesShipsMessage {
 
     @Override
     public void handleClientSide(EntityPlayer player) {
-        if (config != null) {
+        if (config != null && ArchimedesShipMod.proxy != null && ArchimedesShipMod.proxy instanceof ClientProxy) {
             ((ClientProxy) ArchimedesShipMod.proxy).syncedConfig = ArchimedesShipMod.instance.getLocalConfig();
             ((ClientProxy) ArchimedesShipMod.proxy).syncedConfig.setShared(config);
         }
