@@ -1,6 +1,6 @@
 package darkevilmac.archimedes.common.entity;
 
-import darkevilmac.movingworld.common.util.Vec3Mod;
+import darkevilmac.movingworld.common.util.Vec3dMod;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -17,7 +17,7 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 
     public EntityParachute(World world, EntityShip ship, BlockPos pos) {
         this(world);
-        Vec3Mod vec = new Vec3Mod(pos.getX() - ship.getMobileChunk().getCenterX(), pos.getY() - ship.getMobileChunk().minY(), pos.getZ() - ship.getMobileChunk().getCenterZ());
+        Vec3dMod vec = new Vec3dMod(pos.getX() - ship.getMobileChunk().getCenterX(), pos.getY() - ship.getMobileChunk().minY(), pos.getZ() - ship.getMobileChunk().getCenterZ());
         vec = vec.rotateAroundY((float) Math.toRadians(ship.rotationYaw));
 
         setLocationAndAngles(ship.posX + vec.xCoord, ship.posY + vec.yCoord - 2D, ship.posZ + vec.zCoord, 0F, 0F);
@@ -26,7 +26,7 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
         motionZ = ship.motionZ;
     }
 
-    public EntityParachute(World world, Entity mounter, Vec3Mod vec, Vec3Mod shipPos, Vec3Mod motion) {
+    public EntityParachute(World world, Entity mounter, Vec3dMod vec, Vec3dMod shipPos, Vec3dMod motion) {
         this(world);
 
         setLocationAndAngles(shipPos.xCoord + vec.xCoord, shipPos.yCoord + vec.yCoord - 2D, shipPos.zCoord + vec.zCoord, 0F, 0F);

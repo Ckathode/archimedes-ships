@@ -6,7 +6,7 @@ import darkevilmac.movingworld.common.tile.IMovingWorldTileEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 
 public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTileEntity {
 

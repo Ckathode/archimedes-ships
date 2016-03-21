@@ -8,6 +8,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -18,8 +19,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumWorldBlockLayer;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockCrate extends BlockContainer {
@@ -28,7 +35,6 @@ public class BlockCrate extends BlockContainer {
 
     public BlockCrate(Material material) {
         super(material);
-        setBlockBounds(0F, 0F, 0F, 1F, 0.1F, 1F);
     }
 
     public static int getMetaForAxis(EnumFacing.Axis axis) {
@@ -36,23 +42,29 @@ public class BlockCrate extends BlockContainer {
     }
 
     @Override
-    public boolean isFullCube() {
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+    {
+        return new AxisAlignedBB(0F, 0F, 0F, 1F, 0.1F, 1F);
+    }
+
+    @Override
+    public boolean isFullCube(IBlockState state) {
         return false;
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
     @Override
-    public int getRenderType() {
-        return 3;
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.MODEL;
     }
 
     @Override
-    public EnumWorldBlockLayer getBlockLayer() {
-        return EnumWorldBlockLayer.SOLID;
+    public BlockRenderLayer getBlockLayer() {
+        return BlockRenderLayer.SOLID;
     }
 
     @Override
@@ -66,8 +78,8 @@ public class BlockCrate extends BlockContainer {
     }
 
     @Override
-    protected BlockState createBlockState() {
-        return new BlockState(this, AXIS);
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, AXIS);
     }
 
     @Override
@@ -98,7 +110,7 @@ public class BlockCrate extends BlockContainer {
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         TileEntity te = world.getTileEntity(pos);
         if (te instanceof TileEntityCrate) {
             ((TileEntityCrate) te).releaseEntity();
@@ -122,8 +134,6 @@ public class BlockCrate extends BlockContainer {
     @Override
     public void onFallenUpon(World worldIn, BlockPos pos, Entity entityIn, float fallDistance) {
         super.onFallenUpon(worldIn, pos, entityIn, fallDistance);
-
-        System.out.println("onFall");
 
         if (worldIn != null && !worldIn.isRemote) {
             if (worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos) instanceof TileEntityCrate

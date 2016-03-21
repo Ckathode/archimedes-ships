@@ -18,17 +18,16 @@ buildscript {
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = 'MC1.8.9-INDEV-G'
+version = 'MC1.9-INDEV'
 group = 'darkevilmac.archimedesshipsplus'
 archivesBaseName = 'archimedesshipsplus'
 
 minecraft {
-    version = "1.8.9-11.15.0.1695"
-    runDir = 'run'
+    version = "1.9-12.16.0.1780-1.9"
+    runDir = "run"
+    mappings = "snapshot_20160312"
 
     replace '@AS+VER@', project.version
-
-    mappings = 'snapshot_20160112'
 }
 
 dependencies {

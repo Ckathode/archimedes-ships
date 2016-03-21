@@ -13,7 +13,7 @@ import darkevilmac.movingworld.common.chunk.assembly.ChunkDisassembler;
 import darkevilmac.movingworld.common.entity.EntityMovingWorld;
 import darkevilmac.movingworld.common.entity.MovingWorldCapabilities;
 import darkevilmac.movingworld.common.entity.MovingWorldHandlerCommon;
-import darkevilmac.movingworld.common.util.Vec3Mod;
+import darkevilmac.movingworld.common.util.Vec3dMod;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -259,7 +259,7 @@ public class EntityShip extends EntityMovingWorld {
     @SideOnly(Side.CLIENT)
     public void spawnParticles(double horvel) {
         if (capabilities.getEngines() != null && !capabilities.getEngines().isEmpty()) {
-            Vec3Mod vec = Vec3Mod.getOrigin();
+            Vec3dMod vec = Vec3dMod.getOrigin();
             float yaw = (float) Math.toRadians(rotationYaw);
             for (ITileEngineModifier engine : capabilities.getEngines()) {
                 if (engine.getPowerIncrement(capabilities) != 0F) {
@@ -404,7 +404,7 @@ public class EntityShip extends EntityMovingWorld {
             }
 
             if (ArchimedesShipMod.instance.getNetworkConfig().getShared().shipControlType == ArchimedesConfig.CONTROL_TYPE_ARCHIMEDES) {
-                Vec3Mod vec = new Vec3Mod(riddenByEntity.motionX, 0D, riddenByEntity.motionZ);
+                Vec3dMod vec = new Vec3dMod(riddenByEntity.motionX, 0D, riddenByEntity.motionZ);
                 vec.rotateAroundY((float) Math.toRadians(riddenByEntity.rotationYaw));
 
                 double steer = ((EntityLivingBase) riddenByEntity).moveStrafing;

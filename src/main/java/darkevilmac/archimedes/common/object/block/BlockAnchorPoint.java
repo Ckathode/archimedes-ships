@@ -5,18 +5,20 @@ import darkevilmac.archimedes.common.network.TranslatedChatMessage;
 import darkevilmac.archimedes.common.tileentity.TileEntityAnchorPoint;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumWorldBlockLayer;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -33,23 +35,24 @@ public class BlockAnchorPoint extends BlockContainer {
     }
 
     @Override
-    public boolean isFullCube() {
+    public boolean isFullCube(IBlockState state) {
         return false;
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
     @Override
-    public int getRenderType() {
-        return 3;
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.MODEL;
     }
 
     @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess worldIn, BlockPos pos) {
-        EnumFacing.Axis axis = (EnumFacing.Axis) worldIn.getBlockState(pos).getValue(AXIS);
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+    {
+        EnumFacing.Axis axis = (EnumFacing.Axis) source.getBlockState(pos).getValue(AXIS);
         float f = 0.125F;
         float f1 = 0.125F;
 
@@ -61,8 +64,9 @@ public class BlockAnchorPoint extends BlockContainer {
             f1 = 0.5F;
         }
 
-        this.setBlockBounds(0.5F - f, 0.0F, 0.5F - f1, 0.5F + f, 1.0F, 0.5F + f1);
+        return new AxisAlignedBB(0.5F - f, 0.0F, 0.5F - f1, 0.5F + f, 1.0F, 0.5F + f1);
     }
+
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
@@ -75,8 +79,8 @@ public class BlockAnchorPoint extends BlockContainer {
     }
 
     @Override
-    protected BlockState createBlockState() {
-        return new BlockState(this, AXIS);
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, AXIS);
     }
 
     @Override
@@ -90,7 +94,7 @@ public class BlockAnchorPoint extends BlockContainer {
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (world != null && player != null && !world.isRemote) {
             if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityAnchorPoint) {
                 TileEntityAnchorPoint tile = (TileEntityAnchorPoint) world.getTileEntity(pos);
@@ -120,8 +124,8 @@ public class BlockAnchorPoint extends BlockContainer {
     }
 
     @Override
-    public EnumWorldBlockLayer getBlockLayer() {
-        return EnumWorldBlockLayer.SOLID;
+    public BlockRenderLayer getBlockLayer() {
+        return BlockRenderLayer.SOLID;
     }
 
     @Override

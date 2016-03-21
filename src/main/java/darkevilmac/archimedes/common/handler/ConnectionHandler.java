@@ -6,7 +6,7 @@ import darkevilmac.archimedes.common.entity.EntitySeat;
 import darkevilmac.archimedes.common.entity.EntityShip;
 import darkevilmac.archimedes.common.network.ConfigMessage;
 import darkevilmac.archimedes.common.tileentity.TileEntitySecuredBed;
-import darkevilmac.movingworld.common.util.Vec3Mod;
+import darkevilmac.movingworld.common.util.Vec3dMod;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -75,9 +75,9 @@ public class ConnectionHandler {
             double motionX = nbt.getDouble("motionX");
             double motionY = nbt.getDouble("motionY");
             double motionZ = nbt.getDouble("motionZ");
-            Vec3Mod vec = new Vec3Mod(vecX, vecY, vecZ);
-            Vec3Mod shipVec = new Vec3Mod(shipX, shipY, shipZ);
-            Vec3Mod motionVec = new Vec3Mod(motionX, motionY, motionZ);
+            Vec3dMod vec = new Vec3dMod(vecX, vecY, vecZ);
+            Vec3dMod shipVec = new Vec3dMod(shipX, shipY, shipZ);
+            Vec3dMod motionVec = new Vec3dMod(motionX, motionY, motionZ);
 
             EntityParachute parachute = new EntityParachute(worldObj, player, vec, shipVec, motionVec);
             worldObj.spawnEntityInWorld(parachute);
@@ -97,7 +97,7 @@ public class ConnectionHandler {
             if (ship != null && seat.getPos() != null) {
                 NBTTagCompound nbt = new NBTTagCompound();
 
-                Vec3Mod vec = new Vec3Mod(seat.getPos().getX() - ship.getMobileChunk().getCenterX(), seat.getPos().getY() - ship.getMobileChunk().minY(), seat.getPos().getZ() - ship.getMobileChunk().getCenterZ());
+                Vec3dMod vec = new Vec3dMod(seat.getPos().getX() - ship.getMobileChunk().getCenterX(), seat.getPos().getY() - ship.getMobileChunk().minY(), seat.getPos().getZ() - ship.getMobileChunk().getCenterZ());
                 vec = vec.rotateAroundY((float) Math.toRadians(ship.rotationYaw));
 
                 nbt.setDouble("vecX", vec.xCoord);
