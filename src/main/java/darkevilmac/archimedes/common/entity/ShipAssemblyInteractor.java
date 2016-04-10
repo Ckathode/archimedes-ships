@@ -13,9 +13,10 @@ import darkevilmac.movingworld.common.chunk.assembly.AssembleResult;
 import darkevilmac.movingworld.common.chunk.assembly.CanAssemble;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
@@ -99,10 +100,10 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
     }
 
     @Override
-    public CanAssemble isBlockAllowed(World world, Block block, BlockPos pos) {
-        CanAssemble canAssemble = super.isBlockAllowed(world, block, pos);
+    public CanAssemble isBlockAllowed(World world, IBlockState state, BlockPos pos) {
+        CanAssemble canAssemble = super.isBlockAllowed(world, state, pos);
 
-        if (block == ArchimedesObjects.blockStickyBuffer || ArchimedesShipMod.instance.getNetworkConfig().isSticky(block))
+        if (state.getBlock() == ArchimedesObjects.blockStickyBuffer || ArchimedesShipMod.instance.getNetworkConfig().isSticky(state.getBlock()))
             canAssemble.assembleThenCancel = true;
 
         return canAssemble;

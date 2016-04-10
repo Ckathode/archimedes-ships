@@ -4,7 +4,7 @@ import darkevilmac.archimedes.common.handler.ConnectionHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.UUID;
 
@@ -56,7 +56,7 @@ public class TileEntitySecuredBed extends TileEntity {
                 return;
 
             if (worldObj.getPlayerEntityByUUID(playerID) != null) {
-                worldObj.getPlayerEntityByUUID(playerID).setSpawnChunk(newPos, true, worldObj.provider.getDimensionId());
+                worldObj.getPlayerEntityByUUID(playerID).setSpawnChunk(newPos, true, worldObj.provider.getDimension());
                 worldObj.getPlayerEntityByUUID(playerID).setSpawnPoint(newPos, true);
                 doMove = false;
             }

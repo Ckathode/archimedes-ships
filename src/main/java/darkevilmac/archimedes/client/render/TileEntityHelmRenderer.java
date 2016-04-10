@@ -11,16 +11,20 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ModelRotation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.client.resources.model.ModelRotation;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.*;
+import net.minecraftforge.client.model.Attributes;
+import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.common.model.TRSRTransformation;
 import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
@@ -29,7 +33,7 @@ import java.util.List;
 
 public class TileEntityHelmRenderer extends TileEntitySpecialRenderer {
 
-    public static HashMap<EnumFacing, IFlexibleBakedModel> helmModels;
+    public static HashMap<EnumFacing, IBakedModel> helmModels;
     Function<ResourceLocation, TextureAtlasSprite> textureGetter = new Function<ResourceLocation, TextureAtlasSprite>() {
         public TextureAtlasSprite apply(ResourceLocation location) {
             return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
@@ -39,14 +43,14 @@ public class TileEntityHelmRenderer extends TileEntitySpecialRenderer {
     @Override
     public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage) {
         if (helmModels == null)
-            helmModels = new HashMap<EnumFacing, IFlexibleBakedModel>();
+            helmModels = new HashMap<EnumFacing, IBakedModel>();
         if (helmModels.keySet().isEmpty()) {
             IModel model = null;
 
             try {
                 model = ModelLoaderRegistry.getModel(new ResourceLocation(ArchimedesShipMod.RESOURCE_DOMAIN + "block/helmWheel"));
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                ArchimedesShipMod.modLog.error("A critical exception occured when rendering a helm model, " + e.getLocalizedMessage());
             }
 
             if (model != null) {
@@ -76,7 +80,7 @@ public class TileEntityHelmRenderer extends TileEntitySpecialRenderer {
         }
 
         Tessellator tessellator = Tessellator.getInstance();
-        WorldRenderer worldRenderer = tessellator.getWorldRenderer();
+        VertexBuffer vertexBuffer = tessellator.getBuffer();
         RenderHelper.disableStandardItemLighting();
         GlStateManager.blendFunc(770, 771);
         GlStateManager.enableBlend();
@@ -95,16 +99,16 @@ public class TileEntityHelmRenderer extends TileEntitySpecialRenderer {
         newY = (float) y;
         newZ = (float) z;
 
-        IFlexibleBakedModel modelBaked = null;
+        IBakedModel modelBaked = null;
         if (helmModels.containsKey(blockStateFacing)) {
             bindTexture(TextureMap.locationBlocksTexture);
             modelBaked = helmModels.get(blockStateFacing);
         }
-        worldRenderer.begin(GL11.GL_QUADS,Attributes.DEFAULT_BAKED_FORMAT);
+        vertexBuffer.begin(GL11.GL_QUADS, Attributes.DEFAULT_BAKED_FORMAT);
         GlStateManager.translate(newX, newY, newZ);
 
         if (modelBaked != null) {
-            List<BakedQuad> generalQuads = modelBaked.getGeneralQuads();
+            List<BakedQuad> generalQuads = modelBaked.getQuads(blockState, blockStateFacing, getWorld().rand.nextLong());
 
             float shipPitch = 0;
             if (ship != null) {
@@ -127,8 +131,8 @@ public class TileEntityHelmRenderer extends TileEntitySpecialRenderer {
 
             for (BakedQuad q : generalQuads) {
                 int[] vd = q.getVertexData();
-                worldRenderer.color(1.0F, 1.0F, 1.0F, 1.0F);
-                worldRenderer.addVertexData(vd);
+                vertexBuffer.color(1.0F, 1.0F, 1.0F, 1.0F);
+                vertexBuffer.addVertexData(vd);
             }
 
         }

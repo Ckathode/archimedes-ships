@@ -1,9 +1,11 @@
 package darkevilmac.archimedes.common.command;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.TextComponentString;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +25,7 @@ public class CommandASHelp extends CommandBase {
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender icommandsender) {
+    public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
         return true;
     }
 
@@ -33,10 +35,10 @@ public class CommandASHelp extends CommandBase {
     }
 
     @Override
-    public void processCommand(ICommandSender icommandsender, String[] astring) {
-        icommandsender.addChatMessage(new ChatComponentText(EnumChatFormatting.AQUA.toString() + "Archimedes' Ships mod commands:"));
+    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+        sender.addChatMessage(new TextComponentString(ChatFormatting.AQUA.toString() + "Archimedes' Ships mod commands:"));
         for (CommandBase cb : asCommands) {
-            icommandsender.addChatMessage(new ChatComponentText(cb.getCommandUsage(icommandsender)));
+            sender.addChatMessage(new TextComponentString(cb.getCommandUsage(sender)));
         }
     }
 

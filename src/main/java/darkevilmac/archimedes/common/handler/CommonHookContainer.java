@@ -4,9 +4,9 @@ package darkevilmac.archimedes.common.handler;
 import darkevilmac.archimedes.common.tileentity.TileEntityCrate;
 import darkevilmac.archimedes.common.tileentity.TileEntitySecuredBed;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.MathHelper;
-import net.minecraftforge.event.entity.player.EntityInteractEvent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerSetSpawnEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -14,14 +14,14 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class CommonHookContainer {
     @SubscribeEvent
-    public void onInteractWithEntity(EntityInteractEvent event) {
-        if (event.entityPlayer != null) {
-            int x = MathHelper.floor_double(event.target.posX);
-            int y = MathHelper.floor_double(event.target.posY);
-            int z = MathHelper.floor_double(event.target.posZ);
+    public void onInteractWithEntity(PlayerInteractEvent.EntityInteract event) {
+        if (event.getEntityPlayer() != null) {
+            int x = MathHelper.floor_double(event.getTarget().posX);
+            int y = MathHelper.floor_double(event.getTarget().posY);
+            int z = MathHelper.floor_double(event.getTarget().posZ);
 
-            TileEntity te = event.entity.worldObj.getTileEntity(new BlockPos(x, y, z));
-            if (te instanceof TileEntityCrate && ((TileEntityCrate) te).getContainedEntity() == event.target) {
+            TileEntity te = event.getEntity().worldObj.getTileEntity(new BlockPos(x, y, z));
+            if (te instanceof TileEntityCrate && ((TileEntityCrate) te).getContainedEntity() == event.getTarget()) {
                 ((TileEntityCrate) te).releaseEntity();
                 event.setCanceled(true);
             }
@@ -37,16 +37,16 @@ public class CommonHookContainer {
         if (e.isCanceled())
             return;
 
-        if (e.entityPlayer.getGameProfile() != null && e.entityPlayer.getGameProfile().getId() != null &&
-                ConnectionHandler.playerBedMap.containsKey(e.entityPlayer.getGameProfile().getId())) {
+        if (e.getEntityPlayer().getGameProfile() != null && e.getEntityPlayer().getGameProfile().getId() != null &&
+                ConnectionHandler.playerBedMap.containsKey(e.getEntityPlayer().getGameProfile().getId())) {
             //Spawn for the player is changing and they use a secured bed, clear the map of the player.
 
-            TileEntitySecuredBed bed = ConnectionHandler.playerBedMap.get(e.entityPlayer.getGameProfile().getId());
+            TileEntitySecuredBed bed = ConnectionHandler.playerBedMap.get(e.getEntityPlayer().getGameProfile().getId());
 
-            if (bed.getPos().equals(e.newSpawn))
+            if (bed.getPos().equals(e.getNewSpawn()))
                 return;
 
-            ConnectionHandler.playerBedMap.remove(e.entityPlayer.getGameProfile().getId());
+            ConnectionHandler.playerBedMap.remove(e.getEntityPlayer().getGameProfile().getId());
         }
     }
 

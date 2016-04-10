@@ -20,10 +20,17 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -32,6 +39,17 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Set;
 
 public class EntityShip extends EntityMovingWorld {
+
+    private static final DataParameter<Float> ENGINE_POWER = EntityDataManager.<Float>createKey(EntityShip.class, DataSerializers.FLOAT);
+    private static final DataParameter<Byte> HAS_ENGINES = EntityDataManager.<Byte>createKey(EntityShip.class, DataSerializers.BYTE);
+    private static final DataParameter<Byte> CAN_SUBMERGE = EntityDataManager.<Byte>createKey(EntityShip.class, DataSerializers.BYTE);
+    private static final DataParameter<Byte> IS_SUBMERGED = EntityDataManager.<Byte>createKey(EntityShip.class, DataSerializers.BYTE);
+
+    //dataWatcher.addObject(29, 0F); // Engine power
+    //dataWatcher.addObject(28, new Byte((byte) 0)); // Do we have any engines
+    //dataWatcher.addObject(27, new Byte((byte) 0)); // Can we be submerged if wanted?
+    //dataWatcher.addObject(26, new Byte((byte) 0)); // Are we submerged?
+
 
     public static final float BASE_FORWARD_SPEED = 0.005F, BASE_TURN_SPEED = 0.5F, BASE_LIFT_SPEED = 0.004F;
     public ShipCapabilities capabilities;
@@ -101,9 +119,9 @@ public class EntityShip extends EntityMovingWorld {
                 return entityMovingWorld.getEntityBoundingBox();
             }
             if (entity instanceof EntitySeat || entity.ridingEntity instanceof EntitySeat || entity instanceof EntityLiving)
-                return new AxisAlignedBB(0,0,0,0,0,0);
+                return new AxisAlignedBB(0, 0, 0, 0, 0, 0);
         }
-        return new AxisAlignedBB(0,0,0,0,0,0);
+        return new AxisAlignedBB(0, 0, 0, 0, 0, 0);
     }
 
     @Override
@@ -165,7 +183,7 @@ public class EntityShip extends EntityMovingWorld {
                 BlockPos chunkAnchorPos = anchorPointLocation.shipAnchor.blockPos;
                 BlockPos worldAnchorPos = anchorPointLocation.worldAnchor.blockPos;
 
-                Vec3 worldPosForAnchor = new Vec3(worldAnchorPos.getX(), worldAnchorPos.getY(), worldAnchorPos.getZ());
+                Vec3d worldPosForAnchor = new Vec3d(worldAnchorPos.getX(), worldAnchorPos.getY(), worldAnchorPos.getZ());
 
                 worldPosForAnchor = worldPosForAnchor.addVector(getMobileChunk().maxX() / 2, getMobileChunk().minY(), getMobileChunk().maxZ() / 2);
                 worldPosForAnchor = worldPosForAnchor.subtract(chunkAnchorPos.getX(), 0, chunkAnchorPos.getZ());
@@ -208,11 +226,11 @@ public class EntityShip extends EntityMovingWorld {
     public void handleControl(double horizontalVelocity) {
         capabilities.updateEngines();
 
-        if (riddenByEntity == null) {
+        if (getControllingPassenger() == null) {
             if (prevRiddenByEntity != null) {
                 if (ArchimedesShipMod.instance.getNetworkConfig().getShared().disassembleOnDismount) {
                     alignToAnchor();
-                    updateRiderPosition(prevRiddenByEntity, riderDestination, 1);
+                    updatePassengerPosition(prevRiddenByEntity, riderDestination, 1);
                     disassemble(false);
                 } else {
                     if (!worldObj.isRemote && isFlying()) {
@@ -227,23 +245,24 @@ public class EntityShip extends EntityMovingWorld {
             }
         }
 
-        if (riddenByEntity == null || !capabilities.canMove()) {
+        if (getControllingPassenger() == null || !capabilities.canMove()) {
             if (isFlying()) {
                 motionY -= BASE_LIFT_SPEED * 0.2F;
             }
         } else {
             handlePlayerControl();
-            prevRiddenByEntity = riddenByEntity;
+            prevRiddenByEntity = getControllingPassenger();
         }
     }
 
     @Override
-    public void updateRiderPosition(Entity entity, BlockPos riderDestination, int flags) {
-        super.updateRiderPosition(entity, riderDestination, flags);
+    public void updatePassengerPosition(Entity entity, BlockPos riderDestination, int flags) {
+        super.updatePassengerPosition(entity, riderDestination, flags);
 
         if (submerge && entity != null && entity instanceof EntityLivingBase && worldObj != null && !worldObj.isRemote) {
-            if (!((EntityLivingBase) entity).isPotionActive(Potion.waterBreathing))
-                ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.waterBreathing.id, 20, 1));
+            Potion waterBreathing = Potion.potionRegistry.getObject(new ResourceLocation("water_breathing"));
+            if (!((EntityLivingBase) entity).isPotionActive(waterBreathing))
+                ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(waterBreathing, 20, 1));
         }
     }
 
@@ -371,7 +390,7 @@ public class EntityShip extends EntityMovingWorld {
     public boolean disassemble(boolean overwrite) {
         if (worldObj.isRemote) return true;
 
-        updateRiderPosition();
+        updatePassengerPosition();
 
         ChunkDisassembler disassembler = getDisassembler();
         disassembler.overwrite = overwrite;

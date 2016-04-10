@@ -4,7 +4,7 @@ import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class ClientHelmActionMessage extends ArchimedesShipsMessage {

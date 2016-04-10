@@ -8,9 +8,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ITickable;
 
 public class TileEntityCrate extends TileEntity implements IMovingWorldTileEntity, ITickable {
@@ -55,7 +55,7 @@ public class TileEntityCrate extends TileEntity implements IMovingWorldTileEntit
             if (parentShip == null) {
                 containedEntity.setPosition(pos.getX() + 0.5d, pos.getY() + 0.15f + containedEntity.getYOffset(), pos.getZ() + 0.5d);
             } else {
-                parentShip.updateRiderPosition(containedEntity, pos, 2);
+                parentShip.updatePassengerPosition(containedEntity, pos, 2);
             }
 
             if (containedEntity.hurtResistantTime > 0 || containedEntity.isSneaking()) {
@@ -88,11 +88,11 @@ public class TileEntityCrate extends TileEntity implements IMovingWorldTileEntit
     public Packet getDescriptionPacket() {
         NBTTagCompound compound = new NBTTagCompound();
         writeToNBT(compound);
-        return new S35PacketUpdateTileEntity(pos, 0, compound);
+        return new SPacketUpdateTileEntity(pos, 0, compound);
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
         readFromNBT(packet.getNbtCompound());
     }
 
@@ -140,7 +140,7 @@ public class TileEntityCrate extends TileEntity implements IMovingWorldTileEntit
             if (parentShip == null) {
                 containedEntity.setPosition(pos.getX() + 0.5d, pos.getY() + 0.15f + containedEntity.getYOffset(), pos.getZ() + 0.5d);
             } else {
-                parentShip.updateRiderPosition(containedEntity, pos, 2);
+                parentShip.updatePassengerPosition(containedEntity, pos, 2);
             }
 
             if (containedEntity.hurtResistantTime > 0 || containedEntity.isSneaking()) {

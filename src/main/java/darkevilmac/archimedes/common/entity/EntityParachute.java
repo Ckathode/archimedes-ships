@@ -2,10 +2,10 @@ package darkevilmac.archimedes.common.entity;
 
 import darkevilmac.movingworld.common.util.Vec3dMod;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
@@ -34,8 +34,8 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
         this.motionY = motion.yCoord;
         this.motionZ = motion.zCoord;
 
-        mounter.mountEntity(null);
-        mounter.mountEntity(this);
+        mounter.startRiding(null);
+        mounter.startRiding(this, true);
     }
 
 
@@ -52,25 +52,20 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
         prevPosY = posY;
         prevPosZ = posZ;
 
-        if (!worldObj.isRemote && (riddenByEntity == null || onGround || isInWater())) {
+        if (!worldObj.isRemote && (getControllingPassenger() == null || onGround || isInWater())) {
             setDead();
             return;
         }
 
 
-        if (!worldObj.isRemote && riddenByEntity != null) {
-            motionX += riddenByEntity.motionX;
-            motionZ += riddenByEntity.motionZ;
+        if (!worldObj.isRemote && getControllingPassenger() != null) {
+            motionX += getControllingPassenger().motionX;
+            motionZ += getControllingPassenger().motionZ;
         }
         if (motionY > -.5)
             motionY -= 0.025D;
 
         moveEntity(motionX, motionY, motionZ);
-    }
-
-    @Override
-    public void updateRiderPosition() {
-        super.updateRiderPosition();
     }
 
     @Override
@@ -92,7 +87,7 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
     }
 
     @Override
-    public void updateFallState(double y, boolean grounded, Block blockIn, BlockPos pos) {
+    protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
     }
 
 
@@ -103,9 +98,9 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 
     @Override
     public void writeSpawnData(ByteBuf buffer) {
-        buffer.writeBoolean(riddenByEntity != null);
-        if (riddenByEntity != null) {
-            buffer.writeInt(riddenByEntity.getEntityId());
+        buffer.writeBoolean(getControllingPassenger() != null);
+        if (getControllingPassenger() != null) {
+            buffer.writeInt(getControllingPassenger().getEntityId());
         }
     }
 
@@ -114,7 +109,7 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
         if (additionalData.readBoolean() && worldObj != null) {
             int entityID = additionalData.readInt();
             if (worldObj.getEntityByID(entityID) != null) {
-                worldObj.getEntityByID(entityID).mountEntity(this);
+                worldObj.getEntityByID(entityID).startRiding(this);
             }
         }
     }

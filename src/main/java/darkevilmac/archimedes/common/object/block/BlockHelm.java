@@ -2,23 +2,20 @@ package darkevilmac.archimedes.common.object.block;
 
 import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumWorldBlockLayer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockHelm extends BlockDirectional implements ITileEntityProvider {
 
@@ -29,23 +26,23 @@ public class BlockHelm extends BlockDirectional implements ITileEntityProvider {
 
 
     @Override
-    public EnumWorldBlockLayer getBlockLayer() {
-        return EnumWorldBlockLayer.CUTOUT_MIPPED;
+    public BlockRenderLayer getBlockLayer() {
+        return BlockRenderLayer.CUTOUT_MIPPED;
     }
 
     @Override
-    public boolean isFullCube() {
+    public boolean isFullCube(IBlockState state) {
         return false;
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
     @Override
-    public int getRenderType() {
-        return 3;
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.MODEL;
     }
 
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
@@ -84,10 +81,10 @@ public class BlockHelm extends BlockDirectional implements ITileEntityProvider {
 
     private void setDefaultFacing(World worldIn, BlockPos pos, IBlockState state) {
         if (!worldIn.isRemote) {
-            Block block = worldIn.getBlockState(pos.north()).getBlock();
-            Block block1 = worldIn.getBlockState(pos.south()).getBlock();
-            Block block2 = worldIn.getBlockState(pos.west()).getBlock();
-            Block block3 = worldIn.getBlockState(pos.east()).getBlock();
+            IBlockState block = worldIn.getBlockState(pos.north());
+            IBlockState block1 = worldIn.getBlockState(pos.south());
+            IBlockState block2 = worldIn.getBlockState(pos.west());
+            IBlockState block3 = worldIn.getBlockState(pos.east());
             EnumFacing enumfacing = state.getValue(FACING);
 
             if (enumfacing == EnumFacing.NORTH && block.isFullBlock() && !block1.isFullBlock()) {
@@ -114,13 +111,6 @@ public class BlockHelm extends BlockDirectional implements ITileEntityProvider {
         worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
     }
 
-    @SideOnly(Side.CLIENT)
-    @Override
-    public IBlockState getStateForEntityRender(IBlockState state) {
-        return this.getDefaultState().withProperty(FACING, EnumFacing.SOUTH);
-    }
-
-
     @Override
     public IBlockState getStateFromMeta(int meta) {
         EnumFacing enumfacing = EnumFacing.getFront(meta);
@@ -139,8 +129,8 @@ public class BlockHelm extends BlockDirectional implements ITileEntityProvider {
     }
 
     @Override
-    protected BlockState createBlockState() {
-        return new BlockState(this, FACING);
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, FACING);
     }
 
 }

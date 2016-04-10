@@ -5,7 +5,7 @@ import darkevilmac.archimedes.common.tileentity.TileEntityEngine;
 import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 
@@ -22,8 +22,8 @@ public class ASGuiHandler implements IGuiHandler {
                 }
                 return null;
             case 2:
-                if (player.ridingEntity instanceof EntityShip) {
-                    EntityShip ship = (EntityShip) player.ridingEntity;
+                if (player.getRidingEntity() instanceof EntityShip) {
+                    EntityShip ship = (EntityShip) player.getRidingEntity();
                     return new ContainerShip(ship, player);
                 }
                 return null;
@@ -50,8 +50,8 @@ public class ASGuiHandler implements IGuiHandler {
                 }
                 return null;
             case 2:
-                if (player.ridingEntity instanceof EntityShip) {
-                    EntityShip ship = (EntityShip) player.ridingEntity;
+                if (player.getRidingEntity() instanceof EntityShip) {
+                    EntityShip ship = (EntityShip) player.getRidingEntity();
                     return new GuiShip(ship, player);
                 }
                 return null;

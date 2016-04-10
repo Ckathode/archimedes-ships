@@ -4,8 +4,8 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
@@ -181,7 +181,7 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     @Override
     public void updateRiderPosition() {
         if (ship != null) {
-            ship.updateRiderPosition(riddenByEntity, new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1), 1);
+            ship.updatePassengerPosition(riddenByEntity, new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1), 1);
         }
     }
 

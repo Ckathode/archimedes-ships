@@ -6,12 +6,12 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
@@ -24,17 +24,17 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
         int meta = tileEntity.getBlockMetadata() & 3;
 
         Tessellator tess = Tessellator.getInstance();
-        WorldRenderer worldRenderer = tess.getWorldRenderer();
+        VertexBuffer vertexBuffer = tess.getBuffer();
 
-        Vec3 dVec = new Vec3(0, 0, 0);
+        Vec3d dVec = new Vec3d(0, 0, 0);
         if (tileEntity.parentShip == null) {
             dVec.addVector(0.5F, 0, 0.5F);
-        } else if (tileEntity.parentShip.riddenByEntity instanceof EntityPlayerSP) {
-            dVec = new Vec3(tileEntity.parentShip.riderDestination.getX() - tileEntity.getPos().getX(),
+        } else if (tileEntity.parentShip.getControllingPassenger() instanceof EntityPlayerSP) {
+            dVec = new Vec3d(tileEntity.parentShip.riderDestination.getX() - tileEntity.getPos().getX(),
                     tileEntity.parentShip.riderDestination.getY() - tileEntity.getPos().getY(),
                     tileEntity.parentShip.riderDestination.getZ() - tileEntity.getPos().getZ());
         } else {
-            dVec = new Vec3(tileEntity.parentShip.posX - Minecraft.getMinecraft().getRenderManager().viewerPosX,
+            dVec = new Vec3d(tileEntity.parentShip.posX - Minecraft.getMinecraft().getRenderManager().viewerPosX,
                     tileEntity.parentShip.posY - Minecraft.getMinecraft().getRenderManager().viewerPosY,
                     tileEntity.parentShip.posZ - Minecraft.getMinecraft().getRenderManager().viewerPosZ);
         }
@@ -67,13 +67,13 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
         GlStateManager.translate(-0.28125F, 0.02F, -0.28125F);
         GlStateManager.rotate(northGaugeAngle, 0F, 1F, 0F);
 
-        worldRenderer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
+        vertexBuffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
         GlStateManager.color(1F, 0F, 0F, 1F);
-        worldRenderer.pos(0D, 0D, 0D).endVertex();
-        worldRenderer.pos(0D, 0D, 0.15D).endVertex();
+        vertexBuffer.pos(0D, 0D, 0D).endVertex();
+        vertexBuffer.pos(0D, 0D, 0.15D).endVertex();
         GlStateManager.color(1F, 1F, 1F, 1F);
-        worldRenderer.pos(0D, 0D, 0D).endVertex();
-        worldRenderer.pos(0D, 0D, -0.15D).endVertex();
+        vertexBuffer.pos(0D, 0D, 0D).endVertex();
+        vertexBuffer.pos(0D, 0D, -0.15D).endVertex();
         tess.draw();
         GlStateManager.popMatrix();
 
@@ -82,10 +82,10 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
         GlStateManager.translate(0.25F, 0.02F, -0.25F);
         GlStateManager.rotate(velGaugeAngle, 0F, 1F, 0F);
 
-        worldRenderer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
+        vertexBuffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
         GlStateManager.color(0F, 0F, 0.5F, 1F);
-        worldRenderer.pos(0D, 0D, 0D).endVertex();
-        worldRenderer.pos(0D, 0D, 0.2D).endVertex();
+        vertexBuffer.pos(0D, 0D, 0D).endVertex();
+        vertexBuffer.pos(0D, 0D, 0.2D).endVertex();
         tess.draw();
         GlStateManager.popMatrix();
 
@@ -106,10 +106,10 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
             GlStateManager.translate(0.25F, 0.02F, 0.25F);
             GlStateManager.rotate(vertGaugeAng, 0F, 1F, 0F);
 
-            worldRenderer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
+            vertexBuffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
             GlStateManager.color(0F, 0F, 0.5F, 1F);
-            worldRenderer.pos(0D, 0D, 0D).endVertex();
-            worldRenderer.pos(0.2D, 0D, 0D).endVertex();
+            vertexBuffer.pos(0D, 0D, 0D).endVertex();
+            vertexBuffer.pos(0.2D, 0D, 0D).endVertex();
             tess.draw();
             GlStateManager.popMatrix();
 
@@ -119,19 +119,19 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
             GlStateManager.pushMatrix();
             GlStateManager.rotate(heightGaugeLongAng, 0F, 1F, 0F);
 
-            worldRenderer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
+            vertexBuffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
             GlStateManager.color(0.9F, 0.9F, 0F, 1F);
-            worldRenderer.pos(0D, 0D, 0D).endVertex();
-            worldRenderer.pos(0D, 0D, -0.2D).endVertex();
+            vertexBuffer.pos(0D, 0D, 0D).endVertex();
+            vertexBuffer.pos(0D, 0D, -0.2D).endVertex();
             tess.draw();
             GlStateManager.popMatrix();
 
             GlStateManager.rotate(heightGaugeShortAng, 0F, 1F, 0F);
 
-            worldRenderer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
+            vertexBuffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
             GlStateManager.color(0.7F, 0.7F, 0F, 1F);
-            worldRenderer.pos(0D, -0.01D, 0D).endVertex();
-            worldRenderer.pos(0D, -0.01, -0.15D).endVertex();
+            vertexBuffer.pos(0D, -0.01D, 0D).endVertex();
+            vertexBuffer.pos(0D, -0.01, -0.15D).endVertex();
             tess.draw();
 
             GlStateManager.popMatrix();

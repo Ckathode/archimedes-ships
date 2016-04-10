@@ -3,21 +3,22 @@ package darkevilmac.archimedes.common.object.block;
 import darkevilmac.archimedes.common.tileentity.TileEntityGauge;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.BlockFence;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumWorldBlockLayer;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -30,28 +31,27 @@ public class BlockGauge extends BlockContainer {
 
     public BlockGauge() {
         super(Material.circuits);
-        setBlockBounds(0F, 0F, 0F, 1F, 0.1F, 1F);
         setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(EXTENDED, false));
     }
 
     @Override
-    public EnumWorldBlockLayer getBlockLayer() {
-        return EnumWorldBlockLayer.CUTOUT_MIPPED;
+    public BlockRenderLayer getBlockLayer() {
+        return BlockRenderLayer.CUTOUT_MIPPED;
     }
 
     @Override
-    public boolean isFullCube() {
+    public boolean isFullCube(IBlockState state) {
         return false;
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
     @Override
-    public int getRenderType() {
-        return 3;
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.MODEL;
     }
 
     @Override
@@ -60,9 +60,8 @@ public class BlockGauge extends BlockContainer {
         list.add(new ItemStack(item, 1, 1));
     }
 
-    @Override
-    public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state) {
-        return null;
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+        return new AxisAlignedBB(0, 0, 0, 0, 0, 0);
     }
 
     @Override
@@ -70,27 +69,27 @@ public class BlockGauge extends BlockContainer {
         return true;
     }
 
-    @Override
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
         return this.canBePlacedOn(worldIn, pos.down());
+    }
+
+
+    @Override
+    public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock) {
+        if (!this.canBePlacedOn(worldIn, pos.down())) {
+            this.dropBlockAsItem(worldIn, pos, state, 0);
+            worldIn.setBlockToAir(pos);
+        }
+    }
+
+    private boolean canBePlacedOn(World worldIn, BlockPos pos) {
+        return worldIn.getBlockState(pos).isSideSolid(worldIn, pos, EnumFacing.UP) || worldIn.getBlockState(pos).getBlock() instanceof BlockFence;
     }
 
     @Override
     public int damageDropped(IBlockState state) {
         Boolean isExtended = state.getValue(EXTENDED);
         return isExtended ? 1 : 0;
-    }
-
-    private boolean canBePlacedOn(World worldIn, BlockPos pos) {
-        return World.doesBlockHaveSolidTopSurface(worldIn, pos);
-    }
-
-    @Override
-    public void onNeighborBlockChange(World world, BlockPos pos, IBlockState blockState, Block neighbor) {
-        if (!World.doesBlockHaveSolidTopSurface(world, new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ()))) {
-            dropBlockAsItem(world, pos, blockState, 0);
-            world.setBlockToAir(pos);
-        }
     }
 
     @Override
@@ -133,8 +132,8 @@ public class BlockGauge extends BlockContainer {
     }
 
     @Override
-    public BlockState createBlockState() {
-        return new BlockState(this, FACING, EXTENDED);
+    public BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, FACING, EXTENDED);
     }
 
 }

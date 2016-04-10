@@ -1,13 +1,15 @@
 package darkevilmac.archimedes.common.command;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import darkevilmac.archimedes.common.entity.EntitySeat;
 import darkevilmac.archimedes.common.entity.EntityShip;
 import darkevilmac.archimedes.common.entity.ShipCapabilities;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.TextComponentString;
 
 import java.util.Locale;
 
@@ -19,29 +21,29 @@ public class CommandShipInfo extends CommandBase {
     }
 
     @Override
-    public void processCommand(ICommandSender icommandsender, String[] astring) {
+    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         EntityShip ship = null;
-        if (icommandsender instanceof Entity) {
-            Entity player = (Entity) icommandsender;
-            if (player.ridingEntity instanceof EntityShip) {
-                ship = (EntityShip) player.ridingEntity;
-            } else if (player.ridingEntity instanceof EntitySeat) {
-                ship = ((EntitySeat) player.ridingEntity).getParentShip();
+        if (sender instanceof Entity) {
+            Entity player = (Entity) sender;
+            if (player.getRidingEntity() instanceof EntityShip) {
+                ship = (EntityShip) player.getRidingEntity();
+            } else if (player.getRidingEntity() instanceof EntitySeat) {
+                ship = ((EntitySeat) player.getRidingEntity()).getParentShip();
             }
         }
         if (ship != null) {
-            icommandsender.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN.toString() + EnumChatFormatting.BOLD.toString() + "Ship information"));
-            icommandsender.addChatMessage(new ChatComponentText(String.format(Locale.ENGLISH, "Airship: %b", ship.getCapabilities().canFly())));
-            icommandsender.addChatMessage(new ChatComponentText(String.format(Locale.ENGLISH, "Position: %.2f, %.2f, %.2f", ship.posX, ship.posY, ship.posZ)));
-            icommandsender.addChatMessage(new ChatComponentText(String.format(Locale.ENGLISH, "Speed: %.2f km/h", ship.getHorizontalVelocity() * 20 * 3.6F)));
+            sender.addChatMessage(new TextComponentString(ChatFormatting.GREEN.toString() + ChatFormatting.BOLD.toString() + "Ship information"));
+            sender.addChatMessage(new TextComponentString(String.format(Locale.ENGLISH, "Airship: %b", ship.getCapabilities().canFly())));
+            sender.addChatMessage(new TextComponentString(String.format(Locale.ENGLISH, "Position: %.2f, %.2f, %.2f", ship.posX, ship.posY, ship.posZ)));
+            sender.addChatMessage(new TextComponentString(String.format(Locale.ENGLISH, "Speed: %.2f km/h", ship.getHorizontalVelocity() * 20 * 3.6F)));
             float f = 100F * ((ShipCapabilities) ship.getCapabilities()).getBalloonCount() / ship.getCapabilities().getBlockCount();
-            icommandsender.addChatMessage(new ChatComponentText(String.format(Locale.ENGLISH, "Block count: %d", ship.getCapabilities().getBlockCount())));
-            icommandsender.addChatMessage(new ChatComponentText(String.format(Locale.ENGLISH, "Balloon count: %d", ((ShipCapabilities) ship.getCapabilities()).getBalloonCount())));
-            icommandsender.addChatMessage(new ChatComponentText(String.format(Locale.ENGLISH, "Balloon percentage: %.0f%%", f)));
-            icommandsender.addChatMessage(new ChatComponentText(""));
+            sender.addChatMessage(new TextComponentString(String.format(Locale.ENGLISH, "Block count: %d", ship.getCapabilities().getBlockCount())));
+            sender.addChatMessage(new TextComponentString(String.format(Locale.ENGLISH, "Balloon count: %d", ((ShipCapabilities) ship.getCapabilities()).getBalloonCount())));
+            sender.addChatMessage(new TextComponentString(String.format(Locale.ENGLISH, "Balloon percentage: %.0f%%", f)));
+            sender.addChatMessage(new TextComponentString(""));
             return;
         }
-        icommandsender.addChatMessage(new ChatComponentText("Not steering a ship"));
+        sender.addChatMessage(new TextComponentString("Not steering a ship"));
     }
 
     @Override
@@ -49,9 +51,8 @@ public class CommandShipInfo extends CommandBase {
         return 0;
     }
 
-    @Override
-    public boolean canCommandSenderUseCommand(ICommandSender icommandsender) {
-        return icommandsender instanceof Entity;
+    public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
+        return sender != null && sender instanceof Entity;
     }
 
     @Override
