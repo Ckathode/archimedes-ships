@@ -17,9 +17,11 @@ import darkevilmac.archimedes.common.network.ArchimedesShipsMessageToMessageCode
 import darkevilmac.archimedes.common.network.ArchimedesShipsPacketHandler;
 import darkevilmac.archimedes.common.network.NetworkUtil;
 import darkevilmac.archimedes.common.object.ArchimedesObjects;
+import net.minecraft.block.Block;
 import net.minecraft.command.CommandBase;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -139,7 +141,7 @@ public class ArchimedesShipMod {
                             String name = mapping.name.substring("ArchimedesShips:".length());
 
                             if (mapping.type == GameRegistry.Type.BLOCK) {
-                                mapping.remap(GameRegistry.findBlock(ArchimedesShipMod.MOD_ID, name));
+                                mapping.remap(Block.blockRegistry.getObject(new ResourceLocation(ArchimedesShipMod.MOD_ID, name)));
                             } else {
                                 mapping.remap(Item.getItemFromBlock(GameRegistry.findBlock(ArchimedesShipMod.MOD_ID, name)));
                             }

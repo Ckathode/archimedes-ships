@@ -4,10 +4,10 @@ import darkevilmac.archimedes.common.entity.EntityShip;
 import darkevilmac.archimedes.common.tileentity.TileEntityCrate;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.BlockFence;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -17,13 +17,10 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -35,6 +32,7 @@ public class BlockCrate extends BlockContainer {
 
     public BlockCrate(Material material) {
         super(material);
+        this.setSoundType(SoundType.WOOD);
     }
 
     public static int getMetaForAxis(EnumFacing.Axis axis) {
@@ -42,8 +40,7 @@ public class BlockCrate extends BlockContainer {
     }
 
     @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
-    {
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         return new AxisAlignedBB(0F, 0F, 0F, 1F, 0.1F, 1F);
     }
 
@@ -119,13 +116,18 @@ public class BlockCrate extends BlockContainer {
     }
 
     @Override
-    public boolean canPlaceBlockAt(World world, BlockPos pos) {
-        return World.doesBlockHaveSolidTopSurface(world, pos.add(0, -1, 0));
+    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+        return this.canBePlacedOn(worldIn, pos.down());
     }
+
+    private boolean canBePlacedOn(World worldIn, BlockPos pos) {
+        return worldIn.getBlockState(pos).isSideSolid(worldIn, pos, EnumFacing.UP) || worldIn.getBlockState(pos).getBlock() instanceof BlockFence;
+    }
+
 
     @Override
     public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
-        if (!World.doesBlockHaveSolidTopSurface(world, pos.add(0, -1, 0))) {
+        if (!canBePlacedOn(world, pos.down())) {
             dropBlockAsItem(world, pos, state, 0);
             world.setBlockToAir(pos);
         }

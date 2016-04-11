@@ -1,7 +1,7 @@
 package darkevilmac.archimedes.common.util;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.Vec3i;
+import net.minecraft.util.math.Vec3i;
 
 public class NBTTagUtils {
 

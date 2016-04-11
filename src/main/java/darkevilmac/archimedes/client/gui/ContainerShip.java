@@ -33,7 +33,7 @@ public class ContainerShip extends Container {
 
     @Override
     public boolean canInteractWith(EntityPlayer entityplayer) {
-        return entityplayer.ridingEntity == ship || entityplayer.ridingEntity instanceof EntitySeat && ((EntitySeat) entityplayer.ridingEntity).getParentShip() == ship;
+        return entityplayer.getRidingEntity() == ship || entityplayer.getRidingEntity() instanceof EntitySeat && ((EntitySeat) entityplayer.getRidingEntity()).getParentShip() == ship;
     }
 
     @Override

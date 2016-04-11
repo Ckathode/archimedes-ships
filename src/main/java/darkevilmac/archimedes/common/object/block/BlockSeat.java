@@ -1,6 +1,7 @@
 package darkevilmac.archimedes.common.object.block;
 
 import net.minecraft.block.BlockDirectional;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -17,6 +18,7 @@ public class BlockSeat extends BlockDirectional {
 
     public BlockSeat() {
         super(Material.wood);
+        this.setSoundType(SoundType.CLOTH);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
     }
 

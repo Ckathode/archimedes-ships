@@ -26,7 +26,7 @@ public abstract class ShipMessage extends ArchimedesShipsMessage {
     @Override
     public void encodeInto(ChannelHandlerContext ctx, ByteBuf buf, Side side) {
         buf.writeInt(ship.getEntityId());
-        buf.writeInt(ship.worldObj.provider.getDimensionId());
+        buf.writeInt(ship.worldObj.provider.getDimension());
     }
 
     @Override

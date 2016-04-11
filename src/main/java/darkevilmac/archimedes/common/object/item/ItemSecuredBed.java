@@ -1,16 +1,20 @@
 package darkevilmac.archimedes.common.object.item;
 
 
-import darkevilmac.archimedes.common.object.ArchimedesObjects;
 import darkevilmac.archimedes.common.object.block.BlockSecuredBed;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public class ItemSecuredBed extends Item {
@@ -19,50 +23,60 @@ public class ItemSecuredBed extends Item {
         super();
     }
 
-    /**
-     * Called when a Block is right-clicked with this Item
-     *
-     * @param pos  The block being right-clicked
-     * @param side The side being right-clicked
-     */
-    public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (worldIn.isRemote) {
-            return true;
-        } else if (side != EnumFacing.UP) {
-            return false;
-        } else {
+    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+    {
+        if (worldIn.isRemote)
+        {
+            return EnumActionResult.SUCCESS;
+        }
+        else if (facing != EnumFacing.UP)
+        {
+            return EnumActionResult.FAIL;
+        }
+        else
+        {
             IBlockState iblockstate = worldIn.getBlockState(pos);
             Block block = iblockstate.getBlock();
             boolean flag = block.isReplaceable(worldIn, pos);
 
-            if (!flag) {
+            if (!flag)
+            {
                 pos = pos.up();
             }
 
-            int i = MathHelper.floor_double((double) (playerIn.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-            EnumFacing enumfacing1 = EnumFacing.getHorizontal(i);
-            BlockPos blockpos1 = pos.offset(enumfacing1);
-            boolean flag1 = block.isReplaceable(worldIn, blockpos1);
-            boolean flag2 = worldIn.isAirBlock(pos) || flag;
-            boolean flag3 = worldIn.isAirBlock(blockpos1) || flag1;
+            int i = MathHelper.floor_double((double)(playerIn.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+            EnumFacing enumfacing = EnumFacing.getHorizontal(i);
+            BlockPos blockpos = pos.offset(enumfacing);
 
-            if (playerIn.canPlayerEdit(pos, side, stack) && playerIn.canPlayerEdit(blockpos1, side, stack)) {
-                if (flag2 && flag3 && World.doesBlockHaveSolidTopSurface(worldIn, pos.down()) && World.doesBlockHaveSolidTopSurface(worldIn, blockpos1.down())) {
-                    int j = enumfacing1.getHorizontalIndex();
-                    IBlockState iblockstate1 = ArchimedesObjects.blockSecuredBed.getDefaultState().withProperty(BlockSecuredBed.OCCUPIED, Boolean.valueOf(false)).withProperty(BlockSecuredBed.FACING, enumfacing1).withProperty(BlockSecuredBed.PART, BlockSecuredBed.EnumPartType.FOOT);
+            if (playerIn.canPlayerEdit(pos, facing, stack) && playerIn.canPlayerEdit(blockpos, facing, stack))
+            {
+                boolean flag1 = worldIn.getBlockState(blockpos).getBlock().isReplaceable(worldIn, blockpos);
+                boolean flag2 = flag || worldIn.isAirBlock(pos);
+                boolean flag3 = flag1 || worldIn.isAirBlock(blockpos);
 
-                    if (worldIn.setBlockState(pos, iblockstate1, 3)) {
+                if (flag2 && flag3 && worldIn.getBlockState(pos.down()).isFullyOpaque() && worldIn.getBlockState(blockpos.down()).isFullyOpaque())
+                {
+                    IBlockState iblockstate1 = Blocks.bed.getDefaultState().withProperty(BlockSecuredBed.OCCUPIED, Boolean.valueOf(false)).withProperty(BlockSecuredBed.FACING, enumfacing).withProperty(BlockSecuredBed.PART, BlockSecuredBed.EnumPartType.FOOT);
+
+                    if (worldIn.setBlockState(pos, iblockstate1, 11))
+                    {
                         IBlockState iblockstate2 = iblockstate1.withProperty(BlockSecuredBed.PART, BlockSecuredBed.EnumPartType.HEAD);
-                        worldIn.setBlockState(blockpos1, iblockstate2, 3);
+                        worldIn.setBlockState(blockpos, iblockstate2, 11);
                     }
 
+                    SoundType soundtype = iblockstate1.getBlock().getSoundType();
+                    worldIn.playSound((EntityPlayer)null, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
                     --stack.stackSize;
-                    return true;
-                } else {
-                    return false;
+                    return EnumActionResult.SUCCESS;
                 }
-            } else {
-                return false;
+                else
+                {
+                    return EnumActionResult.FAIL;
+                }
+            }
+            else
+            {
+                return EnumActionResult.FAIL;
             }
         }
     }

@@ -88,12 +88,12 @@ public class ConnectionHandler {
     }
 
     private void handleParachuteLogout(PlayerEvent.PlayerLoggedOutEvent event) {
-        if (event.player.ridingEntity != null && event.player.ridingEntity instanceof EntitySeat) {
+        if (event.player.getRidingEntity() != null && event.player.getRidingEntity() instanceof EntitySeat) {
             EntityPlayer player = event.player;
-            EntitySeat seat = (EntitySeat) player.ridingEntity;
+            EntitySeat seat = (EntitySeat) player.getRidingEntity();
             EntityShip ship = seat.getParentShip();
 
-            player.mountEntity(null);
+            player.startRiding(null);
             if (ship != null && seat.getPos() != null) {
                 NBTTagCompound nbt = new NBTTagCompound();
 

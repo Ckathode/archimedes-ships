@@ -2,12 +2,12 @@ package darkevilmac.archimedes.common.command;
 
 import darkevilmac.archimedes.common.entity.EntityShip;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.NumberInvalidException;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.ChatComponentText;
-
-import java.util.List;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.TextComponentString;
 
 public class CommandDisassembleNear extends CommandBase {
     @Override
@@ -15,14 +15,13 @@ public class CommandDisassembleNear extends CommandBase {
         return "asdisassemblenear";
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public void processCommand(ICommandSender icommandsender, String[] astring) {
-        if (icommandsender instanceof Entity) {
+    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+        if (sender instanceof Entity) {
             double range = 16D;
-            if (astring != null && astring.length > 0) {
+            if (args != null && args.length > 0) {
                 try {
-                    range = Integer.parseInt(astring[0]);
+                    range = Integer.parseInt(args[0]);
                 } catch (NumberFormatException e) {
                     try {
                         throw new NumberInvalidException();
@@ -33,10 +32,10 @@ public class CommandDisassembleNear extends CommandBase {
             }
             double rangesqrd = range * range;
 
-            Entity player = (Entity) icommandsender;
+            Entity player = (Entity) sender;
             EntityShip ne = null;
-            if (player.ridingEntity instanceof EntityShip) {
-                ne = (EntityShip) player.ridingEntity;
+            if (player.getRidingEntity() instanceof EntityShip) {
+                ne = (EntityShip) player.getRidingEntity();
             } else {
                 double nd = 0D;
                 double d;
@@ -52,11 +51,11 @@ public class CommandDisassembleNear extends CommandBase {
             }
 
             if (ne == null) {
-                icommandsender.addChatMessage(new ChatComponentText("No ship in a " + ((int) range) + " objects' range"));
+                sender.addChatMessage(new TextComponentString("No ship in a " + ((int) range) + " objects' range"));
                 return;
             }
             if (!ne.disassemble(false)) {
-                icommandsender.addChatMessage(new ChatComponentText("Failed to disassemble ship; dropping to items"));
+                sender.addChatMessage(new TextComponentString("Failed to disassemble ship; dropping to items"));
                 ne.dropAsItems();
             }
             ne.setDead();
@@ -74,7 +73,7 @@ public class CommandDisassembleNear extends CommandBase {
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender icommandsender) {
-        return icommandsender instanceof Entity && super.canCommandSenderUseCommand(icommandsender);
+    public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
+        return sender != null && sender instanceof Entity && super.checkPermission(server, sender);
     }
 }

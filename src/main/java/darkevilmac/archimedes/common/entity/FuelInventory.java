@@ -4,8 +4,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 
 public class FuelInventory implements IInventory {
 
@@ -77,8 +77,8 @@ public class FuelInventory implements IInventory {
     }
 
     @Override
-    public IChatComponent getDisplayName() {
-        return new ChatComponentText("Engine Inventory");
+    public ITextComponent getDisplayName() {
+        return new TextComponentString("Engine Inventory");
     }
 
     @Override
@@ -92,7 +92,7 @@ public class FuelInventory implements IInventory {
 
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
-        return player.ridingEntity == ship;
+        return player.getRidingEntity() == ship;
     }
 
     @Override

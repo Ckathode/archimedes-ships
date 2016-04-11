@@ -4,7 +4,7 @@ import darkevilmac.archimedes.common.tileentity.TileEntityEngine;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import org.lwjgl.opengl.GL11;
 
 public class GuiEngine extends GuiContainer {
@@ -25,10 +25,10 @@ public class GuiEngine extends GuiContainer {
         int row = 8;
         int col0 = 8;
 
-        fontRendererObj.drawString(StatCollector.translateToLocal("gui.engine.title"), col0, row, color);
+        fontRendererObj.drawString(I18n.translateToLocal("gui.engine.title"), col0, row, color);
         row += 5;
 
-        fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 2, color);
+        fontRendererObj.drawString(I18n.translateToLocal("container.inventory"), 8, ySize - 96 + 2, color);
     }
 
     @Override

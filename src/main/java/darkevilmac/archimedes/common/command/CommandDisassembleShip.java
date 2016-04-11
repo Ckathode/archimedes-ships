@@ -2,9 +2,11 @@ package darkevilmac.archimedes.common.command;
 
 import darkevilmac.archimedes.common.entity.EntityShip;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.TextComponentString;
 
 public class CommandDisassembleShip extends CommandBase {
     @Override
@@ -18,22 +20,22 @@ public class CommandDisassembleShip extends CommandBase {
     }
 
     @Override
-    public void processCommand(ICommandSender icommandsender, String[] astring) {
-        if (icommandsender instanceof Entity) {
-            Entity player = (Entity) icommandsender;
-            if (player.ridingEntity instanceof EntityShip) {
-                EntityShip ship = (EntityShip) player.ridingEntity;
+    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+        if (sender instanceof Entity) {
+            Entity player = (Entity) sender;
+            if (player.getRidingEntity() instanceof EntityShip) {
+                EntityShip ship = (EntityShip) player.getRidingEntity();
                 int mode = 0;
-                if (astring != null && astring.length > 2) {
-                    if (astring[0].equals("overwrite") || astring[0].equals("override")) {
-                        icommandsender.addChatMessage(new ChatComponentText("Overwriting existing objects with ship objects"));
+                if (args != null && args.length > 2) {
+                    if (args[0].equals("overwrite") || args[0].equals("override")) {
+                        sender.addChatMessage(new TextComponentString("Overwriting existing objects with ship objects"));
                         mode = 1;
-                    } else if (astring[1].equals("drop")) {
-                        icommandsender.addChatMessage(new ChatComponentText("Dropping to items if rejoining ship with the world fails"));
+                    } else if (args[1].equals("drop")) {
+                        sender.addChatMessage(new TextComponentString("Dropping to items if rejoining ship with the world fails"));
                         mode = 2;
                     }
                 } else {
-                    icommandsender.addChatMessage(new ChatComponentText("Trying to add ship objects to world"));
+                    sender.addChatMessage(new TextComponentString("Trying to add ship objects to world"));
                 }
 
                 if (!ship.disassemble(mode == 1)) {
@@ -41,16 +43,16 @@ public class CommandDisassembleShip extends CommandBase {
                         ship.dropAsItems();
                     }
                 }
-                player.mountEntity(null);
+                player.startRiding(null);
                 return;
             }
         }
-        icommandsender.addChatMessage(new ChatComponentText("Not steering a ship"));
+        sender.addChatMessage(new TextComponentString("Not steering a ship"));
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender icommandsender) {
-        return icommandsender instanceof Entity;
+    public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
+        return sender != null && sender instanceof Entity;
     }
 
     @Override

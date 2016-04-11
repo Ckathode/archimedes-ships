@@ -146,7 +146,7 @@ public class ArchimedesConfig {
 
     @SubscribeEvent
     public void onConfigChange(ConfigChangedEvent.OnConfigChangedEvent event) {
-        if (event.modID.equals(ArchimedesShipMod.MOD_ID)) {
+        if (event.getModID().equals(ArchimedesShipMod.MOD_ID)) {
             if (config.hasChanged())
                 config.save();
             loadAndSave();

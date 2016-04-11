@@ -2,22 +2,21 @@ package darkevilmac.archimedes.common.object.block;
 
 import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.common.tileentity.TileEntityEngine;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockEngine extends BlockContainer {
 
@@ -29,13 +28,14 @@ public class BlockEngine extends BlockContainer {
     public BlockEngine(Material material, float power, int fuelconsumption) {
         super(material);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+        this.setSoundType(SoundType.METAL);
         enginePower = power;
         engineFuelConsumption = fuelconsumption;
     }
 
     @Override
-    public int getRenderType() {
-        return 3;
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.MODEL;
     }
 
     @Override
@@ -50,19 +50,19 @@ public class BlockEngine extends BlockContainer {
 
     private void setDefaultFacing(World worldIn, BlockPos pos, IBlockState state) {
         if (!worldIn.isRemote) {
-            Block block = worldIn.getBlockState(pos.north()).getBlock();
-            Block block1 = worldIn.getBlockState(pos.south()).getBlock();
-            Block block2 = worldIn.getBlockState(pos.west()).getBlock();
-            Block block3 = worldIn.getBlockState(pos.east()).getBlock();
+            IBlockState northState = worldIn.getBlockState(pos.north());
+            IBlockState southState = worldIn.getBlockState(pos.south());
+            IBlockState westState = worldIn.getBlockState(pos.west());
+            IBlockState eastState = worldIn.getBlockState(pos.east());
             EnumFacing enumfacing = state.getValue(FACING);
 
-            if (enumfacing == EnumFacing.NORTH && block.isFullBlock() && !block1.isFullBlock()) {
+            if (enumfacing == EnumFacing.NORTH && northState.isFullBlock() && !southState.isFullBlock()) {
                 enumfacing = EnumFacing.SOUTH;
-            } else if (enumfacing == EnumFacing.SOUTH && block1.isFullBlock() && !block.isFullBlock()) {
+            } else if (enumfacing == EnumFacing.SOUTH && southState.isFullBlock() && !northState.isFullBlock()) {
                 enumfacing = EnumFacing.NORTH;
-            } else if (enumfacing == EnumFacing.WEST && block2.isFullBlock() && !block3.isFullBlock()) {
+            } else if (enumfacing == EnumFacing.WEST && westState.isFullBlock() && !eastState.isFullBlock()) {
                 enumfacing = EnumFacing.EAST;
-            } else if (enumfacing == EnumFacing.EAST && block3.isFullBlock() && !block2.isFullBlock()) {
+            } else if (enumfacing == EnumFacing.EAST && eastState.isFullBlock() && !westState.isFullBlock()) {
                 enumfacing = EnumFacing.WEST;
             }
 
@@ -71,11 +71,11 @@ public class BlockEngine extends BlockContainer {
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (!player.isSneaking()) {
-            TileEntity tileentity = world.getTileEntity(pos);
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+        if (!playerIn.isSneaking()) {
+            TileEntity tileentity = worldIn.getTileEntity(pos);
             if (tileentity != null) {
-                player.openGui(ArchimedesShipMod.instance, 3, world, pos.getX(), pos.getY(), pos.getZ());
+                playerIn.openGui(ArchimedesShipMod.instance, 3, worldIn, pos.getX(), pos.getY(), pos.getZ());
                 return true;
             }
         }
@@ -92,13 +92,6 @@ public class BlockEngine extends BlockContainer {
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
     }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public IBlockState getStateForEntityRender(IBlockState state) {
-        return this.getDefaultState().withProperty(FACING, EnumFacing.SOUTH);
-    }
-
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
@@ -118,7 +111,7 @@ public class BlockEngine extends BlockContainer {
     }
 
     @Override
-    protected BlockState createBlockState() {
-        return new BlockState(this, FACING);
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, FACING);
     }
 }

@@ -3,8 +3,8 @@ package darkevilmac.archimedes.common.network;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -36,14 +36,14 @@ public class TranslatedChatMessage extends ArchimedesShipsMessage {
             return;
 
         String[] split = message.split("~");
-        ChatComponentText text = new ChatComponentText("");
+        TextComponentString text = new TextComponentString("");
 
         if (split.length > 0) {
             for (String string : split) {
                 if (string.startsWith("TR:")) {
-                    text.appendSibling(new ChatComponentTranslation(string.substring(3)));
+                    text.appendSibling(new TextComponentTranslation(string.substring(3)));
                 } else {
-                    text.appendSibling(new ChatComponentText(string));
+                    text.appendSibling(new TextComponentString(string));
                 }
             }
         }

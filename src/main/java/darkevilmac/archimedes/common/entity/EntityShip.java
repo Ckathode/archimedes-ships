@@ -30,7 +30,9 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -40,10 +42,10 @@ import java.util.Set;
 
 public class EntityShip extends EntityMovingWorld {
 
-    private static final DataParameter<Float> ENGINE_POWER = EntityDataManager.<Float>createKey(EntityShip.class, DataSerializers.FLOAT);
-    private static final DataParameter<Byte> HAS_ENGINES = EntityDataManager.<Byte>createKey(EntityShip.class, DataSerializers.BYTE);
-    private static final DataParameter<Byte> CAN_SUBMERGE = EntityDataManager.<Byte>createKey(EntityShip.class, DataSerializers.BYTE);
-    private static final DataParameter<Byte> IS_SUBMERGED = EntityDataManager.<Byte>createKey(EntityShip.class, DataSerializers.BYTE);
+    public static final DataParameter<Float> ENGINE_POWER = EntityDataManager.<Float>createKey(EntityShip.class, DataSerializers.FLOAT);
+    public static final DataParameter<Byte> HAS_ENGINES = EntityDataManager.<Byte>createKey(EntityShip.class, DataSerializers.BYTE);
+    public static final DataParameter<Byte> CAN_SUBMERGE = EntityDataManager.<Byte>createKey(EntityShip.class, DataSerializers.BYTE);
+    public static final DataParameter<Byte> IS_SUBMERGED = EntityDataManager.<Byte>createKey(EntityShip.class, DataSerializers.BYTE);
 
     //dataWatcher.addObject(29, 0F); // Engine power
     //dataWatcher.addObject(28, new Byte((byte) 0)); // Do we have any engines
@@ -83,26 +85,26 @@ public class EntityShip extends EntityMovingWorld {
                     }
                 }
                 if (ArchimedesShipMod.instance.getNetworkConfig().getShared().enginesMandatory)
-                    getDataWatcher().updateObject(28, new Byte(hasEngines ? (byte) 1 : (byte) 0));
+                    getDataManager().set(HAS_ENGINES, new Byte(hasEngines ? (byte) 1 : (byte) 0));
                 else
-                    getDataWatcher().updateObject(28, new Byte((byte) 1));
+                    getDataManager().set(HAS_ENGINES, new Byte((byte) 1));
             }
             if (worldObj.isRemote) {
-                if (dataWatcher != null && !dataWatcher.getIsBlank() && dataWatcher.hasObjectChanged()) {
-                    submerge = dataWatcher.getWatchableObjectByte(26) == new Byte((byte) 1);
+                if (dataManager != null && !dataManager.isEmpty() && dataManager.isDirty()) {
+                    submerge = dataManager.get(IS_SUBMERGED) == new Byte((byte) 1);
                 }
             }
         }
     }
 
     public boolean getSubmerge() {
-        return !dataWatcher.getIsBlank() ? (dataWatcher.getWatchableObjectByte(26) == (byte) 1) : false;
+        return !getDataManager().isEmpty() ? (getDataManager().get(IS_SUBMERGED) == (byte) 1) : false;
     }
 
     public void setSubmerge(boolean submerge) {
         this.submerge = submerge;
         if (worldObj != null && !worldObj.isRemote) {
-            dataWatcher.updateObject(26, submerge ? new Byte((byte) 1) : new Byte((byte) 0));
+            getDataManager().set(IS_SUBMERGED, submerge ? new Byte((byte) 1) : new Byte((byte) 0));
             if (getMobileChunk().marker != null && getMobileChunk().marker.tileEntity != null && getMobileChunk().marker.tileEntity instanceof TileEntityHelm) {
                 TileEntityHelm helm = (TileEntityHelm) getMobileChunk().marker.tileEntity;
 
@@ -118,7 +120,7 @@ public class EntityShip extends EntityMovingWorld {
                 EntityMovingWorld entityMovingWorld = (EntityMovingWorld) entity;
                 return entityMovingWorld.getEntityBoundingBox();
             }
-            if (entity instanceof EntitySeat || entity.ridingEntity instanceof EntitySeat || entity instanceof EntityLiving)
+            if (entity instanceof EntitySeat || entity.getRidingEntity() instanceof EntitySeat || entity instanceof EntityLiving)
                 return new AxisAlignedBB(0, 0, 0, 0, 0, 0);
         }
         return new AxisAlignedBB(0, 0, 0, 0, 0, 0);
@@ -140,10 +142,10 @@ public class EntityShip extends EntityMovingWorld {
 
     @Override
     public void initMovingWorld() {
-        dataWatcher.addObject(29, 0F); // Engine power
-        dataWatcher.addObject(28, new Byte((byte) 0)); // Do we have any engines
-        dataWatcher.addObject(27, new Byte((byte) 0)); // Can we be submerged if wanted?
-        dataWatcher.addObject(26, new Byte((byte) 0)); // Are we submerged?
+        dataManager.register(ENGINE_POWER, 0F);
+        dataManager.register(HAS_ENGINES, (byte) 0);
+        dataManager.register(CAN_SUBMERGE, (byte) 0);
+        dataManager.register(IS_SUBMERGED, (byte) 0);
     }
 
     @Override
@@ -236,7 +238,7 @@ public class EntityShip extends EntityMovingWorld {
                     if (!worldObj.isRemote && isFlying()) {
                         EntityParachute parachute = new EntityParachute(worldObj, this, riderDestination);
                         if (worldObj.spawnEntityInWorld(parachute)) {
-                            prevRiddenByEntity.mountEntity(parachute);
+                            prevRiddenByEntity.startRiding(parachute);
                             prevRiddenByEntity.setSneaking(false);
                         }
                     }
@@ -369,11 +371,11 @@ public class EntityShip extends EntityMovingWorld {
             double dx = prevPosX - posX;
             double dz = prevPosZ - posZ;
 
-            if (riddenByEntity != null && !isBraking() && dx * dx + dz * dz > 0.01D) {
+            if (getControllingPassenger() != null && !isBraking() && dx * dx + dz * dz > 0.01D) {
                 newYaw = 270F - Math.toDegrees(Math.atan2(dz, dx)) + frontDirection.getHorizontalIndex() * 90F;
             }
 
-            double deltayaw = MathHelper.wrapAngleTo180_double(newYaw - rotationYaw);
+            double deltayaw = MathHelper.wrapDegrees(newYaw - rotationYaw);
             double maxyawspeed = 2D;
             if (deltayaw > maxyawspeed) {
                 deltayaw = maxyawspeed;
@@ -390,15 +392,15 @@ public class EntityShip extends EntityMovingWorld {
     public boolean disassemble(boolean overwrite) {
         if (worldObj.isRemote) return true;
 
-        updatePassengerPosition();
+        updatePassenger(getControllingPassenger());
 
         ChunkDisassembler disassembler = getDisassembler();
         disassembler.overwrite = overwrite;
 
         if (!disassembler.canDisassemble(getNewAssemblyInteractor())) {
             if (prevRiddenByEntity instanceof EntityPlayer) {
-                ChatComponentText c = new ChatComponentText("Cannot disassemble ship here");
-                prevRiddenByEntity.addChatMessage(c);
+                TextComponentString testMessage = new TextComponentString("Cannot disassemble ship here");
+                prevRiddenByEntity.addChatMessage(testMessage);
             }
             return false;
         }
@@ -416,17 +418,17 @@ public class EntityShip extends EntityMovingWorld {
     }
 
     private void handlePlayerControl() {
-        if (riddenByEntity instanceof EntityLivingBase && ((ShipCapabilities) getCapabilities()).canMove()) {
-            double throttle = ((EntityLivingBase) riddenByEntity).moveForward;
+        if (getControllingPassenger() instanceof EntityLivingBase && ((ShipCapabilities) getCapabilities()).canMove()) {
+            double throttle = ((EntityLivingBase) getControllingPassenger()).moveForward;
             if (isFlying()) {
                 throttle *= 0.5D;
             }
 
             if (ArchimedesShipMod.instance.getNetworkConfig().getShared().shipControlType == ArchimedesConfig.CONTROL_TYPE_ARCHIMEDES) {
-                Vec3dMod vec = new Vec3dMod(riddenByEntity.motionX, 0D, riddenByEntity.motionZ);
-                vec.rotateAroundY((float) Math.toRadians(riddenByEntity.rotationYaw));
+                Vec3dMod vec = new Vec3dMod(getControllingPassenger().motionX, 0D, getControllingPassenger().motionZ);
+                vec.rotateAroundY((float) Math.toRadians(getControllingPassenger().rotationYaw));
 
-                double steer = ((EntityLivingBase) riddenByEntity).moveStrafing;
+                double steer = ((EntityLivingBase) getControllingPassenger()).moveStrafing;
 
                 motionYaw += steer * BASE_TURN_SPEED * capabilities.getRotationMult() * ArchimedesShipMod.instance.getNetworkConfig().getShared().turnSpeed;
 
@@ -442,8 +444,8 @@ public class EntityShip extends EntityMovingWorld {
                 motionZ = vec.zCoord;
             } else if (ArchimedesShipMod.instance.getNetworkConfig().getShared().shipControlType == ArchimedesConfig.CONTROL_TYPE_VANILLA) {
                 if (throttle > 0.0D) {
-                    double dsin = -Math.sin(Math.toRadians(riddenByEntity.rotationYaw));
-                    double dcos = Math.cos(Math.toRadians(riddenByEntity.rotationYaw));
+                    double dsin = -Math.sin(Math.toRadians(getControllingPassenger().rotationYaw));
+                    double dcos = Math.cos(Math.toRadians(getControllingPassenger().rotationYaw));
                     motionX += dsin * BASE_FORWARD_SPEED * capabilities.speedMultiplier;
                     motionZ += dcos * BASE_FORWARD_SPEED * capabilities.speedMultiplier;
                 }
@@ -525,6 +527,6 @@ public class EntityShip extends EntityMovingWorld {
     }
 
     public boolean canSubmerge() {
-        return !dataWatcher.getIsBlank() ? dataWatcher.getWatchableObjectByte(27) == new Byte((byte) 1) : false;
+        return !dataManager.isEmpty() ? dataManager.get(CAN_SUBMERGE) == new Byte((byte) 1) : false;
     }
 }

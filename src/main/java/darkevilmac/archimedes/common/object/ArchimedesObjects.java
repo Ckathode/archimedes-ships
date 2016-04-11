@@ -6,6 +6,7 @@ import darkevilmac.archimedes.common.object.item.ItemGaugeBlock;
 import darkevilmac.archimedes.common.object.item.ItemSecuredBed;
 import darkevilmac.archimedes.common.tileentity.*;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
@@ -52,47 +53,40 @@ public class ArchimedesObjects {
         registerItem("securedBed", itemSecuredBed);
 
         blockMarkShip = (BlockHelm) new BlockHelm().setCreativeTab(ArchimedesShipMod.creativeTab);
-        blockMarkShip.setStepSound(Block.soundTypeWood).setHardness(1F).setResistance(1F);
+        blockMarkShip.setHardness(1F).setResistance(1F);
         registerBlock("marker", blockMarkShip);
 
-        blockFloater = new BlockAS(materialFloater).setCreativeTab(ArchimedesShipMod.creativeTab);
-        blockFloater.setStepSound(Block.soundTypeWood).setHardness(1F).setResistance(1F);
+        blockFloater = new BlockAS(materialFloater, SoundType.WOOD).setCreativeTab(ArchimedesShipMod.creativeTab);
+        blockFloater.setHardness(1F).setResistance(1F);
         registerBlock("floater", blockFloater);
 
-        blockBalloon = new BlockRecolourable(Material.cloth).setCreativeTab(ArchimedesShipMod.creativeTab);
-        blockBalloon.setStepSound(Block.soundTypeCloth).setHardness(0.35F).setResistance(1F);
+        blockBalloon = new BlockRecolourable(Material.cloth, SoundType.CLOTH).setCreativeTab(ArchimedesShipMod.creativeTab);
+        blockBalloon.setHardness(0.35F).setResistance(1F);
         registerBlock("balloon", blockBalloon, ItemCloth.class);
 
         blockGauge = (BlockGauge) new BlockGauge().setCreativeTab(ArchimedesShipMod.creativeTab);
-        blockGauge.setStepSound(Block.soundTypeMetal).setHardness(1F).setResistance(1F);
+        blockGauge.setHardness(1F).setResistance(1F);
         registerBlock("gauge", blockGauge, ItemGaugeBlock.class);
 
         blockSeat = (BlockSeat) new BlockSeat().setHardness(1F).setResistance(1F).setCreativeTab(ArchimedesShipMod.creativeTab);
-        blockSeat.setStepSound(Block.soundTypeCloth);
         registerBlock("seat", blockSeat);
 
-        blockBuffer = new BlockAS(Material.cloth).setHardness(1F).setResistance(1F).setCreativeTab(ArchimedesShipMod.creativeTab);
-        blockBuffer.setStepSound(Block.soundTypeWood);
+        blockBuffer = new BlockAS(Material.cloth, SoundType.WOOD).setHardness(1F).setResistance(1F).setCreativeTab(ArchimedesShipMod.creativeTab);
         registerBlock("buffer", blockBuffer);
 
-        blockStickyBuffer = new BlockAS(Material.cloth).setHardness(1F).setResistance(1F).setCreativeTab(ArchimedesShipMod.creativeTab);
-        blockStickyBuffer.setStepSound(Block.soundTypeMetal);
+        blockStickyBuffer = new BlockAS(Material.cloth, SoundType.CLOTH).setHardness(1F).setResistance(1F).setCreativeTab(ArchimedesShipMod.creativeTab);
         registerBlock("stickyBuffer", blockStickyBuffer);
 
         blockEngine = new BlockEngine(Material.iron, 1F, 10).setHardness(2F).setResistance(3F).setCreativeTab(ArchimedesShipMod.creativeTab);
-        blockEngine.setStepSound(Block.soundTypeMetal);
         registerBlock("engine", blockEngine);
 
         blockCrateWood = new BlockCrate(Material.wood).setHardness(1f).setResistance(1f).setCreativeTab(ArchimedesShipMod.creativeTab);
-        blockCrateWood.setStepSound(Block.soundTypeWood);
         registerBlock("crate_wood", blockCrateWood);
 
         blockAnchorPoint = new BlockAnchorPoint(Material.wood).setHardness(1f).setResistance(1F).setCreativeTab(ArchimedesShipMod.creativeTab);
-        blockAnchorPoint.setStepSound(Block.soundTypePiston);
         registerBlock("anchorPoint", blockAnchorPoint);
 
         blockSecuredBed = new BlockSecuredBed().setHardness(0.2F);
-        blockSecuredBed.setStepSound(Block.soundTypeWood);
         registerBlockNoItemBlock("securedBed", blockSecuredBed);
     }
 
@@ -110,13 +104,13 @@ public class ArchimedesObjects {
         }
         Blocks.fire.setFireInfo(blockBalloon, 30, 60);
 
-        GameRegistry.addRecipe(new ItemStack(blockGauge, 1, 0), "VXV", "XO#", " # ", Character.valueOf('X'), Items.iron_ingot, Character.valueOf('#'), Items.gold_ingot, Character.valueOf('O'), Items.redstone, Character.valueOf('V'), Blocks.glass_pane);
-        GameRegistry.addRecipe(new ItemStack(blockGauge, 1, 0), "VXV", "XO#", " # ", Character.valueOf('X'), Items.gold_ingot, Character.valueOf('#'), Items.iron_ingot, Character.valueOf('O'), Items.redstone, Character.valueOf('V'), Blocks.glass_pane);
-        GameRegistry.addRecipe(new ItemStack(blockGauge, 1, 1), "VXV", "XO#", "V#V", Character.valueOf('X'), Items.iron_ingot, Character.valueOf('#'), Items.gold_ingot, Character.valueOf('O'), Items.redstone, Character.valueOf('V'), Blocks.glass_pane);
-        GameRegistry.addRecipe(new ItemStack(blockGauge, 1, 1), "VXV", "XO#", "V#V", Character.valueOf('X'), Items.gold_ingot, Character.valueOf('#'), Items.iron_ingot, Character.valueOf('O'), Items.redstone, Character.valueOf('V'), Blocks.glass_pane);
+        GameRegistry.addShapedRecipe(new ItemStack(blockGauge, 1, 0), "VXV", "XO#", " # ", Character.valueOf('X'), Items.iron_ingot, Character.valueOf('#'), Items.gold_ingot, Character.valueOf('O'), Items.redstone, Character.valueOf('V'), Blocks.glass_pane);
+        GameRegistry.addShapedRecipe(new ItemStack(blockGauge, 1, 0), "VXV", "XO#", " # ", Character.valueOf('X'), Items.gold_ingot, Character.valueOf('#'), Items.iron_ingot, Character.valueOf('O'), Items.redstone, Character.valueOf('V'), Blocks.glass_pane);
+        GameRegistry.addShapedRecipe(new ItemStack(blockGauge, 1, 1), "VXV", "XO#", "V#V", Character.valueOf('X'), Items.iron_ingot, Character.valueOf('#'), Items.gold_ingot, Character.valueOf('O'), Item.getItemFromBlock(blockGauge), Character.valueOf('V'), Blocks.glass_pane);
+        GameRegistry.addShapedRecipe(new ItemStack(blockGauge, 1, 1), "VXV", "XO#", "V#V", Character.valueOf('X'), Items.gold_ingot, Character.valueOf('#'), Items.iron_ingot, Character.valueOf('O'), Item.getItemFromBlock(blockGauge), Character.valueOf('V'), Blocks.glass_pane);
         GameRegistry.registerTileEntity(TileEntityGauge.class, "archiGauge");
 
-        GameRegistry.addRecipe(new ItemStack(blockSeat), "X ", "XX", Character.valueOf('X'), Blocks.wool);
+        GameRegistry.addShapedRecipe(new ItemStack(blockSeat), "X ", "XX", Character.valueOf('X'), Blocks.wool);
         Blocks.fire.setFireInfo(blockSeat, 30, 30);
 
         GameRegistry.addShapelessRecipe(new ItemStack(blockBuffer), blockFloater, new ItemStack(Items.dye, 1));
@@ -128,7 +122,7 @@ public class ArchimedesObjects {
         GameRegistry.addRecipe(new ItemStack(blockEngine, 1), "#O#", "#X#", "###", Character.valueOf('#'), Items.iron_ingot, Character.valueOf('O'), Items.water_bucket, Character.valueOf('X'), Blocks.furnace);
         GameRegistry.registerTileEntity(TileEntityEngine.class, "archiEngine");
 
-        GameRegistry.addRecipe(new ItemStack(blockAnchorPoint, 1), "XYX", "XXX", "ZZZ", Character.valueOf('X'), Blocks.planks, Character.valueOf('Y'), Blocks.redstone_torch, Character.valueOf('Z'), Items.redstone);
+        GameRegistry.addRecipe(new ItemStack(blockAnchorPoint, 1), " X ", "XXX", "ZYZ", Character.valueOf('X'), Items.iron_ingot, Character.valueOf('Y'), Blocks.iron_block, Character.valueOf('Z'), Items.redstone);
         GameRegistry.registerTileEntity(TileEntityAnchorPoint.class, "archiAnchor");
 
         GameRegistry.addShapelessRecipe(new ItemStack(blockSecuredBed), Blocks.bed, Items.iron_ingot);

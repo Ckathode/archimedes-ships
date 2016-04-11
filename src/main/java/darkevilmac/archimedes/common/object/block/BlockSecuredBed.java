@@ -4,14 +4,18 @@ import darkevilmac.archimedes.common.object.ArchimedesObjects;
 import darkevilmac.archimedes.common.tileentity.TileEntitySecuredBed;
 import net.minecraft.block.BlockBed;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -25,11 +29,12 @@ public class BlockSecuredBed extends BlockBed implements ITileEntityProvider {
 
     public BlockSecuredBed() {
         super();
+        this.setSoundType(SoundType.CLOTH);
         disableStats();
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, final EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (worldIn.isRemote) {
             return true;
         } else {
@@ -44,12 +49,12 @@ public class BlockSecuredBed extends BlockBed implements ITileEntityProvider {
                 }
             }
 
-            if (worldIn.provider.canRespawnHere() && worldIn.getBiomeGenForCoords(pos) != BiomeGenBase.hell) {
+            if (worldIn.provider.canRespawnHere() && worldIn.getBiomeGenForCoords(pos) != BiomeGenBase.biomeRegistry.getObject(new ResourceLocation("hell"))) {
                 if (state.getValue(OCCUPIED).booleanValue()) {
                     EntityPlayer entityplayer1 = this.getPlayerInBed(worldIn, pos);
 
                     if (entityplayer1 != null) {
-                        playerIn.addChatComponentMessage(new ChatComponentTranslation("tile.bed.occupied"));
+                        playerIn.addChatComponentMessage(new TextComponentTranslation("tile.bed.occupied"));
 
                         bedUser = entityplayer1;
                     }
@@ -68,9 +73,9 @@ public class BlockSecuredBed extends BlockBed implements ITileEntityProvider {
                         bedUser = playerIn;
                     } else {
                         if (enumstatus == EntityPlayer.EnumStatus.NOT_POSSIBLE_NOW) {
-                            playerIn.addChatComponentMessage(new ChatComponentTranslation("tile.bed.noSleep"));
+                            playerIn.addChatComponentMessage(new TextComponentTranslation("tile.bed.noSleep"));
                         } else if (enumstatus == EntityPlayer.EnumStatus.NOT_SAFE) {
-                            playerIn.addChatComponentMessage(new ChatComponentTranslation("tile.bed.notSafe"));
+                            playerIn.addChatComponentMessage(new TextComponentTranslation("tile.bed.notSafe"));
                         }
                     }
                 }

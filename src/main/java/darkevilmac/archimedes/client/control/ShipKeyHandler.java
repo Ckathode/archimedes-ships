@@ -30,7 +30,7 @@ public class ShipKeyHandler {
 
     @SubscribeEvent
     public void updateControl(TickEvent.PlayerTickEvent e) {
-        if (e.phase == TickEvent.Phase.START && e.side == Side.CLIENT && e.player == FMLClientHandler.instance().getClientPlayerEntity() && e.player.ridingEntity != null && e.player.ridingEntity instanceof EntityShip) {
+        if (e.phase == TickEvent.Phase.START && e.side == Side.CLIENT && e.player == FMLClientHandler.instance().getClientPlayerEntity() && e.player.getRidingEntity() != null && e.player.getRidingEntity()  instanceof EntityShip) {
             if (config.kbShipInv.isKeyDown() && !kbShipGuiPrevState) {
                 ClientOpenGuiMessage msg = new ClientOpenGuiMessage(2);
                 ArchimedesShipMod.instance.network.sendToServer(msg);
@@ -38,13 +38,13 @@ public class ShipKeyHandler {
             kbShipGuiPrevState = config.kbShipInv.isKeyDown();
 
             if (config.kbDisassemble.isKeyDown() && !kbDisassemblePrevState) {
-                MovingWorldClientActionMessage msg = new MovingWorldClientActionMessage((EntityShip) e.player.ridingEntity, MovingWorldClientActionMessage.Action.DISASSEMBLE);
+                MovingWorldClientActionMessage msg = new MovingWorldClientActionMessage((EntityShip) e.player.getRidingEntity() , MovingWorldClientActionMessage.Action.DISASSEMBLE);
                 MovingWorld.instance.network.sendToServer(msg);
             }
             kbDisassemblePrevState = config.kbDisassemble.isKeyDown();
 
             int c = getHeightControl();
-            EntityShip ship = (EntityShip) e.player.ridingEntity;
+            EntityShip ship = (EntityShip) e.player.getRidingEntity() ;
             if (c != ship.getController().getShipControl()) {
                 ship.getController().updateControl(ship, e.player, c);
             }

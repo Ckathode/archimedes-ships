@@ -3,6 +3,8 @@ package darkevilmac.archimedes.common.entity;
 import darkevilmac.movingworld.common.entity.EntityMovingWorld;
 import darkevilmac.movingworld.common.entity.MovingWorldHandlerServer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 
 public class ShipHandlerServer extends MovingWorldHandlerServer {
 
@@ -25,13 +27,13 @@ public class ShipHandlerServer extends MovingWorldHandlerServer {
     }
 
     @Override
-    public boolean interact(EntityPlayer player) {
-        if (movingWorld.riddenByEntity == null) {
-            player.mountEntity(movingWorld);
+    public boolean interact(EntityPlayer player, ItemStack stack, EnumHand hand) {
+        if (movingWorld.getRidingEntity() == null) {
+            player.startRiding(movingWorld);
             return true;
         } else {
-            if (player.ridingEntity != null)
-                player.mountEntity(null);
+            if (player.getRidingEntity() != null)
+                player.startRiding(null);
             return movingWorld.getCapabilities().mountEntity(player);
         }
     }
@@ -41,7 +43,7 @@ public class ShipHandlerServer extends MovingWorldHandlerServer {
         super.onChunkUpdate();
         if (firstChunkUpdate) {
             ((ShipCapabilities) movingWorld.getCapabilities()).spawnSeatEntities();
-            movingWorld.getDataWatcher().updateObject(27, ((ShipCapabilities) movingWorld.getCapabilities()).canSubmerge() ? new Byte((byte) 1) : new Byte((byte) 0));
+            movingWorld.getDataManager().set(EntityShip.CAN_SUBMERGE, ((ShipCapabilities) movingWorld.getCapabilities()).canSubmerge() ? new Byte((byte) 1) : new Byte((byte) 0));
         }
     }
 }

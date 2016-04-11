@@ -4,6 +4,7 @@ import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.common.network.TranslatedChatMessage;
 import darkevilmac.archimedes.common.tileentity.TileEntityAnchorPoint;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -28,6 +29,7 @@ public class BlockAnchorPoint extends BlockContainer {
 
     public BlockAnchorPoint(Material material) {
         super(material);
+        this.setSoundType(SoundType.METAL);
     }
 
     public static int getMetaForAxis(EnumFacing.Axis axis) {

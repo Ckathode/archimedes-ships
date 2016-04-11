@@ -69,7 +69,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     }
 
     public float getEnginePower() {
-        return ship.getDataWatcher().getWatchableObjectFloat(29);
+        return ship.getDataManager().get(EntityShip.ENGINE_POWER);
     }
 
     public AnchorPointLocation findClosestValidAnchor(int range) {
@@ -180,7 +180,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
             }
         }
         if (!ship.worldObj.isRemote)
-            ship.getDataWatcher().updateObject(29, ePower);
+            ship.getDataManager().set(EntityShip.ENGINE_POWER, ePower);
     }
 
     @Override
@@ -228,7 +228,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     }
 
     public boolean canMove() {
-        return ship.getDataWatcher().getWatchableObjectByte(28) == 1;
+        return ship.getDataManager().get(EntityShip.HAS_ENGINES) == 1;
     }
 
     public List<EntitySeat> getAttachments() {
@@ -332,9 +332,11 @@ public class ShipCapabilities extends MovingWorldCapabilities {
 
     public EntitySeat getAvailableSeat() {
         for (EntitySeat seat : seats) {
-            if (seat.riddenByEntity == null || (seat.riddenByEntity != null && (seat.riddenByEntity.ridingEntity == null
-                    || (seat.riddenByEntity.ridingEntity != null && seat.riddenByEntity.ridingEntity != seat)))) {
-                seat.mountEntity(null);
+            if (seat.getControllingPassenger() == null || (seat.getControllingPassenger() != null &&
+                    (seat.getControllingPassenger().getRidingEntity() == null ||
+                            (seat.getControllingPassenger().getRidingEntity() != null &&
+                                    seat.getControllingPassenger().getRidingEntity() != seat)))) {
+                seat.startRiding(null);
                 return seat;
             }
         }
@@ -343,14 +345,15 @@ public class ShipCapabilities extends MovingWorldCapabilities {
 
     @Override
     public boolean mountEntity(Entity entity) {
-        if (seats == null) {
+        if (seats == null || entity == null || !(entity instanceof EntityPlayer)) {
             return false;
         }
 
+        EntityPlayer player = (EntityPlayer) entity;
+
         for (EntitySeat seat : seats) {
-            if (seat.interactFirst((EntityPlayer) entity)) {
+            if (seat.processInitialInteract(player, player.getActiveItemStack(), player.getActiveHand()))
                 return true;
-            }
         }
         return false;
     }

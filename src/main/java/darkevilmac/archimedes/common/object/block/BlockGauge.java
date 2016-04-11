@@ -4,6 +4,7 @@ import darkevilmac.archimedes.common.tileentity.TileEntityGauge;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockFence;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
@@ -31,7 +32,8 @@ public class BlockGauge extends BlockContainer {
 
     public BlockGauge() {
         super(Material.circuits);
-        setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(EXTENDED, false));
+        this.setSoundType(SoundType.METAL);
+        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(EXTENDED, false));
     }
 
     @Override
@@ -69,10 +71,10 @@ public class BlockGauge extends BlockContainer {
         return true;
     }
 
+    @Override
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
         return this.canBePlacedOn(worldIn, pos.down());
     }
-
 
     @Override
     public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock) {
