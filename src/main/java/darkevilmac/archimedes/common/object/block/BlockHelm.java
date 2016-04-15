@@ -15,6 +15,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -23,7 +24,7 @@ public class BlockHelm extends BlockDirectional implements ITileEntityProvider {
     public BlockHelm() {
         super(Material.wood);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
-        setSoundType(SoundType.WOOD);
+        this.setSoundType(SoundType.WOOD);
     }
 
 
@@ -47,11 +48,11 @@ public class BlockHelm extends BlockDirectional implements ITileEntityProvider {
         return EnumBlockRenderType.MODEL;
     }
 
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (!player.isSneaking()) {
-            TileEntity tileentity = world.getTileEntity(pos);
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+        if (!playerIn.isSneaking()) {
+            TileEntity tileentity = worldIn.getTileEntity(pos);
             if (tileentity != null) {
-                player.openGui(ArchimedesShipMod.instance, 1, world, pos.getX(), pos.getY(), pos.getZ());
+                playerIn.openGui(ArchimedesShipMod.instance, 1, worldIn, pos.getX(), pos.getY(), pos.getZ());
                 return true;
             }
         }

@@ -1,6 +1,8 @@
 {
   "variants": {
-    "facing=north": {"model": "archimedesshipsplus:seat"},
+    "facing=north": {
+      "model": "archimedesshipsplus:seat"
+    },
     "facing=south": {
       "model": "archimedesshipsplus:seat",
       "y": 180
@@ -12,6 +14,12 @@
     "facing=east": {
       "model": "archimedesshipsplus:seat",
       "y": 90
+    },
+    "facing=up": {
+      "model": "archimedesshipsplus:seat"
+    },
+    "facing=down": {
+      "model": "archimedesshipsplus:seat"
     }
   }
 }

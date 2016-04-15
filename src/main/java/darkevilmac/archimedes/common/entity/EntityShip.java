@@ -258,13 +258,13 @@ public class EntityShip extends EntityMovingWorld {
     }
 
     @Override
-    public void updatePassengerPosition(Entity entity, BlockPos riderDestination, int flags) {
-        super.updatePassengerPosition(entity, riderDestination, flags);
+    public void updatePassengerPosition(Entity passenger, BlockPos riderDestination, int flags) {
+        super.updatePassengerPosition(passenger, riderDestination, flags);
 
-        if (submerge && entity != null && entity instanceof EntityLivingBase && worldObj != null && !worldObj.isRemote) {
+        if (submerge && passenger != null && passenger instanceof EntityLivingBase && worldObj != null && !worldObj.isRemote) {
             Potion waterBreathing = Potion.potionRegistry.getObject(new ResourceLocation("water_breathing"));
-            if (!((EntityLivingBase) entity).isPotionActive(waterBreathing))
-                ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(waterBreathing, 20, 1));
+            if (!((EntityLivingBase) passenger).isPotionActive(waterBreathing))
+                ((EntityLivingBase) passenger).addPotionEffect(new PotionEffect(waterBreathing, 20, 1));
         }
     }
 

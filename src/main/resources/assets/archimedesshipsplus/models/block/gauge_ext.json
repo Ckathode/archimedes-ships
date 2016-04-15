@@ -34,7 +34,7 @@
             16
           ],
           "texture": "#texture",
-          "cullface": down
+          "cullface": "down"
         }
       }
     }

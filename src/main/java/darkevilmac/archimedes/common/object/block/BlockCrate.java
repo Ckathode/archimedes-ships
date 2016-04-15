@@ -1,7 +1,7 @@
 package darkevilmac.archimedes.common.object.block;
 
-import darkevilmac.archimedes.common.entity.EntityShip;
 import darkevilmac.archimedes.common.tileentity.TileEntityCrate;
+import darkevilmac.movingworld.common.entity.EntityMovingWorld;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockFence;
@@ -12,8 +12,6 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityBoat;
-import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -39,9 +37,13 @@ public class BlockCrate extends BlockContainer {
         return axis == EnumFacing.Axis.X ? 1 : (axis == EnumFacing.Axis.Z ? 2 : 0);
     }
 
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+        return NULL_AABB;
+    }
+
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return new AxisAlignedBB(0F, 0F, 0F, 1F, 0.1F, 1F);
+        return new AxisAlignedBB(0F, 0F, 0F, 1F, 0.2F, 1F);
     }
 
     @Override
@@ -90,8 +92,8 @@ public class BlockCrate extends BlockContainer {
     }
 
     @Override
-    public void onEntityCollidedWithBlock(World world, BlockPos pos, Entity entity) {
-        if (!(entity instanceof EntityPlayer) && entity instanceof EntityLivingBase || (entity instanceof EntityBoat && !(entity instanceof EntityShip)) || entity instanceof EntityMinecart) {
+    public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+        if (entity != null && !(entity instanceof EntityPlayer || entity instanceof EntityMovingWorld)) {
             TileEntity te = world.getTileEntity(pos);
             if (te instanceof TileEntityCrate) {
                 if (((TileEntityCrate) te).canCatchEntity() && ((TileEntityCrate) te).getContainedEntity() == null) {
@@ -109,8 +111,9 @@ public class BlockCrate extends BlockContainer {
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         TileEntity te = world.getTileEntity(pos);
-        if (te instanceof TileEntityCrate) {
+        if (te != null && te instanceof TileEntityCrate) {
             ((TileEntityCrate) te).releaseEntity();
+            return true;
         }
         return false;
     }
@@ -130,6 +133,15 @@ public class BlockCrate extends BlockContainer {
         if (!canBePlacedOn(world, pos.down())) {
             dropBlockAsItem(world, pos, state, 0);
             world.setBlockToAir(pos);
+        }
+
+        boolean powered = world.isBlockPowered(pos) || world.isBlockPowered(pos.up());
+
+        if (powered) {
+            TileEntity te = world.getTileEntity(pos);
+            if (te != null && te instanceof TileEntityCrate) {
+                ((TileEntityCrate) te).releaseEntity();
+            }
         }
     }
 

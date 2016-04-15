@@ -24,6 +24,11 @@ public class ClientHelmActionMessage extends ArchimedesShipsMessage {
     }
 
     @Override
+    public boolean onMainThread() {
+        return true;
+    }
+
+    @Override
     public void encodeInto(ChannelHandlerContext ctx, ByteBuf buf, Side side) {
         buf.writeByte(actionID);
         buf.writeInt(tileEntity.getPos().getX());

@@ -4,6 +4,7 @@ import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.common.api.block.IBlockBalloon;
 import darkevilmac.archimedes.common.handler.ConnectionHandler;
 import darkevilmac.archimedes.common.object.ArchimedesObjects;
+import darkevilmac.archimedes.common.object.block.BlockHelm;
 import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
 import darkevilmac.archimedes.common.tileentity.TileEntitySecuredBed;
 import darkevilmac.movingworld.MovingWorld;
@@ -16,6 +17,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -107,6 +109,11 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
             canAssemble.assembleThenCancel = true;
 
         return canAssemble;
+    }
+
+    @Override
+    public EnumFacing getFrontDirection(LocatedBlock marker) {
+        return marker.blockState.getValue(BlockHelm.FACING).getOpposite();
     }
 
     public int getBalloonCount() {
