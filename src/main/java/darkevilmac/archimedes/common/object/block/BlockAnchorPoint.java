@@ -54,7 +54,7 @@ public class BlockAnchorPoint extends BlockContainer {
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        EnumFacing.Axis axis = (EnumFacing.Axis) source.getBlockState(pos).getValue(AXIS);
+        EnumFacing.Axis axis = (EnumFacing.Axis) state.getValue(AXIS);
         float f = 0.125F;
         float f1 = 0.125F;
 

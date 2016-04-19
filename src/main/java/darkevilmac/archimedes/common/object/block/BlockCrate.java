@@ -7,6 +7,7 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -26,11 +27,12 @@ import net.minecraft.world.World;
 
 public class BlockCrate extends BlockContainer {
     public static final PropertyEnum AXIS = PropertyEnum.create("axis", EnumFacing.Axis.class, EnumFacing.Axis.X, EnumFacing.Axis.Z);
-
+    public static final PropertyBool POWERED = PropertyBool.create("powered");
 
     public BlockCrate(Material material) {
         super(material);
         this.setSoundType(SoundType.WOOD);
+        this.setDefaultState(this.getBlockState().getBaseState().withProperty(AXIS, EnumFacing.Axis.X).withProperty(POWERED, false));
     }
 
     public static int getMetaForAxis(EnumFacing.Axis axis) {
@@ -43,7 +45,7 @@ public class BlockCrate extends BlockContainer {
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return new AxisAlignedBB(0F, 0F, 0F, 1F, 0.2F, 1F);
+        return new AxisAlignedBB(0F, 0F, 0F, 1F, 0.1F, 1F);
     }
 
     @Override
@@ -68,17 +70,23 @@ public class BlockCrate extends BlockContainer {
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(AXIS, (meta & 3) == 2 ? EnumFacing.Axis.Z : EnumFacing.Axis.X);
+        boolean powered = false;
+        if (meta > 2) {
+            powered = true;
+            meta /= 2;
+        }
+
+        return this.getDefaultState().withProperty(AXIS, (meta & 3) == 2 ? EnumFacing.Axis.Z : EnumFacing.Axis.X).withProperty(POWERED, powered);
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return getMetaForAxis((EnumFacing.Axis) state.getValue(AXIS));
+        return getMetaForAxis((EnumFacing.Axis) state.getValue(AXIS)) * (state.getValue(POWERED) ? 2 : 1);
     }
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, AXIS);
+        return new BlockStateContainer(this, AXIS, POWERED);
     }
 
     @Override
@@ -93,9 +101,12 @@ public class BlockCrate extends BlockContainer {
 
     @Override
     public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+        if (world.isRemote || state.getValue(POWERED))
+            return;
+
         if (entity != null && !(entity instanceof EntityPlayer || entity instanceof EntityMovingWorld)) {
             TileEntity te = world.getTileEntity(pos);
-            if (te instanceof TileEntityCrate) {
+            if (te != null && te instanceof TileEntityCrate) {
                 if (((TileEntityCrate) te).canCatchEntity() && ((TileEntityCrate) te).getContainedEntity() == null) {
                     ((TileEntityCrate) te).setContainedEntity(entity);
                 }
@@ -130,6 +141,9 @@ public class BlockCrate extends BlockContainer {
 
     @Override
     public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
+        if (world.isRemote)
+            return;
+
         if (!canBePlacedOn(world, pos.down())) {
             dropBlockAsItem(world, pos, state, 0);
             world.setBlockToAir(pos);
@@ -141,22 +155,10 @@ public class BlockCrate extends BlockContainer {
             TileEntity te = world.getTileEntity(pos);
             if (te != null && te instanceof TileEntityCrate) {
                 ((TileEntityCrate) te).releaseEntity();
+                world.setBlockState(pos, world.getBlockState(pos).withProperty(POWERED, Boolean.TRUE));
             }
+        } else {
+            world.setBlockState(pos, world.getBlockState(pos).withProperty(POWERED, Boolean.FALSE));
         }
-    }
-
-    @Override
-    public void onFallenUpon(World worldIn, BlockPos pos, Entity entityIn, float fallDistance) {
-        super.onFallenUpon(worldIn, pos, entityIn, fallDistance);
-
-        if (worldIn != null && !worldIn.isRemote) {
-            if (worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos) instanceof TileEntityCrate
-                    && entityIn != null && !(entityIn instanceof EntityPlayer)) {
-                if (((TileEntityCrate) worldIn.getTileEntity(pos)).getContainedEntity() != null) {
-                    ((TileEntityCrate) worldIn.getTileEntity(pos)).setContainedEntity(entityIn);
-                }
-            }
-        }
-
     }
 }

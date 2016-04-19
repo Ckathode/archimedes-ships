@@ -19,7 +19,6 @@ public class ArchimedesShipsPacketHandler extends SimpleChannelInboundHandler<Ar
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, final ArchimedesShipsMessage msg) throws Exception {
         final EntityPlayer player;
-        System.out.println("ChannelRead0, " + ctx.channel().attr(NetworkRegistry.NET_HANDLER));
         switch (FMLCommonHandler.instance().getEffectiveSide()) {
             case CLIENT: {
                 player = this.getClientPlayer();
