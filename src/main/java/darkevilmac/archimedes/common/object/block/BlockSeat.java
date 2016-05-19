@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 public class BlockSeat extends BlockDirectional {
 
     public BlockSeat() {
-        super(Material.wood);
+        super(Material.WOOD);
         this.setSoundType(SoundType.CLOTH);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
     }

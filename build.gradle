@@ -16,22 +16,61 @@ buildscript {
     }
 }
 
+plugins {
+    id 'com.github.johnrengelman.shadow' version '1.2.3'
+}
+
+repositories {
+    maven {
+        url = 'http://unascribed.com/maven/releases'
+    }
+}
+
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = 'MC1.9-INDEV'
+version = 'MC1.9-V1.9'
 group = 'darkevilmac.archimedesshipsplus'
 archivesBaseName = 'archimedesshipsplus'
 
 minecraft {
-    version = "1.9-12.16.0.1863-1.9"
-    runDir = "run"
-    mappings = "snapshot_20160401"
+    version = "1.9-12.16.1.1907"
+    runDir = 'run'
 
-    replace '@AS+VER@', project.version
+	def replacementVersion = 'MOD_VERSION = \"' + project.version + '\"'
+	
+    replace ("MOD_VERSION = \"@AS+VER@\"",
+			 replacementVersion)
+
+	mappings = "snapshot_20160516"
 }
 
 dependencies {
     compile project(':MovingWorld')
+
+    compile 'com.unascribed:lambdanetwork:1.0.0'
+}
+
+shadowJar {
+	exclude 'dummyThing'
+    classifier = 'full'
+
+    relocate 'com.unascribed.lambdanetwork', 'darkevilmac.movingworld.repackage.com.unascribed.lambdanetwork' // Shaded under movingworld because of some references to MovingWorld networking.
+}
+
+reobf {
+    shadowJar { mappingType = 'SEARGE' }
+}
+
+artifacts {
+    archives shadowJar
+}
+
+dependencies {
+    compile 'com.unascribed:lambdanetwork:1.0.0'
+}
+
+configurations {
+    runtime.exclude group: 'darkevilmac.movingworld'
 }
 
 processResources

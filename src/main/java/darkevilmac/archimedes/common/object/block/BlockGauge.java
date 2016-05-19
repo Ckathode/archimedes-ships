@@ -31,7 +31,7 @@ public class BlockGauge extends BlockContainer {
     public static final PropertyBool EXTENDED = PropertyBool.create("extended");
 
     public BlockGauge() {
-        super(Material.circuits);
+        super(Material.CIRCUITS);
         this.setSoundType(SoundType.METAL);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(EXTENDED, false));
     }

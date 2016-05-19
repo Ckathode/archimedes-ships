@@ -1,5 +1,6 @@
 package darkevilmac.archimedes.common;
 
+import com.google.gson.Gson;
 import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.common.object.ArchimedesObjects;
 import darkevilmac.movingworld.MovingWorld;
@@ -7,6 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
@@ -82,23 +84,23 @@ public class ArchimedesConfig {
     }
 
     public void postLoad() {
-        Block[] defaultStickyBlocks = {ArchimedesObjects.blockStickyBuffer, Blocks.stone_button, Blocks.wooden_button, Blocks.lever};
+        Block[] defaultStickyBlocks = {ArchimedesObjects.blockStickyBuffer, Blocks.STONE_BUTTON, Blocks.WOODEN_BUTTON, Blocks.LEVER};
         String[] stickyBlockNames = new String[defaultStickyBlocks.length];
         for (int i = 0; i < defaultStickyBlocks.length; i++) {
-            stickyBlockNames[i] = Block.blockRegistry.getNameForObject(defaultStickyBlocks[i]).toString();
+            stickyBlockNames[i] = Block.REGISTRY.getNameForObject(defaultStickyBlocks[i]).toString();
         }
 
-        Block[] defaultSeatBlocks = {ArchimedesObjects.blockSeat, Blocks.end_portal_frame};
+        Block[] defaultSeatBlocks = {ArchimedesObjects.blockSeat, Blocks.END_PORTAL_FRAME};
         String[] seatBlockNames = new String[defaultSeatBlocks.length];
         for (int i = 0; i < defaultSeatBlocks.length; i++) {
-            seatBlockNames[i] = Block.blockRegistry.getNameForObject(defaultSeatBlocks[i]).toString();
+            seatBlockNames[i] = Block.REGISTRY.getNameForObject(defaultSeatBlocks[i]).toString();
         }
 
 
         Block[] defaultBalloonBlocks = {ArchimedesObjects.blockBalloon};
         String[] balloonBlockNames = new String[defaultBalloonBlocks.length];
         for (int i = 0; i < defaultBalloonBlocks.length; i++) {
-            balloonBlockNames[i] = Block.blockRegistry.getNameForObject(defaultBalloonBlocks[i]).toString();
+            balloonBlockNames[i] = Block.REGISTRY.getNameForObject(defaultBalloonBlocks[i]).toString();
         }
 
         config.load();
@@ -133,15 +135,15 @@ public class ArchimedesConfig {
     }
 
     public boolean isBalloon(Block block) {
-        return shared.balloonAlternatives.contains(Block.blockRegistry.getNameForObject(block).toString());
+        return shared.balloonAlternatives.contains(Block.REGISTRY.getNameForObject(block).toString());
     }
 
     public boolean isSeat(Block block) {
-        return shared.seats.contains(Block.blockRegistry.getNameForObject(block).toString());
+        return shared.seats.contains(Block.REGISTRY.getNameForObject(block).toString());
     }
 
     public boolean isSticky(Block block) {
-        return shared.stickyObjects.contains(Block.blockRegistry.getNameForObject(block).toString());
+        return shared.stickyObjects.contains(Block.REGISTRY.getNameForObject(block).toString());
     }
 
     @SubscribeEvent
@@ -187,5 +189,51 @@ public class ArchimedesConfig {
         public Set<String> stickyObjects;
 
         public boolean enableShipDownfall;
+
+        public NBTTagCompound serialize() {
+            NBTTagCompound tag = new NBTTagCompound();
+            tag.setBoolean("enableAirShips", enableAirShips);
+            tag.setBoolean("enableSubmersibles", enableSubmersibles);
+            tag.setInteger("shipEntitySyncRate", shipEntitySyncRate);
+            tag.setInteger("maxShipChunkBlocks", maxShipChunkBlocks);
+            tag.setFloat("flyBalloonRatio", flyBalloonRatio);
+            tag.setFloat("submersibleFillRatio", submersibleFillRatio);
+            tag.setInteger("shipControlType", shipControlType);
+            tag.setFloat("turnSpeed", turnSpeed);
+            tag.setFloat("speedLimit", speedLimit);
+            tag.setFloat("bankingMultiplier", bankingMultiplier);
+            tag.setBoolean("disassembleOnDismount", disassembleOnDismount);
+            tag.setBoolean("enginesMandatory", enginesMandatory);
+            tag.setBoolean("enableShipDownfall", enableShipDownfall);
+
+            tag.setString("balloonAlternatives", new Gson().toJson(balloonAlternatives));
+            tag.setString("seats", new Gson().toJson(seats));
+            tag.setString("stickyObjects", new Gson().toJson(stickyObjects));
+
+            return tag;
+        }
+
+        public SharedConfig deserialize(NBTTagCompound tag) {
+            SharedConfig sharedConfig = new SharedConfig();
+            sharedConfig.enableAirShips = tag.getBoolean("enableAirShips");
+            sharedConfig.enableSubmersibles = tag.getBoolean("enableSubmersibles");
+            sharedConfig.shipEntitySyncRate = tag.getInteger("shipEntitySyncRate");
+            sharedConfig.maxShipChunkBlocks = tag.getInteger("maxShipChunkBlocks");
+            sharedConfig.flyBalloonRatio = tag.getFloat("flyBalloonRatio");
+            sharedConfig.submersibleFillRatio = tag.getFloat("submersibleFillRatio");
+            sharedConfig.shipControlType = tag.getInteger("shipControlType");
+            sharedConfig.turnSpeed = tag.getFloat("turnSpeed");
+            sharedConfig.speedLimit = tag.getFloat("speedLimit");
+            sharedConfig.bankingMultiplier = tag.getFloat("bankingMultiplier");
+            sharedConfig.disassembleOnDismount = tag.getBoolean("disassembleOnDismount");
+            sharedConfig.enginesMandatory = tag.getBoolean("enginesMandatory");
+            sharedConfig.enableShipDownfall = tag.getBoolean("enableShipDownfall");
+
+            sharedConfig.balloonAlternatives = new Gson().fromJson(tag.getString("balloonAlternatives"), balloonAlternatives.getClass());
+            sharedConfig.seats = new Gson().fromJson(tag.getString("seats"), seats.getClass());
+            sharedConfig.stickyObjects = new Gson().fromJson(tag.getString("stickyObjects"), stickyObjects.getClass());
+
+            return sharedConfig;
+        }
     }
 }

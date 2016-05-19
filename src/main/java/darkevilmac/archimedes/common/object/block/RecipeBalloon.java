@@ -1,6 +1,5 @@
 package darkevilmac.archimedes.common.object.block;
 
-import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.common.object.ArchimedesObjects;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -17,9 +16,9 @@ public class RecipeBalloon implements IRecipe {
             for (int j = 0; j < 2; j++) {
                 ItemStack itemstack = inventorycrafting.getStackInRowAndColumn(i, j);
                 if (itemstack == null) continue;
-                if (itemstack.getItem() == Item.getItemFromBlock(Blocks.wool)) {
+                if (itemstack.getItem() == Item.getItemFromBlock(Blocks.WOOL)) {
                     ItemStack itemStack1 = inventorycrafting.getStackInRowAndColumn(i, j + 1);
-                    return itemStack1 != null && itemStack1.getItem() == Items.string;
+                    return itemStack1 != null && itemStack1.getItem() == Items.STRING;
                 }
                 return false;
             }
@@ -33,9 +32,9 @@ public class RecipeBalloon implements IRecipe {
             for (int j = 0; j < 2; j++) {
                 ItemStack itemstack = inventorycrafting.getStackInRowAndColumn(i, j);
                 if (itemstack == null) continue;
-                if (itemstack.getItem() == Item.getItemFromBlock(Blocks.wool)) {
+                if (itemstack.getItem() == Item.getItemFromBlock(Blocks.WOOL)) {
                     ItemStack itemStack1 = inventorycrafting.getStackInRowAndColumn(i, j + 1);
-                    if (itemStack1 != null && itemStack1.getItem() == Items.string) {
+                    if (itemStack1 != null && itemStack1.getItem() == Items.STRING) {
                         return new ItemStack(ArchimedesObjects.blockBalloon, 1, itemstack.getItemDamage());
                     }
                     return null;

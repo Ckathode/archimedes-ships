@@ -49,7 +49,7 @@ public class BlockSecuredBed extends BlockBed implements ITileEntityProvider {
                 }
             }
 
-            if (worldIn.provider.canRespawnHere() && worldIn.getBiomeGenForCoords(pos) != BiomeGenBase.biomeRegistry.getObject(new ResourceLocation("hell"))) {
+            if (worldIn.provider.canRespawnHere() && worldIn.getBiomeGenForCoords(pos) != BiomeGenBase.REGISTRY.getObject(new ResourceLocation("hell"))) {
                 if (state.getValue(OCCUPIED).booleanValue()) {
                     EntityPlayer entityplayer1 = this.getPlayerInBed(worldIn, pos);
 

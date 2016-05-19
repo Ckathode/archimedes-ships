@@ -47,7 +47,7 @@ public class ArchimedesObjects {
         registeredBlocks = new HashMap<String, Block>();
         registeredItems = new HashMap<String, Item>();
 
-        materialFloater = new Material(MapColor.clothColor);
+        materialFloater = new Material(MapColor.CLOTH);
 
         itemSecuredBed = new ItemSecuredBed().setMaxStackSize(1).setCreativeTab(ArchimedesShipMod.creativeTab);
         registerItem("securedBed", itemSecuredBed);
@@ -60,7 +60,7 @@ public class ArchimedesObjects {
         blockFloater.setHardness(1F).setResistance(1F);
         registerBlock("floater", blockFloater);
 
-        blockBalloon = new BlockRecolourable(Material.cloth, SoundType.CLOTH).setCreativeTab(ArchimedesShipMod.creativeTab);
+        blockBalloon = new BlockRecolourable(Material.CLOTH, SoundType.CLOTH).setCreativeTab(ArchimedesShipMod.creativeTab);
         blockBalloon.setHardness(0.35F).setResistance(1F);
         registerBlock("balloon", blockBalloon, ItemCloth.class);
 
@@ -71,19 +71,19 @@ public class ArchimedesObjects {
         blockSeat = (BlockSeat) new BlockSeat().setHardness(1F).setResistance(1F).setCreativeTab(ArchimedesShipMod.creativeTab);
         registerBlock("seat", blockSeat);
 
-        blockBuffer = new BlockAS(Material.cloth, SoundType.WOOD).setHardness(1F).setResistance(1F).setCreativeTab(ArchimedesShipMod.creativeTab);
+        blockBuffer = new BlockAS(Material.CLOTH, SoundType.WOOD).setHardness(1F).setResistance(1F).setCreativeTab(ArchimedesShipMod.creativeTab);
         registerBlock("buffer", blockBuffer);
 
-        blockStickyBuffer = new BlockAS(Material.cloth, SoundType.CLOTH).setHardness(1F).setResistance(1F).setCreativeTab(ArchimedesShipMod.creativeTab);
+        blockStickyBuffer = new BlockAS(Material.CLOTH, SoundType.CLOTH).setHardness(1F).setResistance(1F).setCreativeTab(ArchimedesShipMod.creativeTab);
         registerBlock("stickyBuffer", blockStickyBuffer);
 
-        blockEngine = new BlockEngine(Material.iron, 1F, 10).setHardness(2F).setResistance(3F).setCreativeTab(ArchimedesShipMod.creativeTab);
+        blockEngine = new BlockEngine(Material.IRON, 1F, 10).setHardness(2F).setResistance(3F).setCreativeTab(ArchimedesShipMod.creativeTab);
         registerBlock("engine", blockEngine);
 
-        blockCrateWood = new BlockCrate(Material.wood).setHardness(1f).setResistance(1f).setCreativeTab(ArchimedesShipMod.creativeTab);
+        blockCrateWood = new BlockCrate(Material.WOOD).setHardness(1f).setResistance(1f).setCreativeTab(ArchimedesShipMod.creativeTab);
         registerBlock("crate_wood", blockCrateWood);
 
-        blockAnchorPoint = new BlockAnchorPoint(Material.wood).setHardness(1f).setResistance(1F).setCreativeTab(ArchimedesShipMod.creativeTab);
+        blockAnchorPoint = new BlockAnchorPoint(Material.WOOD).setHardness(1f).setResistance(1F).setCreativeTab(ArchimedesShipMod.creativeTab);
         registerBlock("anchorPoint", blockAnchorPoint);
 
         blockSecuredBed = new BlockSecuredBed().setHardness(0.2F);
@@ -91,41 +91,41 @@ public class ArchimedesObjects {
     }
 
     public void init(FMLInitializationEvent e) {
-        GameRegistry.addRecipe(new ItemStack(blockMarkShip, 1), "X#X", "#O#", "X#X", Character.valueOf('X'), Blocks.planks, Character.valueOf('#'), Items.stick, Character.valueOf('O'), Items.iron_ingot);
+        GameRegistry.addRecipe(new ItemStack(blockMarkShip, 1), "X#X", "#O#", "X#X", Character.valueOf('X'), Blocks.PLANKS, Character.valueOf('#'), Items.STICK, Character.valueOf('O'), Items.IRON_INGOT);
         GameRegistry.registerTileEntity(TileEntityHelm.class, "archiHelm");
-        Blocks.fire.setFireInfo(blockMarkShip, 5, 5);
+        Blocks.FIRE.setFireInfo(blockMarkShip, 5, 5);
 
-        GameRegistry.addShapelessRecipe(new ItemStack(blockFloater, 1), Blocks.log, Blocks.wool);
-        GameRegistry.addShapelessRecipe(new ItemStack(blockFloater, 1), Blocks.log2, Blocks.wool);
+        GameRegistry.addShapelessRecipe(new ItemStack(blockFloater, 1), Blocks.LOG, Blocks.WOOL);
+        GameRegistry.addShapelessRecipe(new ItemStack(blockFloater, 1), Blocks.LOG2, Blocks.WOOL);
 
         //GameRegistry.addRecipe(new ItemStack(blockBalloon, 1), "X", "#", Character.valueOf('X'), Block.cloth, Character.valueOf('#'), Item.silk);
-        for (int i = 0; i < ItemDye.dyeColors.length; i++) {
-            GameRegistry.addRecipe(new ItemStack(blockBalloon, 1, i), "X", "#", Character.valueOf('X'), new ItemStack(Blocks.wool, 1, i), Character.valueOf('#'), Items.string);
+        for (int i = 0; i < ItemDye.DYE_COLORS.length; i++) {
+            GameRegistry.addRecipe(new ItemStack(blockBalloon, 1, i), "X", "#", Character.valueOf('X'), new ItemStack(Blocks.WOOL, 1, i), Character.valueOf('#'), Items.STRING);
         }
-        Blocks.fire.setFireInfo(blockBalloon, 30, 60);
+        Blocks.FIRE.setFireInfo(blockBalloon, 30, 60);
 
-        GameRegistry.addShapedRecipe(new ItemStack(blockGauge, 1, 0), "VXV", "XO#", " # ", Character.valueOf('X'), Items.iron_ingot, Character.valueOf('#'), Items.gold_ingot, Character.valueOf('O'), Items.redstone, Character.valueOf('V'), Blocks.glass_pane);
-        GameRegistry.addShapedRecipe(new ItemStack(blockGauge, 1, 0), "VXV", "XO#", " # ", Character.valueOf('X'), Items.gold_ingot, Character.valueOf('#'), Items.iron_ingot, Character.valueOf('O'), Items.redstone, Character.valueOf('V'), Blocks.glass_pane);
-        GameRegistry.addShapedRecipe(new ItemStack(blockGauge, 1, 1), "VXV", "XO#", "V#V", Character.valueOf('X'), Items.iron_ingot, Character.valueOf('#'), Items.gold_ingot, Character.valueOf('O'), Item.getItemFromBlock(blockGauge), Character.valueOf('V'), Blocks.glass_pane);
-        GameRegistry.addShapedRecipe(new ItemStack(blockGauge, 1, 1), "VXV", "XO#", "V#V", Character.valueOf('X'), Items.gold_ingot, Character.valueOf('#'), Items.iron_ingot, Character.valueOf('O'), Item.getItemFromBlock(blockGauge), Character.valueOf('V'), Blocks.glass_pane);
+        GameRegistry.addShapedRecipe(new ItemStack(blockGauge, 1, 0), "VXV", "XO#", " # ", Character.valueOf('X'), Items.IRON_INGOT, Character.valueOf('#'), Items.GOLD_INGOT, Character.valueOf('O'), Items.REDSTONE, Character.valueOf('V'), Blocks.GLASS_PANE);
+        GameRegistry.addShapedRecipe(new ItemStack(blockGauge, 1, 0), "VXV", "XO#", " # ", Character.valueOf('X'), Items.GOLD_INGOT, Character.valueOf('#'), Items.IRON_INGOT, Character.valueOf('O'), Items.REDSTONE, Character.valueOf('V'), Blocks.GLASS_PANE);
+        GameRegistry.addShapedRecipe(new ItemStack(blockGauge, 1, 1), "VXV", "XO#", "V#V", Character.valueOf('X'), Items.IRON_INGOT, Character.valueOf('#'), Items.GOLD_INGOT, Character.valueOf('O'), Item.getItemFromBlock(blockGauge), Character.valueOf('V'), Blocks.GLASS_PANE);
+        GameRegistry.addShapedRecipe(new ItemStack(blockGauge, 1, 1), "VXV", "XO#", "V#V", Character.valueOf('X'), Items.GOLD_INGOT, Character.valueOf('#'), Items.IRON_INGOT, Character.valueOf('O'), Item.getItemFromBlock(blockGauge), Character.valueOf('V'), Blocks.GLASS_PANE);
         GameRegistry.registerTileEntity(TileEntityGauge.class, "archiGauge");
 
-        GameRegistry.addShapedRecipe(new ItemStack(blockSeat), "X ", "XX", Character.valueOf('X'), Blocks.wool);
-        Blocks.fire.setFireInfo(blockSeat, 30, 30);
+        GameRegistry.addShapedRecipe(new ItemStack(blockSeat), "X ", "XX", Character.valueOf('X'), Blocks.WOOL);
+        Blocks.FIRE.setFireInfo(blockSeat, 30, 30);
 
-        GameRegistry.addShapelessRecipe(new ItemStack(blockBuffer), blockFloater, new ItemStack(Items.dye, 1));
-        GameRegistry.addShapelessRecipe(new ItemStack(blockStickyBuffer), blockBuffer, new ItemStack(Items.slime_ball, 1));
+        GameRegistry.addShapelessRecipe(new ItemStack(blockBuffer), blockFloater, new ItemStack(Items.DYE, 1));
+        GameRegistry.addShapelessRecipe(new ItemStack(blockStickyBuffer), blockBuffer, new ItemStack(Items.SLIME_BALL, 1));
 
-        GameRegistry.addRecipe(new ItemStack(blockCrateWood, 3), " # ", "# #", "XXX", Character.valueOf('#'), Items.leather, Character.valueOf('X'), Blocks.planks);
+        GameRegistry.addRecipe(new ItemStack(blockCrateWood, 3), " # ", "# #", "XXX", Character.valueOf('#'), Items.LEATHER, Character.valueOf('X'), Blocks.PLANKS);
         GameRegistry.registerTileEntity(TileEntityCrate.class, "archiCrate");
 
-        GameRegistry.addRecipe(new ItemStack(blockEngine, 1), "#O#", "#X#", "###", Character.valueOf('#'), Items.iron_ingot, Character.valueOf('O'), Items.water_bucket, Character.valueOf('X'), Blocks.furnace);
+        GameRegistry.addRecipe(new ItemStack(blockEngine, 1), "#O#", "#X#", "###", Character.valueOf('#'), Items.IRON_INGOT, Character.valueOf('O'), Items.WATER_BUCKET, Character.valueOf('X'), Blocks.FURNACE);
         GameRegistry.registerTileEntity(TileEntityEngine.class, "archiEngine");
 
-        GameRegistry.addRecipe(new ItemStack(blockAnchorPoint, 1), " X ", "XXX", "ZYZ", Character.valueOf('X'), Items.iron_ingot, Character.valueOf('Y'), Blocks.iron_block, Character.valueOf('Z'), Items.redstone);
+        GameRegistry.addRecipe(new ItemStack(blockAnchorPoint, 1), " X ", "XXX", "ZYZ", Character.valueOf('X'), Items.IRON_INGOT, Character.valueOf('Y'), Blocks.IRON_BLOCK, Character.valueOf('Z'), Items.REDSTONE);
         GameRegistry.registerTileEntity(TileEntityAnchorPoint.class, "archiAnchor");
 
-        GameRegistry.addShapelessRecipe(new ItemStack(blockSecuredBed), Blocks.bed, Items.iron_ingot);
+        GameRegistry.addShapelessRecipe(new ItemStack(blockSecuredBed), Blocks.BED, Items.IRON_INGOT);
         GameRegistry.registerTileEntity(TileEntitySecuredBed.class, "archiSecuredBed");
     }
 

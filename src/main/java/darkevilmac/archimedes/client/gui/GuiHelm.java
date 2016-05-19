@@ -2,10 +2,11 @@ package darkevilmac.archimedes.client.gui;
 
 import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.common.entity.ShipAssemblyInteractor;
-import darkevilmac.archimedes.common.network.ClientHelmActionMessage;
-import darkevilmac.archimedes.common.network.ClientRenameShipMessage;
+import darkevilmac.archimedes.common.network.ArchimedesShipsNetworking;
+import darkevilmac.archimedes.common.network.HelmClientAction;
 import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
 import darkevilmac.movingworld.common.chunk.assembly.AssembleResult;
+import darkevilmac.movingworld.common.chunk.assembly.AssembleResult.ResultType;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -17,6 +18,8 @@ import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
 import java.util.Locale;
+
+import static darkevilmac.movingworld.common.chunk.assembly.AssembleResult.ResultType.*;
 
 public class GuiHelm extends GuiContainer {
     public static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("archimedesshipsplus", "textures/gui/shipstatus.png");
@@ -55,11 +58,11 @@ public class GuiHelm extends GuiContainer {
         buttonList.add(btnAssemble);
 
         btnUndo = new GuiButton(2, btnx, btny += 20, 100, 20, I18n.translateToLocal("gui.shipstatus.undo"));
-        btnUndo.enabled = tileEntity.getPrevAssembleResult() != null && tileEntity.getPrevAssembleResult().getCode() != AssembleResult.RESULT_NONE;
+        btnUndo.enabled = tileEntity.getPrevAssembleResult() != null && tileEntity.getPrevAssembleResult().getType() != RESULT_NONE;
         buttonList.add(btnUndo);
 
         btnMount = new GuiButton(3, btnx, btny += 20, 100, 20, I18n.translateToLocal("gui.shipstatus.mount"));
-        btnMount.enabled = tileEntity.getAssembleResult() != null && tileEntity.getAssembleResult().getCode() == AssembleResult.RESULT_OK;
+        btnMount.enabled = tileEntity.getAssembleResult() != null && tileEntity.getAssembleResult().getType() == RESULT_OK;
         buttonList.add(btnMount);
 
         txtShipName = new GuiTextField(0, fontRendererObj, guiLeft + 8 + xSize / 2, guiTop + 21, 120, 10); // TODO: Might be incorrect not sure about 0 in GuiTextField()
@@ -80,8 +83,8 @@ public class GuiHelm extends GuiContainer {
     @Override
     public void updateScreen() {
         super.updateScreen();
-        btnUndo.enabled = tileEntity.getPrevAssembleResult() != null && tileEntity.getPrevAssembleResult().getCode() != AssembleResult.RESULT_NONE;
-        btnMount.enabled = tileEntity.getAssembleResult() != null && tileEntity.getAssembleResult().getCode() == AssembleResult.RESULT_OK;
+        btnUndo.enabled = tileEntity.getPrevAssembleResult() != null && tileEntity.getPrevAssembleResult().getType() != RESULT_NONE;
+        btnMount.enabled = tileEntity.getAssembleResult() != null && tileEntity.getAssembleResult().getType() == RESULT_OK;
 
         btnRename.xPosition = btnAssemble.xPosition = btnUndo.xPosition = btnMount.xPosition = guiLeft - 100;
 
@@ -105,59 +108,59 @@ public class GuiHelm extends GuiContainer {
         row += 5;
         fontRendererObj.drawString(I18n.translateToLocal("gui.shipstatus.name"), col0, row += 10, color);
 
-        int rcode;
+        ResultType rType;
         int rblocks;
         int rballoons;
         int rtes;
         float rmass;
 
         if (result == null || (result != null && result.assemblyInteractor == null) || (result != null && result.assemblyInteractor != null && !(result.assemblyInteractor instanceof ShipAssemblyInteractor))) {
-            rcode = busyCompiling ? AssembleResult.RESULT_BUSY_COMPILING : AssembleResult.RESULT_NONE;
+            rType = busyCompiling ? RESULT_BUSY_COMPILING : RESULT_NONE;
             rblocks = rballoons = rtes = 0;
             rmass = 0f;
         } else {
-            rcode = result.getCode();
+            rType = result.getType();
             rblocks = result.getBlockCount();
             rballoons = ((ShipAssemblyInteractor) result.assemblyInteractor).getBalloonCount();
             rtes = result.getTileEntityCount();
             rmass = result.getMass();
-            if (rcode != AssembleResult.RESULT_NONE) {
+            if (rType != RESULT_NONE) {
                 busyCompiling = false;
             }
         }
 
         String rcodename;
         int color1;
-        switch (rcode) {
-            case AssembleResult.RESULT_NONE:
+        switch (rType) {
+            case RESULT_NONE:
                 color1 = color;
                 rcodename = "gui.shipstatus.result.none";
                 break;
-            case AssembleResult.RESULT_OK:
+            case RESULT_OK:
                 color1 = 0x40A000;
                 rcodename = "gui.shipstatus.result.ok";
                 break;
-            case AssembleResult.RESULT_OK_WITH_WARNINGS:
+            case RESULT_OK_WITH_WARNINGS:
                 color1 = 0xFFAA00;
                 rcodename = "gui.shipstatus.result.okwarn";
                 break;
-            case AssembleResult.RESULT_MISSING_MARKER:
+            case RESULT_MISSING_MARKER:
                 color1 = 0xB00000;
                 rcodename = "gui.shipstatus.result.missingmarker";
                 break;
-            case AssembleResult.RESULT_BLOCK_OVERFLOW:
+            case RESULT_BLOCK_OVERFLOW:
                 color1 = 0xB00000;
                 rcodename = "gui.shipstatus.result.overflow";
                 break;
-            case AssembleResult.RESULT_ERROR_OCCURED:
+            case RESULT_ERROR_OCCURED:
                 color1 = 0xB00000;
                 rcodename = "gui.shipstatus.result.error";
                 break;
-            case AssembleResult.RESULT_BUSY_COMPILING:
+            case RESULT_BUSY_COMPILING:
                 color1 = color;
                 rcodename = "gui.shipstatus.result.busy";
                 break;
-            case AssembleResult.RESULT_INCONSISTENT:
+            case RESULT_INCONSISTENT:
                 color1 = 0xB00000;
                 rcodename = "gui.shipstatus.result.inconsistent";
                 break;
@@ -209,24 +212,38 @@ public class GuiHelm extends GuiContainer {
                 btnRename.displayString = I18n.translateToLocal("gui.shipstatus.rename");
                 tileEntity.getInfo().setName(txtShipName.getText());
                 txtShipName.setFocused(false);
+                //txtShipName.setEnableBackgroundDrawing(false);
 
-                ClientRenameShipMessage msg = new ClientRenameShipMessage(tileEntity, tileEntity.getInfo().getName());
-                ArchimedesShipMod.instance.network.sendToServer(msg);
+                ArchimedesShipsNetworking.NETWORK.send().packet("ClientRenameShipMessage")
+                        .with("tileX", tileEntity.getPos().getX())
+                        .with("tileY", tileEntity.getPos().getY())
+                        .with("tileZ", tileEntity.getPos().getZ())
+                        .with("newName", tileEntity.getInfo().getName()).toServer();
             } else {
                 btnRename.displayString = I18n.translateToLocal("gui.shipstatus.done");
                 txtShipName.setFocused(true);
+                //txtShipName.setEnableBackgroundDrawing(true);
             }
         } else if (button == btnAssemble) {
-            ClientHelmActionMessage msg = new ClientHelmActionMessage(tileEntity, 0);
-            ArchimedesShipMod.instance.network.sendToServer(msg);
+            ArchimedesShipsNetworking.NETWORK.send().packet("ClientHelmActionMessage")
+                    .with("tileX", tileEntity.getPos().getX())
+                    .with("tileY", tileEntity.getPos().getY())
+                    .with("tileZ", tileEntity.getPos().getZ())
+                    .with("action", HelmClientAction.ASSEMBLE.toInt()).toServer();
             tileEntity.setAssembleResult(null);
             busyCompiling = true;
-        } else if (button == btnUndo) {
-            ClientHelmActionMessage msg = new ClientHelmActionMessage(tileEntity, 2);
-            ArchimedesShipMod.instance.network.sendToServer(msg);
         } else if (button == btnMount) {
-            ClientHelmActionMessage msg = new ClientHelmActionMessage(tileEntity, 1);
-            ArchimedesShipMod.instance.network.sendToServer(msg);
+            ArchimedesShipsNetworking.NETWORK.send().packet("ClientHelmActionMessage")
+                    .with("tileX", tileEntity.getPos().getX())
+                    .with("tileY", tileEntity.getPos().getY())
+                    .with("tileZ", tileEntity.getPos().getZ())
+                    .with("action", HelmClientAction.MOUNT.toInt()).toServer();
+        } else if (button == btnUndo) {
+            ArchimedesShipsNetworking.NETWORK.send().packet("ClientHelmActionMessage")
+                    .with("tileX", tileEntity.getPos().getX())
+                    .with("tileY", tileEntity.getPos().getY())
+                    .with("tileZ", tileEntity.getPos().getZ())
+                    .with("action", HelmClientAction.UNDOCOMPILE.toInt()).toServer();
         }
     }
 

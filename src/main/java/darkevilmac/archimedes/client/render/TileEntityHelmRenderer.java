@@ -101,7 +101,7 @@ public class TileEntityHelmRenderer extends TileEntitySpecialRenderer {
 
         IBakedModel modelBaked = null;
         if (helmModels.containsKey(blockStateFacing)) {
-            bindTexture(TextureMap.locationBlocksTexture);
+            bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
             modelBaked = helmModels.get(blockStateFacing);
         }
         vertexBuffer.begin(GL11.GL_QUADS, Attributes.DEFAULT_BAKED_FORMAT);

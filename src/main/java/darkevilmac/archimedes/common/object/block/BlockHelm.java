@@ -22,7 +22,7 @@ import net.minecraft.world.World;
 public class BlockHelm extends BlockDirectional implements ITileEntityProvider {
 
     public BlockHelm() {
-        super(Material.wood);
+        super(Material.WOOD);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
         this.setSoundType(SoundType.WOOD);
     }
