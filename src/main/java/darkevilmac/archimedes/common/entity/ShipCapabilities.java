@@ -383,7 +383,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     public void clear() {
         if (seats != null) {
             for (EntitySeat seat : seats) {
-                seat.killedBy(this);
+                seat.killedBy();
                 seat.setDead();
             }
             seats = null;

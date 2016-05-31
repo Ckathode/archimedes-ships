@@ -20,7 +20,6 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     public static final DataParameter<Integer> POSX = EntityDataManager.<Integer>createKey(EntitySeat.class, DataSerializers.VARINT);
     public static final DataParameter<Integer> POSY = EntityDataManager.<Integer>createKey(EntitySeat.class, DataSerializers.VARINT);
     public static final DataParameter<Integer> POSZ = EntityDataManager.<Integer>createKey(EntitySeat.class, DataSerializers.VARINT);
-    public static final DataParameter<Byte> TEN = EntityDataManager.<Byte>createKey(EntitySeat.class, DataSerializers.BYTE);
 
     private EntityShip ship;
     private BlockPos pos;
@@ -70,17 +69,11 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
             pos = new BlockPos(x, y, z);
             setLocationAndAngles(entityship.posX, entityship.posY, entityship.posZ, 0F, 0F);
             if (worldObj != null && !worldObj.isRemote) {
-                if (!this.dataManager.isEmpty() && this.dataManager.get(TEN) == new Byte((byte) 1)) {
+                if (!this.dataManager.isEmpty()) {
                     this.dataManager.set(SHIPID, entityship.getEntityId());
                     this.dataManager.set(POSX, x);
                     this.dataManager.set(POSY, y);
                     this.dataManager.set(POSZ, z);
-                } else {
-                    this.dataManager.register(SHIPID, entityship.getEntityId());
-                    this.dataManager.register(POSX, x);
-                    this.dataManager.register(POSY, y);
-                    this.dataManager.register(POSZ, z);
-                    this.dataManager.register(TEN, new Byte((byte) 1));
                 }
             }
         }
@@ -113,7 +106,7 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
         }
     }
 
-    public void killedBy(ShipCapabilities capabilities) {
+    public void killedBy() {
         if (getControllingPassenger() != null && ship != null && ship.isFlying()) {
             EntityParachute parachute = new EntityParachute(worldObj, ship, pos);
             if (prevRiddenByEntity != null && worldObj.spawnEntityInWorld(parachute)) {
@@ -131,15 +124,15 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
         super.onUpdate();
 
         if (worldObj.isRemote) {
-            if (!this.dataManager.isEmpty() && this.dataManager.get(TEN) == new Byte((byte) 1)) {
-                if (this.dataManager.get(SHIPID) != 0) {
+            if (!this.dataManager.isEmpty() && this.dataManager.isDirty()) {
+                if (this.dataManager.get(SHIPID) != -1) {
                     ship = (EntityShip) worldObj.getEntityByID(this.dataManager.get(SHIPID));
                     pos = new BlockPos(this.dataManager.get(POSX),
                             this.dataManager.get(POSY),
                             this.dataManager.get(POSZ));
                 }
             }
-            if (this.dataManager.isDirty() && this.dataManager.get(SHIPID) != 0) {
+            if (this.dataManager.isDirty() && this.dataManager.get(SHIPID) != -1) {
                 ship = (EntityShip) worldObj.getEntityByID(this.dataManager.get(SHIPID));
                 pos = new BlockPos(this.dataManager.get(POSX),
                         this.dataManager.get(POSY),
@@ -182,11 +175,10 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
 
     @Override
     protected void entityInit() {
-        this.dataManager.register(SHIPID, 0);
+        this.dataManager.register(SHIPID, -1);
         this.dataManager.register(POSX, 0);
         this.dataManager.register(POSY, 0);
         this.dataManager.register(POSZ, 0);
-        this.dataManager.register(TEN, new Byte((byte) 1));
     }
 
     @Override
@@ -253,7 +245,6 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
             }
         }
     }
-
 
 
 }

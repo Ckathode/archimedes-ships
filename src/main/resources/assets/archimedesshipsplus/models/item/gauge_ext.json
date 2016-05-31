@@ -1,39 +1,20 @@
 {
   "parent": "archimedesshipsplus:block/gauge_ext",
   "display": {
-    "thirdperson": {
-      "rotation": [
-        10,
-        -45,
-        170
-      ],
-      "translation": [
-        0,
-        0,
-        -2.75
-      ],
-      "scale": [
-        0.375,
-        0.375,
-        0.375
-      ]
+    "thirdperson_righthand": {
+      "rotation": [ 75, 45, 0 ],
+      "translation": [ 0, 2.5, 2],
+      "scale": [ 0.375, 0.375, 0.375 ]
     },
-    "firstperson": {
-      "rotation": [
-        10,
-        -45,
-        170
-      ],
-      "translation": [
-        -1,
-        1.5,
-        -2.5
-      ],
-      "scale": [
-        0.75,
-        0.75,
-        0.75
-      ]
+    "firstperson_righthand": {
+      "rotation": [ 0, 45, 0 ],
+      "translation": [ 0, 4.2, 0 ],
+      "scale": [ 0.40, 0.40, 0.40 ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [ 0, 225, 0 ],
+      "translation": [ 0, 4.2, 0 ],
+      "scale": [ 0.40, 0.40, 0.40 ]
     }
   }
 }

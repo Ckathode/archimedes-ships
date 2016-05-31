@@ -123,7 +123,7 @@ public class TileEntityHelm extends TileMovingWorldMarkingBlock {
                 res = getAssembleResult();
             }
 
-            ByteBuf buf = Unpooled.buffer(12);
+            ByteBuf buf = Unpooled.buffer(1, 32);
 
             buf.writeBoolean(prev);
             if (res == null) {
@@ -132,8 +132,10 @@ public class TileEntityHelm extends TileMovingWorldMarkingBlock {
                 buf = res.toByteBuf(buf);
             }
 
+            byte[] bufArray = new byte[buf.readableBytes()];
+            buf.readBytes(bufArray);
             ArchimedesShipsNetworking.NETWORK.send().packet("AssembleResultMessage")
-                    .with("result", buf.array()).toAllIn(player.worldObj);
+                    .with("result", bufArray).toAllAround(player.worldObj, player, 64);
         }
     }
 

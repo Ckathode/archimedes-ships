@@ -1,46 +1,10 @@
 {
   "parent": "archimedesshipsplus:block/anchorPoint",
   "display": {
-    "thirdperson": {
-      "rotation": [
-        10,
-        -45,
-        170
-      ],
-      "translation": [
-        0,
-        1.5,
-        -2.75
-      ],
-      "scale": [
-        0.75,
-        0.75,
-        0.75
-      ]
-    },
-    "firstperson": {
-      "translation": [
-        0,
-        2,
-        -2.75
-      ]
-    },
-    "gui": {
-      "rotation": [
-        0,
-        0,
-        0
-      ],
-      "translation": [
-        -0.25,
-        0.75,
-        0.25
-      ],
-      "scale": [
-        1.5,
-        1.5,
-        1.5
-      ]
+    "fixed": {
+      "rotation": [ 0, 90, 0 ],
+      "translation": [ 0, 0, 0 ],
+      "scale": [ 0.5, 0.5, 0.5 ]
     }
   }
 }

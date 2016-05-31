@@ -53,7 +53,6 @@ public class ArchimedesShipsNetworking {
                                 ((ContainerHelm) entityPlayer.openContainer).tileEntity.getAssembleResult().assemblyInteractor = result.assemblyInteractor;
                             }
                         }
-
                     }
                 });
 
