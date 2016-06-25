@@ -1,9 +1,10 @@
 package darkevilmac.archimedes.client.control;
 
+import net.minecraft.entity.player.EntityPlayer;
+
 import darkevilmac.archimedes.common.control.ShipControllerCommon;
 import darkevilmac.archimedes.common.entity.EntityShip;
 import darkevilmac.archimedes.common.network.ArchimedesShipsNetworking;
-import net.minecraft.entity.player.EntityPlayer;
 
 public class ShipControllerClient extends ShipControllerCommon {
     @Override

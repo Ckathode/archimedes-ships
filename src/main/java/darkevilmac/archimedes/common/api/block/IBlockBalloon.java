@@ -8,7 +8,6 @@ public interface IBlockBalloon {
      * How many balloon blocks is this block equivalent to?
      *
      * @param tileEntity null if not applicable.
-     * @return
      */
     int getBalloonWorth(TileEntity tileEntity);
 

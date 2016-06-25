@@ -3,7 +3,8 @@ package darkevilmac.archimedes.common.indev;
 import net.minecraft.launchwrapper.Launch;
 
 /**
- * Just links to common things I call when in development. Prevents me from releasing a version that spams the console by accident.
+ * Just links to common things I call when in development. Prevents me from releasing a version that
+ * spams the console by accident.
  */
 
 public class IndevCalls {

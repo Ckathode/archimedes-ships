@@ -1,6 +1,5 @@
 package darkevilmac.archimedes.common.entity;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -13,6 +12,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+
+import io.netty.buffer.ByteBuf;
 
 public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
 
@@ -37,8 +38,6 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     /**
      * Called from ShipCapabilities.
      *
-     * @param entityplayer
-     * @return
      * @ShipCapabilities
      */
     @Override
@@ -57,8 +56,6 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
 
     /**
      * Sets the parent ship as well as position.
-     *
-     * @param entityship
      */
     public void setParentShip(EntityShip entityship, BlockPos bPos) {
         int x = bPos.getX();

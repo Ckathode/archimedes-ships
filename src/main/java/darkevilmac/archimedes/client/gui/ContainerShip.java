@@ -1,12 +1,13 @@
 package darkevilmac.archimedes.client.gui;
 
-import darkevilmac.archimedes.common.entity.EntitySeat;
-import darkevilmac.archimedes.common.entity.EntityShip;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+
+import darkevilmac.archimedes.common.entity.EntitySeat;
+import darkevilmac.archimedes.common.entity.EntityShip;
 
 public class ContainerShip extends Container {
     public final EntityShip ship;

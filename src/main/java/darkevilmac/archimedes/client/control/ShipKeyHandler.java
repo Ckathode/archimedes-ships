@@ -1,16 +1,17 @@
 package darkevilmac.archimedes.client.control;
 
-import darkevilmac.archimedes.common.ArchimedesConfig;
-import darkevilmac.archimedes.common.entity.EntityShip;
-import darkevilmac.archimedes.common.network.ArchimedesShipsNetworking;
-import darkevilmac.movingworld.common.network.MovingWorldClientAction;
-import darkevilmac.movingworld.common.network.MovingWorldNetworking;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import darkevilmac.archimedes.common.ArchimedesConfig;
+import darkevilmac.archimedes.common.entity.EntityShip;
+import darkevilmac.archimedes.common.network.ArchimedesShipsNetworking;
+import darkevilmac.movingworld.common.network.MovingWorldClientAction;
+import darkevilmac.movingworld.common.network.MovingWorldNetworking;
 
 @SideOnly(Side.CLIENT)
 public class ShipKeyHandler {

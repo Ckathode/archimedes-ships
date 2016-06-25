@@ -1,6 +1,5 @@
 package darkevilmac.archimedes.common.object.block;
 
-import darkevilmac.archimedes.common.tileentity.TileEntityGauge;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockFence;
@@ -24,6 +23,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import java.util.List;
+
+import darkevilmac.archimedes.common.tileentity.TileEntityGauge;
 
 public class BlockGauge extends BlockContainer {
 
@@ -77,7 +78,7 @@ public class BlockGauge extends BlockContainer {
     }
 
     @Override
-    public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock) {
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
         if (!this.canBePlacedOn(worldIn, pos.down())) {
             this.dropBlockAsItem(worldIn, pos, state, 0);
             worldIn.setBlockToAir(pos);

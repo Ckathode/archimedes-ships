@@ -1,6 +1,5 @@
 package darkevilmac.archimedes.client.render;
 
-import darkevilmac.archimedes.common.entity.EntityParachute;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
@@ -9,7 +8,10 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
+
+import darkevilmac.archimedes.common.entity.EntityParachute;
 
 //TODO: possible rewrite?
 

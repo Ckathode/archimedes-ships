@@ -1,9 +1,7 @@
 package darkevilmac.archimedes.common.command;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
-import darkevilmac.archimedes.common.entity.EntitySeat;
-import darkevilmac.archimedes.common.entity.EntityShip;
-import darkevilmac.archimedes.common.entity.ShipCapabilities;
+
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -12,6 +10,10 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 
 import java.util.Locale;
+
+import darkevilmac.archimedes.common.entity.EntitySeat;
+import darkevilmac.archimedes.common.entity.EntityShip;
+import darkevilmac.archimedes.common.entity.ShipCapabilities;
 
 public class CommandShipInfo extends CommandBase {
 

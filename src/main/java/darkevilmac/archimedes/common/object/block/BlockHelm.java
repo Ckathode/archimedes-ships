@@ -1,7 +1,5 @@
 package darkevilmac.archimedes.common.object.block;
 
-import darkevilmac.archimedes.ArchimedesShipMod;
-import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
@@ -18,6 +16,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import darkevilmac.archimedes.ArchimedesShipMod;
+import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
 
 public class BlockHelm extends BlockDirectional implements ITileEntityProvider {
 
@@ -71,8 +72,8 @@ public class BlockHelm extends BlockDirectional implements ITileEntityProvider {
     }
 
     @Override
-    public boolean onBlockEventReceived(World world, BlockPos pos, IBlockState state, int eventID, int eventParam) {
-        super.onBlockEventReceived(world, pos, state, eventID, eventParam);
+    public boolean eventReceived(IBlockState state, World world, BlockPos pos, int eventID, int eventParam) {
+        super.eventReceived(state, world, pos, eventID, eventParam);
         TileEntity tileentity = world.getTileEntity(pos);
         return tileentity != null && tileentity.receiveClientEvent(eventID, eventParam);
     }

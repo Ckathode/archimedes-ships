@@ -1,7 +1,5 @@
 package darkevilmac.archimedes.common.object.block;
 
-import darkevilmac.archimedes.common.object.ArchimedesObjects;
-import darkevilmac.archimedes.common.tileentity.TileEntitySecuredBed;
 import net.minecraft.block.BlockBed;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
@@ -18,12 +16,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Iterator;
 import java.util.Random;
+
+import darkevilmac.archimedes.common.object.ArchimedesObjects;
+import darkevilmac.archimedes.common.tileentity.TileEntitySecuredBed;
 
 public class BlockSecuredBed extends BlockBed implements ITileEntityProvider {
 
@@ -49,7 +50,7 @@ public class BlockSecuredBed extends BlockBed implements ITileEntityProvider {
                 }
             }
 
-            if (worldIn.provider.canRespawnHere() && worldIn.getBiomeGenForCoords(pos) != BiomeGenBase.REGISTRY.getObject(new ResourceLocation("hell"))) {
+            if (worldIn.provider.canRespawnHere() && worldIn.getBiome(pos) != Biome.REGISTRY.getObject(new ResourceLocation("hell"))) {
                 if (state.getValue(OCCUPIED).booleanValue()) {
                     EntityPlayer entityplayer1 = this.getPlayerInBed(worldIn, pos);
 
@@ -64,17 +65,17 @@ public class BlockSecuredBed extends BlockBed implements ITileEntityProvider {
                     state = state.withProperty(OCCUPIED, Boolean.valueOf(false));
                     worldIn.setBlockState(pos, state, 4);
 
-                    EntityPlayer.EnumStatus enumstatus = playerIn.trySleep(pos);
+                    EntityPlayer.SleepResult enumstatus = playerIn.trySleep(pos);
 
-                    if (enumstatus == EntityPlayer.EnumStatus.OK) {
+                    if (enumstatus == EntityPlayer.SleepResult.OK) {
                         state = state.withProperty(OCCUPIED, Boolean.valueOf(true));
                         worldIn.setBlockState(pos, state, 4);
 
                         bedUser = playerIn;
                     } else {
-                        if (enumstatus == EntityPlayer.EnumStatus.NOT_POSSIBLE_NOW) {
+                        if (enumstatus == EntityPlayer.SleepResult.NOT_POSSIBLE_NOW) {
                             playerIn.addChatComponentMessage(new TextComponentTranslation("tile.bed.noSleep"));
-                        } else if (enumstatus == EntityPlayer.EnumStatus.NOT_SAFE) {
+                        } else if (enumstatus == EntityPlayer.SleepResult.NOT_SAFE) {
                             playerIn.addChatComponentMessage(new TextComponentTranslation("tile.bed.notSafe"));
                         }
                     }

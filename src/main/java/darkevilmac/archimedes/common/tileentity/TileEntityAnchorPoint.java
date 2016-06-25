@@ -1,12 +1,13 @@
 package darkevilmac.archimedes.common.tileentity;
 
-import darkevilmac.movingworld.common.chunk.mobilechunk.MobileChunk;
-import darkevilmac.movingworld.common.entity.EntityMovingWorld;
-import darkevilmac.movingworld.common.tile.IMovingWorldTileEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+
+import darkevilmac.movingworld.common.chunk.mobilechunk.MobileChunk;
+import darkevilmac.movingworld.common.entity.EntityMovingWorld;
+import darkevilmac.movingworld.common.tile.IMovingWorldTileEntity;
 
 public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTileEntity {
 
@@ -40,20 +41,21 @@ public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTil
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tag) {
-        super.writeToNBT(tag);
+    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+        compound = super.writeToNBT(compound);
         if (anchorPointInfo != null) {
-            tag.setInteger("linkX", anchorPointInfo.linkPos.getX());
-            tag.setInteger("linkY", anchorPointInfo.linkPos.getY());
-            tag.setInteger("linkZ", anchorPointInfo.linkPos.getZ());
-            tag.setBoolean("forShip", anchorPointInfo.forShip);
-            tag.setBoolean("hasAnchorInfo", true);
+            compound.setInteger("linkX", anchorPointInfo.linkPos.getX());
+            compound.setInteger("linkY", anchorPointInfo.linkPos.getY());
+            compound.setInteger("linkZ", anchorPointInfo.linkPos.getZ());
+            compound.setBoolean("forShip", anchorPointInfo.forShip);
+            compound.setBoolean("hasAnchorInfo", true);
         } else {
-            tag.setBoolean("hasAnchorInfo", false);
+            compound.setBoolean("hasAnchorInfo", false);
         }
         if (activeShip != null && !activeShip.isDead) {
-            tag.setInteger("vehicle", activeShip.getEntityId());
+            compound.setInteger("vehicle", activeShip.getEntityId());
         }
+        return compound;
     }
 
     @Override

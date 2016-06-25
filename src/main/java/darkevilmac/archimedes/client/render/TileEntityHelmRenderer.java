@@ -1,11 +1,7 @@
 package darkevilmac.archimedes.client.render;
 
 import com.google.common.base.Function;
-import darkevilmac.archimedes.ArchimedesShipMod;
-import darkevilmac.archimedes.common.entity.EntityShip;
-import darkevilmac.archimedes.common.object.block.BlockHelm;
-import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
-import darkevilmac.movingworld.common.tile.IMovingWorldTileEntity;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -25,11 +21,18 @@ import net.minecraftforge.client.model.Attributes;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.model.TRSRTransformation;
+
 import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+
+import darkevilmac.archimedes.ArchimedesShipMod;
+import darkevilmac.archimedes.common.entity.EntityShip;
+import darkevilmac.archimedes.common.object.block.BlockHelm;
+import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
+import darkevilmac.movingworld.common.tile.IMovingWorldTileEntity;
 
 public class TileEntityHelmRenderer extends TileEntitySpecialRenderer {
 

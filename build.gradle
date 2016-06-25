@@ -11,7 +11,7 @@ buildscript {
             url = 'https://oss.sonatype.org/content/repositories/snapshots'
         }
         dependencies {
-            classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+            classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
         }
     }
 }
@@ -33,15 +33,15 @@ group = 'darkevilmac.archimedesshipsplus'
 archivesBaseName = 'archimedesshipsplus'
 
 minecraft {
-    version = "1.9-12.16.1.1907"
+    version = "1.10-12.18.0.1986-1.10.0"
     runDir = 'run'
 
-	def replacementVersion = 'MOD_VERSION = \"' + project.version + '\"'
-	
-    replace ("MOD_VERSION = \"@AS+VER@\"",
-			 replacementVersion)
+    def replacementVersion = 'MOD_VERSION = \"' + project.version + '\"'
 
-	mappings = "snapshot_20160516"
+    replace("MOD_VERSION = \"@AS+VER@\"",
+            replacementVersion)
+
+    mappings = "snapshot_20160621"
 }
 
 dependencies {
@@ -51,10 +51,11 @@ dependencies {
 }
 
 shadowJar {
-	exclude 'dummyThing'
+    exclude 'dummyThing'
     classifier = 'full'
 
-    relocate 'com.unascribed.lambdanetwork', 'darkevilmac.movingworld.repackage.com.unascribed.lambdanetwork' // Shaded under movingworld because of some references to MovingWorld networking.
+    relocate 'com.unascribed.lambdanetwork', 'darkevilmac.movingworld.repackage.com.unascribed.lambdanetwork'
+    // Shaded under movingworld because of some references to MovingWorld networking.
 }
 
 reobf {

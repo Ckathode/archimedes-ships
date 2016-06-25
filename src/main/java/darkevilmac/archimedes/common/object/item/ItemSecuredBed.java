@@ -1,7 +1,6 @@
 package darkevilmac.archimedes.common.object.item;
 
 
-import darkevilmac.archimedes.common.object.block.BlockSecuredBed;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -16,6 +15,8 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+
+import darkevilmac.archimedes.common.object.block.BlockSecuredBed;
 
 public class ItemSecuredBed extends Item {
 

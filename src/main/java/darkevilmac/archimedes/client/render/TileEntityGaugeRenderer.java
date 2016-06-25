@@ -1,6 +1,5 @@
 package darkevilmac.archimedes.client.render;
 
-import darkevilmac.archimedes.common.tileentity.TileEntityGauge;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
@@ -12,7 +11,10 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+
 import org.lwjgl.opengl.GL11;
+
+import darkevilmac.archimedes.common.tileentity.TileEntityGauge;
 
 public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
 

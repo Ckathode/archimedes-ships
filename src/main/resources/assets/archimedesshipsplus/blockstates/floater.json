@@ -1,5 +1,7 @@
 {
   "variants": {
-    "normal": {"model": "archimedesshipsplus:floater"}
+    "normal": {
+      "model": "archimedesshipsplus:floater"
+    }
   }
 }

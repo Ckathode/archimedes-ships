@@ -1,11 +1,12 @@
 package darkevilmac.archimedes.client.gui;
 
-import darkevilmac.archimedes.common.tileentity.TileEntityEngine;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+
+import darkevilmac.archimedes.common.tileentity.TileEntityEngine;
 
 public class ContainerEngine extends Container {
     public final TileEntityEngine tileEntity;
@@ -41,7 +42,8 @@ public class ContainerEngine extends Container {
     }
 
     /**
-     * Called when a player shift-clicks on a slot. You must override this or you will crash when someone does that.
+     * Called when a player shift-clicks on a slot. You must override this or you will crash when
+     * someone does that.
      */
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2) {

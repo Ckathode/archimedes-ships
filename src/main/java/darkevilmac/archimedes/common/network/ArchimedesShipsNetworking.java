@@ -1,16 +1,11 @@
 package darkevilmac.archimedes.common.network;
 
-import com.unascribed.lambdanetwork.*;
-import darkevilmac.archimedes.ArchimedesShipMod;
-import darkevilmac.archimedes.client.ClientProxy;
-import darkevilmac.archimedes.client.gui.ContainerHelm;
-import darkevilmac.archimedes.common.ArchimedesConfig;
-import darkevilmac.archimedes.common.entity.EntityShip;
-import darkevilmac.archimedes.common.entity.ShipAssemblyInteractor;
-import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
-import darkevilmac.movingworld.common.chunk.assembly.AssembleResult;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
+import com.unascribed.lambdanetwork.BiConsumer;
+import com.unascribed.lambdanetwork.DataType;
+import com.unascribed.lambdanetwork.LambdaNetwork;
+import com.unascribed.lambdanetwork.LambdaNetworkBuilder;
+import com.unascribed.lambdanetwork.Token;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -21,6 +16,17 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.relauncher.Side;
+
+import darkevilmac.archimedes.ArchimedesShipMod;
+import darkevilmac.archimedes.client.ClientProxy;
+import darkevilmac.archimedes.client.gui.ContainerHelm;
+import darkevilmac.archimedes.common.ArchimedesConfig;
+import darkevilmac.archimedes.common.entity.EntityShip;
+import darkevilmac.archimedes.common.entity.ShipAssemblyInteractor;
+import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
+import darkevilmac.movingworld.common.chunk.assembly.AssembleResult;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 
 
 public class ArchimedesShipsNetworking {

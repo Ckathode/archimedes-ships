@@ -1,20 +1,5 @@
 package darkevilmac.archimedes.common.entity;
 
-import darkevilmac.archimedes.ArchimedesShipMod;
-import darkevilmac.archimedes.client.control.ShipControllerClient;
-import darkevilmac.archimedes.common.ArchimedesConfig;
-import darkevilmac.archimedes.common.api.tileentity.ITileEngineModifier;
-import darkevilmac.archimedes.common.control.ShipControllerCommon;
-import darkevilmac.archimedes.common.object.block.AnchorPointLocation;
-import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
-import darkevilmac.movingworld.common.chunk.MovingWorldAssemblyInteractor;
-import darkevilmac.movingworld.common.chunk.assembly.AssembleResult;
-import darkevilmac.movingworld.common.chunk.assembly.ChunkDisassembler;
-import darkevilmac.movingworld.common.entity.EntityMovingWorld;
-import darkevilmac.movingworld.common.entity.MovingWorldCapabilities;
-import darkevilmac.movingworld.common.entity.MovingWorldHandlerCommon;
-import darkevilmac.movingworld.common.util.Vec3dMod;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -39,6 +24,22 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Set;
+
+import darkevilmac.archimedes.ArchimedesShipMod;
+import darkevilmac.archimedes.client.control.ShipControllerClient;
+import darkevilmac.archimedes.common.ArchimedesConfig;
+import darkevilmac.archimedes.common.api.tileentity.ITileEngineModifier;
+import darkevilmac.archimedes.common.control.ShipControllerCommon;
+import darkevilmac.archimedes.common.object.block.AnchorPointLocation;
+import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
+import darkevilmac.movingworld.common.chunk.MovingWorldAssemblyInteractor;
+import darkevilmac.movingworld.common.chunk.assembly.AssembleResult;
+import darkevilmac.movingworld.common.chunk.assembly.ChunkDisassembler;
+import darkevilmac.movingworld.common.entity.EntityMovingWorld;
+import darkevilmac.movingworld.common.entity.MovingWorldCapabilities;
+import darkevilmac.movingworld.common.entity.MovingWorldHandlerCommon;
+import darkevilmac.movingworld.common.util.Vec3dMod;
+import io.netty.buffer.ByteBuf;
 
 public class EntityShip extends EntityMovingWorld {
 
@@ -175,8 +176,6 @@ public class EntityShip extends EntityMovingWorld {
 
     /**
      * Aligns to the closest anchor within 16 objects.
-     *
-     * @return
      */
     public boolean alignToAnchor() {
         for (int amountToIgnore = 0; amountToIgnore < 100; amountToIgnore++) {

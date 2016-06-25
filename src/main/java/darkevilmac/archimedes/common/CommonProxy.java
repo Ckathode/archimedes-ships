@@ -1,12 +1,13 @@
 package darkevilmac.archimedes.common;
 
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.LoaderState;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+
 import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.client.gui.ASGuiHandler;
 import darkevilmac.archimedes.common.handler.CommonHookContainer;
 import darkevilmac.archimedes.common.handler.CommonPlayerTicker;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.LoaderState;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 public class CommonProxy {
     public CommonPlayerTicker playerTicker;

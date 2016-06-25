@@ -1,14 +1,15 @@
 package darkevilmac.archimedes.client.handler;
 
-import darkevilmac.archimedes.ArchimedesShipMod;
-import darkevilmac.archimedes.common.entity.EntityShip;
-import darkevilmac.archimedes.common.handler.CommonHookContainer;
-import darkevilmac.movingworld.common.network.MovingWorldNetworking;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import darkevilmac.archimedes.ArchimedesShipMod;
+import darkevilmac.archimedes.common.entity.EntityShip;
+import darkevilmac.archimedes.common.handler.CommonHookContainer;
+import darkevilmac.movingworld.common.network.MovingWorldNetworking;
 
 @SideOnly(Side.CLIENT)
 public class ClientHookContainer extends CommonHookContainer {

@@ -1,5 +1,7 @@
 {
   "variants": {
-    "normal": {"model": "archimedesshipsplus:stickyBuffer"}
+    "normal": {
+      "model": "archimedesshipsplus:stickyBuffer"
+    }
   }
 }

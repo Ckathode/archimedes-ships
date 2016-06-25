@@ -1,13 +1,14 @@
 package darkevilmac.archimedes.common.entity;
 
-import darkevilmac.movingworld.common.util.Vec3dMod;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+
+import darkevilmac.movingworld.common.util.Vec3dMod;
+import io.netty.buffer.ByteBuf;
 
 public class EntityParachute extends Entity implements IEntityAdditionalSpawnData {
 

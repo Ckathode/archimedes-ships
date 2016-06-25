@@ -1,5 +1,18 @@
 package darkevilmac.archimedes.client.gui;
 
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.translation.I18n;
+
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
+
+import java.io.IOException;
+import java.util.Locale;
+
 import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.common.entity.ShipAssemblyInteractor;
 import darkevilmac.archimedes.common.network.ArchimedesShipsNetworking;
@@ -7,19 +20,10 @@ import darkevilmac.archimedes.common.network.HelmClientAction;
 import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
 import darkevilmac.movingworld.common.chunk.assembly.AssembleResult;
 import darkevilmac.movingworld.common.chunk.assembly.AssembleResult.ResultType;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
 
-import java.io.IOException;
-import java.util.Locale;
-
-import static darkevilmac.movingworld.common.chunk.assembly.AssembleResult.ResultType.*;
+import static darkevilmac.movingworld.common.chunk.assembly.AssembleResult.ResultType.RESULT_BUSY_COMPILING;
+import static darkevilmac.movingworld.common.chunk.assembly.AssembleResult.ResultType.RESULT_NONE;
+import static darkevilmac.movingworld.common.chunk.assembly.AssembleResult.ResultType.RESULT_OK;
 
 public class GuiHelm extends GuiContainer {
     public static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("archimedesshipsplus", "textures/gui/shipstatus.png");

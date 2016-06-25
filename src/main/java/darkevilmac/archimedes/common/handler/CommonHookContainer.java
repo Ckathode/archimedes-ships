@@ -1,8 +1,6 @@
 package darkevilmac.archimedes.common.handler;
 
 
-import darkevilmac.archimedes.common.tileentity.TileEntityCrate;
-import darkevilmac.archimedes.common.tileentity.TileEntitySecuredBed;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -11,6 +9,9 @@ import net.minecraftforge.event.entity.player.PlayerSetSpawnEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+
+import darkevilmac.archimedes.common.tileentity.TileEntityCrate;
+import darkevilmac.archimedes.common.tileentity.TileEntitySecuredBed;
 
 public class CommonHookContainer {
     @SubscribeEvent

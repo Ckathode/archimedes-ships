@@ -1,7 +1,5 @@
 package darkevilmac.archimedes.common.object.block;
 
-import darkevilmac.archimedes.common.network.ArchimedesShipsNetworking;
-import darkevilmac.archimedes.common.tileentity.TileEntityAnchorPoint;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -21,6 +19,9 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import darkevilmac.archimedes.common.network.ArchimedesShipsNetworking;
+import darkevilmac.archimedes.common.tileentity.TileEntityAnchorPoint;
 
 public class BlockAnchorPoint extends BlockContainer {
 

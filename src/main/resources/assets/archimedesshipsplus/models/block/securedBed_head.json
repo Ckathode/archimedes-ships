@@ -1,85 +1,85 @@
 {
-    "textures": {
-        "particle": "minecraft:blocks/bed_head_top",
-        "top": "minecraft:blocks/bed_head_top",
-        "bottom": "minecraft:blocks/planks_oak",
-        "end": "archimedesshipsplus:blocks/securedBed_head_end",
-        "side": "archimedesshipsplus:blocks/securedBed_head_side"
-    },
-    "elements": [
-        {
-            "from": [
-                0,
-                0,
-                0
-            ],
-            "to": [
-                16,
-                9,
-                16
-            ],
-            "faces": {
-                "up": {
-                    "uv": [
-                        0,
-                        16,
-                        16,
-                        0
-                    ],
-                    "texture": "#top",
-                    "rotation": 90
-                },
-                "south": {
-                    "uv": [
-                        0,
-                        7,
-                        16,
-                        16
-                    ],
-                    "texture": "#end"
-                },
-                "west": {
-                    "uv": [
-                        0,
-                        7,
-                        16,
-                        16
-                    ],
-                    "texture": "#side"
-                },
-                "east": {
-                    "uv": [
-                        16,
-                        7,
-                        0,
-                        16
-                    ],
-                    "texture": "#side"
-                }
-            }
+  "textures": {
+    "particle": "minecraft:blocks/bed_head_top",
+    "top": "minecraft:blocks/bed_head_top",
+    "bottom": "minecraft:blocks/planks_oak",
+    "end": "archimedesshipsplus:blocks/securedBed_head_end",
+    "side": "archimedesshipsplus:blocks/securedBed_head_side"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        9,
+        16
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0,
+            16,
+            16,
+            0
+          ],
+          "texture": "#top",
+          "rotation": 90
         },
-        {
-            "from": [
-                0,
-                3,
-                0
-            ],
-            "to": [
-                16,
-                3,
-                16
-            ],
-            "faces": {
-                "down": {
-                    "uv": [
-                        0,
-                        0,
-                        16,
-                        16
-                    ],
-                    "texture": "#bottom"
-                }
-            }
+        "south": {
+          "uv": [
+            0,
+            7,
+            16,
+            16
+          ],
+          "texture": "#end"
+        },
+        "west": {
+          "uv": [
+            0,
+            7,
+            16,
+            16
+          ],
+          "texture": "#side"
+        },
+        "east": {
+          "uv": [
+            16,
+            7,
+            0,
+            16
+          ],
+          "texture": "#side"
         }
-    ]
+      }
+    },
+    {
+      "from": [
+        0,
+        3,
+        0
+      ],
+      "to": [
+        16,
+        3,
+        16
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#bottom"
+        }
+      }
+    }
+  ]
 }

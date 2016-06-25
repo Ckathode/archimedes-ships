@@ -1,23 +1,41 @@
 package darkevilmac.archimedes.common.object;
 
-import darkevilmac.archimedes.ArchimedesShipMod;
-import darkevilmac.archimedes.common.object.block.*;
-import darkevilmac.archimedes.common.object.item.ItemGaugeBlock;
-import darkevilmac.archimedes.common.object.item.ItemSecuredBed;
-import darkevilmac.archimedes.common.tileentity.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemCloth;
+import net.minecraft.item.ItemDye;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.HashMap;
+
+import darkevilmac.archimedes.ArchimedesShipMod;
+import darkevilmac.archimedes.common.object.block.BlockAS;
+import darkevilmac.archimedes.common.object.block.BlockAnchorPoint;
+import darkevilmac.archimedes.common.object.block.BlockCrate;
+import darkevilmac.archimedes.common.object.block.BlockEngine;
+import darkevilmac.archimedes.common.object.block.BlockGauge;
+import darkevilmac.archimedes.common.object.block.BlockHelm;
+import darkevilmac.archimedes.common.object.block.BlockRecolourable;
+import darkevilmac.archimedes.common.object.block.BlockSeat;
+import darkevilmac.archimedes.common.object.block.BlockSecuredBed;
+import darkevilmac.archimedes.common.object.item.ItemGaugeBlock;
+import darkevilmac.archimedes.common.object.item.ItemSecuredBed;
+import darkevilmac.archimedes.common.tileentity.TileEntityAnchorPoint;
+import darkevilmac.archimedes.common.tileentity.TileEntityCrate;
+import darkevilmac.archimedes.common.tileentity.TileEntityEngine;
+import darkevilmac.archimedes.common.tileentity.TileEntityGauge;
+import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
+import darkevilmac.archimedes.common.tileentity.TileEntitySecuredBed;
 
 /**
  * Block registration is here, to keep the mod class nice and small.

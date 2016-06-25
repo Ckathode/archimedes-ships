@@ -1,7 +1,8 @@
 package darkevilmac.archimedes.common.control;
 
-import darkevilmac.archimedes.common.entity.EntityShip;
 import net.minecraft.entity.player.EntityPlayer;
+
+import darkevilmac.archimedes.common.entity.EntityShip;
 
 public class ShipControllerCommon {
     private int shipControl = 0;

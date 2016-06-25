@@ -1,22 +1,22 @@
 package darkevilmac.archimedes.common.tileentity;
 
-import darkevilmac.archimedes.common.api.tileentity.ITileEngineModifier;
-import darkevilmac.archimedes.common.entity.ShipCapabilities;
-import darkevilmac.movingworld.common.chunk.mobilechunk.MobileChunk;
-import darkevilmac.movingworld.common.entity.EntityMovingWorld;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+
+import darkevilmac.archimedes.common.api.tileentity.ITileEngineModifier;
+import darkevilmac.archimedes.common.entity.ShipCapabilities;
+import darkevilmac.movingworld.common.chunk.mobilechunk.MobileChunk;
+import darkevilmac.movingworld.common.entity.EntityMovingWorld;
 
 
 public class TileEntityEngine extends TileEntity implements IInventory, ITileEngineModifier {
@@ -40,7 +40,7 @@ public class TileEntityEngine extends TileEntity implements IInventory, ITileEng
     }
 
     @Override
-    public Packet getDescriptionPacket() {
+    public SPacketUpdateTileEntity getUpdatePacket() {
         NBTTagCompound compound = new NBTTagCompound();
         writeToNBT(compound);
         return new SPacketUpdateTileEntity(pos, 1, compound);
@@ -66,8 +66,8 @@ public class TileEntityEngine extends TileEntity implements IInventory, ITileEng
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound compound) {
-        super.writeToNBT(compound);
+    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+        compound = super.writeToNBT(compound);
         compound.setInteger("burn", burnTime);
         compound.setShort("fuelCons", (short) engineFuelConsumption);
         compound.setFloat("power", enginePower);
@@ -81,6 +81,7 @@ public class TileEntityEngine extends TileEntity implements IInventory, ITileEng
             }
         }
         compound.setTag("inv", list);
+        return compound;
     }
 
     public boolean isRunning() {

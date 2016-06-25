@@ -1,20 +1,52 @@
 {
   "variants": {
-    "color=white": {"model": "archimedesshipsplus:balloon_white"},
-    "color=orange": {"model": "archimedesshipsplus:balloon_orange"},
-    "color=magenta": {"model": "archimedesshipsplus:balloon_magenta"},
-    "color=light_blue": {"model": "archimedesshipsplus:balloon_light_blue"},
-    "color=yellow": {"model": "archimedesshipsplus:balloon_yellow"},
-    "color=lime": {"model": "archimedesshipsplus:balloon_lime"},
-    "color=pink": {"model": "archimedesshipsplus:balloon_pink"},
-    "color=gray": {"model": "archimedesshipsplus:balloon_gray"},
-    "color=silver": {"model": "archimedesshipsplus:balloon_silver"},
-    "color=cyan": {"model": "archimedesshipsplus:balloon_cyan"},
-    "color=purple": {"model": "archimedesshipsplus:balloon_purple"},
-    "color=blue": {"model": "archimedesshipsplus:balloon_blue"},
-    "color=brown": {"model": "archimedesshipsplus:balloon_brown"},
-    "color=green": {"model": "archimedesshipsplus:balloon_green"},
-    "color=red": {"model": "archimedesshipsplus:balloon_red"},
-    "color=black": {"model": "archimedesshipsplus:balloon_black"}
+    "color=white": {
+      "model": "archimedesshipsplus:balloon_white"
+    },
+    "color=orange": {
+      "model": "archimedesshipsplus:balloon_orange"
+    },
+    "color=magenta": {
+      "model": "archimedesshipsplus:balloon_magenta"
+    },
+    "color=light_blue": {
+      "model": "archimedesshipsplus:balloon_light_blue"
+    },
+    "color=yellow": {
+      "model": "archimedesshipsplus:balloon_yellow"
+    },
+    "color=lime": {
+      "model": "archimedesshipsplus:balloon_lime"
+    },
+    "color=pink": {
+      "model": "archimedesshipsplus:balloon_pink"
+    },
+    "color=gray": {
+      "model": "archimedesshipsplus:balloon_gray"
+    },
+    "color=silver": {
+      "model": "archimedesshipsplus:balloon_silver"
+    },
+    "color=cyan": {
+      "model": "archimedesshipsplus:balloon_cyan"
+    },
+    "color=purple": {
+      "model": "archimedesshipsplus:balloon_purple"
+    },
+    "color=blue": {
+      "model": "archimedesshipsplus:balloon_blue"
+    },
+    "color=brown": {
+      "model": "archimedesshipsplus:balloon_brown"
+    },
+    "color=green": {
+      "model": "archimedesshipsplus:balloon_green"
+    },
+    "color=red": {
+      "model": "archimedesshipsplus:balloon_red"
+    },
+    "color=black": {
+      "model": "archimedesshipsplus:balloon_black"
+    }
   }
 }

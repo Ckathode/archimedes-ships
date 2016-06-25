@@ -1,7 +1,5 @@
 package darkevilmac.archimedes.common.object.block;
 
-import darkevilmac.archimedes.ArchimedesShipMod;
-import darkevilmac.archimedes.common.tileentity.TileEntityEngine;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -17,6 +15,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import darkevilmac.archimedes.ArchimedesShipMod;
+import darkevilmac.archimedes.common.tileentity.TileEntityEngine;
 
 public class BlockEngine extends BlockContainer {
 

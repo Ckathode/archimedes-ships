@@ -1,17 +1,17 @@
 package darkevilmac.archimedes.common.tileentity;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
+
 import darkevilmac.archimedes.common.entity.EntityShip;
 import darkevilmac.movingworld.common.chunk.mobilechunk.MobileChunk;
 import darkevilmac.movingworld.common.entity.EntityMovingWorld;
 import darkevilmac.movingworld.common.tile.IMovingWorldTileEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.ITickable;
 
 public class TileEntityCrate extends TileEntity implements IMovingWorldTileEntity, ITickable {
     private EntityShip parentShip;
@@ -85,7 +85,7 @@ public class TileEntityCrate extends TileEntity implements IMovingWorldTileEntit
     }
 
     @Override
-    public Packet getDescriptionPacket() {
+    public SPacketUpdateTileEntity getUpdatePacket() {
         NBTTagCompound compound = new NBTTagCompound();
         writeToNBT(compound);
         return new SPacketUpdateTileEntity(pos, 0, compound);
@@ -109,11 +109,12 @@ public class TileEntityCrate extends TileEntity implements IMovingWorldTileEntit
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound compound) {
-        super.writeToNBT(compound);
+    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+        compound = super.writeToNBT(compound);
         if (containedEntity != null) {
             compound.setInteger("contained", containedEntity.getEntityId());
         }
+        return compound;
     }
 
     @Override

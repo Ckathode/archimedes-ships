@@ -1,8 +1,9 @@
 package darkevilmac.archimedes.common.handler;
 
-import darkevilmac.archimedes.common.entity.EntityParachute;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+
+import darkevilmac.archimedes.common.entity.EntityParachute;
 
 public class CommonPlayerTicker {
     @SubscribeEvent

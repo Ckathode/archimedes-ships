@@ -1,6 +1,8 @@
 {
   "variants": {
-    "extended=false,facing=north": {"model": "archimedesshipsplus:gauge"},
+    "extended=false,facing=north": {
+      "model": "archimedesshipsplus:gauge"
+    },
     "extended=false,facing=south": {
       "model": "archimedesshipsplus:gauge",
       "y": 180
@@ -13,7 +15,9 @@
       "model": "archimedesshipsplus:gauge",
       "y": 90
     },
-    "extended=true,facing=north": {"model": "archimedesshipsplus:gauge_ext"},
+    "extended=true,facing=north": {
+      "model": "archimedesshipsplus:gauge_ext"
+    },
     "extended=true,facing=south": {
       "model": "archimedesshipsplus:gauge_ext",
       "y": 180

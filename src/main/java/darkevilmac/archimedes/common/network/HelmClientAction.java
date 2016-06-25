@@ -3,10 +3,6 @@ package darkevilmac.archimedes.common.network;
 public enum HelmClientAction {
     UNKNOWN, ASSEMBLE, MOUNT, UNDOCOMPILE;
 
-    public int toInt() {
-        return HelmClientAction.toInt(this);
-    }
-
     public static int toInt(HelmClientAction action) {
         switch (action) {
             case ASSEMBLE:
@@ -31,5 +27,9 @@ public enum HelmClientAction {
             default:
                 return UNKNOWN;
         }
+    }
+
+    public int toInt() {
+        return HelmClientAction.toInt(this);
     }
 }

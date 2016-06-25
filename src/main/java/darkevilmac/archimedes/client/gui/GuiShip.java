@@ -1,15 +1,17 @@
 package darkevilmac.archimedes.client.gui;
 
-import darkevilmac.archimedes.common.entity.EntityShip;
-import darkevilmac.archimedes.common.network.ArchimedesShipsNetworking;
-import darkevilmac.movingworld.common.network.MovingWorldClientAction;
-import darkevilmac.movingworld.common.network.MovingWorldNetworking;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
+
 import org.lwjgl.opengl.GL11;
+
+import darkevilmac.archimedes.common.entity.EntityShip;
+import darkevilmac.archimedes.common.network.ArchimedesShipsNetworking;
+import darkevilmac.movingworld.common.network.MovingWorldClientAction;
+import darkevilmac.movingworld.common.network.MovingWorldNetworking;
 
 public class GuiShip extends GuiContainer {
     public static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("archimedesshipsplus", "textures/gui/shipinv.png");

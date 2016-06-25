@@ -1,5 +1,10 @@
 package darkevilmac.archimedes.common.tileentity;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
 import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.common.entity.EntityShip;
 import darkevilmac.archimedes.common.entity.ShipAssemblyInteractor;
@@ -12,10 +17,6 @@ import darkevilmac.movingworld.common.entity.MovingWorldInfo;
 import darkevilmac.movingworld.common.tile.TileMovingWorldMarkingBlock;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class TileEntityHelm extends TileMovingWorldMarkingBlock {
     public boolean submerge;
@@ -140,14 +141,15 @@ public class TileEntityHelm extends TileMovingWorldMarkingBlock {
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tagCompound) {
-        super.writeToNBT(tagCompound);
-        tagCompound.setBoolean("submergeShipOnAssemble", submerge);
+    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+        compound = super.writeToNBT(compound);
+        compound.setBoolean("submergeShipOnAssemble", submerge);
+        return compound;
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tagCompound) {
-        super.readFromNBT(tagCompound);
-        submerge = tagCompound.getBoolean("submergeShipOnAssemble");
+    public void readFromNBT(NBTTagCompound compound) {
+        super.readFromNBT(compound);
+        submerge = compound.getBoolean("submergeShipOnAssemble");
     }
 }

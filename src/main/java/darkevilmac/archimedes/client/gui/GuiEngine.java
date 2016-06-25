@@ -1,11 +1,13 @@
 package darkevilmac.archimedes.client.gui;
 
-import darkevilmac.archimedes.common.tileentity.TileEntityEngine;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
+
 import org.lwjgl.opengl.GL11;
+
+import darkevilmac.archimedes.common.tileentity.TileEntityEngine;
 
 public class GuiEngine extends GuiContainer {
     public static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("archimedesshipsplus", "textures/gui/engine.png");

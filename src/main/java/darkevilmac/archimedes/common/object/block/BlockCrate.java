@@ -1,7 +1,5 @@
 package darkevilmac.archimedes.common.object.block;
 
-import darkevilmac.archimedes.common.tileentity.TileEntityCrate;
-import darkevilmac.movingworld.common.entity.EntityMovingWorld;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockFence;
@@ -24,6 +22,9 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import darkevilmac.archimedes.common.tileentity.TileEntityCrate;
+import darkevilmac.movingworld.common.entity.EntityMovingWorld;
 
 public class BlockCrate extends BlockContainer {
     public static final PropertyEnum AXIS = PropertyEnum.create("axis", EnumFacing.Axis.class, EnumFacing.Axis.X, EnumFacing.Axis.Z);
@@ -140,7 +141,7 @@ public class BlockCrate extends BlockContainer {
 
 
     @Override
-    public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
+    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn) {
         if (world.isRemote)
             return;
 

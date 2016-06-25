@@ -1,12 +1,5 @@
 package darkevilmac.archimedes.common.handler;
 
-import darkevilmac.archimedes.ArchimedesShipMod;
-import darkevilmac.archimedes.common.entity.EntityParachute;
-import darkevilmac.archimedes.common.entity.EntitySeat;
-import darkevilmac.archimedes.common.entity.EntityShip;
-import darkevilmac.archimedes.common.network.ArchimedesShipsNetworking;
-import darkevilmac.archimedes.common.tileentity.TileEntitySecuredBed;
-import darkevilmac.movingworld.common.util.Vec3dMod;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -16,6 +9,14 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 import java.util.HashMap;
 import java.util.UUID;
+
+import darkevilmac.archimedes.ArchimedesShipMod;
+import darkevilmac.archimedes.common.entity.EntityParachute;
+import darkevilmac.archimedes.common.entity.EntitySeat;
+import darkevilmac.archimedes.common.entity.EntityShip;
+import darkevilmac.archimedes.common.network.ArchimedesShipsNetworking;
+import darkevilmac.archimedes.common.tileentity.TileEntitySecuredBed;
+import darkevilmac.movingworld.common.util.Vec3dMod;
 
 public class ConnectionHandler {
 

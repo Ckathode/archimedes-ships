@@ -1,11 +1,12 @@
 package darkevilmac.archimedes.client.gui;
 
-import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+
+import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
 
 public class ContainerHelm extends Container {
     public final TileEntityHelm tileEntity;
@@ -28,14 +29,14 @@ public class ContainerHelm extends Container {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
                 int xOff = 40;
-                int yOff  = 90;
+                int yOff = 90;
                 addSlotToContainer(new Slot(inventoryPlayer, j + i * 9 + 9, 8 + j * 18 + xOff, 84 + i * 18 + yOff));
             }
         }
 
         for (int i = 0; i < 9; i++) {
             int xOff = 40;
-            int yOff  = 90;
+            int yOff = 90;
             addSlotToContainer(new Slot(inventoryPlayer, i, 8 + i * 18 + xOff, 142 + yOff));
         }
     }

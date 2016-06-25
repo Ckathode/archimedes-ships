@@ -1,12 +1,13 @@
 package darkevilmac.archimedes.common.tileentity;
 
-import darkevilmac.archimedes.common.handler.ConnectionHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.UUID;
+
+import darkevilmac.archimedes.common.handler.ConnectionHandler;
 
 public class TileEntitySecuredBed extends TileEntity {
 
@@ -64,15 +65,17 @@ public class TileEntitySecuredBed extends TileEntity {
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tag) {
-        super.writeToNBT(tag);
+    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+        compound = super.writeToNBT(compound);
         if (worldObj != null && worldObj.isRemote)
-            return;
+            return compound;
 
         if (playerID != null)
-            tag.setString("uuid", playerID.toString());
+            compound.setString("uuid", playerID.toString());
 
-        tag.setBoolean("doMove", doMove);
+        compound.setBoolean("doMove", doMove);
+
+        return compound;
     }
 
     @Override

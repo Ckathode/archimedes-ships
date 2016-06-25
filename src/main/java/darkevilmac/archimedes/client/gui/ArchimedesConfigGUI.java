@@ -1,6 +1,5 @@
 package darkevilmac.archimedes.client.gui;
 
-import darkevilmac.archimedes.ArchimedesShipMod;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.config.ConfigElement;
@@ -9,6 +8,8 @@ import net.minecraftforge.fml.client.config.IConfigElement;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import darkevilmac.archimedes.ArchimedesShipMod;
 
 public class ArchimedesConfigGUI extends GuiConfig {
 
