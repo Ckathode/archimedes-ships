@@ -34,8 +34,8 @@ import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
 import darkevilmac.movingworld.client.render.RenderMovingWorld;
 
 public class ClientProxy extends CommonProxy {
-    public ShipKeyHandler shipKeyHandler;
 
+    public ShipKeyHandler shipKeyHandler;
     public ArchimedesConfig syncedConfig;
 
     @Override

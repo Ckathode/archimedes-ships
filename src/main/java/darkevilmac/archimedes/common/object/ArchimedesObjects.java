@@ -61,6 +61,8 @@ public class ArchimedesObjects {
     public static HashMap<String, Block> registeredBlocks;
     public static HashMap<String, Item> registeredItems;
 
+    public static String REGISTRY_PREFIX = ArchimedesShipMod.MOD_ID.toLowerCase();
+
     public void preInit(FMLPreInitializationEvent e) {
         registeredBlocks = new HashMap<String, Block>();
         registeredItems = new HashMap<String, Item>();
@@ -105,7 +107,7 @@ public class ArchimedesObjects {
         registerBlock("anchorPoint", blockAnchorPoint);
 
         blockSecuredBed = new BlockSecuredBed().setHardness(0.2F);
-        registerBlockNoItemBlock("securedBed", blockSecuredBed);
+        registerBlock("securedBed", blockSecuredBed, false);
     }
 
     public void init(FMLInitializationEvent e) {
@@ -150,27 +152,38 @@ public class ArchimedesObjects {
     public void postInit(FMLPostInitializationEvent e) {
     }
 
-    private void registerBlockNoItemBlock(String id, Block block) {
-        block.setUnlocalizedName("archimedes." + id);
-        GameRegistry.registerBlock(block, null, id);
-        ArchimedesObjects.registeredBlocks.put(id, block);
+    private void registerBlock(String id, Block block) {
+        registerBlock(id, block, true);
     }
 
-    private void registerBlock(String id, Block block) {
+    private void registerBlock(String id, Block block, boolean withItemBlock) {
         block.setUnlocalizedName("archimedes." + id);
-        GameRegistry.registerBlock(block, id);
+        block.setRegistryName(REGISTRY_PREFIX, id);
+        GameRegistry.register(block);
+        if (withItemBlock)
+            GameRegistry.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
         ArchimedesObjects.registeredBlocks.put(id, block);
     }
 
     private void registerBlock(String id, Block block, Class<? extends ItemBlock> itemBlockClass) {
-        block.setUnlocalizedName("archimedes." + id);
-        GameRegistry.registerBlock(block, itemBlockClass, id);
-        ArchimedesObjects.registeredBlocks.put(id, block);
+        try {
+            block.setUnlocalizedName("archimedes." + id);
+            block.setRegistryName(REGISTRY_PREFIX, id);
+            GameRegistry.register(block);
+
+            ItemBlock itemBlock = itemBlockClass.getDeclaredConstructor(Block.class).newInstance(block);
+            itemBlock.setRegistryName(REGISTRY_PREFIX, id);
+            GameRegistry.register(itemBlock);
+            ArchimedesObjects.registeredBlocks.put(id, block);
+        } catch (Exception e) {
+            ArchimedesShipMod.modLog.error("Caught exception while registering " + block, e);
+        }
     }
 
     private void registerItem(String id, Item item) {
         item.setUnlocalizedName("archimedes." + id);
-        GameRegistry.registerItem(item, id);
+        item.setRegistryName(REGISTRY_PREFIX, id);
+        GameRegistry.register(item);
         ArchimedesObjects.registeredItems.put(id, item);
     }
 }
