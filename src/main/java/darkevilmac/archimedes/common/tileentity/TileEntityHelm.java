@@ -4,6 +4,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.common.entity.EntityShip;
@@ -19,6 +21,9 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
 public class TileEntityHelm extends TileMovingWorldMarkingBlock {
+    @SideOnly(Side.CLIENT)
+    public float prevPitch;
+
     public boolean submerge;
     private ShipAssemblyInteractor interactor;
     private EntityShip activeShip;
@@ -95,10 +100,14 @@ public class TileEntityHelm extends TileMovingWorldMarkingBlock {
     }
 
     @Override
-    public void mountedMovingWorld(EntityPlayer player, EntityMovingWorld movingWorld, int stage) {
+    public void mountedMovingWorld(EntityPlayer player, EntityMovingWorld movingWorld, MountStage stage) {
         switch (stage) {
-            case 1: {
+            case PREMSG: {
                 sendAssembleResult(player, false);
+            }
+            case PRERIDE: {
+            }
+            case POSTRIDE: {
             }
         }
     }

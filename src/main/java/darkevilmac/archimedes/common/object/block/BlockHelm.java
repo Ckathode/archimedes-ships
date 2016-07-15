@@ -14,8 +14,11 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
@@ -47,6 +50,45 @@ public class BlockHelm extends BlockDirectional implements ITileEntityProvider {
     @Override
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.MODEL;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
+        AxisAlignedBB selectedBoundingBox = super.getSelectedBoundingBox(state, worldIn, pos);
+        if (state == null || state.getValue(FACING) == null)
+            return super.getSelectedBoundingBox(state, worldIn, pos);
+
+        double pixelSize = 1D / 16D;
+        EnumFacing facing = state.getValue(FACING);
+        switch (facing) {
+            case NORTH: {
+                selectedBoundingBox = new AxisAlignedBB(1 - (pixelSize * 1), 1, 1 - (pixelSize * 3), pixelSize * 1, 0, pixelSize * 2);
+                selectedBoundingBox = selectedBoundingBox.offset(pos.getX(), pos.getY(), pos.getZ());
+
+                return selectedBoundingBox;
+            }
+            case SOUTH: {
+                selectedBoundingBox = new AxisAlignedBB(1 - (pixelSize * 1), 1, 1 - (pixelSize * 2), pixelSize * 1, 0, pixelSize * 3);
+                selectedBoundingBox = selectedBoundingBox.offset(pos.getX(), pos.getY(), pos.getZ());
+
+                return selectedBoundingBox;
+            }
+            case WEST: {
+                selectedBoundingBox = new AxisAlignedBB(pixelSize * 2, 0, pixelSize * 1, 1 - (pixelSize * 3), 1, 1 - (pixelSize * 1));
+                selectedBoundingBox = selectedBoundingBox.offset(pos.getX(), pos.getY(), pos.getZ());
+
+                return selectedBoundingBox;
+            }
+            case EAST: {
+                selectedBoundingBox = new AxisAlignedBB(1 - (pixelSize * 2), 1, 1 - (pixelSize * 1), pixelSize * 3, 0, pixelSize * 1);
+                selectedBoundingBox = selectedBoundingBox.offset(pos.getX(), pos.getY(), pos.getZ());
+
+                return selectedBoundingBox;
+            }
+            default: {
+                return selectedBoundingBox;
+            }
+        }
     }
 
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
