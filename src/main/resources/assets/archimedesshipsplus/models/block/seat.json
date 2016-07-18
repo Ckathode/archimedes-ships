@@ -1,5 +1,6 @@
 {
   "ambientocclusion": false,
+  "parent": "block/block",
   "textures": {
     "seatpadding": "archimedesshipsplus:blocks/seat",
     "wood": "blocks/planks_oak",

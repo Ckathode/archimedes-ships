@@ -16,7 +16,7 @@ import darkevilmac.movingworld.common.network.MovingWorldNetworking;
 @SideOnly(Side.CLIENT)
 public class ShipKeyHandler {
     private ArchimedesConfig config;
-    private boolean kbShipGuiPrevState, kbDisassemblePrevState;
+    private boolean kbShipGuiPrevState, kbDisassemblePrevState,kbAlignPrevState;
 
     public ShipKeyHandler(ArchimedesConfig cfg) {
         config = cfg;
@@ -46,7 +46,16 @@ public class ShipKeyHandler {
             }
             kbDisassemblePrevState = config.kbDisassemble.isKeyDown();
 
-            int c = getHeightControl();
+            if(config.kbAlign.isKeyDown() && !kbAlignPrevState){
+                MovingWorldNetworking.NETWORK.send().packet("MovingWorldClientActionMessage")
+                        .with("dimID", e.player.worldObj.provider.getDimension())
+                        .with("entityID", e.player.getRidingEntity().getEntityId())
+                        .with("action", MovingWorldClientAction.ALIGN.toByte())
+                        .toServer();
+            }
+            kbAlignPrevState = config.kbAlign.isKeyDown();
+
+            int c = getControlCode();
             EntityShip ship = (EntityShip) e.player.getRidingEntity();
             if (c != ship.getController().getShipControl()) {
                 ship.getController().updateControl(ship, e.player, c);
@@ -55,7 +64,7 @@ public class ShipKeyHandler {
     }
 
 
-    public int getHeightControl() {
+    public int getControlCode() {
         if (config.kbAlign.isKeyDown()) return 4;
         if (config.kbBrake.isKeyDown()) return 3;
         int vert = 0;

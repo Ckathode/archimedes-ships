@@ -1,5 +1,6 @@
 {
   "ambientocclusion": false,
+  "parent": "block/block",
   "textures": {
     "texture": "archimedesshipsplus:blocks/gauge",
     "particle": "archimedesshipsplus:blocks/gauge"

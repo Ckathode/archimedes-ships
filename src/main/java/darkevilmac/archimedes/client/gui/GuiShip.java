@@ -102,7 +102,7 @@ public class GuiShip extends GuiContainer {
                     .with("action", MovingWorldClientAction.ALIGN.toByte())
                     .toServer();
 
-            ship.alignToGrid();
+            ship.alignToGrid(true);
         } else if (button == btnSubmersible && ((GuiButtonSubmersible) btnSubmersible).canDo) {
             GuiButtonSubmersible subButton = (GuiButtonSubmersible) button;
 

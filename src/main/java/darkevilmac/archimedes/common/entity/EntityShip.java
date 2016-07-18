@@ -43,16 +43,10 @@ import io.netty.buffer.ByteBuf;
 
 public class EntityShip extends EntityMovingWorld {
 
-    public static final DataParameter<Float> ENGINE_POWER = EntityDataManager.<Float>createKey(EntityShip.class, DataSerializers.FLOAT);
-    public static final DataParameter<Byte> HAS_ENGINES = EntityDataManager.<Byte>createKey(EntityShip.class, DataSerializers.BYTE);
-    public static final DataParameter<Byte> CAN_SUBMERGE = EntityDataManager.<Byte>createKey(EntityShip.class, DataSerializers.BYTE);
-    public static final DataParameter<Byte> IS_SUBMERGED = EntityDataManager.<Byte>createKey(EntityShip.class, DataSerializers.BYTE);
-
-    //dataWatcher.addObject(29, 0F); // Engine power
-    //dataWatcher.addObject(28, new Byte((byte) 0)); // Do we have any engines
-    //dataWatcher.addObject(27, new Byte((byte) 0)); // Can we be submerged if wanted?
-    //dataWatcher.addObject(26, new Byte((byte) 0)); // Are we submerged?
-
+    public static final DataParameter<Float> ENGINE_POWER = EntityDataManager.createKey(EntityShip.class, DataSerializers.FLOAT);
+    public static final DataParameter<Byte> HAS_ENGINES = EntityDataManager.createKey(EntityShip.class, DataSerializers.BYTE);
+    public static final DataParameter<Byte> CAN_SUBMERGE = EntityDataManager.createKey(EntityShip.class, DataSerializers.BYTE);
+    public static final DataParameter<Byte> IS_SUBMERGED = EntityDataManager.createKey(EntityShip.class, DataSerializers.BYTE);
 
     public static final float BASE_FORWARD_SPEED = 0.005F, BASE_TURN_SPEED = 0.5F, BASE_LIFT_SPEED = 0.004F;
     public ShipCapabilities capabilities;
@@ -175,28 +169,28 @@ public class EntityShip extends EntityMovingWorld {
     }
 
     /**
-     * Aligns to the closest anchor within 16 objects.
+     * Aligns to the closest anchor within 16 blocks.
      */
     public boolean alignToAnchor() {
-        for (int amountToIgnore = 0; amountToIgnore < 100; amountToIgnore++) {
-            if (capabilities.findClosestValidAnchor(16) != null) {
-                AnchorPointLocation anchorPointLocation = capabilities.findClosestValidAnchor(16);
-                BlockPos chunkAnchorPos = anchorPointLocation.shipAnchor.blockPos;
-                BlockPos worldAnchorPos = anchorPointLocation.worldAnchor.blockPos;
+        if (capabilities.findClosestValidAnchor(16) != null) {
+            AnchorPointLocation anchorPointLocation = capabilities.findClosestValidAnchor(16);
+            BlockPos chunkAnchorPos = anchorPointLocation.shipAnchor.blockPos;
+            BlockPos worldAnchorPos = anchorPointLocation.worldAnchor.blockPos;
 
-                Vec3d worldPosForAnchor = new Vec3d(worldAnchorPos.getX(), worldAnchorPos.getY(), worldAnchorPos.getZ());
+            Vec3d worldPosForAnchor = new Vec3d(worldAnchorPos.getX(), worldAnchorPos.getY(), worldAnchorPos.getZ());
 
-                worldPosForAnchor = worldPosForAnchor.addVector(getMobileChunk().maxX() / 2, getMobileChunk().minY(), getMobileChunk().maxZ() / 2);
-                worldPosForAnchor = worldPosForAnchor.subtract(chunkAnchorPos.getX(), 0, chunkAnchorPos.getZ());
+            worldPosForAnchor = worldPosForAnchor.addVector(getMobileChunk().maxX() / 2, getMobileChunk().minY(), getMobileChunk().maxZ() / 2);
+            worldPosForAnchor = worldPosForAnchor.subtract(chunkAnchorPos.getX(), 0, chunkAnchorPos.getZ());
 
-                setPosition(worldPosForAnchor.xCoord, worldPosForAnchor.yCoord + 2, worldPosForAnchor.zCoord);
-            } else {
-                break;
-            }
+            setPosition(worldPosForAnchor.xCoord, worldPosForAnchor.yCoord + 3, worldPosForAnchor.zCoord);
         }
-
-        alignToGrid();
         return false;
+    }
+
+    @Override
+    public void alignToGrid(boolean doPosAdjustment) {
+        super.alignToGrid(true);
+        alignToAnchor();
     }
 
     @Override
@@ -267,10 +261,17 @@ public class EntityShip extends EntityMovingWorld {
         }
     }
 
+    /**
+     * Currently overridden for future combat system.
+     */
+
     protected String getHurtSound() {
         return "mob.irongolem.hit";
     }
 
+    /**
+     * Currently overridden for future combat system.
+     */
     protected String getDeathSound() {
         return "mob.irongolem.death";
     }

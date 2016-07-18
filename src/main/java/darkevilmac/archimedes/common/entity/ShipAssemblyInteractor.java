@@ -13,6 +13,7 @@ import darkevilmac.archimedes.common.api.block.IBlockBalloon;
 import darkevilmac.archimedes.common.handler.ConnectionHandler;
 import darkevilmac.archimedes.common.object.ArchimedesObjects;
 import darkevilmac.archimedes.common.object.block.BlockHelm;
+import darkevilmac.archimedes.common.tileentity.TileEntityAnchorPoint;
 import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
 import darkevilmac.archimedes.common.tileentity.TileEntitySecuredBed;
 import darkevilmac.movingworld.MovingWorld;
@@ -104,11 +105,18 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
     }
 
     @Override
-    public CanAssemble isBlockAllowed(World world, IBlockState state, BlockPos pos) {
-        CanAssemble canAssemble = super.isBlockAllowed(world, state, pos);
+    public CanAssemble isBlockAllowed(World world, LocatedBlock lb) {
+        IBlockState state = lb.blockState;
+        BlockPos pos = lb.blockPos;
+        CanAssemble canAssemble = super.isBlockAllowed(world, lb);
 
         if (state.getBlock() == ArchimedesObjects.blockStickyBuffer || ArchimedesShipMod.instance.getNetworkConfig().isSticky(state.getBlock()))
             canAssemble.assembleThenCancel = true;
+
+        if (lb.tileEntity != null && lb.tileEntity instanceof TileEntityAnchorPoint
+                && ((TileEntityAnchorPoint) lb.tileEntity).anchorPointInfo != null
+                && !((TileEntityAnchorPoint) lb.tileEntity).anchorPointInfo.forShip)
+            canAssemble.justCancel = true;
 
         return canAssemble;
     }

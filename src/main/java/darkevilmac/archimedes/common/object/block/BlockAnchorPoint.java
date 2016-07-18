@@ -112,11 +112,20 @@ public class BlockAnchorPoint extends BlockContainer {
                     if (tile.anchorPointInfo.forShip) {
                         if (player.getEntityData().getBoolean("SelectedShipData")) {
                             int[] selectedShipPos = player.getEntityData().getIntArray("SelectedShipAnchorPos");
-                            String message = "TR:" + "common.tile.anchor.activateShip" + "~ X:"
-                                    + selectedShipPos[0] + " Y:" + selectedShipPos[1] + " Z:" + selectedShipPos[2];
-                            tile.setAnchorPointInfo(new BlockPos(selectedShipPos[0], selectedShipPos[1], selectedShipPos[2]), tile.anchorPointInfo.forShip);
-                            ArchimedesShipsNetworking.NETWORK.send().packet("TranslatedChatMessage")
-                                    .with("message", message).to(player);
+                            BlockPos selectedShipBlockPos = new BlockPos(selectedShipPos[0], selectedShipPos[1], selectedShipPos[2]);
+                            if (!tile.getPos().equals(selectedShipBlockPos)) {
+                                String message = "TR:" + "common.tile.anchor.activateShip" + "~ X:"
+                                        + selectedShipPos[0] + " Y:" + selectedShipPos[1] + " Z:" + selectedShipPos[2];
+                                tile.setAnchorPointInfo(selectedShipBlockPos, tile.anchorPointInfo.forShip);
+                                ArchimedesShipsNetworking.NETWORK.send().packet("TranslatedChatMessage")
+                                        .with("message", message).to(player);
+                            } else {
+                                String message = "TR:" + "common.tile.anchor.noGroundLink";
+                                ArchimedesShipsNetworking.NETWORK.send().packet("TranslatedChatMessage")
+                                        .with("message", message).to(player);
+                                player.getEntityData().removeTag("SelectedShipData");
+                                player.getEntityData().removeTag("SelectedShipAnchorPos");
+                            }
                         } else {
                             String message = "TR:" + "common.tile.anchor.noGroundLink";
                             ArchimedesShipsNetworking.NETWORK.send().packet("TranslatedChatMessage")

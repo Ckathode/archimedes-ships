@@ -44,7 +44,7 @@ public class CommandDisassembleShip extends CommandBase {
                         ship.dropAsItems();
                     }
                 }
-                player.startRiding(null);
+                player.dismountRidingEntity();
                 return;
             }
         }

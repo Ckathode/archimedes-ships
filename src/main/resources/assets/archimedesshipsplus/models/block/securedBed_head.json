@@ -1,4 +1,5 @@
 {
+  "parent": "block/block",
   "textures": {
     "particle": "minecraft:blocks/bed_head_top",
     "top": "minecraft:blocks/bed_head_top",
