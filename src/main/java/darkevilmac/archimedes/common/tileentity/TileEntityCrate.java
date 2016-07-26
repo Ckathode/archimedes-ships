@@ -97,24 +97,24 @@ public class TileEntityCrate extends TileEntity implements IMovingWorldTileEntit
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
-        super.readFromNBT(compound);
-        if (compound.hasKey("contained")) {
+    public void readFromNBT(NBTTagCompound tag) {
+        super.readFromNBT(tag);
+        if (tag.hasKey("contained")) {
             if (worldObj == null) {
-                containedEntityId = compound.getInteger("contained");
+                containedEntityId = tag.getInteger("contained");
             } else {
-                setContainedEntity(worldObj.getEntityByID(compound.getInteger("contained")));
+                setContainedEntity(worldObj.getEntityByID(tag.getInteger("contained")));
             }
         }
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        compound = super.writeToNBT(compound);
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+        tag = super.writeToNBT(tag);
         if (containedEntity != null) {
-            compound.setInteger("contained", containedEntity.getEntityId());
+            tag.setInteger("contained", containedEntity.getEntityId());
         }
-        return compound;
+        return tag;
     }
 
     @Override

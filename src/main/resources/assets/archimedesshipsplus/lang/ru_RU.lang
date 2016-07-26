@@ -2,12 +2,6 @@
 
 entity.ArchimedesShips.shipmod.name=Корабль Архимеда
 
-common.tile.anchor.activateGround=no entry
-common.tile.anchor.activateShip=no entry
-common.tile.anchor.changeModeGround=no entry
-common.tile.anchor.changeModeShip=no entry
-common.tile.anchor.noGroundLink=no entry
-
 tile.archimedes.marker.name=Корабельный штурвал
 tile.archimedes.floater.name=Плот
 tile.archimedes.balloon.name=Воздушный шар
@@ -40,35 +34,35 @@ key.archimedes.align=Выровнять
 key.archimedes.decompile=Разобрать
 key.archimedes.shipinv=Инвентарь корабля
 
-gui.shipstatus.title=Статус корабля
-gui.shipstatus.rename=Переименовать
-gui.shipstatus.done=Закончить переименование
-gui.shipstatus.compile=Создать корабль
-gui.shipstatus.undo=Отмена
-gui.shipstatus.mount=Управлять кораблём
-gui.shipstatus.name=Имя
-gui.shipstatus.shiptype=Тип
-gui.shipstatus.type.unknown=Неизвестный тип
-gui.shipstatus.type.airship=Воздушный корабль
-gui.shipstatus.type.boat=Корабль
-gui.shipstatus.compilerresult=Статус
-gui.shipstatus.count.block=Блоков
-gui.shipstatus.count.balloon=Воздушных шаров
-gui.shipstatus.count.tileentity=Tile Entities
-gui.shipstatus.mass=Масса
-gui.shipstatus.massunit=кг
+gui.archimedes.shipstatus.title=Статус корабля
+gui.archimedes.shipstatus.rename=Переименовать
+gui.archimedes.shipstatus.done=Закончить переименование
+gui.archimedes.shipstatus.compile=Создать корабль
+gui.archimedes.shipstatus.undo=Отмена
+gui.archimedes.shipstatus.mount=Управлять кораблём
+gui.archimedes.shipstatus.name=Имя
+gui.archimedes.shipstatus.shiptype=Тип
+gui.archimedes.shipstatus.type.unknown=Неизвестный тип
+gui.archimedes.shipstatus.type.airship=Воздушный корабль
+gui.archimedes.shipstatus.type.boat=Корабль
+gui.archimedes.shipstatus.compilerresult=Статус
+gui.archimedes.shipstatus.count.block=Блоков
+gui.archimedes.shipstatus.count.balloon=Воздушных шаров
+gui.archimedes.shipstatus.count.tileentity=Tile Entities
+gui.archimedes.shipstatus.mass=Масса
+gui.archimedes.shipstatus.massunit=кг
 
-gui.shipstatus.result.none=Не создан
-gui.shipstatus.result.ok=ОК
-gui.shipstatus.result.okwarn=Изменения обнаружены
-gui.shipstatus.result.missingmarker=Отсутствует штурвал
-gui.shipstatus.result.overflow=Переполнение
-gui.shipstatus.result.error=Ошибка
-gui.shipstatus.result.busy=Создание...
-gui.shipstatus.result.inconsistent=Неустойчивый
+gui.archimedes.shipstatus.result.none=Не создан
+gui.archimedes.shipstatus.result.ok=ОК
+gui.archimedes.shipstatus.result.okwarn=Изменения обнаружены
+gui.archimedes.shipstatus.result.missingmarker=Отсутствует штурвал
+gui.archimedes.shipstatus.result.overflow=Переполнение
+gui.archimedes.shipstatus.result.error=Ошибка
+gui.archimedes.shipstatus.result.busy=Создание...
+gui.archimedes.shipstatus.result.inconsistent=Неустойчивый
 
-gui.shipinv.title=Инвентарь корабля
-gui.shipinv.decompile=Разобрать
-gui.shipinv.align=Выровнять
+gui.archimedes.shipinv.title=Инвентарь корабля
+gui.archimedes.shipinv.decompile=Разобрать
+gui.archimedes.shipinv.align=Выровнять
 
-gui.engine.title=Топливо парового двигателя
+gui.archimedes.engine.title=Топливо парового двигателя

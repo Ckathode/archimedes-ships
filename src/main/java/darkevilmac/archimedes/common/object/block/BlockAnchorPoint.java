@@ -20,7 +20,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import darkevilmac.archimedes.common.network.ArchimedesShipsNetworking;
 import darkevilmac.archimedes.common.tileentity.TileEntityAnchorPoint;
 
 public class BlockAnchorPoint extends BlockContainer {
@@ -97,50 +96,7 @@ public class BlockAnchorPoint extends BlockContainer {
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (world != null && player != null && !world.isRemote) {
-            if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityAnchorPoint) {
-                TileEntityAnchorPoint tile = (TileEntityAnchorPoint) world.getTileEntity(pos);
-                if (tile.anchorPointInfo == null)
-                    tile.setAnchorPointInfo(BlockPos.ORIGIN, false);
-                if (player.isSneaking()) {
-                    tile.anchorPointInfo.forShip = !tile.anchorPointInfo.forShip;
-                    String message = "TR:" + (tile.anchorPointInfo.forShip ? "common.tile.anchor.changeModeShip"
-                            : "common.tile.anchor.changeModeGround") + "~ ";
 
-                    ArchimedesShipsNetworking.NETWORK.send().packet("TranslatedChatMessage")
-                            .with("message", message).to(player);
-                } else {
-                    if (tile.anchorPointInfo.forShip) {
-                        if (player.getEntityData().getBoolean("SelectedShipData")) {
-                            int[] selectedShipPos = player.getEntityData().getIntArray("SelectedShipAnchorPos");
-                            BlockPos selectedShipBlockPos = new BlockPos(selectedShipPos[0], selectedShipPos[1], selectedShipPos[2]);
-                            if (!tile.getPos().equals(selectedShipBlockPos)) {
-                                String message = "TR:" + "common.tile.anchor.activateShip" + "~ X:"
-                                        + selectedShipPos[0] + " Y:" + selectedShipPos[1] + " Z:" + selectedShipPos[2];
-                                tile.setAnchorPointInfo(selectedShipBlockPos, tile.anchorPointInfo.forShip);
-                                ArchimedesShipsNetworking.NETWORK.send().packet("TranslatedChatMessage")
-                                        .with("message", message).to(player);
-                            } else {
-                                String message = "TR:" + "common.tile.anchor.noGroundLink";
-                                ArchimedesShipsNetworking.NETWORK.send().packet("TranslatedChatMessage")
-                                        .with("message", message).to(player);
-                                player.getEntityData().removeTag("SelectedShipData");
-                                player.getEntityData().removeTag("SelectedShipAnchorPos");
-                            }
-                        } else {
-                            String message = "TR:" + "common.tile.anchor.noGroundLink";
-                            ArchimedesShipsNetworking.NETWORK.send().packet("TranslatedChatMessage")
-                                    .with("message", message).to(player);
-                        }
-                    } else {
-                        player.getEntityData().setIntArray("SelectedShipAnchorPos", new int[]{pos.getX(), pos.getY(), pos.getZ()});
-                        player.getEntityData().setBoolean("SelectedShipData", true);
-
-                        String message = "TR:" + "common.tile.anchor.activateGround";
-                        ArchimedesShipsNetworking.NETWORK.send().packet("TranslatedChatMessage")
-                                .with("message", message).to(player);
-                    }
-                }
-            }
         }
         return true;
     }

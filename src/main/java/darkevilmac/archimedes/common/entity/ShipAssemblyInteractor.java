@@ -135,12 +135,12 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
     }
 
     @Override
-    public void writeNBTFully(NBTTagCompound compound) {
+    public void writeNBTFully(NBTTagCompound tag) {
         writeNBTMetadata(compound);
     }
 
     @Override
-    public void writeNBTMetadata(NBTTagCompound compound) {
+    public void writeNBTMetadata(NBTTagCompound tag) {
         compound.setInteger("balloonCount", getBalloonCount());
     }
 }

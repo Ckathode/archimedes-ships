@@ -2,12 +2,6 @@
 
 entity.ArchimedesShips.shipmod.name=Archimedes' Ships
 
-common.tile.anchor.activateGround=Du hast einen Anker für den Einsatz auf dem Boden aktiviert, aktiviere irgendeinen Schiffsanker, wenn du möchtest dass dieser verknüpft wird.
-common.tile.anchor.activateShip=Schiffsanker verknüpft
-common.tile.anchor.changeModeGround=Dieser Anker kann nun an Land verwendet werden.
-common.tile.anchor.changeModeShip=Dieser Anker kann nun auf Schiffen verwendet werden.
-common.tile.anchor.noGroundLink=Du musst zuvor einen Bodenanker aktivieren um ihn mit einem Schiffsanker zu verbinden.
-
 itemGroup.archimedesTab=Archimedes' Ships
 
 tile.archimedes.marker.name=Steuerrad
@@ -47,37 +41,37 @@ key.archimedes.align=Ausrichten
 key.archimedes.decompile=Zerlegen
 key.archimedes.shipinv=Schiffsinventar
 
-container.shipEngine=Antrieb
+container.archimedes.shipEngine=Antrieb
 
-gui.shipstatus.title=Schiffsstatus
-gui.shipstatus.rename=Umbenennen
-gui.shipstatus.done=Fertig
-gui.shipstatus.compile=Zusammensetzen
-gui.shipstatus.undo=Rückgängig
-gui.shipstatus.mount=Einsteigen
-gui.shipstatus.name=Name
-gui.shipstatus.shiptype=Typ
-gui.shipstatus.type.unknown=Unbekannt
-gui.shipstatus.type.airship=Luftschiff
-gui.shipstatus.type.boat=Schiff
-gui.shipstatus.compilerresult=Status
-gui.shipstatus.count.block=Blocks
-gui.shipstatus.count.balloon=Ballons
-gui.shipstatus.count.tileentity=Teilarten
-gui.shipstatus.mass=Gewicht
-gui.shipstatus.massunit=kg
+gui.archimedes.shipstatus.title=Schiffsstatus
+gui.archimedes.shipstatus.rename=Umbenennen
+gui.archimedes.shipstatus.done=Fertig
+gui.archimedes.shipstatus.compile=Zusammensetzen
+gui.archimedes.shipstatus.undo=Rückgängig
+gui.archimedes.shipstatus.mount=Einsteigen
+gui.archimedes.shipstatus.name=Name
+gui.archimedes.shipstatus.shiptype=Typ
+gui.archimedes.shipstatus.type.unknown=Unbekannt
+gui.archimedes.shipstatus.type.airship=Luftschiff
+gui.archimedes.shipstatus.type.boat=Schiff
+gui.archimedes.shipstatus.compilerresult=Status
+gui.archimedes.shipstatus.count.block=Blocks
+gui.archimedes.shipstatus.count.balloon=Ballons
+gui.archimedes.shipstatus.count.tileentity=Teilarten
+gui.archimedes.shipstatus.mass=Gewicht
+gui.archimedes.shipstatus.massunit=kg
 
-gui.shipstatus.result.none=nicht zusammengesetzt!
-gui.shipstatus.result.ok=OK
-gui.shipstatus.result.okwarn=Änderungen festgestellt!
-gui.shipstatus.result.missingmarker=Steuerad fehlt!
-gui.shipstatus.result.overflow=Überladen!
-gui.shipstatus.result.error=Fehler
-gui.shipstatus.result.busy=zusammensetzen
-gui.shipstatus.result.inconsistent=Instabil
+gui.archimedes.shipstatus.result.none=nicht zusammengesetzt!
+gui.archimedes.shipstatus.result.ok=OK
+gui.archimedes.shipstatus.result.okwarn=Änderungen festgestellt!
+gui.archimedes.shipstatus.result.missingmarker=Steuerad fehlt!
+gui.archimedes.shipstatus.result.overflow=Überladen!
+gui.archimedes.shipstatus.result.error=Fehler
+gui.archimedes.shipstatus.result.busy=zusammensetzen
+gui.archimedes.shipstatus.result.inconsistent=Instabil
 
-gui.shipinv.title=Schiffsinventar
-gui.shipinv.decompile=zerlegen
-gui.shipinv.align=ausrichten
+gui.archimedes.shipinv.title=Schiffsinventar
+gui.archimedes.shipinv.decompile=zerlegen
+gui.archimedes.shipinv.align=ausrichten
 
-gui.engine.title=Dampfmaschinentank
+gui.archimedes.engine.title=Dampfmaschinentank

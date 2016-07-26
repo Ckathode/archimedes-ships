@@ -80,11 +80,11 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
     }
 
     @Override
-    protected void readEntityFromNBT(NBTTagCompound tagCompund) {
+    protected void readEntityFromNBT(NBTTagCompound tag) {
     }
 
     @Override
-    protected void writeEntityToNBT(NBTTagCompound tagCompound) {
+    protected void writeEntityToNBT(NBTTagCompound tag) {
     }
 
     @Override

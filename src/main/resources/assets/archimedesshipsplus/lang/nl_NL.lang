@@ -2,12 +2,6 @@
 
 entity.ArchimedesShips.shipmod.name=Archimedes' Ships
 
-common.tile.anchor.activateGround=no entry
-common.tile.anchor.activateShip=no entry
-common.tile.anchor.changeModeGround=no entry
-common.tile.anchor.changeModeShip=no entry
-common.tile.anchor.noGroundLink=no entry
-
 tile.archimedes.marker.name=Scheepsroer
 tile.archimedes.floater.name=Drijver
 tile.archimedes.balloon.name=Luchtballon
@@ -40,35 +34,35 @@ key.archimedes.align=Lijn uit
 key.archimedes.decompile=Demonteren
 key.archimedes.shipinv=Schip inventaris
 
-gui.shipstatus.title=Schip status
-gui.shipstatus.rename=Hernoem
-gui.shipstatus.done=Klaar met hernoemen
-gui.shipstatus.compile=Stel schip samen
-gui.shipstatus.undo=Ongedaan maken
-gui.shipstatus.mount=Boord het schip
-gui.shipstatus.name=Naam
-gui.shipstatus.shiptype=Type
-gui.shipstatus.type.unknown=Onbekend type
-gui.shipstatus.type.airship=Luchtschip
-gui.shipstatus.type.boat=Schip
-gui.shipstatus.compilerresult=Status
-gui.shipstatus.count.block=Blocks
-gui.shipstatus.count.balloon=Luchtballonnen
-gui.shipstatus.count.tileentity=Tile Entities
-gui.shipstatus.mass=Massa
-gui.shipstatus.massunit=kg
+gui.archimedes.shipstatus.title=Schip status
+gui.archimedes.shipstatus.rename=Hernoem
+gui.archimedes.shipstatus.done=Klaar met hernoemen
+gui.archimedes.shipstatus.compile=Stel schip samen
+gui.archimedes.shipstatus.undo=Ongedaan maken
+gui.archimedes.shipstatus.mount=Boord het schip
+gui.archimedes.shipstatus.name=Naam
+gui.archimedes.shipstatus.shiptype=Type
+gui.archimedes.shipstatus.type.unknown=Onbekend type
+gui.archimedes.shipstatus.type.airship=Luchtschip
+gui.archimedes.shipstatus.type.boat=Schip
+gui.archimedes.shipstatus.compilerresult=Status
+gui.archimedes.shipstatus.count.block=Blocks
+gui.archimedes.shipstatus.count.balloon=Luchtballonnen
+gui.archimedes.shipstatus.count.tileentity=Tile Entities
+gui.archimedes.shipstatus.mass=Massa
+gui.archimedes.shipstatus.massunit=kg
 
-gui.shipstatus.result.none=Niet geassembleerd
-gui.shipstatus.result.ok=OK
-gui.shipstatus.result.okwarn=Veranderingen gedetecteerd
-gui.shipstatus.result.missingmarker=Missend roer
-gui.shipstatus.result.overflow=Overflow
-gui.shipstatus.result.error=Fout
-gui.shipstatus.result.busy=Samenstellen...
-gui.shipstatus.result.inconsistent=Inconsistent
+gui.archimedes.shipstatus.result.none=Niet geassembleerd
+gui.archimedes.shipstatus.result.ok=OK
+gui.archimedes.shipstatus.result.okwarn=Veranderingen gedetecteerd
+gui.archimedes.shipstatus.result.missingmarker=Missend roer
+gui.archimedes.shipstatus.result.overflow=Overflow
+gui.archimedes.shipstatus.result.error=Fout
+gui.archimedes.shipstatus.result.busy=Samenstellen...
+gui.archimedes.shipstatus.result.inconsistent=Inconsistent
 
-gui.shipinv.title=Schip inventaris
-gui.shipinv.decompile=Demonteren
-gui.shipinv.align=Lijn uit
+gui.archimedes.shipinv.title=Schip inventaris
+gui.archimedes.shipinv.decompile=Demonteren
+gui.archimedes.shipinv.align=Lijn uit
 
-gui.engine.title=Stoommachine brandstof
+gui.archimedes.engine.title=Stoommachine brandstof

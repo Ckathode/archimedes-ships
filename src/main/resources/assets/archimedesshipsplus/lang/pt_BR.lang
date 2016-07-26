@@ -2,12 +2,6 @@
 
 entity.ArchimedesShips.shipmod.name=Archimedes' Ships
 
-common.tile.anchor.activateGround=no entry
-common.tile.anchor.activateShip=no entry
-common.tile.anchor.changeModeGround=no entry
-common.tile.anchor.changeModeShip=no entry
-common.tile.anchor.noGroundLink=no entry
-
 tile.archimedes.marker.name=Leme do Barco
 tile.archimedes.floater.name=Flutuador
 tile.archimedes.balloon.name=Balão de Ar
@@ -40,35 +34,35 @@ key.archimedes.align=Alinhar
 key.archimedes.decompile=Desmontar
 key.archimedes.shipinv=Inventário do Barco
 
-gui.shipstatus.title=Estado do Barco
-gui.shipstatus.rename=Rebatizar
-gui.shipstatus.done=Rebatismo Concluído
-gui.shipstatus.compile=Montar o Barco
-gui.shipstatus.undo=Desfazer
-gui.shipstatus.mount=Subir no Barco
-gui.shipstatus.name=Nome
-gui.shipstatus.shiptype=Tipo
-gui.shipstatus.type.unknown=Tipo Desconhecido
-gui.shipstatus.type.airship=Dirigível
-gui.shipstatus.type.boat=Barco
-gui.shipstatus.compilerresult=Estado
-gui.shipstatus.count.block=Blocos
-gui.shipstatus.count.balloon=Balões de Ar
-gui.shipstatus.count.tileentity=Partes da Entidade
-gui.shipstatus.mass=Massa
-gui.shipstatus.massunit=kg
+gui.archimedes.shipstatus.title=Estado do Barco
+gui.archimedes.shipstatus.rename=Rebatizar
+gui.archimedes.shipstatus.done=Rebatismo Concluído
+gui.archimedes.shipstatus.compile=Montar o Barco
+gui.archimedes.shipstatus.undo=Desfazer
+gui.archimedes.shipstatus.mount=Subir no Barco
+gui.archimedes.shipstatus.name=Nome
+gui.archimedes.shipstatus.shiptype=Tipo
+gui.archimedes.shipstatus.type.unknown=Tipo Desconhecido
+gui.archimedes.shipstatus.type.airship=Dirigível
+gui.archimedes.shipstatus.type.boat=Barco
+gui.archimedes.shipstatus.compilerresult=Estado
+gui.archimedes.shipstatus.count.block=Blocos
+gui.archimedes.shipstatus.count.balloon=Balões de Ar
+gui.archimedes.shipstatus.count.tileentity=Partes da Entidade
+gui.archimedes.shipstatus.mass=Massa
+gui.archimedes.shipstatus.massunit=kg
 
-gui.shipstatus.result.none=Não Montado
-gui.shipstatus.result.ok=OK
-gui.shipstatus.result.okwarn=Alterações Detectadas
-gui.shipstatus.result.missingmarker=Faltando Leme
-gui.shipstatus.result.overflow=Sobrecarga
-gui.shipstatus.result.error=Erro
-gui.shipstatus.result.busy=Montando...
-gui.shipstatus.result.inconsistent=Inconsistente
+gui.archimedes.shipstatus.result.none=Não Montado
+gui.archimedes.shipstatus.result.ok=OK
+gui.archimedes.shipstatus.result.okwarn=Alterações Detectadas
+gui.archimedes.shipstatus.result.missingmarker=Faltando Leme
+gui.archimedes.shipstatus.result.overflow=Sobrecarga
+gui.archimedes.shipstatus.result.error=Erro
+gui.archimedes.shipstatus.result.busy=Montando...
+gui.archimedes.shipstatus.result.inconsistent=Inconsistente
 
-gui.shipinv.title=Inventário do Barco
-gui.shipinv.decompile=Desmontar
-gui.shipinv.align=Alinhar
+gui.archimedes.shipinv.title=Inventário do Barco
+gui.archimedes.shipinv.decompile=Desmontar
+gui.archimedes.shipinv.align=Alinhar
 
-gui.engine.title=Combustível do Motor a Vapor
+gui.archimedes.engine.title=Combustível do Motor a Vapor

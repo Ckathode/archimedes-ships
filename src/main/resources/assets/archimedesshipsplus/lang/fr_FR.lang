@@ -2,12 +2,6 @@
 
 entity.ArchimedesShips.shipmod.name=Les vaisseaux d'Archimède
 
-common.tile.anchor.activateGround=no entry
-common.tile.anchor.activateShip=no entry
-common.tile.anchor.changeModeGround=no entry
-common.tile.anchor.changeModeShip=no entry
-common.tile.anchor.noGroundLink=no entry
-
 tile.archimedes.marker.name=Barre de vaisseau
 tile.archimedes.floater.name=Flotteur
 tile.archimedes.balloon.name=Montgolfière
@@ -40,33 +34,33 @@ key.archimedes.align=S'aligner
 key.archimedes.decompile=Désassembler
 key.archimedes.shipinv=Inventaire de vaisseau
 
-gui.shipstatus.title=Statut du vaisseau
-gui.shipstatus.rename=Rebaptiser
-gui.shipstatus.done=Rebaptisation terminée
-gui.shipstatus.compile=Assemblez le vaisseau
-gui.shipstatus.undo=Annuler
-gui.shipstatus.mount=Monter sur le vaisseau
-gui.shipstatus.name=Nom
-gui.shipstatus.shiptype=Type
-gui.shipstatus.type.unknown=Type inconnu
-gui.shipstatus.type.airship=Ballon dirigeable
-gui.shipstatus.type.boat=Navire
-gui.shipstatus.compilerresult=Statut
-gui.shipstatus.count.block=Blocs
-gui.shipstatus.count.balloon=Montgolfière
-gui.shipstatus.count.tileentity=Entités de tuile
+gui.archimedes.shipstatus.title=Statut du vaisseau
+gui.archimedes.shipstatus.rename=Rebaptiser
+gui.archimedes.shipstatus.done=Rebaptisation terminée
+gui.archimedes.shipstatus.compile=Assemblez le vaisseau
+gui.archimedes.shipstatus.undo=Annuler
+gui.archimedes.shipstatus.mount=Monter sur le vaisseau
+gui.archimedes.shipstatus.name=Nom
+gui.archimedes.shipstatus.shiptype=Type
+gui.archimedes.shipstatus.type.unknown=Type inconnu
+gui.archimedes.shipstatus.type.airship=Ballon dirigeable
+gui.archimedes.shipstatus.type.boat=Navire
+gui.archimedes.shipstatus.compilerresult=Statut
+gui.archimedes.shipstatus.count.block=Blocs
+gui.archimedes.shipstatus.count.balloon=Montgolfière
+gui.archimedes.shipstatus.count.tileentity=Entités de tuile
 
-gui.shipstatus.result.none=Non assemblé
-gui.shipstatus.result.ok=OK
-gui.shipstatus.result.okwarn=Changements détectés
-gui.shipstatus.result.missingmarker=Barre manquante
-gui.shipstatus.result.overflow=Surplus
-gui.shipstatus.result.error=Erreur
-gui.shipstatus.result.busy=Assemblage en cours...
-gui.shipstatus.result.inconsistent=Incompatible
+gui.archimedes.shipstatus.result.none=Non assemblé
+gui.archimedes.shipstatus.result.ok=OK
+gui.archimedes.shipstatus.result.okwarn=Changements détectés
+gui.archimedes.shipstatus.result.missingmarker=Barre manquante
+gui.archimedes.shipstatus.result.overflow=Surplus
+gui.archimedes.shipstatus.result.error=Erreur
+gui.archimedes.shipstatus.result.busy=Assemblage en cours...
+gui.archimedes.shipstatus.result.inconsistent=Incompatible
 
-gui.shipinv.title=Inventaire de vaisseau
-gui.shipinv.decompile=Désassembler
-gui.shipinv.align=Aligner
+gui.archimedes.shipinv.title=Inventaire de vaisseau
+gui.archimedes.shipinv.decompile=Désassembler
+gui.archimedes.shipinv.align=Aligner
 
-gui.engine.title=Carburant du moteur à vapeur
+gui.archimedes.engine.title=Carburant du moteur à vapeur

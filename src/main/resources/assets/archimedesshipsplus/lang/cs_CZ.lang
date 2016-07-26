@@ -2,12 +2,6 @@
 
 entity.ArchimedesShips.shipmod.name=Archimedes' Ships
 
-common.tile.anchor.activateGround=no entry
-common.tile.anchor.activateShip=no entry
-common.tile.anchor.changeModeGround=no entry
-common.tile.anchor.changeModeShip=no entry
-common.tile.anchor.noGroundLink=no entry
-
 tile.archimedes.marker.name=Lodní kormidlo
 tile.archimedes.floater.name=Plovák
 tile.archimedes.balloon.name=Vzdušný balón
@@ -41,37 +35,37 @@ key.archimedes.align=Vyrovnat
 key.archimedes.decompile=Vylodit se
 key.archimedes.shipinv=Lodní inventář
 
-gui.shipstatus.title=Status lodě
-gui.shipstatus.rename=Přejmenuj
-gui.shipstatus.done=Přejmenováni hotovo
-gui.shipstatus.compile=Sestavit loď
-gui.shipstatus.undo=Zrušit
-gui.shipstatus.mount=Nalodit se
-gui.shipstatus.name=Jméno
-gui.shipstatus.shiptype=Typ
-gui.shipstatus.type.unknown=Neznámý typ
-gui.shipstatus.type.airship=Vzducholoď
-gui.shipstatus.type.boat=Loď
-gui.shipstatus.compilerresult=Status
-gui.shipstatus.count.block=Bloků
-gui.shipstatus.count.balloon=Vzdušné balóny
-gui.shipstatus.count.tileentity=Tonáž
-gui.shipstatus.mass=Hmotnost
-gui.shipstatus.massunit=kg
+gui.archimedes.shipstatus.title=Status lodě
+gui.archimedes.shipstatus.rename=Přejmenuj
+gui.archimedes.shipstatus.done=Přejmenováni hotovo
+gui.archimedes.shipstatus.compile=Sestavit loď
+gui.archimedes.shipstatus.undo=Zrušit
+gui.archimedes.shipstatus.mount=Nalodit se
+gui.archimedes.shipstatus.name=Jméno
+gui.archimedes.shipstatus.shiptype=Typ
+gui.archimedes.shipstatus.type.unknown=Neznámý typ
+gui.archimedes.shipstatus.type.airship=Vzducholoď
+gui.archimedes.shipstatus.type.boat=Loď
+gui.archimedes.shipstatus.compilerresult=Status
+gui.archimedes.shipstatus.count.block=Bloků
+gui.archimedes.shipstatus.count.balloon=Vzdušné balóny
+gui.archimedes.shipstatus.count.tileentity=Tonáž
+gui.archimedes.shipstatus.mass=Hmotnost
+gui.archimedes.shipstatus.massunit=kg
 
-gui.shipstatus.result.none=Nesestaveno
-gui.shipstatus.result.ok=OK
-gui.shipstatus.result.okwarn=Detekována změna
-gui.shipstatus.result.missingmarker=Chybý kormidlo
-gui.shipstatus.result.overflow=Přetížení
-gui.shipstatus.result.error=Chyba
-gui.shipstatus.result.busy=Sestavuji...
-gui.shipstatus.result.inconsistent=Nekonzistentní
+gui.archimedes.shipstatus.result.none=Nesestaveno
+gui.archimedes.shipstatus.result.ok=OK
+gui.archimedes.shipstatus.result.okwarn=Detekována změna
+gui.archimedes.shipstatus.result.missingmarker=Chybý kormidlo
+gui.archimedes.shipstatus.result.overflow=Přetížení
+gui.archimedes.shipstatus.result.error=Chyba
+gui.archimedes.shipstatus.result.busy=Sestavuji...
+gui.archimedes.shipstatus.result.inconsistent=Nekonzistentní
 
-gui.shipinv.title=Lodní inventář
-gui.shipinv.decompile=Vylodit se
-gui.shipinv.align=Srovnat
+gui.archimedes.shipinv.title=Lodní inventář
+gui.archimedes.shipinv.decompile=Vylodit se
+gui.archimedes.shipinv.align=Srovnat
 
-gui.engine.title=Palivo paromotoru
+gui.archimedes.engine.title=Palivo paromotoru
 # Parent Language: en_US
 # by DeRigeurEx

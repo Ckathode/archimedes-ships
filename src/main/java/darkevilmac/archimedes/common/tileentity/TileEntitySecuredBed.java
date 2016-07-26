@@ -65,17 +65,17 @@ public class TileEntitySecuredBed extends TileEntity {
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        compound = super.writeToNBT(compound);
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+        tag = super.writeToNBT(tag);
         if (worldObj != null && worldObj.isRemote)
-            return compound;
+            return tag;
 
         if (playerID != null)
-            compound.setString("uuid", playerID.toString());
+            tag.setString("uuid", playerID.toString());
 
-        compound.setBoolean("doMove", doMove);
+        tag.setBoolean("doMove", doMove);
 
-        return compound;
+        return tag;
     }
 
     @Override

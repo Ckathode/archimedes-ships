@@ -9,15 +9,15 @@ public class NBTTagUtils {
         if (tag == null || vec3i == null)
             return;
 
-        tag.setInteger(prefix + "vecX", vec3i.getX());
-        tag.setInteger(prefix + "vecY", vec3i.getY());
-        tag.setInteger(prefix + "vecZ", vec3i.getZ());
+        tag.setInteger(prefix + "VecX", vec3i.getX());
+        tag.setInteger(prefix + "VecY", vec3i.getY());
+        tag.setInteger(prefix + "VecZ", vec3i.getZ());
     }
 
-    public static Vec3i readVec3iFromNBT(NBTTagCompound nbtTagCompound, String prefix) {
-        return new Vec3i(nbtTagCompound.getInteger(prefix + "vecX"),
-                nbtTagCompound.getInteger(prefix + "vecY"),
-                nbtTagCompound.getInteger(prefix + "vecZ"));
+    public static Vec3i readVec3iFromNBT(NBTTagCompound tag, String prefix) {
+        return new Vec3i(tag.getInteger(prefix + "VecX"),
+                tag.getInteger(prefix + "VecY"),
+                tag.getInteger(prefix + "VecZ"));
     }
 
 

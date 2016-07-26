@@ -204,13 +204,13 @@ public class EntityShip extends EntityMovingWorld {
     }
 
     @Override
-    public void writeMovingWorldNBT(NBTTagCompound compound) {
-        compound.setBoolean("submerge", submerge);
+    public void writeMovingWorldNBT(NBTTagCompound tag) {
+        tag.setBoolean("submerge", submerge);
     }
 
     @Override
-    public void readMovingWorldNBT(NBTTagCompound compound) {
-        setSubmerge(compound.getBoolean("submerge"));
+    public void readMovingWorldNBT(NBTTagCompound tag) {
+        setSubmerge(tag.getBoolean("submerge"));
     }
 
     @Override

@@ -2,12 +2,13 @@ package darkevilmac.archimedes.client.gui;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
 
 import org.lwjgl.opengl.GL11;
 
+import darkevilmac.archimedes.client.LanguageEntries;
 import darkevilmac.archimedes.common.entity.EntityShip;
 import darkevilmac.archimedes.common.network.ArchimedesShipsNetworking;
 import darkevilmac.movingworld.common.network.MovingWorldClientAction;
@@ -33,11 +34,11 @@ public class GuiShip extends GuiContainer {
         super.initGui();
         buttonList.clear();
 
-        btnDisassemble = new GuiButton(1, guiLeft + 4, guiTop + 20, 100, 20, I18n.translateToLocal("gui.shipinv.decompile"));
+        btnDisassemble = new GuiButton(1, guiLeft + 4, guiTop + 20, 100, 20, I18n.format(LanguageEntries.GUI_SHIPINV_DECOMPILE));
         btnDisassemble.enabled = ship.getDisassembler().canDisassemble(ship.getAssemblyInteractor());
         buttonList.add(btnDisassemble);
 
-        btnAlign = new GuiButton(2, guiLeft + 4, guiTop + 40, 100, 20, I18n.translateToLocal("gui.shipinv.align"));
+        btnAlign = new GuiButton(2, guiLeft + 4, guiTop + 40, 100, 20, I18n.format(LanguageEntries.GUI_SHIPINV_ALIGN));
         buttonList.add(btnAlign);
 
 
@@ -71,10 +72,10 @@ public class GuiShip extends GuiContainer {
         int row = 8;
         int col0 = 8;
 
-        fontRendererObj.drawString(I18n.translateToLocal("gui.shipinv.title") + " - " + ship.getInfo().getName(), col0, row, color);
+        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_SHIPINV_TITLE) + " - " + ship.getInfo().getName(), col0, row, color);
         row += 5;
 
-        fontRendererObj.drawString(I18n.translateToLocal("container.inventory"), 8, ySize - 96 + 2, color);
+        fontRendererObj.drawString(I18n.format("container.inventory"), 8, ySize - 96 + 2, color);
     }
 
     @Override

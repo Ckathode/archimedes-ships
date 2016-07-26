@@ -3,9 +3,9 @@ package darkevilmac.archimedes.client.gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.Locale;
 
 import darkevilmac.archimedes.ArchimedesShipMod;
+import darkevilmac.archimedes.client.LanguageEntries;
 import darkevilmac.archimedes.common.entity.ShipAssemblyInteractor;
 import darkevilmac.archimedes.common.network.ArchimedesShipsNetworking;
 import darkevilmac.archimedes.common.network.HelmClientAction;
@@ -55,17 +56,17 @@ public class GuiHelm extends GuiContainer {
         int btny = guiTop + 20;
         buttonList.clear();
 
-        btnRename = new GuiButton(4, btnx, btny, 100, 20, I18n.translateToLocal("gui.shipstatus.rename"));
+        btnRename = new GuiButton(4, btnx, btny, 100, 20, I18n.format(LanguageEntries.GUI_STATUS_RENAME));
         buttonList.add(btnRename);
 
-        btnAssemble = new GuiButton(1, btnx, btny += 20, 100, 20, I18n.translateToLocal("gui.shipstatus.compile"));
+        btnAssemble = new GuiButton(1, btnx, btny += 20, 100, 20, I18n.format(LanguageEntries.GUI_STATUS_COMPILE));
         buttonList.add(btnAssemble);
 
-        btnUndo = new GuiButton(2, btnx, btny += 20, 100, 20, I18n.translateToLocal("gui.shipstatus.undo"));
+        btnUndo = new GuiButton(2, btnx, btny += 20, 100, 20, I18n.format(LanguageEntries.GUI_STATUS_UNDO));
         btnUndo.enabled = tileEntity.getPrevAssembleResult() != null && tileEntity.getPrevAssembleResult().getType() != RESULT_NONE;
         buttonList.add(btnUndo);
 
-        btnMount = new GuiButton(3, btnx, btny += 20, 100, 20, I18n.translateToLocal("gui.shipstatus.mount"));
+        btnMount = new GuiButton(3, btnx, btny += 20, 100, 20, I18n.format(LanguageEntries.GUI_STATUS_MOUNT));
         btnMount.enabled = tileEntity.getAssembleResult() != null && tileEntity.getAssembleResult().getType() == RESULT_OK;
         buttonList.add(btnMount);
 
@@ -108,9 +109,9 @@ public class GuiHelm extends GuiContainer {
         int col0 = 8;
         int col1 = col0 + xSize / 2;
 
-        fontRendererObj.drawString(I18n.translateToLocal("gui.shipstatus.title"), col0, row, color);
+        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_TITLE), col0, row, color);
         row += 5;
-        fontRendererObj.drawString(I18n.translateToLocal("gui.shipstatus.name"), col0, row += 10, color);
+        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_NAME), col0, row += 10, color);
 
         ResultType rType;
         int rblocks;
@@ -138,64 +139,64 @@ public class GuiHelm extends GuiContainer {
         switch (rType) {
             case RESULT_NONE:
                 color1 = color;
-                rcodename = "gui.shipstatus.result.none";
+                rcodename = LanguageEntries.GUI_STATUS_RESULT_NONE;
                 break;
             case RESULT_OK:
                 color1 = 0x40A000;
-                rcodename = "gui.shipstatus.result.ok";
+                rcodename = LanguageEntries.GUI_STATUS_RESULT_OKAY;
                 break;
             case RESULT_OK_WITH_WARNINGS:
                 color1 = 0xFFAA00;
-                rcodename = "gui.shipstatus.result.okwarn";
+                rcodename = LanguageEntries.GUI_STATUS_RESULT_OKAYWARN;
                 break;
             case RESULT_MISSING_MARKER:
                 color1 = 0xB00000;
-                rcodename = "gui.shipstatus.result.missingmarker";
+                rcodename = LanguageEntries.GUI_STATUS_RESULT_MISSINGMARKER;
                 break;
             case RESULT_BLOCK_OVERFLOW:
                 color1 = 0xB00000;
-                rcodename = "gui.shipstatus.result.overflow";
+                rcodename = LanguageEntries.GUI_STATUS_RESULT_OVERFLOW;
                 break;
             case RESULT_ERROR_OCCURED:
                 color1 = 0xB00000;
-                rcodename = "gui.shipstatus.result.error";
+                rcodename = LanguageEntries.GUI_STATUS_RESULT_ERROR;
                 break;
             case RESULT_BUSY_COMPILING:
                 color1 = color;
-                rcodename = "gui.shipstatus.result.busy";
+                rcodename = LanguageEntries.GUI_STATUS_RESULT_BUSY;
                 break;
             case RESULT_INCONSISTENT:
                 color1 = 0xB00000;
-                rcodename = "gui.shipstatus.result.inconsistent";
+                rcodename = LanguageEntries.GUI_STATUS_RESULT_INCONSISTENT;
                 break;
             default:
                 color1 = color;
-                rcodename = "gui.shipstatus.result.none";
+                rcodename = LanguageEntries.GUI_STATUS_RESULT_NONE;
                 break;
         }
 
-        fontRendererObj.drawString(I18n.translateToLocal("gui.shipstatus.compilerresult"), col0, row += 10, color);
-        fontRendererObj.drawString(I18n.translateToLocal(rcodename), col1, row, color1);
+        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_COMPILERESULT), col0, row += 10, color);
+        fontRendererObj.drawString(I18n.format(rcodename), col1, row, color1);
 
         float balloonratio = (float) rballoons / rblocks;
-        fontRendererObj.drawString(I18n.translateToLocal("gui.shipstatus.shiptype"), col0, row += 10, color);
+        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_SHIPTYPE), col0, row += 10, color);
         if (rblocks == 0) {
-            fontRendererObj.drawString(I18n.translateToLocal("gui.shipstatus.type.unknown"), col1, row, color);
+            fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_TYPEUNKNOWN), col1, row, color);
         } else {
-            fontRendererObj.drawString(I18n.translateToLocal(balloonratio > ArchimedesShipMod.instance.getNetworkConfig().getShared().flyBalloonRatio ? "gui.shipstatus.type.airship" : "gui.shipstatus.type.boat"), col1, row, color);
+            fontRendererObj.drawString(I18n.format(balloonratio > ArchimedesShipMod.instance.getNetworkConfig().getShared().flyBalloonRatio ? LanguageEntries.GUI_STATUS_TYPEAIRSHIP : LanguageEntries.GUI_STATUS_TYPEBOAT), col1, row, color);
         }
 
-        fontRendererObj.drawString(I18n.translateToLocal("gui.shipstatus.count.block"), col0, row += 10, color);
+        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_COUNTBLOCK), col0, row += 10, color);
         fontRendererObj.drawString(String.valueOf(rblocks), col1, row, color);
 
-        fontRendererObj.drawString(I18n.translateToLocal("gui.shipstatus.count.balloon"), col0, row += 10, color);
+        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_COUNTBALLOON), col0, row += 10, color);
         fontRendererObj.drawString(String.valueOf(rballoons) + " (" + (int) (balloonratio * 100f) + "%)", col1, row, color);
 
-        fontRendererObj.drawString(I18n.translateToLocal("gui.shipstatus.count.tileentity"), col0, row += 10, color);
+        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_COUNTTILE), col0, row += 10, color);
         fontRendererObj.drawString(String.valueOf(rtes), col1, row, color);
 
-        fontRendererObj.drawString(I18n.translateToLocal("gui.shipstatus.mass"), col0, row += 10, color);
-        fontRendererObj.drawString(String.format(Locale.ROOT, "%.1f %s", rmass, I18n.translateToLocal("gui.shipstatus.massunit")), col1, row, color);
+        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_MASS), col0, row += 10, color);
+        fontRendererObj.drawString(String.format(Locale.ROOT, "%.1f %s", rmass, I18n.format(LanguageEntries.GUI_STATUS_MASSUNIT)), col1, row, color);
     }
 
     @Override
@@ -213,7 +214,7 @@ public class GuiHelm extends GuiContainer {
     public void actionPerformed(GuiButton button) {
         if (button == btnRename) {
             if (txtShipName.isFocused()) {
-                btnRename.displayString = I18n.translateToLocal("gui.shipstatus.rename");
+                btnRename.displayString = I18n.format(LanguageEntries.GUI_STATUS_RENAME);
                 tileEntity.getInfo().setName(txtShipName.getText());
                 txtShipName.setFocused(false);
                 //txtShipName.setEnableBackgroundDrawing(false);
@@ -224,7 +225,7 @@ public class GuiHelm extends GuiContainer {
                         .with("tileZ", tileEntity.getPos().getZ())
                         .with("newName", tileEntity.getInfo().getName()).toServer();
             } else {
-                btnRename.displayString = I18n.translateToLocal("gui.shipstatus.done");
+                btnRename.displayString = I18n.format(LanguageEntries.GUI_STATUS_DONE);
                 txtShipName.setFocused(true);
                 //txtShipName.setEnableBackgroundDrawing(true);
             }

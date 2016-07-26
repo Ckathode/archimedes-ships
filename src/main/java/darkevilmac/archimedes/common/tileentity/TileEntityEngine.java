@@ -13,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 
+import darkevilmac.archimedes.client.LanguageEntries;
 import darkevilmac.archimedes.common.api.tileentity.ITileEngineModifier;
 import darkevilmac.archimedes.common.entity.ShipCapabilities;
 import darkevilmac.movingworld.common.chunk.mobilechunk.MobileChunk;
@@ -52,12 +53,12 @@ public class TileEntityEngine extends TileEntity implements IInventory, ITileEng
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
-        super.readFromNBT(compound);
-        burnTime = compound.getInteger("burn");
-        engineFuelConsumption = compound.getShort("fuelCons");
-        enginePower = compound.getFloat("power");
-        NBTTagList list = compound.getTagList("inv", 10);
+    public void readFromNBT(NBTTagCompound tag) {
+        super.readFromNBT(tag);
+        burnTime = tag.getInteger("burn");
+        engineFuelConsumption = tag.getShort("fuelCons");
+        enginePower = tag.getFloat("power");
+        NBTTagList list = tag.getTagList("inv", 10);
         for (int i = 0; i < list.tagCount(); i++) {
             NBTTagCompound comp = list.getCompoundTagAt(i);
             int j = comp.getByte("i");
@@ -66,11 +67,11 @@ public class TileEntityEngine extends TileEntity implements IInventory, ITileEng
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        compound = super.writeToNBT(compound);
-        compound.setInteger("burn", burnTime);
-        compound.setShort("fuelCons", (short) engineFuelConsumption);
-        compound.setFloat("power", enginePower);
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+        tag = super.writeToNBT(tag);
+        tag.setInteger("burn", burnTime);
+        tag.setShort("fuelCons", (short) engineFuelConsumption);
+        tag.setFloat("power", enginePower);
         NBTTagList list = new NBTTagList();
         for (int i = 0; i < getSizeInventory(); i++) {
             if (itemStacks[i] != null) {
@@ -80,8 +81,8 @@ public class TileEntityEngine extends TileEntity implements IInventory, ITileEng
                 list.appendTag(comp);
             }
         }
-        compound.setTag("inv", list);
-        return compound;
+        tag.setTag("inv", list);
+        return tag;
     }
 
     public boolean isRunning() {
@@ -206,7 +207,7 @@ public class TileEntityEngine extends TileEntity implements IInventory, ITileEng
 
     @Override
     public String getName() {
-        return "container.shipEngine";
+        return LanguageEntries.CONTAINER_ENGINE;
     }
 
     @Override

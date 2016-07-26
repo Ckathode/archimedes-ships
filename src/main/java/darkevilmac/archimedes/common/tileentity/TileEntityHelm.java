@@ -150,15 +150,15 @@ public class TileEntityHelm extends TileMovingWorldMarkingBlock {
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        compound = super.writeToNBT(compound);
-        compound.setBoolean("submergeShipOnAssemble", submerge);
-        return compound;
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+        tag = super.writeToNBT(tag);
+        tag.setBoolean("submergeShipOnAssemble", submerge);
+        return tag;
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
-        super.readFromNBT(compound);
-        submerge = compound.getBoolean("submergeShipOnAssemble");
+    public void readFromNBT(NBTTagCompound tag) {
+        super.readFromNBT(tag);
+        submerge = tag.getBoolean("submergeShipOnAssemble");
     }
 }

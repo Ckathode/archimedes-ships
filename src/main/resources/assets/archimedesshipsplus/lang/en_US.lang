@@ -1,14 +1,8 @@
 #Archimedes' Ships language file en_US
 
-entity.ArchimedesShips.shipmod.name=Archimedes' Ships
+entity.ArchimedesShips.shipmod.name=Archimedes' Ships Plus
 
-common.tile.anchor.activateGround=You have activated an anchor for use on the ground, activate any anchors for ships you want this anchor to be associated with.
-common.tile.anchor.activateShip=Linked ship anchor with ground anchor at
-common.tile.anchor.changeModeGround=This Anchor is now set for use on the ground.
-common.tile.anchor.changeModeShip=This Anchor is now set for use on ships.
-common.tile.anchor.noGroundLink=You must activate a ground anchor to link with this ship anchor.
-
-itemGroup.archimedesTab=Archimedes' Ships
+itemGroup.archimedesTab=Archimedes' Ships Plus
 
 tile.archimedes.marker.name=Ship's Helm
 tile.archimedes.floater.name=Floater
@@ -47,37 +41,38 @@ key.archimedes.align=Align
 key.archimedes.decompile=Disassemble
 key.archimedes.shipinv=Ship Inventory
 
-container.shipEngine=Engine
+container.archimedes.shipEngine=Engine
+container.archimedes.anchorPoint=Anchor Point
 
-gui.shipstatus.title=Ship Status
-gui.shipstatus.rename=Rename
-gui.shipstatus.done=Done Renaming
-gui.shipstatus.compile=Assemble Ship
-gui.shipstatus.undo=Undo
-gui.shipstatus.mount=Mount Ship
-gui.shipstatus.name=Name
-gui.shipstatus.shiptype=Type
-gui.shipstatus.type.unknown=Unknown Type
-gui.shipstatus.type.airship=Airship
-gui.shipstatus.type.boat=Ship
-gui.shipstatus.compilerresult=Status
-gui.shipstatus.count.block=Blocks
-gui.shipstatus.count.balloon=Air Balloons
-gui.shipstatus.count.tileentity=Tile Entities
-gui.shipstatus.mass=Mass
-gui.shipstatus.massunit=kg
+gui.archimedes.shipstatus.title=Ship Status
+gui.archimedes.shipstatus.rename=Rename
+gui.archimedes.shipstatus.done=Done Renaming
+gui.archimedes.shipstatus.compile=Assemble Ship
+gui.archimedes.shipstatus.undo=Undo
+gui.archimedes.shipstatus.mount=Mount Ship
+gui.archimedes.shipstatus.name=Name
+gui.archimedes.shipstatus.shiptype=Type
+gui.archimedes.shipstatus.type.unknown=Unknown Type
+gui.archimedes.shipstatus.type.airship=Airship
+gui.archimedes.shipstatus.type.boat=Ship
+gui.archimedes.shipstatus.compilerresult=Status
+gui.archimedes.shipstatus.count.block=Blocks
+gui.archimedes.shipstatus.count.balloon=Air Balloons
+gui.archimedes.shipstatus.count.tileentity=Tile Entities
+gui.archimedes.shipstatus.mass=Mass
+gui.archimedes.shipstatus.massunit=kg
 
-gui.shipstatus.result.none=Not Assembled
-gui.shipstatus.result.ok=OK
-gui.shipstatus.result.okwarn=Changes detected
-gui.shipstatus.result.missingmarker=Missing Helm
-gui.shipstatus.result.overflow=Overflow
-gui.shipstatus.result.error=Error
-gui.shipstatus.result.busy=Assembling...
-gui.shipstatus.result.inconsistent=Inconsistent
+gui.archimedes.shipstatus.result.none=Not Assembled
+gui.archimedes.shipstatus.result.ok=OK
+gui.archimedes.shipstatus.result.okwarn=Changes detected
+gui.archimedes.shipstatus.result.missingmarker=Missing Helm
+gui.archimedes.shipstatus.result.overflow=Overflow
+gui.archimedes.shipstatus.result.error=Error
+gui.archimedes.shipstatus.result.busy=Assembling...
+gui.archimedes.shipstatus.result.inconsistent=Inconsistent
 
-gui.shipinv.title=Ship Inventory
-gui.shipinv.decompile=Disassemble
-gui.shipinv.align=Align
+gui.archimedes.shipinv.title=Ship Inventory
+gui.archimedes.shipinv.decompile=Disassemble
+gui.archimedes.shipinv.align=Align
 
-gui.engine.title=Steam Engine Fuel
+gui.archimedes.engine.title=Steam Engine Fuel

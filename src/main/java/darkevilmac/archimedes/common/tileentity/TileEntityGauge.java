@@ -51,10 +51,10 @@ public class TileEntityGauge extends TileEntity implements IMovingWorldTileEntit
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
-        super.readFromNBT(compound);
-        if (compound.hasKey("vehicle") && worldObj != null) {
-            int id = compound.getInteger("vehicle");
+    public void readFromNBT(NBTTagCompound tag) {
+        super.readFromNBT(tag);
+        if (tag.hasKey("vehicle") && worldObj != null) {
+            int id = tag.getInteger("vehicle");
             Entity entity = worldObj.getEntityByID(id);
             if (entity instanceof EntityMovingWorld) {
                 parentShip = (EntityMovingWorld) entity;
@@ -63,8 +63,8 @@ public class TileEntityGauge extends TileEntity implements IMovingWorldTileEntit
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        return super.writeToNBT(compound);
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+        return super.writeToNBT(tag);
     }
 
 }
