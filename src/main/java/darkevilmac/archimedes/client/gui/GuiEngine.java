@@ -13,8 +13,8 @@ import darkevilmac.archimedes.common.tileentity.TileEntityEngine;
 public class GuiEngine extends GuiContainer {
     public static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("archimedesshipsplus", "textures/gui/engine.png");
 
-    public GuiEngine(TileEntityEngine tileentity, EntityPlayer entityplayer) {
-        super(new ContainerEngine(tileentity, entityplayer));
+    public GuiEngine(TileEntityEngine te, EntityPlayer entityplayer) {
+        super(new ContainerEngine(te, entityplayer));
     }
 
     @Override

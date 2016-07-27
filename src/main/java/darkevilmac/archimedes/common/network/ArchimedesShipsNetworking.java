@@ -23,7 +23,9 @@ import darkevilmac.archimedes.client.gui.ContainerHelm;
 import darkevilmac.archimedes.common.ArchimedesConfig;
 import darkevilmac.archimedes.common.entity.EntityShip;
 import darkevilmac.archimedes.common.entity.ShipAssemblyInteractor;
+import darkevilmac.archimedes.common.tileentity.TileEntityAnchorPoint;
 import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
+import darkevilmac.archimedes.common.util.NBTTagUtils;
 import darkevilmac.movingworld.common.chunk.assembly.AssembleResult;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -144,6 +146,29 @@ public class ArchimedesShipsNetworking {
                     }
                 });
 
+        builder = builder.packet("ClientAnchorPointActionMessage").boundTo(Side.SERVER).with(DataType.NBT_COMPOUND, "info").handledOnMainThreadBy(new BiConsumer<EntityPlayer, Token>() {
+            @Override
+            public void accept(EntityPlayer entityPlayer, Token token) {
+                NBTTagCompound info = token.getNBT("info");
+
+                World world = DimensionManager.getWorld(info.getInteger("dimID"));
+                BlockPos anchorPos = (BlockPos) NBTTagUtils.readVec3iFromNBT(info, "anchorPos");
+                TileEntityAnchorPoint anchorPoint = (TileEntityAnchorPoint) world.getTileEntity(anchorPos);
+
+                if (token.getInt("actionId") == 0) {
+                    // Switch
+
+                    anchorPoint.instance.setType(anchorPoint.instance.getType().opposite());
+                } else {
+                    // Link
+                    if (anchorPoint.instance.getType() == TileEntityAnchorPoint.InstanceType.FORLAND) {
+
+                    }
+                }
+
+            }
+        });
+
         builder = builder.packet("ControlInputMessage").boundTo(Side.SERVER)
                 .with(DataType.INT, "dimID")
                 .with(DataType.INT, "entityID")
@@ -161,6 +186,7 @@ public class ArchimedesShipsNetworking {
                         }
                     }
                 });
+
 
         builder = builder.packet("TranslatedChatMessage").boundTo(Side.CLIENT)
                 .with(DataType.STRING, "message").handledOnMainThreadBy(new BiConsumer<EntityPlayer, Token>() {

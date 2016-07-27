@@ -1,5 +1,6 @@
 package darkevilmac.archimedes.common.tileentity;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -9,6 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -192,8 +194,19 @@ public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTil
         return false;
     }
 
-    enum InstanceType {
-        FORSHIP, FORLAND
+    public enum InstanceType {
+        FORSHIP, FORLAND;
+
+        @Override
+        public String toString() {
+            if (FMLLaunchHandler.side().isClient())
+                return this == FORSHIP ? I18n.format(LanguageEntries.GUI_ANCHOR_MODE_SHIP) : I18n.format(LanguageEntries.GUI_ANCHOR_MODE_WORLD);
+            else return super.toString();
+        }
+
+        public InstanceType opposite() {
+            return this == FORSHIP ? FORLAND : FORSHIP;
+        }
     }
 
     public class Instance implements INBTSerializable<NBTTagCompound> {

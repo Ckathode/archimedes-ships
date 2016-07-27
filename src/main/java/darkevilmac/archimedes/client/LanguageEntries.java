@@ -46,6 +46,15 @@ public class LanguageEntries {
     public static String GUI_SHIPINV_DECOMPILE = "gui.archimedes.shipinv.decompile";
     public static String GUI_SHIPINV_ALIGN = "gui.archimedes.shipinv.align";
 
+    public static String GUI_ANCHOR_TITLE = "gui.archimedes.anchor.title";
+    public static String GUI_ANCHOR_POS = "gui.archimedes.anchor.pos";
+    public static String GUI_ANCHOR_TYPE = "gui.archimedes.anchor.type";
+    public static String GUI_ANCHOR_LINK = "gui.archimedes.anchor.link";
+    public static String GUI_ANCHOR_SWITCH = "gui.archimedes.anchor.switch";
+
+    public static String GUI_ANCHOR_MODE_WORLD = "gui.archimedes.anchor.mode.world";
+    public static String GUI_ANCHOR_MODE_SHIP = "gui.archimedes.anchor.mode.ship";
+
     public static String GUI_ENGINE_TITLE = "gui.archimedes.engine.title";
 
 }

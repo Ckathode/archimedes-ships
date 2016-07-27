@@ -1,6 +1,7 @@
 package darkevilmac.archimedes.common.util;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 
 public class NBTTagUtils {
@@ -15,7 +16,7 @@ public class NBTTagUtils {
     }
 
     public static Vec3i readVec3iFromNBT(NBTTagCompound tag, String prefix) {
-        return new Vec3i(tag.getInteger(prefix + "VecX"),
+        return new BlockPos(tag.getInteger(prefix + "VecX"),
                 tag.getInteger(prefix + "VecY"),
                 tag.getInteger(prefix + "VecZ"));
     }

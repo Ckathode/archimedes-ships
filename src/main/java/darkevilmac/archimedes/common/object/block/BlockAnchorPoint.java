@@ -20,6 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.common.tileentity.TileEntityAnchorPoint;
 
 public class BlockAnchorPoint extends BlockContainer {
@@ -94,11 +95,16 @@ public class BlockAnchorPoint extends BlockContainer {
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (world != null && player != null && !world.isRemote) {
-
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+        if (!playerIn.isSneaking()) {
+            TileEntity tileentity = worldIn.getTileEntity(pos);
+            if (tileentity != null) {
+                playerIn.openGui(ArchimedesShipMod.instance, 4, worldIn, pos.getX(), pos.getY(), pos.getZ());
+                return true;
+            }
         }
-        return true;
+
+        return false;
     }
 
     @Override

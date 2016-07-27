@@ -104,14 +104,14 @@ public class GuiHelm extends GuiContainer {
     protected void drawGuiContainerForegroundLayer(int mousex, int mousey) {
         AssembleResult result = tileEntity.getAssembleResult();
 
-        int color = 0x404040;
+        int colorTitle = 0x404040;
         int row = 8;
         int col0 = 8;
         int col1 = col0 + xSize / 2;
 
-        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_TITLE), col0, row, color);
+        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_TITLE), col0, row, colorTitle);
         row += 5;
-        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_NAME), col0, row += 10, color);
+        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_NAME), col0, row += 10, colorTitle);
 
         ResultType rType;
         int rblocks;
@@ -135,68 +135,68 @@ public class GuiHelm extends GuiContainer {
         }
 
         String rcodename;
-        int color1;
+        int valueColor;
         switch (rType) {
             case RESULT_NONE:
-                color1 = color;
+                valueColor = colorTitle;
                 rcodename = LanguageEntries.GUI_STATUS_RESULT_NONE;
                 break;
             case RESULT_OK:
-                color1 = 0x40A000;
+                valueColor = 0x40A000;
                 rcodename = LanguageEntries.GUI_STATUS_RESULT_OKAY;
                 break;
             case RESULT_OK_WITH_WARNINGS:
-                color1 = 0xFFAA00;
+                valueColor = 0xFFAA00;
                 rcodename = LanguageEntries.GUI_STATUS_RESULT_OKAYWARN;
                 break;
             case RESULT_MISSING_MARKER:
-                color1 = 0xB00000;
+                valueColor = 0xB00000;
                 rcodename = LanguageEntries.GUI_STATUS_RESULT_MISSINGMARKER;
                 break;
             case RESULT_BLOCK_OVERFLOW:
-                color1 = 0xB00000;
+                valueColor = 0xB00000;
                 rcodename = LanguageEntries.GUI_STATUS_RESULT_OVERFLOW;
                 break;
             case RESULT_ERROR_OCCURED:
-                color1 = 0xB00000;
+                valueColor = 0xB00000;
                 rcodename = LanguageEntries.GUI_STATUS_RESULT_ERROR;
                 break;
             case RESULT_BUSY_COMPILING:
-                color1 = color;
+                valueColor = colorTitle;
                 rcodename = LanguageEntries.GUI_STATUS_RESULT_BUSY;
                 break;
             case RESULT_INCONSISTENT:
-                color1 = 0xB00000;
+                valueColor = 0xB00000;
                 rcodename = LanguageEntries.GUI_STATUS_RESULT_INCONSISTENT;
                 break;
             default:
-                color1 = color;
+                valueColor = colorTitle;
                 rcodename = LanguageEntries.GUI_STATUS_RESULT_NONE;
                 break;
         }
 
-        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_COMPILERESULT), col0, row += 10, color);
-        fontRendererObj.drawString(I18n.format(rcodename), col1, row, color1);
+        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_COMPILERESULT), col0, row += 10, colorTitle);
+        fontRendererObj.drawString(I18n.format(rcodename), col1, row, valueColor);
 
         float balloonratio = (float) rballoons / rblocks;
-        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_SHIPTYPE), col0, row += 10, color);
+        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_SHIPTYPE), col0, row += 10, colorTitle);
         if (rblocks == 0) {
-            fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_TYPEUNKNOWN), col1, row, color);
+            fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_TYPEUNKNOWN), col1, row, colorTitle);
         } else {
-            fontRendererObj.drawString(I18n.format(balloonratio > ArchimedesShipMod.instance.getNetworkConfig().getShared().flyBalloonRatio ? LanguageEntries.GUI_STATUS_TYPEAIRSHIP : LanguageEntries.GUI_STATUS_TYPEBOAT), col1, row, color);
+            fontRendererObj.drawString(I18n.format(balloonratio > ArchimedesShipMod.instance.getNetworkConfig().getShared().flyBalloonRatio ? LanguageEntries.GUI_STATUS_TYPEAIRSHIP : LanguageEntries.GUI_STATUS_TYPEBOAT), col1, row, colorTitle);
         }
 
-        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_COUNTBLOCK), col0, row += 10, color);
-        fontRendererObj.drawString(String.valueOf(rblocks), col1, row, color);
+        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_COUNTBLOCK), col0, row += 10, colorTitle);
+        fontRendererObj.drawString(String.valueOf(rblocks), col1, row, colorTitle);
 
-        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_COUNTBALLOON), col0, row += 10, color);
-        fontRendererObj.drawString(String.valueOf(rballoons) + " (" + (int) (balloonratio * 100f) + "%)", col1, row, color);
+        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_COUNTBALLOON), col0, row += 10, colorTitle);
+        fontRendererObj.drawString(String.valueOf(rballoons) + " (" + (int) (balloonratio * 100f) + "%)", col1, row, colorTitle);
 
-        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_COUNTTILE), col0, row += 10, color);
-        fontRendererObj.drawString(String.valueOf(rtes), col1, row, color);
+        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_COUNTTILE), col0, row += 10, colorTitle);
+        fontRendererObj.drawString(String.valueOf(rtes), col1, row, colorTitle);
 
-        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_MASS), col0, row += 10, color);
-        fontRendererObj.drawString(String.format(Locale.ROOT, "%.1f %s", rmass, I18n.format(LanguageEntries.GUI_STATUS_MASSUNIT)), col1, row, color);
+        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_MASS), col0, row += 10, colorTitle);
+        fontRendererObj.drawString(String.format(Locale.ROOT, "%.1f %s", rmass, I18n.format(LanguageEntries.GUI_STATUS_MASSUNIT)), col1, row, colorTitle);
     }
 
     @Override

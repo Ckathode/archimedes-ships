@@ -7,6 +7,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 
 import darkevilmac.archimedes.common.entity.EntityShip;
+import darkevilmac.archimedes.common.tileentity.TileEntityAnchorPoint;
 import darkevilmac.archimedes.common.tileentity.TileEntityEngine;
 import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
 
@@ -34,6 +35,11 @@ public class ASGuiHandler implements IGuiHandler {
                     return new ContainerEngine((TileEntityEngine) te, player);
                 }
                 return null;
+            case 4:
+                te = world.getTileEntity(pos);
+                if (te instanceof TileEntityAnchorPoint) {
+                    return new ContainerAnchorPoint((TileEntityAnchorPoint) te, player);
+                }
             default:
                 return null;
         }
@@ -49,19 +55,21 @@ public class ASGuiHandler implements IGuiHandler {
                 if (te instanceof TileEntityHelm) {
                     return new GuiHelm((TileEntityHelm) te, player);
                 }
-                return null;
             case 2:
                 if (player.getRidingEntity() instanceof EntityShip) {
                     EntityShip ship = (EntityShip) player.getRidingEntity();
                     return new GuiShip(ship, player);
                 }
-                return null;
             case 3:
                 te = world.getTileEntity(pos);
                 if (te instanceof TileEntityEngine) {
                     return new GuiEngine((TileEntityEngine) te, player);
                 }
-                return null;
+            case 4:
+                te = world.getTileEntity(pos);
+                if (te instanceof TileEntityAnchorPoint) {
+                    return new GuiAnchorPoint((TileEntityAnchorPoint) te, player);
+                }
             default:
                 return null;
         }

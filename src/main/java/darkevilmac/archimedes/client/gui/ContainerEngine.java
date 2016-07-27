@@ -46,29 +46,29 @@ public class ContainerEngine extends Container {
      * someone does that.
      */
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2) {
-        ItemStack itemstack = null;
-        Slot slot = this.inventorySlots.get(par2);
+    public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int slotNum) {
+        ItemStack stackClone = null;
+        Slot slot = this.inventorySlots.get(slotNum);
 
         if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
-            itemstack = itemstack1.copy();
+            ItemStack stack = slot.getStack();
+            stackClone = stack.copy();
 
-            if (par2 < 4) {
-                if (!this.mergeItemStack(itemstack1, 4, this.inventorySlots.size(), true)) {
+            if (slotNum < this.tileEntity.getSizeInventory()) {
+                if (!this.mergeItemStack(stack, this.tileEntity.getSizeInventory(), this.inventorySlots.size(), true)) {
                     return null;
                 }
-            } else if (!this.mergeItemStack(itemstack1, 0, 4, false)) {
+            } else if (!this.mergeItemStack(stack, 0, this.tileEntity.getSizeInventory(), false)) {
                 return null;
             }
 
-            if (itemstack1.stackSize == 0) {
+            if (stack.stackSize == 0) {
                 slot.putStack(null);
             } else {
                 slot.onSlotChanged();
             }
         }
 
-        return itemstack;
+        return stackClone;
     }
 }

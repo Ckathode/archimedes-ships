@@ -23,57 +23,45 @@ public class ContainerAnchorPoint extends Container {
 
     @Override
     public boolean canInteractWith(EntityPlayer player) {
-        return player.worldObj.getTileEntity(tileEntity.getPos()) == tileEntity && player.getDistanceSq(tileEntity.getPos()) < 25D;
+        return tileEntity.isUseableByPlayer(player);
     }
 
     protected void bindPlayerInventory(InventoryPlayer inventoryPlayer) {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
-                int xOff = 40;
-                int yOff = 90 + 16;
-                addSlotToContainer(new Slot(inventoryPlayer, j + i * 9 + 9, 8 + j * 18 + xOff, 84 + i * 18 + yOff));
+                addSlotToContainer(new Slot(inventoryPlayer, j + i * 9 + 9, 48 + j * 18, 124 + i * 18));
             }
         }
 
         for (int i = 0; i < 9; i++) {
-            int xOff = 40;
-            int yOff = 90 + 16;
-            addSlotToContainer(new Slot(inventoryPlayer, i, 8 + i * 18 + xOff, 142 + yOff));
+            addSlotToContainer(new Slot(inventoryPlayer, i, 48 + i * 18, 182));
         }
     }
 
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
-        ItemStack stack = null;
-        Slot slotObject = inventorySlots.get(slot);
+    public ItemStack transferStackInSlot(EntityPlayer player, int slotNum) {
+        ItemStack itemstack = null;
+        Slot slot = this.inventorySlots.get(slotNum);
 
-        //null checks and checks if the item can be stacked (maxStackSize > 1)
-        if (slotObject != null && slotObject.getHasStack()) {
-            ItemStack stackInSlot = slotObject.getStack();
-            stack = stackInSlot.copy();
+        if (slot != null && slot.getHasStack()) {
+            ItemStack itemstack1 = slot.getStack();
+            itemstack = itemstack1.copy();
 
-            //merges the item into player inventory since its in the tileEntity
-            if (slot < 9) {
-                if (!this.mergeItemStack(stackInSlot, 0, 35, true)) {
+            if (slotNum < 4) {
+                if (!this.mergeItemStack(itemstack1, 4, this.inventorySlots.size(), true)) {
                     return null;
                 }
-            }
-            //places it into the tileEntity is possible since its in the player inventory
-            else if (!this.mergeItemStack(stackInSlot, 0, 9, false)) {
+            } else if (!this.mergeItemStack(itemstack1, 0, 4, false)) {
                 return null;
             }
 
-            if (stackInSlot.stackSize == 0) {
-                slotObject.putStack(null);
+            if (itemstack1.stackSize == 0) {
+                slot.putStack(null);
             } else {
-                slotObject.onSlotChanged();
+                slot.onSlotChanged();
             }
-
-            if (stackInSlot.stackSize == stack.stackSize) {
-                return null;
-            }
-            slotObject.onPickupFromSlot(player, stackInSlot);
         }
-        return stack;
+
+        return itemstack;
     }
 }
