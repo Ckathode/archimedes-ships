@@ -1,6 +1,5 @@
 package darkevilmac.archimedes.common.tileentity;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -9,30 +8,23 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 import darkevilmac.archimedes.client.LanguageEntries;
 import darkevilmac.archimedes.common.object.ArchimedesObjects;
-import darkevilmac.archimedes.common.util.NBTTagUtils;
 import darkevilmac.movingworld.common.chunk.mobilechunk.MobileChunk;
 import darkevilmac.movingworld.common.entity.EntityMovingWorld;
 import darkevilmac.movingworld.common.tile.IMovingWorldTileEntity;
 
 public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTileEntity, IInventory {
 
-    public Instance instance;
+    public AnchorInstance instance;
     public ItemStack item;
     private EntityMovingWorld activeShip;
 
     public TileEntityAnchorPoint() {
         super();
         activeShip = null;
-        instance = new Instance();
+        instance = new AnchorInstance();
     }
 
     @Override
@@ -47,8 +39,8 @@ public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTil
         }
 
         NBTTagCompound instanceCompound = tag.getCompoundTag("instance");
-        if (instanceCompound.getBoolean("anchorInstance")) {
-            instance = new Instance();
+        if (instanceCompound.getBoolean("instance")) {
+            instance = new AnchorInstance();
             instance.deserializeNBT(instanceCompound);
         }
 
@@ -194,114 +186,9 @@ public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTil
         return false;
     }
 
-    public enum InstanceType {
-        FORSHIP, FORLAND;
-
-        @Override
-        public String toString() {
-            if (FMLLaunchHandler.side().isClient())
-                return this == FORSHIP ? I18n.format(LanguageEntries.GUI_ANCHOR_MODE_SHIP) : I18n.format(LanguageEntries.GUI_ANCHOR_MODE_WORLD);
-            else return super.toString();
-        }
-
-        public InstanceType opposite() {
-            return this == FORSHIP ? FORLAND : FORSHIP;
-        }
-    }
-
-    public class Instance implements INBTSerializable<NBTTagCompound> {
-        /**
-         * A unique identifier for this anchor, essentially a verification check for dimensions.
-         */
-        private UUID identifier;
-        private InstanceType type;
-        /**
-         * The anchors related to our instance, stores their position in world as well as their
-         * UUID, used for checking if we're in range as well as notifying an anchor if one is
-         * removed from the world.
-         **/
-        private Map<UUID, BlockPos> relatedAnchors;
-
-        public Instance() {
-            this.identifier = UUID.randomUUID();
-            this.type = InstanceType.FORLAND;
-            this.relatedAnchors = new HashMap<UUID, BlockPos>();
-        }
-
-        public UUID getIdentifier() {
-            return identifier;
-        }
-
-        public void setIdentifier(UUID identifier) {
-            this.identifier = identifier;
-        }
-
-        public InstanceType getType() {
-            return type;
-        }
-
-        public void setType(InstanceType type) {
-            this.type = type;
-        }
-
-        public Map<UUID, BlockPos> getRelatedAnchors() {
-            return relatedAnchors;
-        }
-
-        public void setRelatedAnchors(Map<UUID, BlockPos> relatedAnchors) {
-            this.relatedAnchors = relatedAnchors;
-        }
-
-
-        @Override
-        public NBTTagCompound serializeNBT() {
-            NBTTagCompound tag = new NBTTagCompound();
-
-            tag.setBoolean("anchorInstance", true);
-            tag.setBoolean("type", type == InstanceType.FORSHIP);
-            tag.setUniqueId("identifier", identifier);
-
-
-            if (!relatedAnchors.isEmpty()) {
-                NBTTagCompound relatedAnchorsCompound = new NBTTagCompound();
-                relatedAnchorsCompound.setInteger("size", relatedAnchors.size());
-
-                int curEntry = 0;
-                for (HashMap.Entry<UUID, BlockPos> e : relatedAnchors.entrySet()) {
-                    NBTTagCompound entry = new NBTTagCompound();
-                    entry.setUniqueId("identifier", e.getKey());
-                    NBTTagUtils.writeVec3iToNBT(entry, "related", e.getValue());
-                    relatedAnchorsCompound.setTag(String.valueOf(curEntry), entry);
-                    curEntry++;
-                }
-
-                tag.setTag("relatedAnchorsCompound", relatedAnchorsCompound);
-            }
-
-            return tag;
-        }
-
-        @Override
-        public void deserializeNBT(NBTTagCompound tag) {
-            if (!tag.getBoolean("anchorInstance"))
-                throw new IllegalArgumentException("NBT provided for deserialization is not valid for an anchor point! " + tag.toString());
-
-            this.type = tag.getBoolean("type") ? InstanceType.FORSHIP : InstanceType.FORLAND;
-            this.identifier = tag.getUniqueId("identifier");
-
-            if (tag.hasKey("relatedAnchorsCompound")) {
-                NBTTagCompound relatedAnchorsCompound = tag.getCompoundTag("relatedAnchorsCompound");
-                int size = relatedAnchorsCompound.getInteger("size");
-
-                for (int entry = 0; entry < size; entry++) {
-                    NBTTagCompound entryCompound = relatedAnchorsCompound.getCompoundTag(String.valueOf(entry));
-                    BlockPos entryPos = new BlockPos(NBTTagUtils.readVec3iFromNBT(entryCompound, "related"));
-                    UUID entryIdentifier = entryCompound.getUniqueId("identifier");
-
-                    relatedAnchors.put(entryIdentifier, entryPos);
-                }
-            }
-        }
+    @Override
+    public String toString() {
+        return String.format("TileEntityAnchorPoint at {X: %i Y: %i Z: %i} with state {%s}", pos.getX(), pos.getY(), pos.getZ(), worldObj.getBlockState(pos));
     }
 
 }

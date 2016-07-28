@@ -15,6 +15,7 @@ import org.lwjgl.opengl.GL11;
 
 import darkevilmac.archimedes.client.LanguageEntries;
 import darkevilmac.archimedes.common.object.ArchimedesObjects;
+import darkevilmac.archimedes.common.tileentity.AnchorInstance;
 import darkevilmac.archimedes.common.tileentity.TileEntityAnchorPoint;
 
 
@@ -48,7 +49,6 @@ public class GuiAnchorPoint extends GuiContainer {
 
         btnLink = new GuiButton(1, linkX, linkY,
                 width, 20, I18n.format(LanguageEntries.GUI_ANCHOR_LINK));
-        btnLink.enabled = anchorPoint.item != null && anchorPoint.instance.getType() == TileEntityAnchorPoint.InstanceType.FORLAND;
 
         int switchX = guiLeft + 149;
         int switchY = guiTop + 79;
@@ -100,7 +100,7 @@ public class GuiAnchorPoint extends GuiContainer {
     protected void mouseReleased(int mouseX, int mouseY, int state) {
         super.mouseReleased(mouseX, mouseY, state);
 
-        btnLink.enabled = anchorPoint.item != null && anchorPoint.instance.getType() == TileEntityAnchorPoint.InstanceType.FORLAND;
+        btnLink.enabled = anchorPoint.item != null && anchorPoint.instance.getType() == AnchorInstance.InstanceType.FORLAND;
     }
 
 }
