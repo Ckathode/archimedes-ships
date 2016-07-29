@@ -29,7 +29,6 @@ import darkevilmac.archimedes.common.entity.ShipAssemblyInteractor;
 import darkevilmac.archimedes.common.tileentity.AnchorInstance;
 import darkevilmac.archimedes.common.tileentity.TileEntityAnchorPoint;
 import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
-import darkevilmac.archimedes.common.util.NBTTagUtils;
 import darkevilmac.movingworld.common.chunk.assembly.AssembleResult;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -150,90 +149,96 @@ public class ArchimedesShipsNetworking {
                     }
                 });
 
-        builder = builder.packet("ClientAnchorPointActionMessage").boundTo(Side.SERVER).with(DataType.NBT_COMPOUND, "info").handledOnMainThreadBy(new BiConsumer<EntityPlayer, Token>() {
-            @Override
-            public void accept(EntityPlayer entityPlayer, Token token) {
-                NBTTagCompound info = token.getNBT("info");
+        builder = builder.packet("ClientAnchorPointActionMessage").boundTo(Side.SERVER)
+                .with(DataType.BYTE, "actionId")
+                .with(DataType.INT, "tileX")
+                .with(DataType.INT, "tileY")
+                .with(DataType.INT, "tileZ")
+                .handledOnMainThreadBy(new BiConsumer<EntityPlayer, Token>() {
+                    @Override
+                    public void accept(EntityPlayer entityPlayer, Token token) {
+                        World world = entityPlayer.worldObj;
+                        BlockPos anchorPos = new BlockPos(token.getInt("tileX"), token.getInt("tileY"), token.getInt("tileZ"));
+                        if (world == null || world.getTileEntity(anchorPos) == null || !(world.getTileEntity(anchorPos) instanceof TileEntityAnchorPoint))
+                            return;
 
-                World world = DimensionManager.getWorld(info.getInteger("dimID"));
-                BlockPos anchorPos = (BlockPos) NBTTagUtils.readVec3iFromNBT(info, "anchorPos");
-                TileEntityAnchorPoint anchorPoint = (TileEntityAnchorPoint) world.getTileEntity(anchorPos);
+                        TileEntityAnchorPoint anchorPoint = (TileEntityAnchorPoint) world.getTileEntity(anchorPos);
 
-                if (token.getInt("actionId") == 0) {
-                    // Switch
-                    /**
-                     * Clear the entries as well as notify the entries to clear us from them.
-                     * Then switch mode.
-                     */
-                    for (HashMap.Entry<UUID, BlockPos> e : anchorPoint.instance.getRelatedAnchors().entrySet()) {
-                        if (world.getTileEntity(e.getValue()) != null && world.getTileEntity(e.getValue()) instanceof TileEntityAnchorPoint) {
-                            TileEntityAnchorPoint entryAnchorPoint = (TileEntityAnchorPoint) world.getTileEntity(e.getValue());
-                            entryAnchorPoint.instance.removeRelation(anchorPoint.instance.getIdentifier());
-                        } else {
-                            ArchimedesShipMod.modLog.error("Invalid entries in anchor tile: " + anchorPoint.toString() + ", cleaning.");
-                        }
-                    }
-
-                    anchorPoint.instance.clearRelations();
-                    anchorPoint.instance.setType(anchorPoint.instance.getType().opposite());
-                    anchorPoint.instance.setIdentifier(UUID.randomUUID());
-                } else if (anchorPoint.item != null) {
-                    // Link
-                    /**
-                     * As a note, we don't set the relation of our own anchor because the anchor we
-                     * would relate it to has yet to be placed, we set this info when the anchor is placed.
-                     */
-                    if (anchorPoint.instance.getType() == AnchorInstance.InstanceType.FORLAND) {
-                        if (!anchorPoint.item.getTagCompound().hasKey("instance")) {
-                            AnchorInstance itemAnchorInstanceTag = new AnchorInstance();
-
-                            itemAnchorInstanceTag.setType(AnchorInstance.InstanceType.FORSHIP);
-                            itemAnchorInstanceTag.setIdentifier(UUID.randomUUID());
-                            itemAnchorInstanceTag.addRelation(anchorPoint.instance.getIdentifier(), anchorPos);
-                            anchorPoint.item.getTagCompound().setTag("instance", itemAnchorInstanceTag.serializeNBT());
-                        } else {
-                            AnchorInstance instanceFromKey = new AnchorInstance();
-                            instanceFromKey.deserializeNBT(anchorPoint.item.getTagCompound().getCompoundTag("instance"));
-
-                            if (instanceFromKey.getType() == AnchorInstance.InstanceType.FORLAND) {
-                                // Incorrect type, clear it.
-                                instanceFromKey.setIdentifier(UUID.randomUUID());
-                                instanceFromKey.setType(AnchorInstance.InstanceType.FORSHIP);
-                                instanceFromKey.clearRelations();
-                            }
-
-                            instanceFromKey.addRelation(anchorPoint.instance.getIdentifier(), anchorPos);
-                            anchorPoint.item.getTagCompound().setTag("instance", instanceFromKey.serializeNBT());
-                        }
-                    } else {
-                        if (!anchorPoint.item.getTagCompound().hasKey("instance")) {
-                            if (!anchorPoint.item.getTagCompound().hasKey("instance")) {
-                                AnchorInstance itemAnchorInstanceTag = new AnchorInstance();
-
-                                itemAnchorInstanceTag.setType(AnchorInstance.InstanceType.FORLAND);
-                                itemAnchorInstanceTag.setIdentifier(UUID.randomUUID());
-                                itemAnchorInstanceTag.addRelation(anchorPoint.instance.getIdentifier(), anchorPos);
-                                anchorPoint.item.getTagCompound().setTag("instance", itemAnchorInstanceTag.serializeNBT());
-                            } else {
-                                AnchorInstance instanceFromKey = new AnchorInstance();
-                                instanceFromKey.deserializeNBT(anchorPoint.item.getTagCompound().getCompoundTag("instance"));
-
-                                if (instanceFromKey.getType() == AnchorInstance.InstanceType.FORSHIP) {
-                                    // Incorrect type, clear it.
-                                    instanceFromKey.setIdentifier(UUID.randomUUID());
-                                    instanceFromKey.setType(AnchorInstance.InstanceType.FORLAND);
-                                    instanceFromKey.clearRelations();
+                        if (token.getInt("actionId") == 0) {
+                            // Switch
+                            /**
+                             * Clear the entries as well as notify the entries to clear us from them.
+                             * Then switch mode.
+                             */
+                            for (HashMap.Entry<UUID, BlockPos> e : anchorPoint.instance.getRelatedAnchors().entrySet()) {
+                                if (world.getTileEntity(e.getValue()) != null && world.getTileEntity(e.getValue()) instanceof TileEntityAnchorPoint) {
+                                    TileEntityAnchorPoint entryAnchorPoint = (TileEntityAnchorPoint) world.getTileEntity(e.getValue());
+                                    entryAnchorPoint.instance.removeRelation(anchorPoint.instance.getIdentifier());
+                                } else {
+                                    ArchimedesShipMod.modLog.error("Invalid entries in anchor tile: " + anchorPoint.toString() + ", cleaning.");
                                 }
+                            }
 
-                                instanceFromKey.addRelation(anchorPoint.instance.getIdentifier(), anchorPos);
-                                anchorPoint.item.getTagCompound().setTag("instance", instanceFromKey.serializeNBT());
+                            anchorPoint.instance.clearRelations();
+                            anchorPoint.instance.setType(anchorPoint.instance.getType().opposite());
+                            anchorPoint.instance.setIdentifier(UUID.randomUUID());
+                        } else if (anchorPoint.content != null) {
+                            // Link
+                            /**
+                             * As a note, we don't set the relation of our own anchor because the anchor we
+                             * would relate it to has yet to be placed, we set this info when the anchor is placed.
+                             */
+                            if (anchorPoint.instance.getType() == AnchorInstance.InstanceType.FORLAND) {
+                                if (!anchorPoint.content.getTagCompound().hasKey("instance")) {
+                                    AnchorInstance itemAnchorInstanceTag = new AnchorInstance();
+
+                                    itemAnchorInstanceTag.setType(AnchorInstance.InstanceType.FORSHIP);
+                                    itemAnchorInstanceTag.setIdentifier(UUID.randomUUID());
+                                    itemAnchorInstanceTag.addRelation(anchorPoint.instance.getIdentifier(), anchorPos);
+                                    anchorPoint.content.getTagCompound().setTag("instance", itemAnchorInstanceTag.serializeNBT());
+                                } else {
+                                    AnchorInstance instanceFromKey = new AnchorInstance();
+                                    instanceFromKey.deserializeNBT(anchorPoint.content.getTagCompound().getCompoundTag("instance"));
+
+                                    if (instanceFromKey.getType() == AnchorInstance.InstanceType.FORLAND) {
+                                        // Incorrect type, clear it.
+                                        instanceFromKey.setIdentifier(UUID.randomUUID());
+                                        instanceFromKey.setType(AnchorInstance.InstanceType.FORSHIP);
+                                        instanceFromKey.clearRelations();
+                                    }
+
+                                    instanceFromKey.addRelation(anchorPoint.instance.getIdentifier(), anchorPos);
+                                    anchorPoint.content.getTagCompound().setTag("instance", instanceFromKey.serializeNBT());
+                                }
+                            } else {
+                                if (!anchorPoint.content.getTagCompound().hasKey("instance")) {
+                                    if (!anchorPoint.content.getTagCompound().hasKey("instance")) {
+                                        AnchorInstance itemAnchorInstanceTag = new AnchorInstance();
+
+                                        itemAnchorInstanceTag.setType(AnchorInstance.InstanceType.FORLAND);
+                                        itemAnchorInstanceTag.setIdentifier(UUID.randomUUID());
+                                        itemAnchorInstanceTag.addRelation(anchorPoint.instance.getIdentifier(), anchorPos);
+                                        anchorPoint.content.getTagCompound().setTag("instance", itemAnchorInstanceTag.serializeNBT());
+                                    } else {
+                                        AnchorInstance instanceFromKey = new AnchorInstance();
+                                        instanceFromKey.deserializeNBT(anchorPoint.content.getTagCompound().getCompoundTag("instance"));
+
+                                        if (instanceFromKey.getType() == AnchorInstance.InstanceType.FORSHIP) {
+                                            // Incorrect type, clear it.
+                                            instanceFromKey.setIdentifier(UUID.randomUUID());
+                                            instanceFromKey.setType(AnchorInstance.InstanceType.FORLAND);
+                                            instanceFromKey.clearRelations();
+                                        }
+
+                                        instanceFromKey.addRelation(anchorPoint.instance.getIdentifier(), anchorPos);
+                                        anchorPoint.content.getTagCompound().setTag("instance", instanceFromKey.serializeNBT());
+                                    }
+                                }
                             }
                         }
-                    }
-                }
 
-            }
-        });
+                    }
+                });
 
         builder = builder.packet("ControlInputMessage").boundTo(Side.SERVER)
                 .with(DataType.INT, "dimID")

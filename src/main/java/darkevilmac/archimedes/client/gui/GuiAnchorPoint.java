@@ -14,8 +14,8 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import darkevilmac.archimedes.client.LanguageEntries;
+import darkevilmac.archimedes.common.network.ArchimedesShipsNetworking;
 import darkevilmac.archimedes.common.object.ArchimedesObjects;
-import darkevilmac.archimedes.common.tileentity.AnchorInstance;
 import darkevilmac.archimedes.common.tileentity.TileEntityAnchorPoint;
 
 
@@ -49,6 +49,7 @@ public class GuiAnchorPoint extends GuiContainer {
 
         btnLink = new GuiButton(1, linkX, linkY,
                 width, 20, I18n.format(LanguageEntries.GUI_ANCHOR_LINK));
+        btnLink.enabled = anchorPoint.content != null;
 
         int switchX = guiLeft + 149;
         int switchY = guiTop + 79;
@@ -90,9 +91,18 @@ public class GuiAnchorPoint extends GuiContainer {
     @Override
     protected void actionPerformed(GuiButton button) {
         if (button == btnLink) {
-
+            ArchimedesShipsNetworking.NETWORK.send().packet("ClientAnchorPointActionMessage")
+                    .with("actionId", 1)
+                    .with("tileX", anchorPoint.getPos().getX())
+                    .with("tileX", anchorPoint.getPos().getY())
+                    .with("tileX", anchorPoint.getPos().getZ())
+                    .toServer();
         } else if (button == btnSwitch) {
-
+            ArchimedesShipsNetworking.NETWORK.send().packet("ClientAnchorPointActionMessage")
+                    .with("actionId", 0)
+                    .with("tileX", anchorPoint.getPos().getX())
+                    .with("tileX", anchorPoint.getPos().getY())
+                    .with("tileX", anchorPoint.getPos().getZ()).toServer();
         }
     }
 
@@ -100,7 +110,7 @@ public class GuiAnchorPoint extends GuiContainer {
     protected void mouseReleased(int mouseX, int mouseY, int state) {
         super.mouseReleased(mouseX, mouseY, state);
 
-        btnLink.enabled = anchorPoint.item != null && anchorPoint.instance.getType() == AnchorInstance.InstanceType.FORLAND;
+        btnLink.enabled = anchorPoint.content != null;
     }
 
 }

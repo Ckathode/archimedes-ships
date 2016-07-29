@@ -4,6 +4,7 @@ package darkevilmac.archimedes.client.gui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
@@ -13,12 +14,14 @@ public class ContainerAnchorPoint extends Container {
     public final TileEntityAnchorPoint tileEntity;
     public final EntityPlayer player;
 
+
     public ContainerAnchorPoint(TileEntityAnchorPoint te, EntityPlayer entityplayer) {
         super();
         tileEntity = te;
         player = entityplayer;
 
         bindPlayerInventory(entityplayer.inventory);
+        addSlotToContainer(new SlotAnchor(tileEntity, 0, 32 + 17, 64 + 17));
     }
 
     @Override
@@ -64,4 +67,16 @@ public class ContainerAnchorPoint extends Container {
 
         return itemstack;
     }
+
+    public class SlotAnchor extends Slot {
+        public SlotAnchor(IInventory inventoryIn, int index, int xPosition, int yPosition) {
+            super(inventoryIn, index, xPosition, yPosition);
+        }
+
+        @Override
+        public boolean isItemValid(ItemStack itemstack) {
+            return TileEntityAnchorPoint.isItemAnchor(itemstack);
+        }
+    }
+
 }

@@ -3,11 +3,16 @@ package darkevilmac.archimedes.common.tileentity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.Objects;
+
+import javax.annotation.Nullable;
 
 import darkevilmac.archimedes.client.LanguageEntries;
 import darkevilmac.archimedes.common.object.ArchimedesObjects;
@@ -18,13 +23,14 @@ import darkevilmac.movingworld.common.tile.IMovingWorldTileEntity;
 public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTileEntity, IInventory {
 
     public AnchorInstance instance;
-    public ItemStack item;
+    public ItemStack content;
     private EntityMovingWorld activeShip;
 
     public TileEntityAnchorPoint() {
         super();
         activeShip = null;
         instance = new AnchorInstance();
+        content = null;
     }
 
     @Override
@@ -45,9 +51,9 @@ public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTil
         }
 
         if (tag.hasKey("item")) {
-            item = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("item"));
+            content = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("item"));
         } else {
-            item = null;
+            content = null;
         }
     }
 
@@ -63,10 +69,10 @@ public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTil
             tag.setTag("instance", instanceCompound);
         }
 
-        if (item == null) {
+        if (content == null) {
             tag.removeTag("item");
         } else {
-            item.writeToNBT(tag.getCompoundTag("item"));
+            content.writeToNBT(tag.getCompoundTag("item"));
         }
 
         return tag;
@@ -89,91 +95,6 @@ public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTil
 
     @Override
     public void tick(MobileChunk mobileChunk) {
-        // No implementation
-    }
-
-    @Override
-    public int getSizeInventory() {
-        return 1;
-    }
-
-
-    @Override
-    public ItemStack getStackInSlot(int index) {
-        if (index == 0) return item;
-        return null;
-    }
-
-    @Override
-    public ItemStack decrStackSize(int index, int count) {
-        if (index == 0 && item != null) {
-            item.stackSize -= count;
-            return item;
-        }
-        return null;
-    }
-
-
-    @Override
-    public ItemStack removeStackFromSlot(int index) {
-        if (index == 0 && item != null) {
-            ItemStack oldStack = item.copy();
-            item = null;
-            return oldStack;
-        }
-        return null;
-    }
-
-    @Override
-    public void setInventorySlotContents(int index, ItemStack stack) {
-        if (index == 0) {
-            item = stack;
-        }
-    }
-
-    @Override
-    public int getInventoryStackLimit() {
-        return 1;
-    }
-
-    @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
-        return this.worldObj.getTileEntity(this.pos) != this ? false : player.getDistanceSq((double) this.pos.getX() + 0.5D, (double) this.pos.getY() + 0.5D, (double) this.pos.getZ() + 0.5D) <= 64.0D;
-    }
-
-    @Override
-    public void openInventory(EntityPlayer player) {
-    }
-
-    @Override
-    public void closeInventory(EntityPlayer player) {
-    }
-
-    @Override
-    public boolean isItemValidForSlot(int index, ItemStack stack) {
-        return index == 0 && stack != null && stack.getItem() != null &&
-                stack.getItem().equals(Item.getItemFromBlock(ArchimedesObjects.blockAnchorPoint));
-    }
-
-    @Override
-    public int getField(int id) {
-        // Very useless methods that were implemented because mojang I guess.
-        return 0;
-    }
-
-    @Override
-    public void setField(int id, int value) {
-        // Very useless methods that were implemented because mojang I guess.
-    }
-
-    @Override
-    public int getFieldCount() {
-        return 0;
-    }
-
-    @Override
-    public void clear() {
-        item = null;
     }
 
     @Override
@@ -191,4 +112,96 @@ public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTil
         return String.format("TileEntityAnchorPoint at {X: %i Y: %i Z: %i} with state {%s}", pos.getX(), pos.getY(), pos.getZ(), worldObj.getBlockState(pos));
     }
 
+    @Override
+    public int getSizeInventory() {
+        return 1;
+    }
+
+    @Nullable
+    @Override
+    public ItemStack getStackInSlot(int index) {
+        if (index != 0) {
+            throw new IndexOutOfBoundsException();
+        } else return content;
+    }
+
+    @Nullable
+    @Override
+    public ItemStack decrStackSize(int index, int count) {
+        ItemStack splitResult = ItemStackHelper.getAndSplit(new ItemStack[]{content}, index, count);
+        content = splitResult;
+        return splitResult;
+    }
+
+    /**
+     * Removes a stack from the given slot and returns it.
+     */
+    @Nullable
+    @Override
+    public ItemStack removeStackFromSlot(int index) {
+        ItemStack removeResult = ItemStackHelper.getAndRemove(new ItemStack[]{content}, index);
+        content = removeResult;
+        return removeResult;
+    }
+
+    @Override
+    public void setInventorySlotContents(int index, @Nullable ItemStack stack) {
+        if (index != 0)
+            throw new IndexOutOfBoundsException();
+
+        this.content = stack;
+        if (stack != null && stack.stackSize > this.getInventoryStackLimit()) {
+            stack.stackSize = this.getInventoryStackLimit();
+        }
+    }
+
+    @Override
+    public int getInventoryStackLimit() {
+        return 1;
+    }
+
+    @Override
+    public boolean isUseableByPlayer(EntityPlayer player) {
+        return this.worldObj.getTileEntity(this.pos) != this ? false : player.getDistanceSq((double) this.pos.getX() + 0.5D, (double) this.pos.getY() + 0.5D, (double) this.pos.getZ() + 0.5D) <= 64.0D;
+    }
+
+    @Override
+    public void openInventory(EntityPlayer player) {
+
+    }
+
+    @Override
+    public void closeInventory(EntityPlayer player) {
+
+    }
+
+    @Override
+    public boolean isItemValidForSlot(int index, ItemStack stack) {
+        boolean accepted = index == 0 &&
+                (stack == null || Objects.equals(stack.getItem(), Item.getItemFromBlock(ArchimedesObjects.blockAnchorPoint)));
+        return accepted;
+    }
+
+    @Override
+    public int getField(int id) {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value) {
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public void clear() {
+        content = null;
+    }
+
+    public static boolean isItemAnchor(ItemStack itemstack) {
+        return itemstack != null && Objects.equals(itemstack.getItem(), Item.getItemFromBlock(ArchimedesObjects.blockAnchorPoint));
+    }
 }

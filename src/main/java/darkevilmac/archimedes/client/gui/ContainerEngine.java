@@ -3,8 +3,10 @@ package darkevilmac.archimedes.client.gui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityFurnace;
 
 import darkevilmac.archimedes.common.tileentity.TileEntityEngine;
 
@@ -70,5 +72,16 @@ public class ContainerEngine extends Container {
         }
 
         return stackClone;
+    }
+
+    public static class SlotFuel extends Slot {
+        public SlotFuel(IInventory inventory, int id, int x, int y) {
+            super(inventory, id, x, y);
+        }
+
+        @Override
+        public boolean isItemValid(ItemStack itemstack) {
+            return TileEntityFurnace.isItemFuel(itemstack);
+        }
     }
 }
