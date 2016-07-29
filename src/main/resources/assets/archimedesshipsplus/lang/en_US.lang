@@ -74,6 +74,7 @@ gui.archimedes.shipstatus.result.inconsistent=Inconsistent
 gui.archimedes.anchor.title=Anchor Point
 gui.archimedes.anchor.pos=Position: %s
 gui.archimedes.anchor.type=Type: %s
+gui.archimedes.anchor.id=ID: %s
 gui.archimedes.anchor.link=Link
 gui.archimedes.anchor.switch=Switch Mode
 
@@ -85,3 +86,5 @@ gui.archimedes.shipinv.decompile=Disassemble
 gui.archimedes.shipinv.align=Align
 
 gui.archimedes.engine.title=Steam Engine Fuel
+
+gui.archimedes.item.tooltip.shift=Hold Shift

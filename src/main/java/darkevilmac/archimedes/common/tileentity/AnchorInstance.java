@@ -151,7 +151,16 @@ public class AnchorInstance implements INBTSerializable<NBTTagCompound> {
         }
 
         public InstanceType opposite() {
-            return this == FORSHIP ? FORLAND : FORSHIP;
+            switch (this) {
+                case FORLAND: {
+                    return FORSHIP;
+                }
+                case FORSHIP: {
+                    return FORLAND;
+                }
+            }
+
+            return this;
         }
     }
 }

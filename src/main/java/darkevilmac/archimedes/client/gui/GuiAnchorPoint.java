@@ -24,7 +24,7 @@ public class GuiAnchorPoint extends GuiContainer {
     public static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("archimedesshipsplus", "textures/gui/anchorPoint.png");
 
     private GuiButton btnLink, btnSwitch;
-    private TileEntityAnchorPoint anchorPoint;
+    public TileEntityAnchorPoint anchorPoint;
 
     public GuiAnchorPoint(TileEntityAnchorPoint te, EntityPlayer entityplayer) {
         super(new ContainerAnchorPoint(te, entityplayer));
@@ -92,17 +92,17 @@ public class GuiAnchorPoint extends GuiContainer {
     protected void actionPerformed(GuiButton button) {
         if (button == btnLink) {
             ArchimedesShipsNetworking.NETWORK.send().packet("ClientAnchorPointActionMessage")
-                    .with("actionId", 1)
+                    .with("actionID", 1)
                     .with("tileX", anchorPoint.getPos().getX())
-                    .with("tileX", anchorPoint.getPos().getY())
-                    .with("tileX", anchorPoint.getPos().getZ())
+                    .with("tileY", anchorPoint.getPos().getY())
+                    .with("tileZ", anchorPoint.getPos().getZ())
                     .toServer();
         } else if (button == btnSwitch) {
             ArchimedesShipsNetworking.NETWORK.send().packet("ClientAnchorPointActionMessage")
-                    .with("actionId", 0)
+                    .with("actionID", 0)
                     .with("tileX", anchorPoint.getPos().getX())
-                    .with("tileX", anchorPoint.getPos().getY())
-                    .with("tileX", anchorPoint.getPos().getZ()).toServer();
+                    .with("tileY", anchorPoint.getPos().getY())
+                    .with("tileZ", anchorPoint.getPos().getZ()).toServer();
         }
     }
 

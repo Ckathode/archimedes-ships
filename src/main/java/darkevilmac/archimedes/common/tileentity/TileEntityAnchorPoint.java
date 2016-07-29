@@ -1,5 +1,6 @@
 package darkevilmac.archimedes.common.tileentity;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -7,14 +8,18 @@ import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 
 import java.util.Objects;
 
 import javax.annotation.Nullable;
 
 import darkevilmac.archimedes.client.LanguageEntries;
+import darkevilmac.archimedes.client.gui.GuiAnchorPoint;
 import darkevilmac.archimedes.common.object.ArchimedesObjects;
 import darkevilmac.movingworld.common.chunk.mobilechunk.MobileChunk;
 import darkevilmac.movingworld.common.entity.EntityMovingWorld;
@@ -31,6 +36,31 @@ public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTil
         activeShip = null;
         instance = new AnchorInstance();
         content = null;
+    }
+
+    @Nullable
+    @Override
+    public SPacketUpdateTileEntity getUpdatePacket() {
+        return new SPacketUpdateTileEntity(this.pos, 5, this.getUpdateTag());
+    }
+
+    @Override
+    public NBTTagCompound getUpdateTag() {
+        return this.writeToNBT(new NBTTagCompound());
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
+        readFromNBT(packet.getNbtCompound());
+
+        if (FMLLaunchHandler.side().isClient()) {
+            if (Minecraft.getMinecraft().currentScreen != null && Minecraft.getMinecraft().currentScreen instanceof GuiAnchorPoint) {
+                GuiAnchorPoint activeGUI = (GuiAnchorPoint) Minecraft.getMinecraft().currentScreen;
+                if (Objects.equals(activeGUI.anchorPoint.pos, this.pos)) {
+                    activeGUI.initGui();
+                }
+            }
+        }
     }
 
     @Override
@@ -109,7 +139,7 @@ public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTil
 
     @Override
     public String toString() {
-        return String.format("TileEntityAnchorPoint at {X: %i Y: %i Z: %i} with state {%s}", pos.getX(), pos.getY(), pos.getZ(), worldObj.getBlockState(pos));
+        return String.format("TileEntityAnchorPoint at {X: %s Y: %s Z: %s} with state {%s} and instance {%s}", pos.getX(), pos.getY(), pos.getZ(), worldObj.getBlockState(pos), instance.toString());
     }
 
     @Override

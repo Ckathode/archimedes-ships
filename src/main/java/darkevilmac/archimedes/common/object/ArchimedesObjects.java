@@ -28,6 +28,7 @@ import darkevilmac.archimedes.common.object.block.BlockHelm;
 import darkevilmac.archimedes.common.object.block.BlockRecolourable;
 import darkevilmac.archimedes.common.object.block.BlockSeat;
 import darkevilmac.archimedes.common.object.block.BlockSecuredBed;
+import darkevilmac.archimedes.common.object.item.ItemBlockAnchorPoint;
 import darkevilmac.archimedes.common.object.item.ItemGaugeBlock;
 import darkevilmac.archimedes.common.object.item.ItemSecuredBed;
 import darkevilmac.archimedes.common.tileentity.TileEntityAnchorPoint;
@@ -104,7 +105,7 @@ public class ArchimedesObjects {
         registerBlock("crate_wood", blockCrateWood);
 
         blockAnchorPoint = new BlockAnchorPoint(Material.WOOD).setHardness(1f).setResistance(1F).setCreativeTab(ArchimedesShipMod.creativeTab);
-        registerBlock("anchorPoint", blockAnchorPoint);
+        registerBlock("anchorPoint", blockAnchorPoint, ItemBlockAnchorPoint.class);
 
         blockSecuredBed = new BlockSecuredBed().setHardness(0.2F);
         registerBlock("securedBed", blockSecuredBed, false);

@@ -150,7 +150,7 @@ public class ArchimedesShipsNetworking {
                 });
 
         builder = builder.packet("ClientAnchorPointActionMessage").boundTo(Side.SERVER)
-                .with(DataType.BYTE, "actionId")
+                .with(DataType.BYTE, "actionID")
                 .with(DataType.INT, "tileX")
                 .with(DataType.INT, "tileY")
                 .with(DataType.INT, "tileZ")
@@ -164,7 +164,7 @@ public class ArchimedesShipsNetworking {
 
                         TileEntityAnchorPoint anchorPoint = (TileEntityAnchorPoint) world.getTileEntity(anchorPos);
 
-                        if (token.getInt("actionId") == 0) {
+                        if (token.getInt("actionID") == 0) {
                             // Switch
                             /**
                              * Clear the entries as well as notify the entries to clear us from them.
@@ -182,6 +182,7 @@ public class ArchimedesShipsNetworking {
                             anchorPoint.instance.clearRelations();
                             anchorPoint.instance.setType(anchorPoint.instance.getType().opposite());
                             anchorPoint.instance.setIdentifier(UUID.randomUUID());
+                            anchorPoint.markDirty();
                         } else if (anchorPoint.content != null) {
                             // Link
                             /**
@@ -211,6 +212,9 @@ public class ArchimedesShipsNetworking {
                                     anchorPoint.content.getTagCompound().setTag("instance", instanceFromKey.serializeNBT());
                                 }
                             } else {
+                                if (anchorPoint.content.getTagCompound() == null) {
+                                    anchorPoint.content.setTagCompound(new NBTTagCompound());
+                                }
                                 if (!anchorPoint.content.getTagCompound().hasKey("instance")) {
                                     if (!anchorPoint.content.getTagCompound().hasKey("instance")) {
                                         AnchorInstance itemAnchorInstanceTag = new AnchorInstance();
@@ -236,7 +240,7 @@ public class ArchimedesShipsNetworking {
                                 }
                             }
                         }
-
+                        ((EntityPlayerMP) entityPlayer).connection.sendPacket(anchorPoint.getUpdatePacket());
                     }
                 });
 
