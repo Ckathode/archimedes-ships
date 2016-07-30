@@ -11,6 +11,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemCloth;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
+import net.minecraft.stats.Achievement;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -19,6 +20,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import java.util.HashMap;
 
 import darkevilmac.archimedes.ArchimedesShipMod;
+import darkevilmac.archimedes.client.LanguageEntries;
 import darkevilmac.archimedes.common.object.block.BlockAS;
 import darkevilmac.archimedes.common.object.block.BlockAnchorPoint;
 import darkevilmac.archimedes.common.object.block.BlockCrate;
@@ -57,6 +59,14 @@ public class ArchimedesObjects {
     public static Block blockSecuredBed;
 
     public static Item itemSecuredBed;
+
+    public static Achievement achievementAssembleFailure;
+    public static Achievement achievementAssembleSuccess;
+    public static Achievement achievementAssembleMount;
+    public static Achievement achievementCreateHelm;
+    public static Achievement achievementCreateEngine;
+    public static Achievement achievementSubmerseShip;
+    public static Achievement achievementFlyShip;
 
     public static Material materialFloater;
     public static HashMap<String, Block> registeredBlocks;
@@ -148,6 +158,31 @@ public class ArchimedesObjects {
 
         GameRegistry.addShapelessRecipe(new ItemStack(blockSecuredBed), Blocks.BED, Items.IRON_INGOT);
         GameRegistry.registerTileEntity(TileEntitySecuredBed.class, "archiSecuredBed");
+
+        achievementCreateHelm = new Achievement("achievement.archimedes.create.helm",
+                LanguageEntries.ACHIEVEMENT_CREATE_HELM, 5 + 4, 4, Item.getItemFromBlock(blockMarkShip), null);
+        achievementAssembleFailure = new Achievement("achievement.archimedes.assemble.failure",
+                LanguageEntries.ACHIEVEMENT_ASSEMBLE_FAILURE, 5 + 7, 6, Item.getItemFromBlock(blockMarkShip), achievementCreateHelm);
+        achievementAssembleSuccess = new Achievement("achievement.archimedes.assemble.success",
+                LanguageEntries.ACHIEVEMENT_ASSEMBLE_SUCCESS, 5 + 7, 4, Item.getItemFromBlock(blockMarkShip), achievementCreateHelm);
+        achievementAssembleMount = new Achievement("achievement.archimedes.assemble.mount",
+                LanguageEntries.ACHIEVEMENT_ASSEMBLE_MOUNT, 5 + 7, 2, Item.getItemFromBlock(blockSeat), achievementCreateHelm);
+        achievementFlyShip = new Achievement("achievement.archimedes.fly",
+                LanguageEntries.ACHIEVEMENT_FLY_SHIP, 5 + 9, 0, Item.getItemFromBlock(blockBalloon), achievementAssembleMount);
+        achievementSubmerseShip = new Achievement("achievement.archimedes.submerse",
+                LanguageEntries.ACHIEVEMENT_SUBMERSE_SHIP, 5 + 9, 2, Item.getItemFromBlock(blockAnchorPoint), achievementAssembleMount);
+
+        achievementCreateEngine = new Achievement("achievement.archimedes.create.engine",
+                LanguageEntries.ACHIEVEMENT_CREATE_ENGINE, 5 + 4, 1, Item.getItemFromBlock(blockEngine), null);
+
+        achievementCreateHelm.registerStat();
+        achievementAssembleFailure.registerStat();
+        achievementAssembleSuccess.registerStat();
+        achievementAssembleMount.registerStat();
+        achievementFlyShip.registerStat();
+        achievementSubmerseShip.registerStat();
+
+        achievementCreateEngine.registerStat();
     }
 
     public void postInit(FMLPostInitializationEvent e) {

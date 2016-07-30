@@ -21,6 +21,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import darkevilmac.archimedes.ArchimedesShipMod;
+import darkevilmac.archimedes.common.object.ArchimedesObjects;
 import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
 
 public class BlockHelm extends BlockDirectional implements ITileEntityProvider {
@@ -149,6 +150,10 @@ public class BlockHelm extends BlockDirectional implements ITileEntityProvider {
 
     @Override
     public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+        if (placer != null && placer instanceof EntityPlayer) {
+            ((EntityPlayer) placer).addStat(ArchimedesObjects.achievementCreateHelm);
+        }
+
         return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
     }
 

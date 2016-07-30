@@ -11,6 +11,7 @@ import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.common.entity.EntityShip;
 import darkevilmac.archimedes.common.entity.ShipAssemblyInteractor;
 import darkevilmac.archimedes.common.network.ArchimedesShipsNetworking;
+import darkevilmac.archimedes.common.object.ArchimedesObjects;
 import darkevilmac.movingworld.common.chunk.MovingWorldAssemblyInteractor;
 import darkevilmac.movingworld.common.chunk.assembly.AssembleResult;
 import darkevilmac.movingworld.common.chunk.mobilechunk.MobileChunk;
@@ -38,6 +39,8 @@ public class TileEntityHelm extends TileMovingWorldMarkingBlock {
     public void assembledMovingWorld(EntityPlayer player, boolean returnVal) {
         sendAssembleResult(player, false);
         sendAssembleResult(player, true);
+
+        player.addStat(getAssembleResult().isOK() ? ArchimedesObjects.achievementAssembleSuccess : ArchimedesObjects.achievementAssembleFailure);
     }
 
 
@@ -108,6 +111,7 @@ public class TileEntityHelm extends TileMovingWorldMarkingBlock {
             case PRERIDE: {
             }
             case POSTRIDE: {
+                player.addStat(ArchimedesObjects.achievementAssembleMount);
             }
         }
     }

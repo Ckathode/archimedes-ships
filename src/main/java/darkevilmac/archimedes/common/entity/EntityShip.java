@@ -30,6 +30,7 @@ import darkevilmac.archimedes.client.control.ShipControllerClient;
 import darkevilmac.archimedes.common.ArchimedesConfig;
 import darkevilmac.archimedes.common.api.tileentity.ITileEngineModifier;
 import darkevilmac.archimedes.common.control.ShipControllerCommon;
+import darkevilmac.archimedes.common.object.ArchimedesObjects;
 import darkevilmac.archimedes.common.object.block.AnchorPointLocation;
 import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
 import darkevilmac.movingworld.common.chunk.MovingWorldAssemblyInteractor;
@@ -470,6 +471,9 @@ public class EntityShip extends EntityMovingWorld {
                     i = -1;
                 }
                 motionY += i * BASE_LIFT_SPEED * capabilities.getLiftMult();
+                if (getControllingPassenger() != null && getControllingPassenger() instanceof EntityPlayer
+                        && !((EntityPlayer) getControllingPassenger()).hasAchievement(ArchimedesObjects.achievementFlyShip))
+                    ((EntityPlayer) getControllingPassenger()).addStat(ArchimedesObjects.achievementFlyShip);
             }
         }
     }

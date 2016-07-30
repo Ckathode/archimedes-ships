@@ -26,7 +26,9 @@ import darkevilmac.archimedes.client.gui.ContainerHelm;
 import darkevilmac.archimedes.common.ArchimedesConfig;
 import darkevilmac.archimedes.common.entity.EntityShip;
 import darkevilmac.archimedes.common.entity.ShipAssemblyInteractor;
+import darkevilmac.archimedes.common.object.ArchimedesObjects;
 import darkevilmac.archimedes.common.tileentity.AnchorInstance;
+import darkevilmac.archimedes.common.tileentity.BlockLocation;
 import darkevilmac.archimedes.common.tileentity.TileEntityAnchorPoint;
 import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
 import darkevilmac.movingworld.common.chunk.assembly.AssembleResult;
@@ -87,6 +89,7 @@ public class ArchimedesShipsNetworking {
                                 }
 
                                 ship.setSubmerge(submerse);
+                                entityPlayer.addStat(ArchimedesObjects.achievementSubmerseShip);
                             }
                         }
                     }
@@ -170,9 +173,9 @@ public class ArchimedesShipsNetworking {
                              * Clear the entries as well as notify the entries to clear us from them.
                              * Then switch mode.
                              */
-                            for (HashMap.Entry<UUID, BlockPos> e : anchorPoint.instance.getRelatedAnchors().entrySet()) {
-                                if (world.getTileEntity(e.getValue()) != null && world.getTileEntity(e.getValue()) instanceof TileEntityAnchorPoint) {
-                                    TileEntityAnchorPoint entryAnchorPoint = (TileEntityAnchorPoint) world.getTileEntity(e.getValue());
+                            for (HashMap.Entry<UUID, BlockLocation> e : anchorPoint.instance.getRelatedAnchors().entrySet()) {
+                                if (world.getTileEntity(e.getValue().pos) != null && world.getTileEntity(e.getValue().pos) instanceof TileEntityAnchorPoint) {
+                                    TileEntityAnchorPoint entryAnchorPoint = (TileEntityAnchorPoint) world.getTileEntity(e.getValue().pos);
                                     entryAnchorPoint.instance.removeRelation(anchorPoint.instance.getIdentifier());
                                 } else {
                                     ArchimedesShipMod.modLog.error("Invalid entries in anchor tile: " + anchorPoint.toString() + ", cleaning.");
@@ -195,7 +198,8 @@ public class ArchimedesShipsNetworking {
 
                                     itemAnchorInstanceTag.setType(AnchorInstance.InstanceType.FORSHIP);
                                     itemAnchorInstanceTag.setIdentifier(UUID.randomUUID());
-                                    itemAnchorInstanceTag.addRelation(anchorPoint.instance.getIdentifier(), anchorPos);
+                                    itemAnchorInstanceTag.addRelation(anchorPoint.instance.getIdentifier(),
+                                            new BlockLocation(anchorPos, entityPlayer.worldObj.provider.getDimension()));
                                     anchorPoint.content.getTagCompound().setTag("instance", itemAnchorInstanceTag.serializeNBT());
                                 } else {
                                     AnchorInstance instanceFromKey = new AnchorInstance();
@@ -208,7 +212,8 @@ public class ArchimedesShipsNetworking {
                                         instanceFromKey.clearRelations();
                                     }
 
-                                    instanceFromKey.addRelation(anchorPoint.instance.getIdentifier(), anchorPos);
+                                    instanceFromKey.addRelation(anchorPoint.instance.getIdentifier(),
+                                            new BlockLocation(anchorPos, entityPlayer.worldObj.provider.getDimension()));
                                     anchorPoint.content.getTagCompound().setTag("instance", instanceFromKey.serializeNBT());
                                 }
                             } else {
@@ -221,7 +226,8 @@ public class ArchimedesShipsNetworking {
 
                                         itemAnchorInstanceTag.setType(AnchorInstance.InstanceType.FORLAND);
                                         itemAnchorInstanceTag.setIdentifier(UUID.randomUUID());
-                                        itemAnchorInstanceTag.addRelation(anchorPoint.instance.getIdentifier(), anchorPos);
+                                        itemAnchorInstanceTag.addRelation(anchorPoint.instance.getIdentifier(),
+                                                new BlockLocation(anchorPos, entityPlayer.worldObj.provider.getDimension()));
                                         anchorPoint.content.getTagCompound().setTag("instance", itemAnchorInstanceTag.serializeNBT());
                                     } else {
                                         AnchorInstance instanceFromKey = new AnchorInstance();
@@ -234,7 +240,8 @@ public class ArchimedesShipsNetworking {
                                             instanceFromKey.clearRelations();
                                         }
 
-                                        instanceFromKey.addRelation(anchorPoint.instance.getIdentifier(), anchorPos);
+                                        instanceFromKey.addRelation(anchorPoint.instance.getIdentifier(),
+                                                new BlockLocation(anchorPos, entityPlayer.worldObj.provider.getDimension()));
                                         anchorPoint.content.getTagCompound().setTag("instance", instanceFromKey.serializeNBT());
                                     }
                                 }

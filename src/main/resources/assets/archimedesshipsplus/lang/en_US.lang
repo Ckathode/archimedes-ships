@@ -88,3 +88,19 @@ gui.archimedes.shipinv.align=Align
 gui.archimedes.engine.title=Steam Engine Fuel
 
 gui.archimedes.item.tooltip.shift=Hold Shift
+
+achievement.archimedes.assemble.failure=Oops!
+achievement.archimedes.assemble.success=Aye Aye, cap'n!
+achievement.archimedes.assemble.mount=Take a seat
+achievement.archimedes.create.helm=Almost there...
+achievement.archimedes.create.engine=We need more power!
+achievement.archimedes.submerse=The depths
+achievement.archimedes.fly=Upwards!
+
+achievement.archimedes.assemble.failure.desc=What went wrong...?
+achievement.archimedes.assemble.success.desc=She be a seaworthy vessel.
+achievement.archimedes.assemble.mount.desc=Here's hoping for a smooth journey!
+achievement.archimedes.create.helm.desc=Now we prepare for something big...
+achievement.archimedes.create.engine.desc=Now we're talking!
+achievement.archimedes.submerse.desc=I wonder what's down here?
+achievement.archimedes.fly.desc=We don't need helium where we're going.

@@ -17,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import darkevilmac.archimedes.ArchimedesShipMod;
+import darkevilmac.archimedes.common.object.ArchimedesObjects;
 import darkevilmac.archimedes.common.tileentity.TileEntityEngine;
 
 public class BlockEngine extends BlockContainer {
@@ -86,6 +87,10 @@ public class BlockEngine extends BlockContainer {
 
     @Override
     public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+        if (placer != null && placer instanceof EntityPlayer) {
+            ((EntityPlayer) placer).addStat(ArchimedesObjects.achievementCreateEngine);
+        }
+
         return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
     }
 

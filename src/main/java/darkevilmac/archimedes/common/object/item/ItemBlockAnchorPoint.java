@@ -14,6 +14,7 @@ import java.util.List;
 import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.client.LanguageEntries;
 import darkevilmac.archimedes.common.tileentity.AnchorInstance;
+import darkevilmac.archimedes.common.tileentity.BlockLocation;
 
 public class ItemBlockAnchorPoint extends ItemBlock {
     public ItemBlockAnchorPoint(Block block) {
@@ -30,7 +31,7 @@ public class ItemBlockAnchorPoint extends ItemBlock {
         if (GuiScreen.isShiftKeyDown()) {
             AnchorInstance instance = new AnchorInstance();
             instance.deserializeNBT(stack.getTagCompound().getCompoundTag("instance"));
-            String readablePosition = instance.getRelatedAnchors().values().toArray()[0]
+            String readablePosition = ((BlockLocation) instance.getRelatedAnchors().values().toArray()[0]).pos
                     .toString().substring(9).replace("}", "").replaceAll("=", ":");
             String pos = I18n.format(LanguageEntries.GUI_ANCHOR_POS, (ChatFormatting.YELLOW + readablePosition).toString());
             String shortenedID = I18n.format(LanguageEntries.GUI_ANCHOR_ID, (ChatFormatting.YELLOW + instance.getIdentifier().toString().substring(0, 8)

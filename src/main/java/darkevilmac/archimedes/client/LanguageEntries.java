@@ -52,12 +52,20 @@ public class LanguageEntries {
     public static final String GUI_ANCHOR_TYPE = "gui.archimedes.anchor.type";
     public static final String GUI_ANCHOR_LINK = "gui.archimedes.anchor.link";
     public static final String GUI_ANCHOR_SWITCH = "gui.archimedes.anchor.switch";
-
     public static final String GUI_ANCHOR_MODE_WORLD = "gui.archimedes.anchor.mode.world";
     public static final String GUI_ANCHOR_MODE_SHIP = "gui.archimedes.anchor.mode.ship";
 
     public static final String GUI_ENGINE_TITLE = "gui.archimedes.engine.title";
 
     public static final String GUI_ITEM_TOOLTIP_SHIFT = "gui.archimedes.item.tooltip.shift";
+
+    public static final String ACHIEVEMENT_ASSEMBLE_FAILURE = "archimedes.assemble.failure";
+    public static final String ACHIEVEMENT_ASSEMBLE_SUCCESS = "archimedes.assemble.success";
+    public static final String ACHIEVEMENT_ASSEMBLE_MOUNT =   "archimedes.assemble.mount";
+    public static final String ACHIEVEMENT_CREATE_HELM =      "archimedes.create.helm";
+    public static final String ACHIEVEMENT_CREATE_ENGINE =    "archimedes.create.engine";
+    public static final String ACHIEVEMENT_SUBMERSE_SHIP =    "archimedes.submerse";
+    public static final String ACHIEVEMENT_FLY_SHIP =         "archimedes.fly";
+
 
 }
