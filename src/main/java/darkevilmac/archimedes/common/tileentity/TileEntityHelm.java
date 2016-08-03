@@ -1,12 +1,5 @@
 package darkevilmac.archimedes.common.tileentity;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.common.entity.EntityShip;
 import darkevilmac.archimedes.common.entity.ShipAssemblyInteractor;
@@ -20,6 +13,12 @@ import darkevilmac.movingworld.common.entity.MovingWorldInfo;
 import darkevilmac.movingworld.common.tile.TileMovingWorldMarkingBlock;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntityHelm extends TileMovingWorldMarkingBlock {
     @SideOnly(Side.CLIENT)
@@ -29,6 +28,7 @@ public class TileEntityHelm extends TileMovingWorldMarkingBlock {
     private ShipAssemblyInteractor interactor;
     private EntityShip activeShip;
     private MovingWorldInfo info;
+    private BlockPos chunkPos;
 
     public TileEntityHelm() {
         super();
@@ -46,6 +46,7 @@ public class TileEntityHelm extends TileMovingWorldMarkingBlock {
 
     @Override
     public void setParentMovingWorld(BlockPos pos, EntityMovingWorld entityMovingWorld) {
+        chunkPos = pos;
         activeShip = (EntityShip) entityMovingWorld;
     }
 
@@ -57,6 +58,12 @@ public class TileEntityHelm extends TileMovingWorldMarkingBlock {
     @Override
     public void setParentMovingWorld(EntityMovingWorld entityMovingWorld) {
         setParentMovingWorld(new BlockPos(BlockPos.ORIGIN), entityMovingWorld);
+    }
+
+    @Override
+    public BlockPos getChunkPos() {
+
+        return chunkPos;
     }
 
     @Override

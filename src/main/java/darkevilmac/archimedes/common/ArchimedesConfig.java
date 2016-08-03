@@ -24,7 +24,7 @@ import java.util.Set;
 
 import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.common.object.ArchimedesObjects;
-import darkevilmac.movingworld.MovingWorld;
+import darkevilmac.movingworld.MovingWorldMod;
 
 public class ArchimedesConfig {
     public static final int CONTROL_TYPE_VANILLA = 0, CONTROL_TYPE_ARCHIMEDES = 1;
@@ -74,16 +74,16 @@ public class ArchimedesConfig {
     }
 
     public void addBlacklistWhitelistEntries() {
-        MovingWorld.instance.getNetworkConfig().addBlacklistedBlock(ArchimedesObjects.blockBuffer);
+        MovingWorldMod.instance.getNetworkConfig().addBlacklistedBlock(ArchimedesObjects.blockBuffer);
 
-        MovingWorld.instance.getNetworkConfig().addWhitelistedBlock(ArchimedesObjects.blockMarkShip);
-        MovingWorld.instance.getNetworkConfig().addWhitelistedBlock(ArchimedesObjects.blockFloater);
-        MovingWorld.instance.getNetworkConfig().addWhitelistedBlock(ArchimedesObjects.blockBalloon);
-        MovingWorld.instance.getNetworkConfig().addWhitelistedBlock(ArchimedesObjects.blockGauge);
-        MovingWorld.instance.getNetworkConfig().addWhitelistedBlock(ArchimedesObjects.blockSeat);
-        MovingWorld.instance.getNetworkConfig().addWhitelistedBlock(ArchimedesObjects.blockEngine);
-        MovingWorld.instance.getNetworkConfig().addWhitelistedBlock(ArchimedesObjects.blockStickyBuffer);
-        MovingWorld.instance.getNetworkConfig().addWhitelistedBlock(ArchimedesObjects.blockAnchorPoint);
+        MovingWorldMod.instance.getNetworkConfig().addWhitelistedBlock(ArchimedesObjects.blockMarkShip);
+        MovingWorldMod.instance.getNetworkConfig().addWhitelistedBlock(ArchimedesObjects.blockFloater);
+        MovingWorldMod.instance.getNetworkConfig().addWhitelistedBlock(ArchimedesObjects.blockBalloon);
+        MovingWorldMod.instance.getNetworkConfig().addWhitelistedBlock(ArchimedesObjects.blockGauge);
+        MovingWorldMod.instance.getNetworkConfig().addWhitelistedBlock(ArchimedesObjects.blockSeat);
+        MovingWorldMod.instance.getNetworkConfig().addWhitelistedBlock(ArchimedesObjects.blockEngine);
+        MovingWorldMod.instance.getNetworkConfig().addWhitelistedBlock(ArchimedesObjects.blockStickyBuffer);
+        MovingWorldMod.instance.getNetworkConfig().addWhitelistedBlock(ArchimedesObjects.blockAnchorPoint);
     }
 
     public void postLoad() {

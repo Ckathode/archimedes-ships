@@ -9,15 +9,16 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 
 import darkevilmac.archimedes.common.entity.EntityShip;
+import darkevilmac.movingworld.api.IMovingWorldTileEntity;
 import darkevilmac.movingworld.common.chunk.mobilechunk.MobileChunk;
 import darkevilmac.movingworld.common.entity.EntityMovingWorld;
-import darkevilmac.movingworld.common.tile.IMovingWorldTileEntity;
 
 public class TileEntityCrate extends TileEntity implements IMovingWorldTileEntity, ITickable {
     private EntityShip parentShip;
     private int containedEntityId;
     private Entity containedEntity;
     private int refreshTime;
+    private BlockPos chunkPos;
 
     public TileEntityCrate() {
         parentShip = null;
@@ -28,6 +29,7 @@ public class TileEntityCrate extends TileEntity implements IMovingWorldTileEntit
 
     @Override
     public void setParentMovingWorld(BlockPos pos, EntityMovingWorld entityMovingWorld) {
+        chunkPos = pos;
         parentShip = (EntityShip) entityMovingWorld;
     }
 
@@ -39,6 +41,11 @@ public class TileEntityCrate extends TileEntity implements IMovingWorldTileEntit
     @Override
     public void setParentMovingWorld(EntityMovingWorld entityMovingWorld) {
         setParentMovingWorld(new BlockPos(BlockPos.ORIGIN), entityMovingWorld);
+    }
+
+    @Override
+    public BlockPos getChunkPos() {
+        return chunkPos;
     }
 
     @Override

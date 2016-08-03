@@ -16,7 +16,6 @@ import darkevilmac.archimedes.common.api.block.IBlockBalloon;
 import darkevilmac.archimedes.common.api.block.IBlockCustomMass;
 import darkevilmac.archimedes.common.api.tileentity.ITileEngineModifier;
 import darkevilmac.archimedes.common.object.ArchimedesObjects;
-import darkevilmac.archimedes.common.object.block.AnchorPointLocation;
 import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
 import darkevilmac.movingworld.common.chunk.LocatedBlock;
 import darkevilmac.movingworld.common.entity.EntityMovingWorld;
@@ -72,7 +71,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
         return ship.getDataManager().get(EntityShip.ENGINE_POWER);
     }
 
-    public AnchorPointLocation findClosestValidAnchor(int range) {
+    public LocatedBlock findClosestValidAnchor(int range) {
         //if (ship != null && ship.worldObj != null && !ship.worldObj.isRemote) {
         //    if (anchorPoints != null) {
         //        AnchorPointLocation apLoc = new AnchorPointLocation(null, null);

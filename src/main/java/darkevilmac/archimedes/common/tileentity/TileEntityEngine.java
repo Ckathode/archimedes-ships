@@ -26,6 +26,7 @@ public class TileEntityEngine extends TileEntity implements IInventory, ITileEng
     ItemStack[] itemStacks;
     private int burnTime;
     private boolean running;
+    private BlockPos chunkPos;
 
     public TileEntityEngine() {
         itemStacks = new ItemStack[getSizeInventory()];
@@ -227,6 +228,7 @@ public class TileEntityEngine extends TileEntity implements IInventory, ITileEng
 
     @Override
     public void setParentMovingWorld(BlockPos pos, EntityMovingWorld entityMovingWorld) {
+        this.chunkPos = pos;
         // We don't bother with our parent.
     }
 
@@ -238,6 +240,11 @@ public class TileEntityEngine extends TileEntity implements IInventory, ITileEng
     @Override
     public void setParentMovingWorld(EntityMovingWorld entityMovingWorld) {
         // We don't bother with our parent.
+    }
+
+    @Override
+    public BlockPos getChunkPos() {
+        return chunkPos;
     }
 
     @Override

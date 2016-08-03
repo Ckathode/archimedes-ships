@@ -16,7 +16,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -31,7 +30,6 @@ import darkevilmac.archimedes.common.ArchimedesConfig;
 import darkevilmac.archimedes.common.api.tileentity.ITileEngineModifier;
 import darkevilmac.archimedes.common.control.ShipControllerCommon;
 import darkevilmac.archimedes.common.object.ArchimedesObjects;
-import darkevilmac.archimedes.common.object.block.AnchorPointLocation;
 import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
 import darkevilmac.movingworld.common.chunk.MovingWorldAssemblyInteractor;
 import darkevilmac.movingworld.common.chunk.assembly.AssembleResult;
@@ -174,16 +172,16 @@ public class EntityShip extends EntityMovingWorld {
      */
     public boolean alignToAnchor() {
         if (capabilities.findClosestValidAnchor(16) != null) {
-            AnchorPointLocation anchorPointLocation = capabilities.findClosestValidAnchor(16);
-            BlockPos chunkAnchorPos = anchorPointLocation.shipAnchor.blockPos;
-            BlockPos worldAnchorPos = anchorPointLocation.worldAnchor.blockPos;
-
-            Vec3d worldPosForAnchor = new Vec3d(worldAnchorPos.getX(), worldAnchorPos.getY(), worldAnchorPos.getZ());
-
-            worldPosForAnchor = worldPosForAnchor.addVector(getMobileChunk().maxX() / 2, getMobileChunk().minY(), getMobileChunk().maxZ() / 2);
-            worldPosForAnchor = worldPosForAnchor.subtract(chunkAnchorPos.getX(), 0, chunkAnchorPos.getZ());
-
-            setPosition(worldPosForAnchor.xCoord, worldPosForAnchor.yCoord + 3, worldPosForAnchor.zCoord);
+            //AnchorPointLocation anchorPointLocation = capabilities.findClosestValidAnchor(16);
+            //BlockPos chunkAnchorPos = anchorPointLocation.shipAnchor.blockPos;
+            //BlockPos worldAnchorPos = anchorPointLocation.worldAnchor.blockPos;
+//
+            //Vec3d worldPosForAnchor = new Vec3d(worldAnchorPos.getX(), worldAnchorPos.getY(), worldAnchorPos.getZ());
+//
+            //worldPosForAnchor = worldPosForAnchor.addVector(getMobileChunk().maxX() / 2, getMobileChunk().minY(), getMobileChunk().maxZ() / 2);
+            //worldPosForAnchor = worldPosForAnchor.subtract(chunkAnchorPos.getX(), 0, chunkAnchorPos.getZ());
+//
+            //setPosition(worldPosForAnchor.xCoord, worldPosForAnchor.yCoord + 3, worldPosForAnchor.zCoord);
         }
         return false;
     }

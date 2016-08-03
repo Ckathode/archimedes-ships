@@ -2,32 +2,6 @@ package darkevilmac.archimedes;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ListMultimap;
-
-import net.minecraft.block.Block;
-import net.minecraft.command.CommandBase;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.fml.common.registry.EntityRegistry;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.util.Collections;
-import java.util.List;
-
 import darkevilmac.archimedes.client.ClientProxy;
 import darkevilmac.archimedes.common.ArchimedesConfig;
 import darkevilmac.archimedes.common.CommonProxy;
@@ -41,11 +15,30 @@ import darkevilmac.archimedes.common.entity.EntityShip;
 import darkevilmac.archimedes.common.handler.ConnectionHandler;
 import darkevilmac.archimedes.common.network.ArchimedesShipsNetworking;
 import darkevilmac.archimedes.common.object.ArchimedesObjects;
+import net.minecraft.block.Block;
+import net.minecraft.command.CommandBase;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-@Mod(modid = ArchimedesShipMod.MOD_ID, name = ArchimedesShipMod.MOD_NAME, version = ArchimedesShipMod.MOD_VERSION, dependencies = "required-after:MovingWorld", guiFactory = ArchimedesShipMod.MOD_GUIFACTORY)
+import java.util.Collections;
+import java.util.List;
+
+@Mod(modid = ArchimedesShipMod.MOD_ID, name = ArchimedesShipMod.MOD_NAME, version = ArchimedesShipMod.MOD_VERSION, dependencies = "required-after:movingworld", guiFactory = ArchimedesShipMod.MOD_GUIFACTORY)
 public class ArchimedesShipMod {
 
-    public static final String MOD_ID = "ArchimedesShipsPlus";
+    public static final String MOD_ID = "archimedesshipsplus";
     public static final String MOD_VERSION = "@AS+VER@";
     public static final String MOD_NAME = "Archimedes' Ships Plus";
     public static final String RESOURCE_DOMAIN = "archimedesshipsplus:";

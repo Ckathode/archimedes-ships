@@ -13,7 +13,7 @@ import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.common.entity.EntityShip;
 import darkevilmac.archimedes.common.object.block.BlockHelm;
 import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
-import darkevilmac.movingworld.common.tile.IMovingWorldTileEntity;
+import darkevilmac.movingworld.api.IMovingWorldTileEntity;
 
 public class TileEntityHelmRenderer extends TileEntitySpecialRenderer {
 

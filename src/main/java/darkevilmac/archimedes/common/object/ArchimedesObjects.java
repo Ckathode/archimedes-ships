@@ -21,6 +21,7 @@ import java.util.HashMap;
 
 import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.client.LanguageEntries;
+import darkevilmac.archimedes.common.object.achievement.SmartAchievementPage;
 import darkevilmac.archimedes.common.object.block.BlockAS;
 import darkevilmac.archimedes.common.object.block.BlockAnchorPoint;
 import darkevilmac.archimedes.common.object.block.BlockCrate;
@@ -59,6 +60,8 @@ public class ArchimedesObjects {
     public static Block blockSecuredBed;
 
     public static Item itemSecuredBed;
+
+    public static SmartAchievementPage achievementPage;
 
     public static Achievement achievementAssembleFailure;
     public static Achievement achievementAssembleSuccess;
@@ -160,29 +163,32 @@ public class ArchimedesObjects {
         GameRegistry.registerTileEntity(TileEntitySecuredBed.class, "archiSecuredBed");
 
         achievementCreateHelm = new Achievement("achievement.archimedes.create.helm",
-                LanguageEntries.ACHIEVEMENT_CREATE_HELM, 5 + 4, 4, Item.getItemFromBlock(blockMarkShip), null);
-        achievementAssembleFailure = new Achievement("achievement.archimedes.assemble.failure",
-                LanguageEntries.ACHIEVEMENT_ASSEMBLE_FAILURE, 5 + 7, 6, Item.getItemFromBlock(blockMarkShip), achievementCreateHelm);
-        achievementAssembleSuccess = new Achievement("achievement.archimedes.assemble.success",
-                LanguageEntries.ACHIEVEMENT_ASSEMBLE_SUCCESS, 5 + 7, 4, Item.getItemFromBlock(blockMarkShip), achievementCreateHelm);
-        achievementAssembleMount = new Achievement("achievement.archimedes.assemble.mount",
-                LanguageEntries.ACHIEVEMENT_ASSEMBLE_MOUNT, 5 + 7, 2, Item.getItemFromBlock(blockSeat), achievementCreateHelm);
-        achievementFlyShip = new Achievement("achievement.archimedes.fly",
-                LanguageEntries.ACHIEVEMENT_FLY_SHIP, 5 + 9, 0, Item.getItemFromBlock(blockBalloon), achievementAssembleMount);
-        achievementSubmerseShip = new Achievement("achievement.archimedes.submerse",
-                LanguageEntries.ACHIEVEMENT_SUBMERSE_SHIP, 5 + 9, 2, Item.getItemFromBlock(blockAnchorPoint), achievementAssembleMount);
-
+                LanguageEntries.ACHIEVEMENT_CREATE_HELM, 0, 0, Item.getItemFromBlock(blockMarkShip), null);
         achievementCreateEngine = new Achievement("achievement.archimedes.create.engine",
-                LanguageEntries.ACHIEVEMENT_CREATE_ENGINE, 5 + 4, 1, Item.getItemFromBlock(blockEngine), null);
+                LanguageEntries.ACHIEVEMENT_CREATE_ENGINE, 0, -3, Item.getItemFromBlock(blockEngine), null);
+        achievementAssembleFailure = new Achievement("achievement.archimedes.assemble.failure",
+                LanguageEntries.ACHIEVEMENT_ASSEMBLE_FAILURE, 3, 2, Item.getItemFromBlock(blockMarkShip), achievementCreateHelm);
+        achievementAssembleSuccess = new Achievement("achievement.archimedes.assemble.success",
+                LanguageEntries.ACHIEVEMENT_ASSEMBLE_SUCCESS, 3, 0, Item.getItemFromBlock(blockMarkShip), achievementCreateHelm);
+        achievementAssembleMount = new Achievement("achievement.archimedes.assemble.mount",
+                LanguageEntries.ACHIEVEMENT_ASSEMBLE_MOUNT, 3, -2, Item.getItemFromBlock(blockSeat), achievementAssembleSuccess);
+        achievementFlyShip = new Achievement("achievement.archimedes.fly",
+                LanguageEntries.ACHIEVEMENT_FLY_SHIP, 5, -4, Item.getItemFromBlock(blockBalloon), achievementAssembleMount);
+        achievementSubmerseShip = new Achievement("achievement.archimedes.submerse",
+                LanguageEntries.ACHIEVEMENT_SUBMERSE_SHIP, 5, -2, Item.getItemFromBlock(blockAnchorPoint), achievementAssembleMount);
 
-        achievementCreateHelm.registerStat();
-        achievementAssembleFailure.registerStat();
-        achievementAssembleSuccess.registerStat();
-        achievementAssembleMount.registerStat();
-        achievementFlyShip.registerStat();
-        achievementSubmerseShip.registerStat();
 
-        achievementCreateEngine.registerStat();
+        achievementPage = new SmartAchievementPage(ArchimedesShipMod.MOD_NAME);
+
+        achievementPage.registerAchievement(achievementCreateHelm);
+        achievementPage.registerAchievement(achievementCreateEngine);
+        achievementPage.registerAchievement(achievementAssembleFailure);
+        achievementPage.registerAchievement(achievementAssembleSuccess);
+        achievementPage.registerAchievement(achievementAssembleMount);
+        achievementPage.registerAchievement(achievementFlyShip);
+        achievementPage.registerAchievement(achievementSubmerseShip);
+
+        achievementPage.finalize();
     }
 
     public void postInit(FMLPostInitializationEvent e) {

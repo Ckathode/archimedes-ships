@@ -9,10 +9,11 @@ import net.minecraft.util.math.BlockPos;
 
 import darkevilmac.movingworld.common.chunk.mobilechunk.MobileChunk;
 import darkevilmac.movingworld.common.entity.EntityMovingWorld;
-import darkevilmac.movingworld.common.tile.IMovingWorldTileEntity;
+import darkevilmac.movingworld.api.IMovingWorldTileEntity;
 
 public class TileEntityGauge extends TileEntity implements IMovingWorldTileEntity {
     public EntityMovingWorld parentShip;
+    private BlockPos chunkPos;
 
     public TileEntityGauge() {
         parentShip = null;
@@ -20,6 +21,7 @@ public class TileEntityGauge extends TileEntity implements IMovingWorldTileEntit
 
     @Override
     public void setParentMovingWorld(BlockPos pos, EntityMovingWorld entityMovingWorld) {
+        this.chunkPos = pos;
         parentShip = entityMovingWorld;
     }
 
@@ -31,6 +33,11 @@ public class TileEntityGauge extends TileEntity implements IMovingWorldTileEntit
     @Override
     public void setParentMovingWorld(EntityMovingWorld entityMovingWorld) {
         setParentMovingWorld(new BlockPos(BlockPos.ORIGIN), entityMovingWorld);
+    }
+
+    @Override
+    public BlockPos getChunkPos() {
+        return chunkPos;
     }
 
     @Override

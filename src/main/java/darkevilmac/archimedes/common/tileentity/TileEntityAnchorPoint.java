@@ -21,14 +21,16 @@ import javax.annotation.Nullable;
 import darkevilmac.archimedes.client.LanguageEntries;
 import darkevilmac.archimedes.client.gui.GuiAnchorPoint;
 import darkevilmac.archimedes.common.object.ArchimedesObjects;
+import darkevilmac.movingworld.api.IMovingWorldTileEntity;
 import darkevilmac.movingworld.common.chunk.mobilechunk.MobileChunk;
 import darkevilmac.movingworld.common.entity.EntityMovingWorld;
-import darkevilmac.movingworld.common.tile.IMovingWorldTileEntity;
 
 public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTileEntity, IInventory {
 
     public AnchorInstance instance;
     public ItemStack content;
+
+    public BlockPos chunkPos;
     private EntityMovingWorld activeShip;
 
     public TileEntityAnchorPoint() {
@@ -110,6 +112,7 @@ public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTil
 
     @Override
     public void setParentMovingWorld(BlockPos pos, EntityMovingWorld entityMovingWorld) {
+        chunkPos = pos;
         activeShip = entityMovingWorld;
     }
 
@@ -121,6 +124,11 @@ public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTil
     @Override
     public void setParentMovingWorld(EntityMovingWorld entityMovingWorld) {
         setParentMovingWorld(new BlockPos(BlockPos.ORIGIN), entityMovingWorld);
+    }
+
+    @Override
+    public BlockPos getChunkPos() {
+        return chunkPos;
     }
 
     @Override

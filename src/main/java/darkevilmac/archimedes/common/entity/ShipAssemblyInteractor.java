@@ -15,7 +15,7 @@ import darkevilmac.archimedes.common.object.ArchimedesObjects;
 import darkevilmac.archimedes.common.object.block.BlockHelm;
 import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
 import darkevilmac.archimedes.common.tileentity.TileEntitySecuredBed;
-import darkevilmac.movingworld.MovingWorld;
+import darkevilmac.movingworld.MovingWorldMod;
 import darkevilmac.movingworld.common.chunk.LocatedBlock;
 import darkevilmac.movingworld.common.chunk.MovingWorldAssemblyInteractor;
 import darkevilmac.movingworld.common.chunk.assembly.CanAssemble;
@@ -62,7 +62,7 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
             try {
                 balloonCount += ((IBlockBalloon) block).getBalloonWorth(locatedBlock.tileEntity);
             } catch (NullPointerException e) {
-                MovingWorld.logger.error("IBlockBalloon didn't check if something was null or not, report to mod author. " + block.toString());
+                MovingWorldMod.logger.error("IBlockBalloon didn't check if something was null or not, report to mod author. " + block.toString());
             }
         } else if (block == ArchimedesObjects.blockBalloon) {
             balloonCount++;

@@ -61,11 +61,12 @@ public class LanguageEntries {
 
     public static final String ACHIEVEMENT_ASSEMBLE_FAILURE = "archimedes.assemble.failure";
     public static final String ACHIEVEMENT_ASSEMBLE_SUCCESS = "archimedes.assemble.success";
-    public static final String ACHIEVEMENT_ASSEMBLE_MOUNT =   "archimedes.assemble.mount";
-    public static final String ACHIEVEMENT_CREATE_HELM =      "archimedes.create.helm";
-    public static final String ACHIEVEMENT_CREATE_ENGINE =    "archimedes.create.engine";
-    public static final String ACHIEVEMENT_SUBMERSE_SHIP =    "archimedes.submerse";
-    public static final String ACHIEVEMENT_FLY_SHIP =         "archimedes.fly";
+    public static final String ACHIEVEMENT_ASSEMBLE_MOUNT = "archimedes.assemble.mount";
+    public static final String ACHIEVEMENT_CREATE_HELM = "archimedes.create.helm";
+    public static final String ACHIEVEMENT_CREATE_ENGINE = "archimedes.create.engine";
+    public static final String ACHIEVEMENT_SUBMERSE_SHIP = "archimedes.submerse";
+    public static final String ACHIEVEMENT_FLY_SHIP = "archimedes.fly";
 
 
+    public static final String ITEMGROUP_NAME = "itemGroup.archimedesTab";
 }

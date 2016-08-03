@@ -1,7 +1,7 @@
 package darkevilmac.archimedes.common.api.tileentity;
 
 import darkevilmac.archimedes.common.entity.ShipCapabilities;
-import darkevilmac.movingworld.common.tile.IMovingWorldTileEntity;
+import darkevilmac.movingworld.api.IMovingWorldTileEntity;
 
 public interface ITileEngineModifier extends IMovingWorldTileEntity {
 
