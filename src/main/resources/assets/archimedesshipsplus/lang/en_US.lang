@@ -77,6 +77,8 @@ gui.archimedes.anchor.type=Type: %s
 gui.archimedes.anchor.id=ID: %s
 gui.archimedes.anchor.link=Link
 gui.archimedes.anchor.switch=Switch Mode
+gui.archimedes.anchor.related=Related to: %s
+gui.archimedes.anchor.norelations=No relations
 
 gui.archimedes.anchor.mode.world=World Anchor
 gui.archimedes.anchor.mode.ship=Ship Anchor

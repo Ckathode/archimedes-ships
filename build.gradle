@@ -28,12 +28,15 @@ repositories {
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = 'MC1.9-V1.9'
+version = 'MC1.10-V1.10'
 group = 'darkevilmac.archimedesshipsplus'
 archivesBaseName = 'archimedesshipsplus'
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 minecraft {
-    version = "1.10.2-12.18.1.2044"
+    version = "1.10.2-12.18.1.2074"
     runDir = 'run'
 
     def replacementVersion = 'MOD_VERSION = \"' + project.version + '\"'

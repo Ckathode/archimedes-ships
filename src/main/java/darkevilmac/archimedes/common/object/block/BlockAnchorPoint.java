@@ -1,5 +1,10 @@
 package darkevilmac.archimedes.common.object.block;
 
+import darkevilmac.archimedes.ArchimedesShipMod;
+import darkevilmac.archimedes.common.object.ArchimedesObjects;
+import darkevilmac.archimedes.common.tileentity.AnchorInstance;
+import darkevilmac.archimedes.common.tileentity.BlockLocation;
+import darkevilmac.archimedes.common.tileentity.TileEntityAnchorPoint;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -19,9 +24,11 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.DimensionManager;
 
-import darkevilmac.archimedes.ArchimedesShipMod;
-import darkevilmac.archimedes.common.tileentity.TileEntityAnchorPoint;
+import java.util.Map;
+import java.util.UUID;
 
 public class BlockAnchorPoint extends BlockContainer {
 
@@ -92,7 +99,36 @@ public class BlockAnchorPoint extends BlockContainer {
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         if (worldIn != null && !worldIn.isRemote && worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos) instanceof TileEntityAnchorPoint) {
+            if (stack != null && stack.getTagCompound() != null && stack.getTagCompound().hasKey("instance")) {
+                TileEntityAnchorPoint anchorPoint = (TileEntityAnchorPoint) worldIn.getTileEntity(pos);
+                AnchorInstance instance = new AnchorInstance();
+                instance.deserializeNBT(stack.getTagCompound().getCompoundTag("instance"));
+                instance.setIdentifier(UUID.randomUUID());
+                anchorPoint.setInstance(instance);
 
+                for (Map.Entry<UUID, BlockLocation> relation : anchorPoint.getInstance().getRelatedAnchors().entrySet()) {
+                    World relationWorld = DimensionManager.getWorld(relation.getValue().dimID);
+                    IBlockState relationState = relationWorld.getBlockState(relation.getValue().pos);
+                    if (relationState.getBlock().equals(ArchimedesObjects.blockAnchorPoint)) {
+                        TileEntity relationTile = relationWorld.getTileEntity(relation.getValue().pos);
+                        if (relationTile != null && relationTile instanceof TileEntityAnchorPoint) {
+                            TileEntityAnchorPoint relationAnchor = (TileEntityAnchorPoint) relationTile;
+                            if (!relationAnchor.getInstance().getType().equals(anchorPoint.getInstance().getType())) {
+                                if (relationAnchor.getInstance().getIdentifier().equals(relation.getKey())) {
+                                    relationAnchor.getInstance().addRelation(anchorPoint.getInstance().getIdentifier(), new BlockLocation(pos, worldIn.provider.getDimension()));
+                                    relationAnchor.markDirty();
+                                    if (worldIn instanceof WorldServer)
+                                        ((WorldServer) worldIn).getPlayerChunkMap().markBlockForUpdate(relationAnchor.getPos());
+
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+                    anchorPoint.getInstance().removeRelation(relation.getKey());
+                    break;
+                }
+            }
         }
     }
 

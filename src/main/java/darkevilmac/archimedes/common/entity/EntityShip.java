@@ -1,5 +1,22 @@
 package darkevilmac.archimedes.common.entity;
 
+import darkevilmac.archimedes.ArchimedesShipMod;
+import darkevilmac.archimedes.client.control.ShipControllerClient;
+import darkevilmac.archimedes.common.ArchimedesConfig;
+import darkevilmac.archimedes.common.api.tileentity.ITileEngineModifier;
+import darkevilmac.archimedes.common.control.ShipControllerCommon;
+import darkevilmac.archimedes.common.object.ArchimedesObjects;
+import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
+import darkevilmac.movingworld.common.chunk.LocatedBlock;
+import darkevilmac.movingworld.common.chunk.MovingWorldAssemblyInteractor;
+import darkevilmac.movingworld.common.chunk.assembly.AssembleResult;
+import darkevilmac.movingworld.common.chunk.assembly.ChunkDisassembler;
+import darkevilmac.movingworld.common.entity.EntityMovingWorld;
+import darkevilmac.movingworld.common.entity.MovingWorldCapabilities;
+import darkevilmac.movingworld.common.entity.MovingWorldHandlerCommon;
+import darkevilmac.movingworld.common.util.MathHelperMod;
+import darkevilmac.movingworld.common.util.Vec3dMod;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -21,24 +38,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.util.Set;
-
-import darkevilmac.archimedes.ArchimedesShipMod;
-import darkevilmac.archimedes.client.control.ShipControllerClient;
-import darkevilmac.archimedes.common.ArchimedesConfig;
-import darkevilmac.archimedes.common.api.tileentity.ITileEngineModifier;
-import darkevilmac.archimedes.common.control.ShipControllerCommon;
-import darkevilmac.archimedes.common.object.ArchimedesObjects;
-import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
-import darkevilmac.movingworld.common.chunk.MovingWorldAssemblyInteractor;
-import darkevilmac.movingworld.common.chunk.assembly.AssembleResult;
-import darkevilmac.movingworld.common.chunk.assembly.ChunkDisassembler;
-import darkevilmac.movingworld.common.entity.EntityMovingWorld;
-import darkevilmac.movingworld.common.entity.MovingWorldCapabilities;
-import darkevilmac.movingworld.common.entity.MovingWorldHandlerCommon;
-import darkevilmac.movingworld.common.util.Vec3dMod;
-import io.netty.buffer.ByteBuf;
 
 public class EntityShip extends EntityMovingWorld {
 
@@ -168,28 +170,35 @@ public class EntityShip extends EntityMovingWorld {
     }
 
     /**
-     * Aligns to the closest anchor within 16 blocks.
+     * Aligns to the closest anchor within the radius specified in the configuration.
      */
     public boolean alignToAnchor() {
-        if (capabilities.findClosestValidAnchor(16) != null) {
-            //AnchorPointLocation anchorPointLocation = capabilities.findClosestValidAnchor(16);
-            //BlockPos chunkAnchorPos = anchorPointLocation.shipAnchor.blockPos;
-            //BlockPos worldAnchorPos = anchorPointLocation.worldAnchor.blockPos;
-//
-            //Vec3d worldPosForAnchor = new Vec3d(worldAnchorPos.getX(), worldAnchorPos.getY(), worldAnchorPos.getZ());
-//
-            //worldPosForAnchor = worldPosForAnchor.addVector(getMobileChunk().maxX() / 2, getMobileChunk().minY(), getMobileChunk().maxZ() / 2);
-            //worldPosForAnchor = worldPosForAnchor.subtract(chunkAnchorPos.getX(), 0, chunkAnchorPos.getZ());
-//
-            //setPosition(worldPosForAnchor.xCoord, worldPosForAnchor.yCoord + 3, worldPosForAnchor.zCoord);
+        ImmutablePair<LocatedBlock, LocatedBlock> closestRelation = capabilities.findClosestValidAnchor(ArchimedesShipMod.instance.getNetworkConfig().anchorRadius);
+        if (!closestRelation.getLeft().equals(LocatedBlock.AIR) && !closestRelation.getRight().equals(LocatedBlock.AIR)) {
+            super.alignToGrid(true);
+            float ox = -getMobileChunk().getCenterX();
+            float oy = -getMobileChunk().minY(); //Created the normal way, through a VehicleFiller, this value will always be 0.
+            float oz = -getMobileChunk().getCenterZ();
+
+            Vec3dMod vec = new Vec3dMod(closestRelation.getLeft().blockPos.getX() + ox,
+                    closestRelation.getLeft().blockPos.getY() + oy,
+                    closestRelation.getLeft().blockPos.getZ() + oz);
+            vec = vec.rotateAroundY(rotationYaw);
+            BlockPos pos = new BlockPos(MathHelperMod.round_double(vec.xCoord + closestRelation.getRight().blockPos.getX()),
+                    MathHelperMod.round_double(vec.yCoord + closestRelation.getRight().blockPos.getY()),
+                    MathHelperMod.round_double(vec.zCoord + closestRelation.getRight().blockPos.getZ()));
+
+            setPositionAndUpdate(pos.getX(), pos.getY(), pos.getZ());
+            super.alignToGrid(true);
+
+            return true;
         }
         return false;
     }
 
     @Override
     public void alignToGrid(boolean doPosAdjustment) {
-        super.alignToGrid(true);
-        alignToAnchor();
+        if (!alignToAnchor()) super.alignToGrid(true);
     }
 
     @Override
@@ -223,7 +232,7 @@ public class EntityShip extends EntityMovingWorld {
         if (getControllingPassenger() == null) {
             if (prevRiddenByEntity != null) {
                 if (ArchimedesShipMod.instance.getNetworkConfig().getShared().disassembleOnDismount) {
-                    alignToAnchor();
+                    alignToGrid(true);
                     updatePassengerPosition(prevRiddenByEntity, riderDestination, 1);
                     disassemble(false);
                 } else {
@@ -453,7 +462,7 @@ public class EntityShip extends EntityMovingWorld {
 
         if (controller.getShipControl() != 0) {
             if (controller.getShipControl() == 4) {
-                alignToAnchor();
+                alignToGrid(true);
             } else if (isBraking()) {
                 motionX *= capabilities.brakeMult;
                 motionZ *= capabilities.brakeMult;

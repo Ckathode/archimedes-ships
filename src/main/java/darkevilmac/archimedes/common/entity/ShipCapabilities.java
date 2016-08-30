@@ -1,21 +1,13 @@
 package darkevilmac.archimedes.common.entity;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockAir;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.common.api.block.IBlockBalloon;
 import darkevilmac.archimedes.common.api.block.IBlockCustomMass;
 import darkevilmac.archimedes.common.api.tileentity.ITileEngineModifier;
 import darkevilmac.archimedes.common.object.ArchimedesObjects;
+import darkevilmac.archimedes.common.tileentity.AnchorInstance;
+import darkevilmac.archimedes.common.tileentity.BlockLocation;
+import darkevilmac.archimedes.common.tileentity.TileEntityAnchorPoint;
 import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
 import darkevilmac.movingworld.common.chunk.LocatedBlock;
 import darkevilmac.movingworld.common.entity.EntityMovingWorld;
@@ -23,6 +15,16 @@ import darkevilmac.movingworld.common.entity.MovingWorldCapabilities;
 import darkevilmac.movingworld.common.util.FloodFiller;
 import darkevilmac.movingworld.common.util.LocatedBlockList;
 import darkevilmac.movingworld.common.util.MaterialDensity;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockAir;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+
+import java.util.*;
 
 public class ShipCapabilities extends MovingWorldCapabilities {
 
@@ -71,104 +73,48 @@ public class ShipCapabilities extends MovingWorldCapabilities {
         return ship.getDataManager().get(EntityShip.ENGINE_POWER);
     }
 
-    public LocatedBlock findClosestValidAnchor(int range) {
-        //if (ship != null && ship.worldObj != null && !ship.worldObj.isRemote) {
-        //    if (anchorPoints != null) {
-        //        AnchorPointLocation apLoc = new AnchorPointLocation(null, null);
-        //        List<AnchorPointLocation> validAnchorPoints = new ArrayList<AnchorPointLocation>();
-//
-        //        List<Integer> validAnchorPointsDistance = new ArrayList<Integer>();
-        //        for (LocatedBlock anchorPointLB : anchorPoints) {
-        //            TileEntityAnchorPoint.AnchorPointInfo anchorPointInfo = ((TileEntityAnchorPoint) anchorPointLB.tileEntity).anchorPointInfo;
-//
-        //            int differenceX = 0;
-        //            int differenceY = 0;
-        //            int differenceZ = 0;
-//
-        //            boolean validXDistance = false;
-        //            boolean validYDistance = false;
-        //            boolean validZDistance = false;
-        //            boolean validDistance = false;
-//
-        //            if (anchorPointInfo.linkPos.getX() > ship.posX) {
-        //                for (int i = 1; i < range; i++) {
-        //                    if (ship.posX + i >= anchorPointInfo.linkPos.getX()) {
-        //                        validXDistance = true;
-        //                        differenceX = i;
-        //                    }
-        //                }
-        //            } else {
-        //                for (int i = 1; i < range; i++) {
-        //                    if (anchorPointInfo.linkPos.getX() + i >= ship.posX) {
-        //                        validXDistance = true;
-        //                        differenceX = i;
-        //                    }
-        //                }
-        //            }
-//
-        //            if (anchorPointInfo.linkPos.getY() > ship.posY) {
-        //                for (int i = 1; i < range; i++) {
-        //                    if (ship.posY + i >= anchorPointInfo.linkPos.getY()) {
-        //                        validYDistance = true;
-        //                        differenceY = i;
-        //                    }
-        //                }
-        //            } else {
-        //                for (int i = 1; i < range; i++) {
-        //                    if (anchorPointInfo.linkPos.getY() + i >= ship.posY) {
-        //                        validYDistance = true;
-        //                        differenceY = i;
-        //                    }
-        //                }
-        //            }
-//
-        //            if (anchorPointInfo.linkPos.getZ() > ship.posZ) {
-        //                for (int i = 1; i < range; i++) {
-        //                    if (ship.posZ + i >= anchorPointInfo.linkPos.getZ()) {
-        //                        validZDistance = true;
-        //                        differenceZ = i;
-        //                    }
-        //                }
-        //            } else {
-        //                for (int i = 1; i < range; i++) {
-        //                    if (anchorPointInfo.linkPos.getZ() + i >= ship.posZ) {
-        //                        validZDistance = true;
-        //                        differenceZ = i;
-        //                    }
-        //                }
-        //            }
-//
-        //            validDistance = validXDistance && validYDistance && validZDistance;
-//
-        //            if (validDistance && ship.worldObj.getTileEntity(anchorPointInfo.linkPos) != null
-        //                    && ship.worldObj.getTileEntity(anchorPointInfo.linkPos) instanceof TileEntityAnchorPoint) {
-        //                TileEntityAnchorPoint anchorPoint = (TileEntityAnchorPoint) ship.worldObj.getTileEntity(anchorPointInfo.linkPos);
-        //                if (anchorPoint.anchorPointInfo != null && !anchorPoint.anchorPointInfo.forShip) {
-        //                    AnchorPointLocation anchorPointLocation = new AnchorPointLocation(null, null);
-        //                    anchorPointLocation.worldAnchor = new LocatedBlock(anchorPoint.getWorld().getBlockState(anchorPoint.getPos()), anchorPoint, anchorPoint.getPos());
-        //                    anchorPointLocation.shipAnchor = anchorPointLB;
-        //                    validAnchorPoints.add(anchorPointLocation);
-        //                    validAnchorPointsDistance.add(differenceX + differenceY + differenceZ);
-        //                }
-        //            }
-        //        }
-//
-        //        AnchorPointLocation shortestAnchorLocation = null;
-//
-        //        if (validAnchorPoints != null && !validAnchorPoints.isEmpty()) {
-        //            int shortestIndex = 0;
-        //            for (int index = 0; index < validAnchorPoints.size(); index++) {
-        //                if (validAnchorPointsDistance.get(index) < validAnchorPointsDistance.get(shortestIndex)) {
-        //                    shortestIndex = index;
-        //                }
-        //            }
-        //            shortestAnchorLocation = validAnchorPoints.get(shortestIndex);
-        //        }
-//
-        //        return shortestAnchorLocation;
-        //    }
-        //}
-        return null;
+    public ImmutablePair<LocatedBlock, LocatedBlock> findClosestValidAnchor(int radius) {
+        LocatedBlock closest = LocatedBlock.AIR;
+        LocatedBlock shipAnchor = LocatedBlock.AIR;
+        int smallestOverallDistance = Integer.MAX_VALUE;
+
+        if (anchorPoints != null) {
+            for (LocatedBlock anchorLB : anchorPoints) {
+                TileEntityAnchorPoint anchorTile = (TileEntityAnchorPoint) anchorLB.tileEntity;
+                AnchorInstance anchor = anchorTile.getInstance();
+                if (anchor.getRelatedAnchors().isEmpty())
+                    continue;
+
+                Iterator<Map.Entry<UUID, BlockLocation>> relationIterator = anchor.getRelatedAnchors().entrySet().iterator();
+                while (relationIterator.hasNext()) {
+                    Map.Entry<UUID, BlockLocation> relation = relationIterator.next();
+                    if (relation.getValue().dimID == ship.worldObj.provider.getDimension()) {
+                        TileEntity relatedTile = ship.worldObj.getTileEntity(relation.getValue().pos);
+                        if (relatedTile != null && relatedTile instanceof TileEntityAnchorPoint) {
+                            TileEntityAnchorPoint relatedAnchor = (TileEntityAnchorPoint) relatedTile;
+                            if (relatedAnchor.getInstance().getRelatedAnchors().containsKey(anchor.getIdentifier())
+                                    && relatedAnchor.getInstance().getType().equals(AnchorInstance.InstanceType.FORLAND)) {
+                                int xDist = (int) Math.abs(Math.round(ship.posX) - relatedAnchor.getPos().getX());
+                                int yDist = (int) Math.abs(Math.round(ship.posY) - relatedAnchor.getPos().getY());
+                                int zDist = (int) Math.abs(Math.round(ship.posZ) - relatedAnchor.getPos().getZ());
+                                if (!(xDist > radius || yDist > radius || zDist > radius)) {
+                                    int collectiveDist = xDist + yDist + zDist;
+                                    if (collectiveDist < smallestOverallDistance) {
+                                        smallestOverallDistance = collectiveDist;
+                                        closest = new LocatedBlock(ship.getEntityWorld().getBlockState(relatedTile.getPos()), relatedTile, relatedTile.getPos());
+                                        shipAnchor = anchorLB;
+                                    }
+                                }
+                                continue;
+                            }
+                            relatedAnchor.getInstance().setChanged(true);
+                        }
+                    }
+                    relationIterator.remove();
+                }
+            }
+        }
+        return new ImmutablePair<>(shipAnchor, closest);
     }
 
     public void updateEngines() {
@@ -275,13 +221,14 @@ public class ShipCapabilities extends MovingWorldCapabilities {
         } else if (block == ArchimedesObjects.blockFloater) {
             floaters++;
         } else if (block == ArchimedesObjects.blockAnchorPoint) {
-            //TileEntity te = ship.getMobileChunk().getTileEntity(pos);
-            //if (te != null && te instanceof TileEntityAnchorPoint && ((TileEntityAnchorPoint) te).anchorPointInfo != null && ((TileEntityAnchorPoint) te).anchorPointInfo.forShip) {
-            //    if (anchorPoints == null) {
-            //        anchorPoints = new ArrayList<LocatedBlock>();
-            //    }
-            //    anchorPoints.add(new LocatedBlock(state, te, pos));
-            //}
+            TileEntity te = ship.getMobileChunk().getTileEntity(pos);
+            if (te != null && te instanceof TileEntityAnchorPoint && ((TileEntityAnchorPoint) te).getInstance() != null
+                    && ((TileEntityAnchorPoint) te).getInstance().getType().equals(AnchorInstance.InstanceType.FORSHIP)) {
+                if (anchorPoints == null) {
+                    anchorPoints = new ArrayList<>();
+                }
+                anchorPoints.add(new LocatedBlock(state, te, pos));
+            }
         } else if (block == ArchimedesObjects.blockEngine) {
             TileEntity te = ship.getMobileChunk().getTileEntity(pos);
             if (te instanceof ITileEngineModifier) {

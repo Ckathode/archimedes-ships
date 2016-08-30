@@ -21,7 +21,7 @@ public class ContainerAnchorPoint extends Container {
         player = entityplayer;
 
         bindPlayerInventory(entityplayer.inventory);
-        addSlotToContainer(new SlotAnchor(tileEntity, 0, 32 + 17, 64 + 17));
+        addSlotToContainer(new SlotAnchor(tileEntity, 0, 32 + 16, 64 + 36));
     }
 
     @Override
@@ -32,12 +32,12 @@ public class ContainerAnchorPoint extends Container {
     protected void bindPlayerInventory(InventoryPlayer inventoryPlayer) {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
-                addSlotToContainer(new Slot(inventoryPlayer, j + i * 9 + 9, 48 + j * 18, 124 + i * 18));
+                addSlotToContainer(new Slot(inventoryPlayer, j + i * 9 + 9, 48 + j * 18, 138 + i * 18));
             }
         }
 
         for (int i = 0; i < 9; i++) {
-            addSlotToContainer(new Slot(inventoryPlayer, i, 48 + i * 18, 182));
+            addSlotToContainer(new Slot(inventoryPlayer, i, 48 + i * 18, 196));
         }
     }
 

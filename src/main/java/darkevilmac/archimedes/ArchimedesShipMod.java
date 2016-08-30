@@ -5,10 +5,7 @@ import com.google.common.collect.ListMultimap;
 import darkevilmac.archimedes.client.ClientProxy;
 import darkevilmac.archimedes.common.ArchimedesConfig;
 import darkevilmac.archimedes.common.CommonProxy;
-import darkevilmac.archimedes.common.command.CommandASHelp;
-import darkevilmac.archimedes.common.command.CommandDisassembleNear;
-import darkevilmac.archimedes.common.command.CommandDisassembleShip;
-import darkevilmac.archimedes.common.command.CommandShipInfo;
+import darkevilmac.archimedes.common.command.*;
 import darkevilmac.archimedes.common.entity.EntityParachute;
 import darkevilmac.archimedes.common.entity.EntitySeat;
 import darkevilmac.archimedes.common.entity.EntityShip;
@@ -153,6 +150,7 @@ public class ArchimedesShipMod {
         registerASCommand(event, new CommandDisassembleShip());
         registerASCommand(event, new CommandShipInfo());
         registerASCommand(event, new CommandDisassembleNear());
+        registerASCommand(event, new CommandASTP());
         Collections.sort(CommandASHelp.asCommands);
     }
 

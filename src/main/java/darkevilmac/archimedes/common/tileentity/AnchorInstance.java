@@ -1,7 +1,10 @@
 package darkevilmac.archimedes.common.tileentity;
 
+import darkevilmac.archimedes.client.LanguageEntries;
+import darkevilmac.archimedes.common.util.NBTTagUtils;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
@@ -11,15 +14,22 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-import darkevilmac.archimedes.client.LanguageEntries;
-import darkevilmac.archimedes.common.util.NBTTagUtils;
-
 public class AnchorInstance implements INBTSerializable<NBTTagCompound> {
     /**
      * A unique identifier for this anchor, essentially a verification check for dimensions.
      */
     private UUID identifier;
     private InstanceType type;
+
+    public boolean hasChanged() {
+        return changed;
+    }
+
+    public void setChanged(boolean changed) {
+        this.changed = changed;
+    }
+
+    private boolean changed;
     /**
      * The anchors related to our instance, stores their position in world as well as their
      * UUID, used for checking if we're in range as well as notifying an anchor if one is
@@ -31,6 +41,7 @@ public class AnchorInstance implements INBTSerializable<NBTTagCompound> {
         this.identifier = UUID.randomUUID();
         this.type = InstanceType.FORLAND;
         this.relatedAnchors = new HashMap<>();
+        changed = false;
     }
 
     public UUID getIdentifier() {
@@ -39,6 +50,7 @@ public class AnchorInstance implements INBTSerializable<NBTTagCompound> {
 
     public void setIdentifier(UUID identifier) {
         this.identifier = identifier;
+        changed = true;
     }
 
     public InstanceType getType() {
@@ -47,6 +59,7 @@ public class AnchorInstance implements INBTSerializable<NBTTagCompound> {
 
     public void setType(InstanceType type) {
         this.type = type;
+        changed = true;
     }
 
     public Map<UUID, BlockLocation> getRelatedAnchors() {
@@ -66,10 +79,14 @@ public class AnchorInstance implements INBTSerializable<NBTTagCompound> {
 
     public void setRelatedAnchors(Map<UUID, BlockLocation> relatedAnchors) {
         this.relatedAnchors = relatedAnchors;
+        changed = true;
+
     }
 
     public void addRelation(UUID identifier, BlockLocation location) {
         relatedAnchors.put(identifier, location);
+        changed = true;
+
     }
 
     @Override
@@ -83,10 +100,14 @@ public class AnchorInstance implements INBTSerializable<NBTTagCompound> {
 
     public void clearRelations() {
         relatedAnchors.clear();
+        changed = true;
+
     }
 
     public void removeRelation(UUID identifier) {
         relatedAnchors.remove(identifier);
+        changed = true;
+
     }
 
     @Override
@@ -97,22 +118,18 @@ public class AnchorInstance implements INBTSerializable<NBTTagCompound> {
         tag.setBoolean("type", type == InstanceType.FORSHIP);
         tag.setUniqueId("identifier", identifier);
 
-
         if (!relatedAnchors.isEmpty()) {
-            NBTTagCompound relatedAnchorsCompound = new NBTTagCompound();
-            relatedAnchorsCompound.setInteger("size", relatedAnchors.size());
+            NBTTagList relatedAnchorsTagList = tag.getTagList("relatedAnchorsTagList", 10);
 
-            int curEntry = 0;
             for (HashMap.Entry<UUID, BlockLocation> e : relatedAnchors.entrySet()) {
                 NBTTagCompound entry = new NBTTagCompound();
                 entry.setUniqueId("identifier", e.getKey());
                 entry.setInteger("dimID", e.getValue().dimID);
                 NBTTagUtils.writeVec3iToNBT(entry, "related", e.getValue().pos);
-                relatedAnchorsCompound.setTag(String.valueOf(curEntry), entry);
-                curEntry++;
+                relatedAnchorsTagList.appendTag(entry);
             }
 
-            tag.setTag("relatedAnchorsCompound", relatedAnchorsCompound);
+            tag.setTag("relatedAnchorsTagList", relatedAnchorsTagList);
         }
 
         return tag;
@@ -120,18 +137,18 @@ public class AnchorInstance implements INBTSerializable<NBTTagCompound> {
 
     @Override
     public void deserializeNBT(NBTTagCompound tag) {
-        if (!tag.getBoolean("instance"))
+        if (!tag.hasKey("instance"))
             throw new IllegalArgumentException("NBT provided for deserialization is not valid for an anchor point! " + tag.toString());
 
         this.type = tag.getBoolean("type") ? InstanceType.FORSHIP : InstanceType.FORLAND;
         this.identifier = tag.getUniqueId("identifier");
 
-        if (tag.hasKey("relatedAnchorsCompound")) {
-            NBTTagCompound relatedAnchorsCompound = tag.getCompoundTag("relatedAnchorsCompound");
-            int size = relatedAnchorsCompound.getInteger("size");
+        if (tag.hasKey("relatedAnchorsTagList")) {
+            NBTTagList relatedAnchorsTagList = tag.getTagList("relatedAnchorsTagList", 10);
+            int size = relatedAnchorsTagList.tagCount();
 
             for (int entry = 0; entry < size; entry++) {
-                NBTTagCompound entryCompound = relatedAnchorsCompound.getCompoundTag(String.valueOf(entry));
+                NBTTagCompound entryCompound = relatedAnchorsTagList.getCompoundTagAt(entry);
                 int entryDimID = entryCompound.getInteger("dimID");
                 BlockPos entryPos = new BlockPos(NBTTagUtils.readVec3iFromNBT(entryCompound, "related"));
                 UUID entryIdentifier = entryCompound.getUniqueId("identifier");

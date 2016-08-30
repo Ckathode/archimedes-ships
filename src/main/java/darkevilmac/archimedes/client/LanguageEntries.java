@@ -52,6 +52,8 @@ public class LanguageEntries {
     public static final String GUI_ANCHOR_TYPE = "gui.archimedes.anchor.type";
     public static final String GUI_ANCHOR_LINK = "gui.archimedes.anchor.link";
     public static final String GUI_ANCHOR_SWITCH = "gui.archimedes.anchor.switch";
+    public static final String GUI_ANCHOR_RELATED = "gui.archimedes.anchor.related";
+    public static final String GUI_ANCHOR_NORELATIONS = "gui.archimedes.anchor.norelations";
     public static final String GUI_ANCHOR_MODE_WORLD = "gui.archimedes.anchor.mode.world";
     public static final String GUI_ANCHOR_MODE_SHIP = "gui.archimedes.anchor.mode.ship";
 

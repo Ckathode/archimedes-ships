@@ -1,5 +1,11 @@
 package darkevilmac.archimedes.common.tileentity;
 
+import darkevilmac.archimedes.client.LanguageEntries;
+import darkevilmac.archimedes.client.gui.GuiAnchorPoint;
+import darkevilmac.archimedes.common.object.ArchimedesObjects;
+import darkevilmac.movingworld.api.IMovingWorldTileEntity;
+import darkevilmac.movingworld.common.chunk.mobilechunk.MobileChunk;
+import darkevilmac.movingworld.common.entity.EntityMovingWorld;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,23 +17,18 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 
+import javax.annotation.Nullable;
 import java.util.Objects;
 
-import javax.annotation.Nullable;
+public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTileEntity, IInventory, ITickable {
 
-import darkevilmac.archimedes.client.LanguageEntries;
-import darkevilmac.archimedes.client.gui.GuiAnchorPoint;
-import darkevilmac.archimedes.common.object.ArchimedesObjects;
-import darkevilmac.movingworld.api.IMovingWorldTileEntity;
-import darkevilmac.movingworld.common.chunk.mobilechunk.MobileChunk;
-import darkevilmac.movingworld.common.entity.EntityMovingWorld;
 
-public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTileEntity, IInventory {
-
-    public AnchorInstance instance;
+    private AnchorInstance instance;
     public ItemStack content;
 
     public BlockPos chunkPos;
@@ -43,7 +44,7 @@ public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTil
     @Nullable
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
-        return new SPacketUpdateTileEntity(this.pos, 5, this.getUpdateTag());
+        return new SPacketUpdateTileEntity(this.pos, 0, this.getUpdateTag());
     }
 
     @Override
@@ -54,6 +55,7 @@ public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTil
     @Override
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
         readFromNBT(packet.getNbtCompound());
+        worldObj.markBlockRangeForRenderUpdate(pos, pos);
 
         if (FMLLaunchHandler.side().isClient()) {
             if (Minecraft.getMinecraft().currentScreen != null && Minecraft.getMinecraft().currentScreen instanceof GuiAnchorPoint) {
@@ -124,6 +126,15 @@ public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTil
     @Override
     public void setParentMovingWorld(EntityMovingWorld entityMovingWorld) {
         setParentMovingWorld(new BlockPos(BlockPos.ORIGIN), entityMovingWorld);
+    }
+
+    public AnchorInstance getInstance() {
+        return instance;
+    }
+
+    public void setInstance(AnchorInstance instance) {
+        this.instance = instance;
+        this.instance.setChanged(true);
     }
 
     @Override
@@ -241,5 +252,17 @@ public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTil
 
     public static boolean isItemAnchor(ItemStack itemstack) {
         return itemstack != null && Objects.equals(itemstack.getItem(), Item.getItemFromBlock(ArchimedesObjects.blockAnchorPoint));
+    }
+
+    @Override
+    public void update() {
+        if (instance != null && instance.hasChanged()) {
+            instance.setChanged(false);
+
+            if (worldObj instanceof WorldServer) {
+                ((WorldServer) worldObj).getPlayerChunkMap().markBlockForUpdate(pos);
+                markDirty();
+            }
+        }
     }
 }

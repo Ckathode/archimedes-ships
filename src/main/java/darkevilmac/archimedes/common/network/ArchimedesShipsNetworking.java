@@ -1,25 +1,6 @@
 package darkevilmac.archimedes.common.network;
 
-import com.unascribed.lambdanetwork.BiConsumer;
-import com.unascribed.lambdanetwork.DataType;
-import com.unascribed.lambdanetwork.LambdaNetwork;
-import com.unascribed.lambdanetwork.LambdaNetworkBuilder;
-import com.unascribed.lambdanetwork.Token;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.World;
-import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.fml.relauncher.Side;
-
-import java.util.HashMap;
-import java.util.UUID;
-
+import com.unascribed.lambdanetwork.*;
 import darkevilmac.archimedes.ArchimedesShipMod;
 import darkevilmac.archimedes.client.ClientProxy;
 import darkevilmac.archimedes.client.gui.ContainerHelm;
@@ -34,6 +15,20 @@ import darkevilmac.archimedes.common.tileentity.TileEntityHelm;
 import darkevilmac.movingworld.common.chunk.assembly.AssembleResult;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.fml.relauncher.Side;
+
+import java.util.HashMap;
+import java.util.UUID;
 
 
 public class ArchimedesShipsNetworking {
@@ -173,18 +168,18 @@ public class ArchimedesShipsNetworking {
                              * Clear the entries as well as notify the entries to clear us from them.
                              * Then switch mode.
                              */
-                            for (HashMap.Entry<UUID, BlockLocation> e : anchorPoint.instance.getRelatedAnchors().entrySet()) {
+                            for (HashMap.Entry<UUID, BlockLocation> e : anchorPoint.getInstance().getRelatedAnchors().entrySet()) {
                                 if (world.getTileEntity(e.getValue().pos) != null && world.getTileEntity(e.getValue().pos) instanceof TileEntityAnchorPoint) {
                                     TileEntityAnchorPoint entryAnchorPoint = (TileEntityAnchorPoint) world.getTileEntity(e.getValue().pos);
-                                    entryAnchorPoint.instance.removeRelation(anchorPoint.instance.getIdentifier());
+                                    ((EntityPlayerMP) entityPlayer).connection.sendPacket(entryAnchorPoint.getUpdatePacket());
                                 } else {
                                     ArchimedesShipMod.modLog.error("Invalid entries in anchor tile: " + anchorPoint.toString() + ", cleaning.");
                                 }
                             }
 
-                            anchorPoint.instance.clearRelations();
-                            anchorPoint.instance.setType(anchorPoint.instance.getType().opposite());
-                            anchorPoint.instance.setIdentifier(UUID.randomUUID());
+                            anchorPoint.getInstance().clearRelations();
+                            anchorPoint.getInstance().setType(anchorPoint.getInstance().getType().opposite());
+                            anchorPoint.getInstance().setIdentifier(UUID.randomUUID());
                             anchorPoint.markDirty();
                         } else if (anchorPoint.content != null) {
                             // Link
@@ -192,62 +187,38 @@ public class ArchimedesShipsNetworking {
                              * As a note, we don't set the relation of our own anchor because the anchor we
                              * would relate it to has yet to be placed, we set this info when the anchor is placed.
                              */
-                            if (anchorPoint.instance.getType() == AnchorInstance.InstanceType.FORLAND) {
-                                if (!anchorPoint.content.getTagCompound().hasKey("instance")) {
-                                    AnchorInstance itemAnchorInstanceTag = new AnchorInstance();
-
-                                    itemAnchorInstanceTag.setType(AnchorInstance.InstanceType.FORSHIP);
-                                    itemAnchorInstanceTag.setIdentifier(UUID.randomUUID());
-                                    itemAnchorInstanceTag.addRelation(anchorPoint.instance.getIdentifier(),
-                                            new BlockLocation(anchorPos, entityPlayer.worldObj.provider.getDimension()));
-                                    anchorPoint.content.getTagCompound().setTag("instance", itemAnchorInstanceTag.serializeNBT());
-                                } else {
-                                    AnchorInstance instanceFromKey = new AnchorInstance();
-                                    instanceFromKey.deserializeNBT(anchorPoint.content.getTagCompound().getCompoundTag("instance"));
-
-                                    if (instanceFromKey.getType() == AnchorInstance.InstanceType.FORLAND) {
-                                        // Incorrect type, clear it.
-                                        instanceFromKey.setIdentifier(UUID.randomUUID());
-                                        instanceFromKey.setType(AnchorInstance.InstanceType.FORSHIP);
-                                        instanceFromKey.clearRelations();
-                                    }
-
-                                    instanceFromKey.addRelation(anchorPoint.instance.getIdentifier(),
-                                            new BlockLocation(anchorPos, entityPlayer.worldObj.provider.getDimension()));
-                                    anchorPoint.content.getTagCompound().setTag("instance", instanceFromKey.serializeNBT());
+                            if (anchorPoint.getInstance().getType() == AnchorInstance.InstanceType.FORLAND) {
+                                if (anchorPoint.content.getTagCompound() == null) {
+                                    anchorPoint.content.setTagCompound(new NBTTagCompound());
                                 }
+                                if (anchorPoint.content.getTagCompound().hasKey("instance"))
+                                    anchorPoint.content.getTagCompound().removeTag("instance");
+                                AnchorInstance itemAnchorInstanceTag = new AnchorInstance();
+
+                                itemAnchorInstanceTag.setType(AnchorInstance.InstanceType.FORSHIP);
+                                itemAnchorInstanceTag.setIdentifier(UUID.randomUUID());
+                                itemAnchorInstanceTag.addRelation(anchorPoint.getInstance().getIdentifier(),
+                                        new BlockLocation(anchorPos, entityPlayer.worldObj.provider.getDimension()));
+                                anchorPoint.content.getTagCompound().setTag("instance", itemAnchorInstanceTag.serializeNBT());
                             } else {
                                 if (anchorPoint.content.getTagCompound() == null) {
                                     anchorPoint.content.setTagCompound(new NBTTagCompound());
                                 }
-                                if (!anchorPoint.content.getTagCompound().hasKey("instance")) {
-                                    if (!anchorPoint.content.getTagCompound().hasKey("instance")) {
-                                        AnchorInstance itemAnchorInstanceTag = new AnchorInstance();
+                                if (anchorPoint.content.getTagCompound().hasKey("instance"))
+                                    anchorPoint.content.getTagCompound().removeTag("instance");
 
-                                        itemAnchorInstanceTag.setType(AnchorInstance.InstanceType.FORLAND);
-                                        itemAnchorInstanceTag.setIdentifier(UUID.randomUUID());
-                                        itemAnchorInstanceTag.addRelation(anchorPoint.instance.getIdentifier(),
-                                                new BlockLocation(anchorPos, entityPlayer.worldObj.provider.getDimension()));
-                                        anchorPoint.content.getTagCompound().setTag("instance", itemAnchorInstanceTag.serializeNBT());
-                                    } else {
-                                        AnchorInstance instanceFromKey = new AnchorInstance();
-                                        instanceFromKey.deserializeNBT(anchorPoint.content.getTagCompound().getCompoundTag("instance"));
+                                AnchorInstance itemAnchorInstanceTag = new AnchorInstance();
 
-                                        if (instanceFromKey.getType() == AnchorInstance.InstanceType.FORSHIP) {
-                                            // Incorrect type, clear it.
-                                            instanceFromKey.setIdentifier(UUID.randomUUID());
-                                            instanceFromKey.setType(AnchorInstance.InstanceType.FORLAND);
-                                            instanceFromKey.clearRelations();
-                                        }
-
-                                        instanceFromKey.addRelation(anchorPoint.instance.getIdentifier(),
-                                                new BlockLocation(anchorPos, entityPlayer.worldObj.provider.getDimension()));
-                                        anchorPoint.content.getTagCompound().setTag("instance", instanceFromKey.serializeNBT());
-                                    }
-                                }
+                                itemAnchorInstanceTag.setType(AnchorInstance.InstanceType.FORLAND);
+                                itemAnchorInstanceTag.setIdentifier(UUID.randomUUID());
+                                itemAnchorInstanceTag.addRelation(anchorPoint.getInstance().getIdentifier(),
+                                        new BlockLocation(anchorPos, entityPlayer.worldObj.provider.getDimension()));
+                                anchorPoint.content.getTagCompound().setTag("instance", itemAnchorInstanceTag.serializeNBT());
                             }
                         }
-                        ((EntityPlayerMP) entityPlayer).connection.sendPacket(anchorPoint.getUpdatePacket());
+                        anchorPoint.markDirty();
+                        if (world instanceof WorldServer)
+                            ((WorldServer) world).getPlayerChunkMap().markBlockForUpdate(anchorPoint.getPos());
                     }
                 });
 
