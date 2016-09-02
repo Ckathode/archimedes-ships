@@ -29,8 +29,8 @@ repositories {
 apply plugin: 'net.minecraftforge.gradle.forge'
 
 version = 'MC1.10-V1.10'
-group = 'darkevilmac.archimedesshipsplus'
-archivesBaseName = 'archimedesshipsplus'
+group = 'io.github.elytra.davincisvessels'
+archivesBaseName = 'davincisvessels'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -57,7 +57,7 @@ shadowJar {
     exclude 'dummyThing'
     classifier = 'full'
 
-    relocate 'com.unascribed.lambdanetwork', 'darkevilmac.movingworld.repackage.com.unascribed.lambdanetwork'
+    relocate 'com.unascribed.lambdanetwork', 'io.github.elytra.movingworld.repackage.com.unascribed.lambdanetwork'
     // Shaded under movingworld because of some references to MovingWorld networking.
 }
 
@@ -74,7 +74,7 @@ dependencies {
 }
 
 configurations {
-    runtime.exclude group: 'darkevilmac.movingworld'
+    runtime.exclude group: 'io.github.elytra.movingworld'
 }
 
 processResources
@@ -117,12 +117,12 @@ idea {
                 it.@name == 'Minecraft Server' && it.@type == 'Application'
             }
 
-            def minecraftClientVMArgs = '-Xincgc -Xmx1024M -Xms1024M -Dfml.coreMods.load=darkevilmac.movingworld.common.asm.coremod.MovingWorldCoreMod -Dmixin.debug=true'
+            def minecraftClientVMArgs = '-Xincgc -Xmx1024M -Xms1024M -Dfml.coreMods.load=io.github.elytra.movingworld.common.asm.coremod.MovingWorldCoreMod -Dmixin.debug=true'
             minecraftClientDefaults.option.find { it.@name == 'VM_PARAMETERS' }.replaceNode {
                 option(name: 'VM_PARAMETERS', value: minecraftClientVMArgs)
             }
 
-            def minecraftServerVMArgs = '-Xincgc -Dfml.ignoreInvalidMinecraftCertificates=true -Dfml.coreMods.load=darkevilmac.movingworld.common.asm.coremod.MovingWorldCoreMod -Dmixin.debug=true'
+            def minecraftServerVMArgs = '-Xincgc -Dfml.ignoreInvalidMinecraftCertificates=true -Dfml.coreMods.load=io.github.elytra.movingworld.common.asm.coremod.MovingWorldCoreMod -Dmixin.debug=true'
             minecraftServerDefaults.option.find { it.@name == 'VM_PARAMETERS' }.replaceNode {
                 option(name: 'VM_PARAMETERS', value: minecraftServerVMArgs)
             }

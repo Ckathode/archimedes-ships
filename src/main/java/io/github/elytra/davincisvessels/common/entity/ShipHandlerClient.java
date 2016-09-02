@@ -1,7 +1,7 @@
 package io.github.elytra.davincisvessels.common.entity;
 
-import darkevilmac.movingworld.common.entity.EntityMovingWorld;
-import darkevilmac.movingworld.common.entity.MovingWorldHandlerClient;
+import io.github.elytra.movingworld.common.entity.EntityMovingWorld;
+import io.github.elytra.movingworld.common.entity.MovingWorldHandlerClient;
 
 public class ShipHandlerClient extends MovingWorldHandlerClient {
 

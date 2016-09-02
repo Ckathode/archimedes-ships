@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import io.github.elytra.davincisvessels.common.entity.EntityShip;
-import darkevilmac.movingworld.common.util.Vec3dMod;
+import io.github.elytra.movingworld.common.util.Vec3dMod;
 
 public class ConnectionHandler {
 

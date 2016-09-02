@@ -25,7 +25,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import java.util.HashMap;
 
 import io.github.elytra.davincisvessels.DavincisVesselsMod;
-import io.github.elytra.davincisvessels.client.LanguageEntries;
+import io.github.elytra.davincisvessels.common.LanguageEntries;
 import io.github.elytra.davincisvessels.common.object.achievement.SmartAchievementPage;
 import io.github.elytra.davincisvessels.common.object.block.BlockAS;
 import io.github.elytra.davincisvessels.common.object.block.BlockEngine;
@@ -34,12 +34,8 @@ import io.github.elytra.davincisvessels.common.object.block.BlockSeat;
 import io.github.elytra.davincisvessels.common.object.block.BlockSecuredBed;
 import io.github.elytra.davincisvessels.common.object.item.ItemBlockAnchorPoint;
 import io.github.elytra.davincisvessels.common.object.item.ItemGaugeBlock;
-import io.github.elytra.davincisvessels.common.tileentity.TileEntityAnchorPoint;
-import io.github.elytra.davincisvessels.common.tileentity.TileEntityCrate;
-import io.github.elytra.davincisvessels.common.tileentity.TileEntityEngine;
-import io.github.elytra.davincisvessels.common.tileentity.TileEntityGauge;
-import io.github.elytra.davincisvessels.common.tileentity.TileEntityHelm;
-import io.github.elytra.davincisvessels.common.tileentity.TileEntitySecuredBed;
+import io.github.elytra.davincisvessels.common.tileentity.*;
+import io.github.elytra.davincisvessels.common.LanguageEntries;
 
 /**
  * Block registration is here, to keep the mod class nice and small.
@@ -177,7 +173,6 @@ public class DavincisVesselsObjects {
         achievementSubmerseShip = new Achievement("achievement.archimedes.submerse",
                 LanguageEntries.ACHIEVEMENT_SUBMERSE_SHIP, 5, -2, Item.getItemFromBlock(blockAnchorPoint), achievementAssembleMount);
 
-
         achievementPage = new SmartAchievementPage(DavincisVesselsMod.MOD_NAME);
 
         achievementPage.registerAchievement(achievementCreateHelm);
@@ -199,7 +194,7 @@ public class DavincisVesselsObjects {
     }
 
     private void registerBlock(String id, Block block, boolean withItemBlock) {
-        block.setUnlocalizedName("archimedes." + id);
+        block.setUnlocalizedName("davincis." + id);
         block.setRegistryName(REGISTRY_PREFIX, id);
         GameRegistry.register(block);
         if (withItemBlock)
@@ -209,7 +204,7 @@ public class DavincisVesselsObjects {
 
     private void registerBlock(String id, Block block, Class<? extends ItemBlock> itemBlockClass) {
         try {
-            block.setUnlocalizedName("archimedes." + id);
+            block.setUnlocalizedName("davincis." + id);
             block.setRegistryName(REGISTRY_PREFIX, id);
             GameRegistry.register(block);
 
@@ -223,7 +218,7 @@ public class DavincisVesselsObjects {
     }
 
     private void registerItem(String id, Item item) {
-        item.setUnlocalizedName("archimedes." + id);
+        item.setUnlocalizedName("davincis." + id);
         item.setRegistryName(REGISTRY_PREFIX, id);
         GameRegistry.register(item);
         DavincisVesselsObjects.registeredItems.put(id, item);

@@ -9,9 +9,9 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 
 import io.github.elytra.davincisvessels.common.entity.EntityShip;
-import darkevilmac.movingworld.api.IMovingWorldTileEntity;
-import darkevilmac.movingworld.common.chunk.mobilechunk.MobileChunk;
-import darkevilmac.movingworld.common.entity.EntityMovingWorld;
+import io.github.elytra.movingworld.api.IMovingWorldTileEntity;
+import io.github.elytra.movingworld.common.chunk.mobilechunk.MobileChunk;
+import io.github.elytra.movingworld.common.entity.EntityMovingWorld;
 
 public class TileEntityCrate extends TileEntity implements IMovingWorldTileEntity, ITickable {
     private EntityShip parentShip;

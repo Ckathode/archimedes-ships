@@ -13,7 +13,7 @@ import net.minecraft.util.math.Vec3d;
 import java.io.IOException;
 
 import io.github.elytra.davincisvessels.common.entity.EntityShip;
-import darkevilmac.movingworld.api.IMovingWorldTileEntity;
+import io.github.elytra.movingworld.api.IMovingWorldTileEntity;
 
 public class TileEntityHelmRenderer extends TileEntitySpecialRenderer {
 

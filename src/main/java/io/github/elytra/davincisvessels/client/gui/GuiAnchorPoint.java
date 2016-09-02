@@ -1,6 +1,6 @@
 package io.github.elytra.davincisvessels.client.gui;
 
-import io.github.elytra.davincisvessels.client.LanguageEntries;
+import io.github.elytra.davincisvessels.common.LanguageEntries;
 import io.github.elytra.davincisvessels.common.network.DavincisVesselsNetworking;
 import io.github.elytra.davincisvessels.common.object.DavincisVesselsObjects;
 import io.github.elytra.davincisvessels.common.tileentity.BlockLocation;

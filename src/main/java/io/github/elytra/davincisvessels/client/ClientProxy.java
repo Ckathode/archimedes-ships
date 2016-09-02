@@ -31,7 +31,7 @@ import net.minecraftforge.fml.common.LoaderState;
 
 import java.util.ArrayList;
 
-import darkevilmac.movingworld.client.render.RenderMovingWorld;
+import io.github.elytra.movingworld.client.render.RenderMovingWorld;
 
 public class ClientProxy extends CommonProxy {
 

@@ -7,7 +7,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
-import darkevilmac.movingworld.common.util.Vec3dMod;
+import io.github.elytra.movingworld.common.util.Vec3dMod;
 import io.netty.buffer.ByteBuf;
 
 public class EntityParachute extends Entity implements IEntityAdditionalSpawnData {

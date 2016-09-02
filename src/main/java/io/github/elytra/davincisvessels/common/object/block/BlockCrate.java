@@ -24,7 +24,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import darkevilmac.movingworld.common.entity.EntityMovingWorld;
+import io.github.elytra.movingworld.common.entity.EntityMovingWorld;
 
 public class BlockCrate extends BlockContainer {
     public static final PropertyEnum AXIS = PropertyEnum.create("axis", EnumFacing.Axis.class, EnumFacing.Axis.X, EnumFacing.Axis.Z);

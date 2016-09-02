@@ -15,13 +15,13 @@ import io.github.elytra.davincisvessels.common.api.block.IBlockBalloon;
 import io.github.elytra.davincisvessels.common.handler.ConnectionHandler;
 import io.github.elytra.davincisvessels.common.object.DavincisVesselsObjects;
 import io.github.elytra.davincisvessels.common.tileentity.TileEntitySecuredBed;
-import darkevilmac.movingworld.MovingWorldMod;
-import darkevilmac.movingworld.common.chunk.LocatedBlock;
-import darkevilmac.movingworld.common.chunk.MovingWorldAssemblyInteractor;
-import darkevilmac.movingworld.common.chunk.assembly.CanAssemble;
+import io.github.elytra.movingworld.MovingWorldMod;
+import io.github.elytra.movingworld.common.chunk.LocatedBlock;
+import io.github.elytra.movingworld.common.chunk.MovingWorldAssemblyInteractor;
+import io.github.elytra.movingworld.common.chunk.assembly.CanAssemble;
 import io.netty.buffer.ByteBuf;
 
-import static darkevilmac.movingworld.common.chunk.assembly.AssembleResult.ResultType.RESULT_NONE;
+import static io.github.elytra.movingworld.common.chunk.assembly.AssembleResult.ResultType.RESULT_NONE;
 
 public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
 

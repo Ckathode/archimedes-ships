@@ -1,7 +1,7 @@
 package io.github.elytra.davincisvessels.common.api.tileentity;
 
 import io.github.elytra.davincisvessels.common.entity.ShipCapabilities;
-import darkevilmac.movingworld.api.IMovingWorldTileEntity;
+import io.github.elytra.movingworld.api.IMovingWorldTileEntity;
 
 public interface ITileEngineModifier extends IMovingWorldTileEntity {
 

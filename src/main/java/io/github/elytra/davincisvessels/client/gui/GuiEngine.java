@@ -1,14 +1,12 @@
 package io.github.elytra.davincisvessels.client.gui;
 
+import io.github.elytra.davincisvessels.common.LanguageEntries;
+import io.github.elytra.davincisvessels.common.tileentity.TileEntityEngine;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.opengl.GL11;
-
-import io.github.elytra.davincisvessels.client.LanguageEntries;
-import io.github.elytra.davincisvessels.common.tileentity.TileEntityEngine;
 
 public class GuiEngine extends GuiContainer {
     public static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("archimedesshipsplus", "textures/gui/engine.png");
@@ -28,7 +26,7 @@ public class GuiEngine extends GuiContainer {
         int row = 8;
         int col0 = 8;
 
-        fontRendererObj.drawString(I18n.format( LanguageEntries.GUI_ENGINE_TITLE), col0, row, color);
+        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_ENGINE_TITLE), col0, row, color);
         row += 5;
 
         fontRendererObj.drawString(I18n.format("container.inventory"), 8, ySize - 96 + 2, color);

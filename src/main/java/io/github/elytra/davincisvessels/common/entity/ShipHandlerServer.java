@@ -4,8 +4,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 
-import darkevilmac.movingworld.common.entity.EntityMovingWorld;
-import darkevilmac.movingworld.common.entity.MovingWorldHandlerServer;
+import io.github.elytra.movingworld.common.entity.EntityMovingWorld;
+import io.github.elytra.movingworld.common.entity.MovingWorldHandlerServer;
 
 public class ShipHandlerServer extends MovingWorldHandlerServer {
 

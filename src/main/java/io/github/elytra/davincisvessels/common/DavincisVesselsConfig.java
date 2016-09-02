@@ -3,7 +3,7 @@ package io.github.elytra.davincisvessels.common;
 import com.google.gson.Gson;
 import io.github.elytra.davincisvessels.DavincisVesselsMod;
 import io.github.elytra.davincisvessels.common.object.DavincisVesselsObjects;
-import darkevilmac.movingworld.MovingWorldMod;
+import io.github.elytra.movingworld.MovingWorldMod;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;

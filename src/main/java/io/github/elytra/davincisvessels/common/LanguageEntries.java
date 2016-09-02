@@ -1,4 +1,4 @@
-package elytra.davincis.client;
+package io.github.elytra.davincisvessels.common;
 
 /**
  * Just a class to statically store language file keys that are referenced in code.

@@ -17,11 +17,11 @@ import org.lwjgl.opengl.GL11;
 import java.util.Iterator;
 import java.util.List;
 
-import io.github.elytra.davincisvessels.client.LanguageEntries;
+import io.github.elytra.davincisvessels.common.LanguageEntries;
 import io.github.elytra.davincisvessels.common.entity.EntityShip;
 import io.github.elytra.davincisvessels.common.network.DavincisVesselsNetworking;
-import darkevilmac.movingworld.common.network.MovingWorldClientAction;
-import darkevilmac.movingworld.common.network.MovingWorldNetworking;
+import io.github.elytra.movingworld.common.network.MovingWorldClientAction;
+import io.github.elytra.movingworld.common.network.MovingWorldNetworking;
 
 public class GuiShip extends GuiContainer {
     public static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("archimedesshipsplus", "textures/gui/shipinv.png");

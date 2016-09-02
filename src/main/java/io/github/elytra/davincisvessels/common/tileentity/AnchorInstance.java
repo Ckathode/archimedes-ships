@@ -1,6 +1,6 @@
 package io.github.elytra.davincisvessels.common.tileentity;
 
-import io.github.elytra.davincisvessels.client.LanguageEntries;
+import io.github.elytra.davincisvessels.common.LanguageEntries;
 import io.github.elytra.davincisvessels.common.util.NBTTagUtils;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.nbt.NBTTagCompound;

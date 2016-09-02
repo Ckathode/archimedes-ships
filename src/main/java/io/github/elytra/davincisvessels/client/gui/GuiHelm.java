@@ -17,14 +17,14 @@ import org.lwjgl.opengl.GL11;
 import java.io.IOException;
 import java.util.Locale;
 
-import io.github.elytra.davincisvessels.client.LanguageEntries;
+import io.github.elytra.davincisvessels.common.LanguageEntries;
 import io.github.elytra.davincisvessels.common.network.DavincisVesselsNetworking;
-import darkevilmac.movingworld.common.chunk.assembly.AssembleResult;
-import darkevilmac.movingworld.common.chunk.assembly.AssembleResult.ResultType;
+import io.github.elytra.movingworld.common.chunk.assembly.AssembleResult;
+import io.github.elytra.movingworld.common.chunk.assembly.AssembleResult.ResultType;
 
-import static darkevilmac.movingworld.common.chunk.assembly.AssembleResult.ResultType.RESULT_BUSY_COMPILING;
-import static darkevilmac.movingworld.common.chunk.assembly.AssembleResult.ResultType.RESULT_NONE;
-import static darkevilmac.movingworld.common.chunk.assembly.AssembleResult.ResultType.RESULT_OK;
+import static io.github.elytra.movingworld.common.chunk.assembly.AssembleResult.ResultType.RESULT_BUSY_COMPILING;
+import static io.github.elytra.movingworld.common.chunk.assembly.AssembleResult.ResultType.RESULT_NONE;
+import static io.github.elytra.movingworld.common.chunk.assembly.AssembleResult.ResultType.RESULT_OK;
 
 public class GuiHelm extends GuiContainer {
     public static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("archimedesshipsplus", "textures/gui/shipstatus.png");

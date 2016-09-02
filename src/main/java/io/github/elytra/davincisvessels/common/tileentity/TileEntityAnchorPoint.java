@@ -1,11 +1,11 @@
 package io.github.elytra.davincisvessels.common.tileentity;
 
-import io.github.elytra.davincisvessels.client.LanguageEntries;
+import io.github.elytra.davincisvessels.common.LanguageEntries;
 import io.github.elytra.davincisvessels.client.gui.GuiAnchorPoint;
 import io.github.elytra.davincisvessels.common.object.DavincisVesselsObjects;
-import darkevilmac.movingworld.api.IMovingWorldTileEntity;
-import darkevilmac.movingworld.common.chunk.mobilechunk.MobileChunk;
-import darkevilmac.movingworld.common.entity.EntityMovingWorld;
+import io.github.elytra.movingworld.api.IMovingWorldTileEntity;
+import io.github.elytra.movingworld.common.chunk.mobilechunk.MobileChunk;
+import io.github.elytra.movingworld.common.entity.EntityMovingWorld;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;

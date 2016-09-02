@@ -2,7 +2,7 @@ package io.github.elytra.davincisvessels.common.object.item;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import io.github.elytra.davincisvessels.DavincisVesselsMod;
-import io.github.elytra.davincisvessels.client.LanguageEntries;
+import io.github.elytra.davincisvessels.common.LanguageEntries;
 import io.github.elytra.davincisvessels.common.tileentity.AnchorInstance;
 import io.github.elytra.davincisvessels.common.tileentity.BlockLocation;
 import net.minecraft.block.Block;
