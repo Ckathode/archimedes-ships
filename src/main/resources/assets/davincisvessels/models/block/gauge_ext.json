@@ -1,0 +1,43 @@
+{
+  "ambientocclusion": false,
+  "parent": "block/block",
+  "textures": {
+    "texture": "davincisvessels:blocks/gauge_ext",
+    "particle": "davincisvessels:blocks/gauge_ext"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        1,
+        16
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#texture"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#texture",
+          "cullface": "down"
+        }
+      }
+    }
+  ]
+}

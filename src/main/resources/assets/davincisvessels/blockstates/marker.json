@@ -1,0 +1,25 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "davincisvessels:helm"
+    },
+    "facing=south": {
+      "model": "davincisvessels:helm",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "davincisvessels:helm",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "davincisvessels:helm",
+      "y": 90
+    },
+    "facing=up": {
+      "model": "davincisvessels:helm"
+    },
+    "facing=down": {
+      "model": "davincisvessels:helm"
+    }
+  }
+}

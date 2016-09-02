@@ -1,0 +1,43 @@
+{
+  "ambientocclusion": false,
+  "parent": "block/block",
+  "textures": {
+    "wood": "blocks/planks_oak",
+    "crate": "davincisvessels:blocks/crate_wood",
+    "particle": "davincisvessels:blocks/crate_wood"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        1,
+        16
+      ],
+      "faces": {
+        "up": {
+          "texture": "#crate"
+        },
+        "down": {
+          "texture": "#wood"
+        },
+        "west": {
+          "texture": "#wood"
+        },
+        "east": {
+          "texture": "#wood"
+        },
+        "north": {
+          "texture": "#wood"
+        },
+        "south": {
+          "texture": "#wood"
+        }
+      }
+    }
+  ]
+}

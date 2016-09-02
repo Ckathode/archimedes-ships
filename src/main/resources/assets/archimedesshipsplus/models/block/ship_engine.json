@@ -1,9 +1,0 @@
-{
-  "parent": "archimedesshipsplus:block/orientableback",
-  "textures": {
-    "front": "archimedesshipsplus:blocks/engine_front",
-    "top": "archimedesshipsplus:blocks/engine",
-    "side": "archimedesshipsplus:blocks/engine_side",
-    "back": "archimedesshipsplus:blocks/engine"
-  }
-}

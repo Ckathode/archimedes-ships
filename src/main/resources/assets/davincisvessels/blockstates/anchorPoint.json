@@ -1,0 +1,11 @@
+{
+  "variants": {
+    "axis=z": {
+      "model": "davincisvessels:anchorPoint",
+      "y": 90
+    },
+    "axis=x": {
+      "model": "davincisvessels:anchorPoint"
+    }
+  }
+}
