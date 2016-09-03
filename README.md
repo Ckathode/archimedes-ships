@@ -1,5 +1,5 @@
-#<p style='text-align: center;'>Archimede's Ships Plus</p>
-####<p style='text-align: center;'>Archimede's Ships Minecraft mod with some useful additions.</p>
+#<p style='text-align: center;'>Davinci's Vessels</p>
+####<p style='text-align: center;'>A continuation of Archimedes Ships by CKathode</p>
 ---
 
 
@@ -19,4 +19,4 @@ Want to help make this mod even better, and make sure that it stays updated for 
 
 ####<p style='text-align: center;'>Contact</p>
 
-The best way to get in contact with me is to go on #ArchimedesShips+ on irc.esper.net
+The best way to get in contact with me is to go on #DavincisVessels on irc.esper.net
