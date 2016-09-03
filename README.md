@@ -2,14 +2,7 @@
 ####<p style='text-align: center;'>A continuation of Archimedes Ships by CKathode</p>
 ---
 
-
-#####<p style='text-align: center;'>Legal Stuff</p>
----
-><p style='text-align: center;'>All code under this repo related to archimede's ships (plus) is licensed under the license stated in the license file.</p>
-
----
-
-If you have feature suggestions feel free to add them as an issue, just make sure to give them the enhancement tag!
+If you have feature suggestions feel free to add them as an issue.
 
 ---
 
