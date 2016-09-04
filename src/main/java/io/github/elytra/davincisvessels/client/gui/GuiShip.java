@@ -24,7 +24,7 @@ import io.github.elytra.movingworld.common.network.MovingWorldClientAction;
 import io.github.elytra.movingworld.common.network.MovingWorldNetworking;
 
 public class GuiShip extends GuiContainer {
-    public static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("archimedesshipsplus", "textures/gui/shipinv.png");
+    public static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("davincisvessels", "textures/gui/shipinv.png");
 
     public final EntityShip ship;
     public final EntityPlayer player;
@@ -136,7 +136,7 @@ public class GuiShip extends GuiContainer {
 
         public void drawButton(Minecraft mc, int mouseX, int mouseY) {
             if (this.visible) {
-                mc.getTextureManager().bindTexture(new ResourceLocation("archimedesshipsplus", "textures/gui/submerse.png"));
+                mc.getTextureManager().bindTexture(new ResourceLocation("davincisvessels", "textures/gui/submerse.png"));
                 GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
                 boolean mouseOver = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
                 int yOffset = 0;

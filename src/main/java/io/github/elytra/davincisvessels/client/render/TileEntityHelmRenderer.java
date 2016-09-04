@@ -1,8 +1,10 @@
 package io.github.elytra.davincisvessels.client.render;
 
 import io.github.elytra.davincisvessels.DavincisVesselsMod;
+import io.github.elytra.davincisvessels.common.entity.EntityShip;
 import io.github.elytra.davincisvessels.common.object.block.BlockHelm;
 import io.github.elytra.davincisvessels.common.tileentity.TileEntityHelm;
+import io.github.elytra.movingworld.api.IMovingWorldTileEntity;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -11,9 +13,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.Vec3d;
 
 import java.io.IOException;
-
-import io.github.elytra.davincisvessels.common.entity.EntityShip;
-import io.github.elytra.movingworld.api.IMovingWorldTileEntity;
 
 public class TileEntityHelmRenderer extends TileEntitySpecialRenderer {
 
@@ -45,17 +44,17 @@ public class TileEntityHelmRenderer extends TileEntitySpecialRenderer {
         GlStateManager.pushMatrix();
         float shipPitch = 0;
         if (ship != null) {
-            shipPitch = (ship.rotationPitch * 10);
+            shipPitch = ship.prevRotationPitch + (ship.rotationPitch - ship.prevRotationPitch) * partialTicks;
             if (blockStateFacing == EnumFacing.NORTH || blockStateFacing == EnumFacing.WEST) {
                 shipPitch *= -1;
             }
             Vec3d vec3d = new Vec3d(2.5, 1.6, 2.5);
 
             translate(vec3d);
-            GlStateManager.rotate(shipPitch,
-                    blockStateFacing.getAxis() == EnumFacing.Axis.X ? 1 : 0,
-                    0,
-                    blockStateFacing.getAxis() == EnumFacing.Axis.Z ? 1 : 0);
+            GlStateManager.rotate(shipPitch*10,
+                    blockStateFacing.getAxis() == EnumFacing.Axis.X ? 1F : 0F,
+                    0F,
+                    blockStateFacing.getAxis() == EnumFacing.Axis.Z ? 1F : 0F);
             translate(vec3d.scale(-1));
         }
 

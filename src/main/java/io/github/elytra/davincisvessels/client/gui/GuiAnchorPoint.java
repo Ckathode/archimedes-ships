@@ -23,7 +23,7 @@ import java.util.UUID;
 
 public class GuiAnchorPoint extends GuiContainer {
 
-    public static final ResourceLocation GUI_TEXTURES = new ResourceLocation("archimedesshipsplus", "textures/gui/anchorPoint.png");
+    public static final ResourceLocation GUI_TEXTURES = new ResourceLocation("davincisvessels", "textures/gui/anchorPoint.png");
 
     private int selectedRelation;
     private String[] relations;

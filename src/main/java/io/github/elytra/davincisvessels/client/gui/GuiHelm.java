@@ -27,7 +27,7 @@ import static io.github.elytra.movingworld.common.chunk.assembly.AssembleResult.
 import static io.github.elytra.movingworld.common.chunk.assembly.AssembleResult.ResultType.RESULT_OK;
 
 public class GuiHelm extends GuiContainer {
-    public static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("archimedesshipsplus", "textures/gui/shipstatus.png");
+    public static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("davincisvessels", "textures/gui/shipstatus.png");
 
     public final TileEntityHelm tileEntity;
     public final EntityPlayer player;
