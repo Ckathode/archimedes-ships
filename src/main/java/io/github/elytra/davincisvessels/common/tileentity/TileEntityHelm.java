@@ -21,8 +21,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntityHelm extends TileMovingWorldMarkingBlock {
-    @SideOnly(Side.CLIENT)
-    public float prevPitch;
 
     public boolean submerge;
     private ShipAssemblyInteractor interactor;

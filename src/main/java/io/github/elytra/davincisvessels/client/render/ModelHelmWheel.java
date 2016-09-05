@@ -1,15 +1,11 @@
 package io.github.elytra.davincisvessels.client.render;
 
 import com.google.common.base.Function;
-
+import io.github.elytra.davincisvessels.DavincisVesselsMod;
 import io.github.elytra.davincisvessels.common.tileentity.TileEntityHelm;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelRotation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -27,8 +23,6 @@ import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.model.TRSRTransformation;
 
 import java.util.HashMap;
-
-import io.github.elytra.davincisvessels.DavincisVesselsMod;
 
 public class ModelHelmWheel {
 
@@ -74,6 +68,7 @@ public class ModelHelmWheel {
             modelBaked = helmModels.get(direction);
         } else return;
 
+
         GlStateManager.pushMatrix();
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
         RenderHelper.disableStandardItemLighting();
@@ -92,10 +87,10 @@ public class ModelHelmWheel {
         vertexBuffer.setTranslation(x, y, z);
         BlockRendererDispatcher blockrendererdispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
         blockrendererdispatcher.getBlockModelRenderer().renderModel(helm.getWorld(), modelBaked, state, BlockPos.ORIGIN, vertexBuffer, false, MathHelper.getPositionRandom(helm.getPos()));
-        vertexBuffer.setTranslation(0.0D, 0.0D, 0.0D);
+        vertexBuffer.setTranslation(0,0,0);
         tessellator.draw();
-        GlStateManager.popMatrix();
         RenderHelper.enableStandardItemLighting();
+        GlStateManager.popMatrix();
     }
 
 

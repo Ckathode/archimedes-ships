@@ -42,26 +42,25 @@ public class TileEntityHelmRenderer extends TileEntitySpecialRenderer {
         }
 
         GlStateManager.pushMatrix();
-        float shipPitch = 0;
+        float shipPitch;
         if (ship != null) {
             shipPitch = ship.prevRotationPitch + (ship.rotationPitch - ship.prevRotationPitch) * partialTicks;
             if (blockStateFacing == EnumFacing.NORTH || blockStateFacing == EnumFacing.WEST) {
                 shipPitch *= -1;
             }
-            Vec3d vec3d = new Vec3d(2.5, 1.6, 2.5);
+            boolean facingZAxis = blockStateFacing.getAxis() == EnumFacing.Axis.Z;
+
+            Vec3d vec3d = new Vec3d(facingZAxis ? 2.5 : 0, 1.65, facingZAxis ? 0 : 2.5);
 
             translate(vec3d);
-            GlStateManager.rotate(shipPitch*10,
-                    blockStateFacing.getAxis() == EnumFacing.Axis.X ? 1F : 0F,
+            GlStateManager.rotate(shipPitch * 10,
+                    !facingZAxis ? 1F : 0F,
                     0F,
-                    blockStateFacing.getAxis() == EnumFacing.Axis.Z ? 1F : 0F);
+                    facingZAxis ? 1F : 0F);
             translate(vec3d.scale(-1));
         }
-
         wheel.render(x, y, z, blockState, helm, blockStateFacing);
         GlStateManager.popMatrix();
-
-        helm.prevPitch = shipPitch;
     }
 
     private void translate(Vec3d translate) {
