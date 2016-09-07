@@ -10,7 +10,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.Vec3d;
 
 import java.io.IOException;
 
@@ -42,28 +41,31 @@ public class TileEntityHelmRenderer extends TileEntitySpecialRenderer {
         }
 
         GlStateManager.pushMatrix();
-        float shipPitch;
         if (ship != null) {
-            shipPitch = ship.prevRotationPitch + (ship.rotationPitch - ship.prevRotationPitch) * partialTicks;
+            float shipPitch = ship.prevRotationPitch + (ship.rotationPitch - ship.prevRotationPitch) * partialTicks;
             if (blockStateFacing == EnumFacing.NORTH || blockStateFacing == EnumFacing.WEST) {
                 shipPitch *= -1;
             }
-            boolean facingZAxis = blockStateFacing.getAxis() == EnumFacing.Axis.Z;
 
-            Vec3d vec3d = new Vec3d(facingZAxis ? 2.5 : 0, 1.65, facingZAxis ? 0 : 2.5);
+            boolean onZAxis = blockStateFacing.getAxis() == EnumFacing.Axis.Z;
 
-            translate(vec3d);
-            GlStateManager.rotate(shipPitch * 10,
-                    !facingZAxis ? 1F : 0F,
-                    0F,
-                    facingZAxis ? 1F : 0F);
-            translate(vec3d.scale(-1));
+            float translateX, translateY, translateZ;
+
+            if (onZAxis) {
+                translateX = 2.5F;
+                translateY = 1.625F;
+                translateZ = 0;
+            } else {
+                translateX = 0;
+                translateY = 1.625F;
+                translateZ = 2.5F;
+            }
+
+            GlStateManager.translate(translateX, translateY, translateZ);
+            GlStateManager.rotate(shipPitch * 10, onZAxis ? 0 : 1, 0, onZAxis ? 1 : 0);
+            GlStateManager.translate(-translateX, -translateY, -translateZ);
         }
         wheel.render(x, y, z, blockState, helm, blockStateFacing);
         GlStateManager.popMatrix();
-    }
-
-    private void translate(Vec3d translate) {
-        GlStateManager.translate(translate.xCoord, translate.yCoord, translate.zCoord);
     }
 }
