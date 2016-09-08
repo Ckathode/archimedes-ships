@@ -41,30 +41,33 @@ public class TileEntityHelmRenderer extends TileEntitySpecialRenderer {
         }
 
         GlStateManager.pushMatrix();
-        if (ship != null) {
-            float shipPitch = ship.prevRotationPitch + (ship.rotationPitch - ship.prevRotationPitch) * partialTicks;
-            if (blockStateFacing == EnumFacing.NORTH || blockStateFacing == EnumFacing.WEST) {
-                shipPitch *= -1;
-            }
 
-            boolean onZAxis = blockStateFacing.getAxis() == EnumFacing.Axis.Z;
+        float shipPitch = 0;
+        if (ship != null)
+            shipPitch = ship.prevRotationPitch + (ship.rotationPitch - ship.prevRotationPitch) * partialTicks;
 
-            float translateX, translateY, translateZ;
-
-            if (onZAxis) {
-                translateX = 2.5F;
-                translateY = 1.625F;
-                translateZ = 0;
-            } else {
-                translateX = 0;
-                translateY = 1.625F;
-                translateZ = 2.5F;
-            }
-
-            GlStateManager.translate(translateX, translateY, translateZ);
-            GlStateManager.rotate(shipPitch * 10, onZAxis ? 0 : 1, 0, onZAxis ? 1 : 0);
-            GlStateManager.translate(-translateX, -translateY, -translateZ);
+        if (blockStateFacing == EnumFacing.NORTH || blockStateFacing == EnumFacing.WEST) {
+            shipPitch *= -1;
         }
+
+        boolean onZAxis = blockStateFacing.getAxis() == EnumFacing.Axis.Z;
+
+        float translateX, translateY, translateZ;
+
+        if (onZAxis) {
+            translateX = 2.5F;
+            translateY = 2.625F;
+            translateZ = 0;
+        } else {
+            translateX = 0;
+            translateY = 2.625F;
+            translateZ = 2.5F;
+        }
+
+        GlStateManager.translate(translateX, translateY, translateZ);
+        GlStateManager.rotate(shipPitch * 10, onZAxis ? 0 : 1, 0, onZAxis ? 1 : 0);
+        GlStateManager.translate(-translateX, -translateY, -translateZ);
+
         wheel.render(x, y, z, blockState, helm, blockStateFacing);
         GlStateManager.popMatrix();
     }
