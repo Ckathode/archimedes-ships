@@ -136,7 +136,7 @@ public class GuiAnchorPoint extends GuiContainer {
                 selectedRelation = 0;
             }
         } else if (button == btnPrevRelation) {
-            if (selectedRelation >= relations.length - 1) {
+            if (selectedRelation > relations.length - 1) {
                 selectedRelation--;
             } else if (selectedRelation == 0) {
                 selectedRelation = relations.length - 1;

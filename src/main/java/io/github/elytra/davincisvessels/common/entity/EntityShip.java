@@ -188,15 +188,16 @@ public class EntityShip extends EntityMovingWorld {
             float oz = -getMobileChunk().getCenterZ();
 
             Vec3dMod vec = new Vec3dMod(closestRelation.getLeft().blockPos.getX() + ox,
-                    closestRelation.getLeft().blockPos.getY() + oy,
+                    oy,
                     closestRelation.getLeft().blockPos.getZ() + oz);
             vec = vec.rotateAroundY(rotationYaw);
             BlockPos pos = new BlockPos(MathHelperMod.round_double(vec.xCoord + closestRelation.getRight().blockPos.getX()),
                     MathHelperMod.round_double(vec.yCoord + closestRelation.getRight().blockPos.getY()),
                     MathHelperMod.round_double(vec.zCoord + closestRelation.getRight().blockPos.getZ()));
 
-            setPositionAndUpdate(pos.getX(), pos.getY(), pos.getZ());
+            setPositionAndUpdate(pos.getX(), pos.getY() + 1, pos.getZ());
             super.alignToGrid(true);
+            updatePassengers();
 
             return true;
         }

@@ -1,7 +1,19 @@
 package io.github.elytra.davincisvessels.common.entity;
 
+import io.github.elytra.davincisvessels.DavincisVesselsMod;
+import io.github.elytra.davincisvessels.common.api.block.IBlockBalloon;
+import io.github.elytra.davincisvessels.common.handler.ConnectionHandler;
+import io.github.elytra.davincisvessels.common.object.DavincisVesselsObjects;
 import io.github.elytra.davincisvessels.common.object.block.BlockHelm;
+import io.github.elytra.davincisvessels.common.tileentity.AnchorInstance;
+import io.github.elytra.davincisvessels.common.tileentity.TileEntityAnchorPoint;
 import io.github.elytra.davincisvessels.common.tileentity.TileEntityHelm;
+import io.github.elytra.davincisvessels.common.tileentity.TileEntitySecuredBed;
+import io.github.elytra.movingworld.MovingWorldMod;
+import io.github.elytra.movingworld.common.chunk.LocatedBlock;
+import io.github.elytra.movingworld.common.chunk.MovingWorldAssemblyInteractor;
+import io.github.elytra.movingworld.common.chunk.assembly.CanAssemble;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
@@ -9,17 +21,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import io.github.elytra.davincisvessels.DavincisVesselsMod;
-import io.github.elytra.davincisvessels.common.api.block.IBlockBalloon;
-import io.github.elytra.davincisvessels.common.handler.ConnectionHandler;
-import io.github.elytra.davincisvessels.common.object.DavincisVesselsObjects;
-import io.github.elytra.davincisvessels.common.tileentity.TileEntitySecuredBed;
-import io.github.elytra.movingworld.MovingWorldMod;
-import io.github.elytra.movingworld.common.chunk.LocatedBlock;
-import io.github.elytra.movingworld.common.chunk.MovingWorldAssemblyInteractor;
-import io.github.elytra.movingworld.common.chunk.assembly.CanAssemble;
-import io.netty.buffer.ByteBuf;
 
 import static io.github.elytra.movingworld.common.chunk.assembly.AssembleResult.ResultType.RESULT_NONE;
 
@@ -112,10 +113,9 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
         if (state.getBlock() == DavincisVesselsObjects.blockStickyBuffer || DavincisVesselsMod.instance.getNetworkConfig().isSticky(state.getBlock()))
             canAssemble.assembleThenCancel = true;
 
-        //if (lb.tileEntity != null && lb.tileEntity instanceof TileEntityAnchorPoint
-        //        && ((TileEntityAnchorPoint) lb.tileEntity).anchorPointInfo != null
-        //        && !((TileEntityAnchorPoint) lb.tileEntity).anchorPointInfo.forShip)
-        //    canAssemble.justCancel = true;
+        if (lb.tileEntity != null && lb.tileEntity instanceof TileEntityAnchorPoint
+                && ((TileEntityAnchorPoint) lb.tileEntity).getInstance().getType() == AnchorInstance.InstanceType.FORLAND)
+            canAssemble.justCancel = true;
 
         return canAssemble;
     }

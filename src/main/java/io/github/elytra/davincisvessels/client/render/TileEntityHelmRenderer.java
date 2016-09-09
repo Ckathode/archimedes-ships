@@ -56,11 +56,11 @@ public class TileEntityHelmRenderer extends TileEntitySpecialRenderer {
 
         if (onZAxis) {
             translateX = 2.5F;
-            translateY = 2.625F;
+            translateY = 1.625F;
             translateZ = 0;
         } else {
             translateX = 0;
-            translateY = 2.625F;
+            translateY = 1.625F;
             translateZ = 2.5F;
         }
 
