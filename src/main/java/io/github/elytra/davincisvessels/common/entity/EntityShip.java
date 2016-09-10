@@ -182,21 +182,22 @@ public class EntityShip extends EntityMovingWorld {
     public boolean alignToAnchor() {
         ImmutablePair<LocatedBlock, LocatedBlock> closestRelation = capabilities.findClosestValidAnchor(DavincisVesselsMod.instance.getNetworkConfig().anchorRadius);
         if (!closestRelation.getLeft().equals(LocatedBlock.AIR) && !closestRelation.getRight().equals(LocatedBlock.AIR)) {
+            BlockPos chunkAnchor = closestRelation.getLeft().blockPos;
+            BlockPos worldAnchor = closestRelation.getRight().blockPos;
             super.alignToGrid(true);
+
+            float yaw = Math.round(rotationYaw / 90F) * 90F;
+            yaw = (float) Math.toRadians(yaw);
             float ox = -getMobileChunk().getCenterX();
-            float oy = -getMobileChunk().minY(); //Created the normal way, through a VehicleFiller, this value will always be 0.
             float oz = -getMobileChunk().getCenterZ();
+            Vec3dMod vecB = new Vec3dMod(chunkAnchor.getX() + ox, 0, chunkAnchor.getZ() + oz);
+            Vec3dMod vec = vecB;
+            vec = vec.rotateAroundY(yaw);
 
-            Vec3dMod vec = new Vec3dMod(closestRelation.getLeft().blockPos.getX() + ox,
-                    oy,
-                    closestRelation.getLeft().blockPos.getZ() + oz);
-            vec = vec.rotateAroundY(rotationYaw);
-            BlockPos pos = new BlockPos(MathHelperMod.round_double(vec.xCoord + closestRelation.getRight().blockPos.getX()),
-                    MathHelperMod.round_double(vec.yCoord + closestRelation.getRight().blockPos.getY()),
-                    MathHelperMod.round_double(vec.zCoord + closestRelation.getRight().blockPos.getZ()));
+            BlockPos pos = new BlockPos(MathHelperMod.round_double(vec.xCoord), 0, MathHelperMod.round_double(vec.zCoord));
+            setPositionAndUpdate(worldAnchor.getX() + -pos.getX(), worldAnchor.getY() + 2, worldAnchor.getZ() + -pos.getZ());
 
-            setPositionAndUpdate(pos.getX(), pos.getY() + 1, pos.getZ());
-            super.alignToGrid(true);
+            super.alignToGrid(false);
             updatePassengers();
 
             return true;

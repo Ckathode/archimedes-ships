@@ -7,7 +7,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ModelRotation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -18,24 +17,16 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
-import net.minecraftforge.common.model.TRSRTransformation;
-
-import java.util.HashMap;
 
 public class ModelHelmWheel {
 
     public static ReloadListener reloadListener;
-    protected static HashMap<EnumFacing, IBakedModel> helmModels;
-    Function<ResourceLocation, TextureAtlasSprite> textureGetter = new Function<ResourceLocation, TextureAtlasSprite>() {
-        public TextureAtlasSprite apply(ResourceLocation location) {
-            return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
-        }
-    };
+    Function<ResourceLocation, TextureAtlasSprite> textureGetter = location ->
+            Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
+    public static IBakedModel helmModel;
 
     public ModelHelmWheel() {
-        if (helmModels == null)
-            helmModels = new HashMap<>();
-        if (helmModels.keySet().isEmpty()) {
+        if (helmModel == null) {
             IModel model = null;
 
             try {
@@ -45,10 +36,7 @@ public class ModelHelmWheel {
             }
 
             if (model != null) {
-                helmModels.put(EnumFacing.NORTH, model.bake(new TRSRTransformation(ModelRotation.getModelRotation(0, 90)), DefaultVertexFormats.BLOCK, textureGetter));
-                helmModels.put(EnumFacing.SOUTH, model.bake(new TRSRTransformation(ModelRotation.getModelRotation(0, -90)), DefaultVertexFormats.BLOCK, textureGetter));
-                helmModels.put(EnumFacing.WEST, model.bake(new TRSRTransformation(ModelRotation.getModelRotation(0, 0)), DefaultVertexFormats.BLOCK, textureGetter));
-                helmModels.put(EnumFacing.EAST, model.bake(new TRSRTransformation(ModelRotation.getModelRotation(0, 180)), DefaultVertexFormats.BLOCK, textureGetter));
+                helmModel = model.bake(model.getDefaultState(), DefaultVertexFormats.BLOCK, textureGetter);
             }
 
             reloadListener = new ReloadListener();
@@ -57,17 +45,7 @@ public class ModelHelmWheel {
     }
 
     public void render(double x, double y, double z, IBlockState state, TileEntityHelm helm, EnumFacing direction) {
-        boolean pushAndPop = false;
-        IBakedModel modelBaked;
-
-        if (helmModels.containsKey(direction)) {
-            modelBaked = helmModels.get(direction);
-        } else return;
-
-        if (pushAndPop)
-            GlStateManager.pushMatrix();
-
-        GlStateManager.translate(x, y, z + 1);
+        GlStateManager.pushMatrix();
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         GlStateManager.enableBlend();
@@ -79,19 +57,39 @@ public class ModelHelmWheel {
             GlStateManager.shadeModel(7424);
         }
 
-        Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightness(modelBaked,
+        GlStateManager.translate(x, y, z + 1);
+
+        switch (direction) {
+            case NORTH: {
+                GlStateManager.translate(0.5, 0, -0.5);
+                GlStateManager.rotate(180, 0, 1, 0);
+                GlStateManager.translate(-0.5, 0, 0.5);
+            }
+            case SOUTH: {
+                GlStateManager.translate(0.5, 0, -0.5);
+                GlStateManager.rotate(-90, 0, 1, 0);
+                GlStateManager.translate(-0.5, 0, 0.5);
+            }
+            case EAST: {
+                GlStateManager.translate(0.5, 0, -0.5);
+                GlStateManager.rotate(180, 0, 1, 0);
+                GlStateManager.translate(-0.5, 0, 0.5);
+            }
+        }
+
+        Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightness(helmModel,
                 state,
                 helm.getWorld().getCombinedLight(helm.getPos(), 0), false);
 
-        if (pushAndPop)
-            GlStateManager.popMatrix();
+        GlStateManager.disableBlend();
+        GlStateManager.enableCull();
+        GlStateManager.popMatrix();
     }
 
     public class ReloadListener implements IResourceManagerReloadListener {
         @Override
         public void onResourceManagerReload(IResourceManager resourceManager) {
-            helmModels.clear();
-
+            helmModel = null;
             IModel model = null;
 
             try {
@@ -101,10 +99,7 @@ public class ModelHelmWheel {
             }
 
             if (model != null) {
-                helmModels.put(EnumFacing.NORTH, model.bake(new TRSRTransformation(ModelRotation.getModelRotation(0, 90)), DefaultVertexFormats.BLOCK, textureGetter));
-                helmModels.put(EnumFacing.SOUTH, model.bake(new TRSRTransformation(ModelRotation.getModelRotation(0, -90)), DefaultVertexFormats.BLOCK, textureGetter));
-                helmModels.put(EnumFacing.WEST, model.bake(new TRSRTransformation(ModelRotation.getModelRotation(0, 0)), DefaultVertexFormats.BLOCK, textureGetter));
-                helmModels.put(EnumFacing.EAST, model.bake(new TRSRTransformation(ModelRotation.getModelRotation(0, 180)), DefaultVertexFormats.BLOCK, textureGetter));
+                helmModel = model.bake(model.getDefaultState(), DefaultVertexFormats.BLOCK, textureGetter);
             }
         }
     }

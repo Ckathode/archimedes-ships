@@ -55,13 +55,13 @@ public class TileEntityHelmRenderer extends TileEntitySpecialRenderer {
         float translateX, translateY, translateZ;
 
         if (onZAxis) {
-            translateX = 2.5F;
-            translateY = 1.625F;
-            translateZ = 0;
+            translateX = 4.5F;
+            translateY = 1.65F;
+            translateZ = 0F;
         } else {
-            translateX = 0;
-            translateY = 1.625F;
-            translateZ = 2.5F;
+            translateX = 0F;
+            translateY = 1.65F;
+            translateZ = 4.5F;
         }
 
         GlStateManager.translate(translateX, translateY, translateZ);
