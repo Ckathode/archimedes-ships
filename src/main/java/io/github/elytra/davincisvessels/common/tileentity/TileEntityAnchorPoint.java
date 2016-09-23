@@ -1,7 +1,7 @@
 package io.github.elytra.davincisvessels.common.tileentity;
 
-import io.github.elytra.davincisvessels.common.LanguageEntries;
 import io.github.elytra.davincisvessels.client.gui.GuiAnchorPoint;
+import io.github.elytra.davincisvessels.common.LanguageEntries;
 import io.github.elytra.davincisvessels.common.object.DavincisVesselsObjects;
 import io.github.elytra.movingworld.api.IMovingWorldTileEntity;
 import io.github.elytra.movingworld.common.chunk.mobilechunk.MobileChunk;
@@ -28,10 +28,9 @@ import java.util.Objects;
 public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTileEntity, IInventory, ITickable {
 
 
-    private AnchorInstance instance;
     public ItemStack content;
-
     public BlockPos chunkPos;
+    private AnchorInstance instance;
     private EntityMovingWorld activeShip;
 
     public TileEntityAnchorPoint() {
@@ -39,6 +38,10 @@ public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTil
         activeShip = null;
         instance = new AnchorInstance();
         content = null;
+    }
+
+    public static boolean isItemAnchor(ItemStack itemstack) {
+        return itemstack != null && Objects.equals(itemstack.getItem(), Item.getItemFromBlock(DavincisVesselsObjects.blockAnchorPoint));
     }
 
     @Nullable
@@ -248,10 +251,6 @@ public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTil
     @Override
     public void clear() {
         content = null;
-    }
-
-    public static boolean isItemAnchor(ItemStack itemstack) {
-        return itemstack != null && Objects.equals(itemstack.getItem(), Item.getItemFromBlock(DavincisVesselsObjects.blockAnchorPoint));
     }
 
     @Override

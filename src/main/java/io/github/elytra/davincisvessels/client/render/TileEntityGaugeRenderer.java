@@ -12,7 +12,6 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {

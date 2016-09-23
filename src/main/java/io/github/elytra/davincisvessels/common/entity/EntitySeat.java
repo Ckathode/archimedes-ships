@@ -1,5 +1,6 @@
 package io.github.elytra.davincisvessels.common.entity;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -12,8 +13,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-
-import io.netty.buffer.ByteBuf;
 
 public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
 
@@ -37,17 +36,13 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
 
     /**
      * Called from ShipCapabilities.
-     *
-     * @ShipCapabilities
      */
     @Override
     public boolean processInitialInteract(EntityPlayer entityplayer, ItemStack stack, EnumHand hand) {
         checkShipOpinion();
 
         if (getControllingPassenger() == null) {
-            entityplayer.startRiding(null);
-            entityplayer.setSneaking(false);
-            entityplayer.startRiding(this);
+            entityplayer.startRiding(this, true);
             return true;
         } else {
             return false;
@@ -165,7 +160,6 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
 
         if (getControllingPassenger() != null && getControllingPassenger().getRidingEntity() != this) {
             Entity rider = getControllingPassenger();
-            rider.startRiding(null);
             rider.startRiding(this);
         }
     }
@@ -181,7 +175,10 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     @Override
     public void updatePassenger(Entity passenger) {
         if (ship != null) {
-            ship.updatePassengerPosition(getControllingPassenger(), new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1), 1);
+            ship.updatePassengerPosition(passenger, new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1), 1);
+
+            if (worldObj.getWorldTime() % 20 == 0)
+                System.out.println(passenger);
         }
     }
 

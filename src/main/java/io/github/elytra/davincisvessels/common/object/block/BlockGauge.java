@@ -1,5 +1,6 @@
 package io.github.elytra.davincisvessels.common.object.block;
 
+import io.github.elytra.davincisvessels.common.tileentity.TileEntityGauge;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockFence;
@@ -23,8 +24,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import java.util.List;
-
-import io.github.elytra.davincisvessels.common.tileentity.TileEntityGauge;
 
 public class BlockGauge extends BlockContainer {
 

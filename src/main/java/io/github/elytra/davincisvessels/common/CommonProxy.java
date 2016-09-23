@@ -1,13 +1,12 @@
 package io.github.elytra.davincisvessels.common;
 
+import io.github.elytra.davincisvessels.DavincisVesselsMod;
+import io.github.elytra.davincisvessels.client.gui.DavincisVesselsGuiHandler;
+import io.github.elytra.davincisvessels.common.handler.CommonHookContainer;
 import io.github.elytra.davincisvessels.common.handler.CommonPlayerTicker;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.LoaderState;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-
-import io.github.elytra.davincisvessels.DavincisVesselsMod;
-import io.github.elytra.davincisvessels.client.gui.DavincisVesselsGuiHandler;
-import io.github.elytra.davincisvessels.common.handler.CommonHookContainer;
 
 public class CommonProxy {
     public CommonPlayerTicker playerTicker;

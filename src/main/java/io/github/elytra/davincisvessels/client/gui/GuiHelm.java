@@ -1,30 +1,26 @@
 package io.github.elytra.davincisvessels.client.gui;
 
 import io.github.elytra.davincisvessels.DavincisVesselsMod;
+import io.github.elytra.davincisvessels.common.LanguageEntries;
 import io.github.elytra.davincisvessels.common.entity.ShipAssemblyInteractor;
+import io.github.elytra.davincisvessels.common.network.DavincisVesselsNetworking;
 import io.github.elytra.davincisvessels.common.network.HelmClientAction;
 import io.github.elytra.davincisvessels.common.tileentity.TileEntityHelm;
+import io.github.elytra.movingworld.common.chunk.assembly.AssembleResult;
+import io.github.elytra.movingworld.common.chunk.assembly.AssembleResult.ResultType;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
 import java.util.Locale;
 
-import io.github.elytra.davincisvessels.common.LanguageEntries;
-import io.github.elytra.davincisvessels.common.network.DavincisVesselsNetworking;
-import io.github.elytra.movingworld.common.chunk.assembly.AssembleResult;
-import io.github.elytra.movingworld.common.chunk.assembly.AssembleResult.ResultType;
-
-import static io.github.elytra.movingworld.common.chunk.assembly.AssembleResult.ResultType.RESULT_BUSY_COMPILING;
-import static io.github.elytra.movingworld.common.chunk.assembly.AssembleResult.ResultType.RESULT_NONE;
-import static io.github.elytra.movingworld.common.chunk.assembly.AssembleResult.ResultType.RESULT_OK;
+import static io.github.elytra.movingworld.common.chunk.assembly.AssembleResult.ResultType.*;
 
 public class GuiHelm extends GuiContainer {
     public static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("davincisvessels", "textures/gui/shipstatus.png");

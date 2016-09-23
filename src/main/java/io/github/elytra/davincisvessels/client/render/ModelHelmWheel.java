@@ -21,9 +21,9 @@ import net.minecraftforge.client.model.ModelLoaderRegistry;
 public class ModelHelmWheel {
 
     public static ReloadListener reloadListener;
+    public static IBakedModel helmModel;
     Function<ResourceLocation, TextureAtlasSprite> textureGetter = location ->
             Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
-    public static IBakedModel helmModel;
 
     public ModelHelmWheel() {
         if (helmModel == null) {

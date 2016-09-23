@@ -1,5 +1,8 @@
 package io.github.elytra.davincisvessels.common.object.block;
 
+import io.github.elytra.davincisvessels.DavincisVesselsMod;
+import io.github.elytra.davincisvessels.common.object.DavincisVesselsObjects;
+import io.github.elytra.davincisvessels.common.tileentity.TileEntityHelm;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
@@ -19,10 +22,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import io.github.elytra.davincisvessels.DavincisVesselsMod;
-import io.github.elytra.davincisvessels.common.object.DavincisVesselsObjects;
-import io.github.elytra.davincisvessels.common.tileentity.TileEntityHelm;
 
 public class BlockHelm extends BlockDirectional implements ITileEntityProvider {
 

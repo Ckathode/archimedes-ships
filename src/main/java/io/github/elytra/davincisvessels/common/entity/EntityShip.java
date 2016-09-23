@@ -198,7 +198,7 @@ public class EntityShip extends EntityMovingWorld {
             setPositionAndUpdate(worldAnchor.getX() + -pos.getX(), worldAnchor.getY() + 2, worldAnchor.getZ() + -pos.getZ());
 
             super.alignToGrid(false);
-            updatePassengers();
+            updatePassenger(getControllingPassenger());
 
             return true;
         }
@@ -359,12 +359,12 @@ public class EntityShip extends EntityMovingWorld {
         }
 
         if (onGround) {
-            isFlying = false;
+            setFlying(false);
         }
 
         float gravity = 0.05F;
         if (waterVolume > 0F && !submergeMode) {
-            isFlying = false;
+            setFlying(false);
             float buoyancyforce = 1F * waterVolume * gravity; //F = rho * V * g (Archimedes' principle)
             float mass = getCapabilities().getMass();
             motionY += buoyancyforce / mass;
@@ -481,7 +481,7 @@ public class EntityShip extends EntityMovingWorld {
             } else if (controller.getShipControl() < 3 && capabilities.canFly()) {
                 int i;
                 if (controller.getShipControl() == 2) {
-                    isFlying = true;
+                    setFlying(true);
                     i = 1;
                 } else {
                     i = -1;
@@ -501,7 +501,7 @@ public class EntityShip extends EntityMovingWorld {
 
     @Override
     public boolean isFlying() {
-        return (capabilities.canFly() && (isFlying || controller.getShipControl() == 2)) || getSubmerge();
+        return (capabilities.canFly() && (super.isFlying() || controller.getShipControl() == 2)) || getSubmerge();
     }
 
     public boolean areSubmerged() {

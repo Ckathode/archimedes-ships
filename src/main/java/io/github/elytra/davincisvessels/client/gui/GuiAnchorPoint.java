@@ -24,11 +24,10 @@ import java.util.UUID;
 public class GuiAnchorPoint extends GuiContainer {
 
     public static final ResourceLocation GUI_TEXTURES = new ResourceLocation("davincisvessels", "textures/gui/anchorPoint.png");
-
+    public TileEntityAnchorPoint anchorPoint;
     private int selectedRelation;
     private String[] relations;
     private GuiButton btnLink, btnSwitch, btnNextRelation, btnPrevRelation;
-    public TileEntityAnchorPoint anchorPoint;
 
     public GuiAnchorPoint(TileEntityAnchorPoint te, EntityPlayer entityplayer) {
         super(new ContainerAnchorPoint(te, entityplayer));

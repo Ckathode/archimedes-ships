@@ -1,7 +1,11 @@
 package io.github.elytra.davincisvessels.client.gui;
 
 import com.google.common.collect.Lists;
-
+import io.github.elytra.davincisvessels.common.LanguageEntries;
+import io.github.elytra.davincisvessels.common.entity.EntityShip;
+import io.github.elytra.davincisvessels.common.network.DavincisVesselsNetworking;
+import io.github.elytra.movingworld.common.network.MovingWorldClientAction;
+import io.github.elytra.movingworld.common.network.MovingWorldNetworking;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -11,17 +15,10 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.opengl.GL11;
 
 import java.util.Iterator;
 import java.util.List;
-
-import io.github.elytra.davincisvessels.common.LanguageEntries;
-import io.github.elytra.davincisvessels.common.entity.EntityShip;
-import io.github.elytra.davincisvessels.common.network.DavincisVesselsNetworking;
-import io.github.elytra.movingworld.common.network.MovingWorldClientAction;
-import io.github.elytra.movingworld.common.network.MovingWorldNetworking;
 
 public class GuiShip extends GuiContainer {
     public static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("davincisvessels", "textures/gui/shipinv.png");

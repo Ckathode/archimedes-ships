@@ -13,6 +13,7 @@ import io.github.elytra.davincisvessels.common.entity.EntityShip;
 import io.github.elytra.davincisvessels.common.object.DavincisVesselsObjects;
 import io.github.elytra.davincisvessels.common.tileentity.TileEntityGauge;
 import io.github.elytra.davincisvessels.common.tileentity.TileEntityHelm;
+import io.github.elytra.movingworld.client.render.RenderMovingWorld;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
@@ -30,8 +31,6 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.LoaderState;
 
 import java.util.ArrayList;
-
-import io.github.elytra.movingworld.client.render.RenderMovingWorld;
 
 public class ClientProxy extends CommonProxy {
 

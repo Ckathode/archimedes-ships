@@ -3,8 +3,10 @@ package io.github.elytra.davincisvessels.common.handler;
 import io.github.elytra.davincisvessels.DavincisVesselsMod;
 import io.github.elytra.davincisvessels.common.entity.EntityParachute;
 import io.github.elytra.davincisvessels.common.entity.EntitySeat;
+import io.github.elytra.davincisvessels.common.entity.EntityShip;
 import io.github.elytra.davincisvessels.common.network.DavincisVesselsNetworking;
 import io.github.elytra.davincisvessels.common.tileentity.TileEntitySecuredBed;
+import io.github.elytra.movingworld.common.util.Vec3dMod;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -14,9 +16,6 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 import java.util.HashMap;
 import java.util.UUID;
-
-import io.github.elytra.davincisvessels.common.entity.EntityShip;
-import io.github.elytra.movingworld.common.util.Vec3dMod;
 
 public class ConnectionHandler {
 
@@ -29,6 +28,10 @@ public class ConnectionHandler {
         if (event.player != null && event.player.worldObj != null && !event.player.worldObj.isRemote) {
             handleParachuteLogout(event);
             handleConfigDesync(event);
+
+            if (event.player.getRidingEntity() != null && event.player.getRidingEntity() instanceof EntityShip) {
+                ((EntityShip) event.player.getRidingEntity()).disassemble(true);
+            }
         }
     }
 

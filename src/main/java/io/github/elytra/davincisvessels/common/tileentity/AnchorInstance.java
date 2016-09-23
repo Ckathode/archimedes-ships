@@ -20,15 +20,6 @@ public class AnchorInstance implements INBTSerializable<NBTTagCompound> {
      */
     private UUID identifier;
     private InstanceType type;
-
-    public boolean hasChanged() {
-        return changed;
-    }
-
-    public void setChanged(boolean changed) {
-        this.changed = changed;
-    }
-
     private boolean changed;
     /**
      * The anchors related to our instance, stores their position in world as well as their
@@ -42,6 +33,14 @@ public class AnchorInstance implements INBTSerializable<NBTTagCompound> {
         this.type = InstanceType.FORLAND;
         this.relatedAnchors = new HashMap<>();
         changed = false;
+    }
+
+    public boolean hasChanged() {
+        return changed;
+    }
+
+    public void setChanged(boolean changed) {
+        this.changed = changed;
     }
 
     public UUID getIdentifier() {
@@ -66,6 +65,12 @@ public class AnchorInstance implements INBTSerializable<NBTTagCompound> {
         return relatedAnchors;
     }
 
+    public void setRelatedAnchors(Map<UUID, BlockLocation> relatedAnchors) {
+        this.relatedAnchors = relatedAnchors;
+        changed = true;
+
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -74,13 +79,6 @@ public class AnchorInstance implements INBTSerializable<NBTTagCompound> {
         return Objects.equals(getIdentifier(), that.getIdentifier()) &&
                 getType() == that.getType() &&
                 Objects.equals(getRelatedAnchors(), that.getRelatedAnchors());
-    }
-
-
-    public void setRelatedAnchors(Map<UUID, BlockLocation> relatedAnchors) {
-        this.relatedAnchors = relatedAnchors;
-        changed = true;
-
     }
 
     public void addRelation(UUID identifier, BlockLocation location) {

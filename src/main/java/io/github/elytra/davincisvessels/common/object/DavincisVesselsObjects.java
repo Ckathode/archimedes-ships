@@ -1,21 +1,20 @@
 package io.github.elytra.davincisvessels.common.object;
 
-import io.github.elytra.davincisvessels.common.object.block.BlockAnchorPoint;
-import io.github.elytra.davincisvessels.common.object.block.BlockCrate;
-import io.github.elytra.davincisvessels.common.object.block.BlockGauge;
-import io.github.elytra.davincisvessels.common.object.block.BlockHelm;
+import io.github.elytra.davincisvessels.DavincisVesselsMod;
+import io.github.elytra.davincisvessels.common.LanguageEntries;
+import io.github.elytra.davincisvessels.common.object.achievement.SmartAchievementPage;
+import io.github.elytra.davincisvessels.common.object.block.*;
+import io.github.elytra.davincisvessels.common.object.item.ItemBlockAnchorPoint;
+import io.github.elytra.davincisvessels.common.object.item.ItemGaugeBlock;
 import io.github.elytra.davincisvessels.common.object.item.ItemSecuredBed;
+import io.github.elytra.davincisvessels.common.tileentity.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemCloth;
-import net.minecraft.item.ItemDye;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.stats.Achievement;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -23,19 +22,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.HashMap;
-
-import io.github.elytra.davincisvessels.DavincisVesselsMod;
-import io.github.elytra.davincisvessels.common.LanguageEntries;
-import io.github.elytra.davincisvessels.common.object.achievement.SmartAchievementPage;
-import io.github.elytra.davincisvessels.common.object.block.BlockAS;
-import io.github.elytra.davincisvessels.common.object.block.BlockEngine;
-import io.github.elytra.davincisvessels.common.object.block.BlockRecolourable;
-import io.github.elytra.davincisvessels.common.object.block.BlockSeat;
-import io.github.elytra.davincisvessels.common.object.block.BlockSecuredBed;
-import io.github.elytra.davincisvessels.common.object.item.ItemBlockAnchorPoint;
-import io.github.elytra.davincisvessels.common.object.item.ItemGaugeBlock;
-import io.github.elytra.davincisvessels.common.tileentity.*;
-import io.github.elytra.davincisvessels.common.LanguageEntries;
 
 /**
  * Block registration is here, to keep the mod class nice and small.

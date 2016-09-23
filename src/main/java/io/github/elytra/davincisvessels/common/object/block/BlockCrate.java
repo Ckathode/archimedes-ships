@@ -1,6 +1,7 @@
 package io.github.elytra.davincisvessels.common.object.block;
 
 import io.github.elytra.davincisvessels.common.tileentity.TileEntityCrate;
+import io.github.elytra.movingworld.common.entity.EntityMovingWorld;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockFence;
@@ -23,8 +24,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import io.github.elytra.movingworld.common.entity.EntityMovingWorld;
 
 public class BlockCrate extends BlockContainer {
     public static final PropertyEnum AXIS = PropertyEnum.create("axis", EnumFacing.Axis.class, EnumFacing.Axis.X, EnumFacing.Axis.Z);

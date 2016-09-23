@@ -1,11 +1,10 @@
 package io.github.elytra.davincisvessels.common.entity;
 
+import io.github.elytra.movingworld.common.entity.EntityMovingWorld;
+import io.github.elytra.movingworld.common.entity.MovingWorldHandlerServer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
-
-import io.github.elytra.movingworld.common.entity.EntityMovingWorld;
-import io.github.elytra.movingworld.common.entity.MovingWorldHandlerServer;
 
 public class ShipHandlerServer extends MovingWorldHandlerServer {
 
@@ -29,14 +28,15 @@ public class ShipHandlerServer extends MovingWorldHandlerServer {
 
     @Override
     public boolean interact(EntityPlayer player, ItemStack stack, EnumHand hand) {
-        if (movingWorld.getRidingEntity() == null) {
-            player.startRiding(movingWorld);
-            return true;
+        if (!movingWorld.isBeingRidden()) {
+            return player.startRiding(movingWorld);
         } else {
-            if (player.getRidingEntity() != null)
-                player.startRiding(null);
-            return movingWorld.getCapabilities().mountEntity(player);
+            if (player.getRidingEntity() != null && !movingWorld.isPassenger(player)) {
+                player.dismountRidingEntity();
+                return movingWorld.getCapabilities().mountEntity(player);
+            }
         }
+        return false;
     }
 
     @Override
