@@ -31,10 +31,11 @@ public class ShipHandlerServer extends MovingWorldHandlerServer {
         if (!movingWorld.isBeingRidden()) {
             return player.startRiding(movingWorld);
         } else {
-            if (player.getRidingEntity() != null && !movingWorld.isPassenger(player)) {
+            if (player.getRidingEntity() != null) {
                 player.dismountRidingEntity();
-                return movingWorld.getCapabilities().mountEntity(player);
             }
+            if (!movingWorld.isPassenger(player))
+                return movingWorld.getCapabilities().mountEntity(player);
         }
         return false;
     }

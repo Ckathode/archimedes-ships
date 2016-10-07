@@ -41,7 +41,7 @@ public class DavincisVesselsMod {
     public static final String RESOURCE_DOMAIN = "davincisvessels:";
     public static final String MOD_GUIFACTORY = "io.github.elytra.davincisvessels.client.gui.DavincisVesselsGUIFactory";
 
-    public static CreativeTabs creativeTab = new CreativeTabs("archimedesTab") {
+    public static CreativeTabs creativeTab = new CreativeTabs("davincisTab") {
         @Override
         public Item getTabIconItem() {
             return Item.getItemFromBlock(DavincisVesselsObjects.blockMarkShip);

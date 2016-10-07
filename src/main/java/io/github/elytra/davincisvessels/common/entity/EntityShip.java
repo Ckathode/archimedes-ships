@@ -56,6 +56,7 @@ public class EntityShip extends EntityMovingWorld {
     private ShipControllerCommon controller;
     private MovingWorldHandlerCommon handler;
     private ShipAssemblyInteractor shipAssemblyInteractor;
+    private int driftCooldown = 0;
     private boolean submerge;
 
     public EntityShip(World world) {
@@ -74,6 +75,7 @@ public class EntityShip extends EntityMovingWorld {
 
         if (worldObj != null) {
             if (!worldObj.isRemote) {
+                driftCooldown -= 1;
                 boolean hasEngines = false;
                 if (capabilities.getEngines() != null) {
                     if (capabilities.getEngines().isEmpty())
@@ -246,6 +248,7 @@ public class EntityShip extends EntityMovingWorld {
                     disassemble(false);
                 } else {
                     if (!worldObj.isRemote && isFlying()) {
+                        driftCooldown = 20 * 6;
                         EntityParachute parachute = new EntityParachute(worldObj, this, riderDestination);
                         if (worldObj.spawnEntityInWorld(parachute)) {
                             prevRiddenByEntity.startRiding(parachute);
@@ -496,7 +499,7 @@ public class EntityShip extends EntityMovingWorld {
 
     @Override
     public boolean canBePushed() {
-        return !isDead && getControllingPassenger() == null;
+        return !isDead && getControllingPassenger() == null && driftCooldown <= 0;
     }
 
     @Override

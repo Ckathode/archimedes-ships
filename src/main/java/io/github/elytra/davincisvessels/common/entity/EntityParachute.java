@@ -9,6 +9,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
+import javax.annotation.Nullable;
+import java.util.List;
+
 public class EntityParachute extends Entity implements IEntityAdditionalSpawnData {
 
     public EntityParachute(World world) {
@@ -52,11 +55,14 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
         prevPosY = posY;
         prevPosZ = posZ;
 
-        if (!worldObj.isRemote && (getControllingPassenger() == null || onGround || isInWater())) {
+        if (!worldObj.isRemote
+                &&
+                (getControllingPassenger() == null
+                        || onGround
+                        || isInWater())) {
             setDead();
             return;
         }
-
 
         if (!worldObj.isRemote && getControllingPassenger() != null) {
             motionX += getControllingPassenger().motionX;
@@ -66,6 +72,13 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
             motionY -= 0.025D;
 
         moveEntity(motionX, motionY, motionZ);
+    }
+
+    @Override
+    @Nullable
+    public Entity getControllingPassenger() {
+        List<Entity> list = this.getPassengers();
+        return list.isEmpty() ? null : (Entity) list.get(0);
     }
 
     @Override

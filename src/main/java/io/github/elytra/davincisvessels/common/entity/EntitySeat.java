@@ -14,6 +14,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
+import javax.annotation.Nullable;
+import java.util.List;
+
 public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
 
     public static final DataParameter<Integer> SHIPID = EntityDataManager.<Integer>createKey(EntitySeat.class, DataSerializers.VARINT);
@@ -85,7 +88,7 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
                 EntityPlayer player = (EntityPlayer) getControllingPassenger();
                 EntitySeat seat = ((ShipCapabilities) ship.getCapabilities()).getAvailableSeat();
                 if (seat != null) {
-                    player.startRiding(null);
+                    player.dismountRidingEntity();
                     player.startRiding(seat);
                     EntityParachute parachute = new EntityParachute(worldObj, ship, pos);
                     if (worldObj.spawnEntityInWorld(parachute)) {
@@ -175,11 +178,23 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     @Override
     public void updatePassenger(Entity passenger) {
         if (ship != null) {
-            ship.updatePassengerPosition(passenger, new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1), 1);
-
-            if (worldObj.getWorldTime() % 20 == 0)
-                System.out.println(passenger);
+            ship.updatePassengerPosition(passenger, new BlockPos(pos.getX(), pos.getY(), pos.getZ()), 0);
         }
+    }
+
+    @Override
+    public void removePassenger(Entity passenger) {
+        super.removePassenger(passenger);
+        if (ship != null) {
+            ship.updatePassengerPosition(passenger, new BlockPos(pos.getX(), pos.getY() + ship.getMobileChunk().maxY() / 2, pos.getZ()), 0);
+        }
+    }
+
+    @Override
+    @Nullable
+    public Entity getControllingPassenger() {
+        List<Entity> list = this.getPassengers();
+        return list.isEmpty() ? null : (Entity) list.get(0);
     }
 
     @Override
