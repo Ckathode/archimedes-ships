@@ -1,6 +1,6 @@
 package io.github.elytra.davincisvessels.client.render;
 
-import io.github.elytra.davincisvessels.common.tileentity.TileEntityGauge;
+import io.github.elytra.davincisvessels.common.tileentity.TileGauge;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL11;
 
 public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
 
-    public void renderGauge(TileEntityGauge tileEntity, double x, double y, double z, float partialTicks) {
+    public void renderGauge(TileGauge tileEntity, double x, double y, double z, float partialTicks) {
         RenderHelper.disableStandardItemLighting();
 
         boolean extended = tileEntity.getBlockMetadata() > 3;
@@ -145,6 +145,6 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
 
     @Override
     public void renderTileEntityAt(TileEntity tileEntity, double posX, double posY, double posZ, float partialTicks, int par6) {
-        renderGauge((TileEntityGauge) tileEntity, posX, posY, posZ, partialTicks);
+        renderGauge((TileGauge) tileEntity, posX, posY, posZ, partialTicks);
     }
 }

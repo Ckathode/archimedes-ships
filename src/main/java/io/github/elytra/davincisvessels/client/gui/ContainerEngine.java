@@ -1,6 +1,6 @@
 package io.github.elytra.davincisvessels.client.gui;
 
-import io.github.elytra.davincisvessels.common.tileentity.TileEntityEngine;
+import io.github.elytra.davincisvessels.common.tileentity.TileEngine;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -10,10 +10,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
 
 public class ContainerEngine extends Container {
-    public final TileEntityEngine tileEntity;
+    public final TileEngine tileEntity;
     public final EntityPlayer player;
 
-    public ContainerEngine(TileEntityEngine tileentityengine, EntityPlayer entityplayer) {
+    public ContainerEngine(TileEngine tileentityengine, EntityPlayer entityplayer) {
         tileEntity = tileentityengine;
         player = entityplayer;
 

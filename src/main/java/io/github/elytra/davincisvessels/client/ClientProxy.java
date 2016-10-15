@@ -11,8 +11,8 @@ import io.github.elytra.davincisvessels.common.DavincisVesselsConfig;
 import io.github.elytra.davincisvessels.common.entity.EntityParachute;
 import io.github.elytra.davincisvessels.common.entity.EntityShip;
 import io.github.elytra.davincisvessels.common.object.DavincisVesselsObjects;
-import io.github.elytra.davincisvessels.common.tileentity.TileEntityGauge;
-import io.github.elytra.davincisvessels.common.tileentity.TileEntityHelm;
+import io.github.elytra.davincisvessels.common.tileentity.TileGauge;
+import io.github.elytra.davincisvessels.common.tileentity.TileHelm;
 import io.github.elytra.movingworld.client.render.RenderMovingWorld;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -82,8 +82,8 @@ public class ClientProxy extends CommonProxy {
     }
 
     public void registerTileEntitySpeacialRenderers() {
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGauge.class, new TileEntityGaugeRenderer());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHelm.class, new TileEntityHelmRenderer());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileGauge.class, new TileEntityGaugeRenderer());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileHelm.class, new TileEntityHelmRenderer());
     }
 
     public void registerRendererVariants() {

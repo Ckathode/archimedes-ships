@@ -1,7 +1,7 @@
 package io.github.elytra.davincisvessels.common.tileentity;
 
 import io.github.elytra.davincisvessels.common.entity.EntityShip;
-import io.github.elytra.movingworld.api.IMovingWorldTileEntity;
+import io.github.elytra.movingworld.api.IMovingTile;
 import io.github.elytra.movingworld.common.chunk.mobilechunk.MobileChunk;
 import io.github.elytra.movingworld.common.entity.EntityMovingWorld;
 import net.minecraft.entity.Entity;
@@ -12,14 +12,14 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 
-public class TileEntityCrate extends TileEntity implements IMovingWorldTileEntity, ITickable {
+public class TileCrate extends TileEntity implements IMovingTile, ITickable {
     private EntityShip parentShip;
     private int containedEntityId;
     private Entity containedEntity;
     private int refreshTime;
     private BlockPos chunkPos;
 
-    public TileEntityCrate() {
+    public TileCrate() {
         parentShip = null;
         containedEntityId = 0;
         containedEntity = null;
@@ -27,9 +27,9 @@ public class TileEntityCrate extends TileEntity implements IMovingWorldTileEntit
     }
 
     @Override
-    public void setParentMovingWorld(BlockPos pos, EntityMovingWorld entityMovingWorld) {
+    public void setParentMovingWorld(EntityMovingWorld movingWorld, BlockPos pos) {
         chunkPos = pos;
-        parentShip = (EntityShip) entityMovingWorld;
+        parentShip = (EntityShip) movingWorld;
     }
 
     @Override
@@ -39,12 +39,17 @@ public class TileEntityCrate extends TileEntity implements IMovingWorldTileEntit
 
     @Override
     public void setParentMovingWorld(EntityMovingWorld entityMovingWorld) {
-        setParentMovingWorld(new BlockPos(BlockPos.ORIGIN), entityMovingWorld);
+        setParentMovingWorld(entityMovingWorld, new BlockPos(BlockPos.ORIGIN));
     }
 
     @Override
     public BlockPos getChunkPos() {
         return chunkPos;
+    }
+
+    @Override
+    public void setChunkPos(BlockPos chunkPos) {
+        this.chunkPos = chunkPos;
     }
 
     @Override

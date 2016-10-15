@@ -1,7 +1,7 @@
 package io.github.elytra.davincisvessels.client.gui;
 
 
-import io.github.elytra.davincisvessels.common.tileentity.TileEntityAnchorPoint;
+import io.github.elytra.davincisvessels.common.tileentity.TileAnchorPoint;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -10,11 +10,11 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class ContainerAnchorPoint extends Container {
-    public final TileEntityAnchorPoint tileEntity;
+    public final TileAnchorPoint tileEntity;
     public final EntityPlayer player;
 
 
-    public ContainerAnchorPoint(TileEntityAnchorPoint te, EntityPlayer entityplayer) {
+    public ContainerAnchorPoint(TileAnchorPoint te, EntityPlayer entityplayer) {
         super();
         tileEntity = te;
         player = entityplayer;
@@ -74,7 +74,7 @@ public class ContainerAnchorPoint extends Container {
 
         @Override
         public boolean isItemValid(ItemStack itemstack) {
-            return TileEntityAnchorPoint.isItemAnchor(itemstack);
+            return TileAnchorPoint.isItemAnchor(itemstack);
         }
     }
 

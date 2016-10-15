@@ -108,7 +108,7 @@ public class DavincisVesselsObjects {
 
     public void init(FMLInitializationEvent e) {
         GameRegistry.addRecipe(new ItemStack(blockMarkShip, 1), "X#X", "#O#", "X#X", Character.valueOf('X'), Blocks.PLANKS, Character.valueOf('#'), Items.STICK, Character.valueOf('O'), Items.IRON_INGOT);
-        GameRegistry.registerTileEntity(TileEntityHelm.class, "archiHelm");
+        GameRegistry.registerTileEntity(TileHelm.class, "archiHelm");
         Blocks.FIRE.setFireInfo(blockMarkShip, 5, 5);
 
         GameRegistry.addShapelessRecipe(new ItemStack(blockFloater, 1), Blocks.LOG, Blocks.WOOL);
@@ -124,7 +124,7 @@ public class DavincisVesselsObjects {
         GameRegistry.addShapedRecipe(new ItemStack(blockGauge, 1, 0), "VXV", "XO#", " # ", Character.valueOf('X'), Items.GOLD_INGOT, Character.valueOf('#'), Items.IRON_INGOT, Character.valueOf('O'), Items.REDSTONE, Character.valueOf('V'), Blocks.GLASS_PANE);
         GameRegistry.addShapedRecipe(new ItemStack(blockGauge, 1, 1), "VXV", "XO#", "V#V", Character.valueOf('X'), Items.IRON_INGOT, Character.valueOf('#'), Items.GOLD_INGOT, Character.valueOf('O'), Item.getItemFromBlock(blockGauge), Character.valueOf('V'), Blocks.GLASS_PANE);
         GameRegistry.addShapedRecipe(new ItemStack(blockGauge, 1, 1), "VXV", "XO#", "V#V", Character.valueOf('X'), Items.GOLD_INGOT, Character.valueOf('#'), Items.IRON_INGOT, Character.valueOf('O'), Item.getItemFromBlock(blockGauge), Character.valueOf('V'), Blocks.GLASS_PANE);
-        GameRegistry.registerTileEntity(TileEntityGauge.class, "archiGauge");
+        GameRegistry.registerTileEntity(TileGauge.class, "archiGauge");
 
         GameRegistry.addShapedRecipe(new ItemStack(blockSeat), "X ", "XX", Character.valueOf('X'), Blocks.WOOL);
         Blocks.FIRE.setFireInfo(blockSeat, 30, 30);
@@ -133,13 +133,13 @@ public class DavincisVesselsObjects {
         GameRegistry.addShapelessRecipe(new ItemStack(blockStickyBuffer), blockBuffer, new ItemStack(Items.SLIME_BALL, 1));
 
         GameRegistry.addRecipe(new ItemStack(blockCrateWood, 3), " # ", "# #", "XXX", Character.valueOf('#'), Items.LEATHER, Character.valueOf('X'), Blocks.PLANKS);
-        GameRegistry.registerTileEntity(TileEntityCrate.class, "archiCrate");
+        GameRegistry.registerTileEntity(TileCrate.class, "archiCrate");
 
         GameRegistry.addRecipe(new ItemStack(blockEngine, 1), "#O#", "#X#", "###", Character.valueOf('#'), Items.IRON_INGOT, Character.valueOf('O'), Items.WATER_BUCKET, Character.valueOf('X'), Blocks.FURNACE);
-        GameRegistry.registerTileEntity(TileEntityEngine.class, "archiEngine");
+        GameRegistry.registerTileEntity(TileEngine.class, "archiEngine");
 
         GameRegistry.addRecipe(new ItemStack(blockAnchorPoint, 1), " X ", "XXX", "ZYZ", Character.valueOf('X'), Items.IRON_INGOT, Character.valueOf('Y'), Blocks.IRON_BLOCK, Character.valueOf('Z'), Items.REDSTONE);
-        GameRegistry.registerTileEntity(TileEntityAnchorPoint.class, "archiAnchor");
+        GameRegistry.registerTileEntity(TileAnchorPoint.class, "archiAnchor");
 
         GameRegistry.addShapelessRecipe(new ItemStack(blockSecuredBed), Blocks.BED, Items.IRON_INGOT);
         GameRegistry.registerTileEntity(TileEntitySecuredBed.class, "archiSecuredBed");

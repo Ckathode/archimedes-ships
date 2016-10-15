@@ -10,8 +10,8 @@ import io.github.elytra.davincisvessels.common.entity.ShipAssemblyInteractor;
 import io.github.elytra.davincisvessels.common.object.DavincisVesselsObjects;
 import io.github.elytra.davincisvessels.common.tileentity.AnchorInstance;
 import io.github.elytra.davincisvessels.common.tileentity.BlockLocation;
-import io.github.elytra.davincisvessels.common.tileentity.TileEntityAnchorPoint;
-import io.github.elytra.davincisvessels.common.tileentity.TileEntityHelm;
+import io.github.elytra.davincisvessels.common.tileentity.TileAnchorPoint;
+import io.github.elytra.davincisvessels.common.tileentity.TileHelm;
 import io.github.elytra.movingworld.common.chunk.assembly.AssembleResult;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -102,8 +102,8 @@ public class DavincisVesselsNetworking {
                                 token.getInt("tileY"), token.getInt("tileZ"));
                         HelmClientAction action = HelmClientAction.fromInt((byte) token.getInt("action"));
 
-                        if (entityPlayer.worldObj.getTileEntity(pos) != null && entityPlayer.worldObj.getTileEntity(pos) instanceof TileEntityHelm) {
-                            TileEntityHelm tileEntity = (TileEntityHelm) entityPlayer.worldObj.getTileEntity(pos);
+                        if (entityPlayer.worldObj.getTileEntity(pos) != null && entityPlayer.worldObj.getTileEntity(pos) instanceof TileHelm) {
+                            TileHelm tileEntity = (TileHelm) entityPlayer.worldObj.getTileEntity(pos);
                             switch (action) {
                                 case ASSEMBLE:
                                     tileEntity.assembleMovingWorld(entityPlayer);
@@ -132,8 +132,8 @@ public class DavincisVesselsNetworking {
                         BlockPos pos = new BlockPos(token.getInt("tileX"),
                                 token.getInt("tileY"), token.getInt("tileZ"));
 
-                        if (entityPlayer.worldObj.getTileEntity(pos) != null && entityPlayer.worldObj.getTileEntity(pos) instanceof TileEntityHelm) {
-                            TileEntityHelm helm = (TileEntityHelm) entityPlayer.worldObj.getTileEntity(pos);
+                        if (entityPlayer.worldObj.getTileEntity(pos) != null && entityPlayer.worldObj.getTileEntity(pos) instanceof TileHelm) {
+                            TileHelm helm = (TileHelm) entityPlayer.worldObj.getTileEntity(pos);
                             helm.getInfo().setName(token.getString("newName"));
                         }
                     }
@@ -157,10 +157,10 @@ public class DavincisVesselsNetworking {
                     public void accept(EntityPlayer entityPlayer, Token token) {
                         World world = entityPlayer.worldObj;
                         BlockPos anchorPos = new BlockPos(token.getInt("tileX"), token.getInt("tileY"), token.getInt("tileZ"));
-                        if (world == null || world.getTileEntity(anchorPos) == null || !(world.getTileEntity(anchorPos) instanceof TileEntityAnchorPoint))
+                        if (world == null || world.getTileEntity(anchorPos) == null || !(world.getTileEntity(anchorPos) instanceof TileAnchorPoint))
                             return;
 
-                        TileEntityAnchorPoint anchorPoint = (TileEntityAnchorPoint) world.getTileEntity(anchorPos);
+                        TileAnchorPoint anchorPoint = (TileAnchorPoint) world.getTileEntity(anchorPos);
 
                         if (token.getInt("actionID") == 0) {
                             // Switch
@@ -169,8 +169,8 @@ public class DavincisVesselsNetworking {
                              * Then switch mode.
                              */
                             for (HashMap.Entry<UUID, BlockLocation> e : anchorPoint.getInstance().getRelatedAnchors().entrySet()) {
-                                if (world.getTileEntity(e.getValue().pos) != null && world.getTileEntity(e.getValue().pos) instanceof TileEntityAnchorPoint) {
-                                    TileEntityAnchorPoint entryAnchorPoint = (TileEntityAnchorPoint) world.getTileEntity(e.getValue().pos);
+                                if (world.getTileEntity(e.getValue().pos) != null && world.getTileEntity(e.getValue().pos) instanceof TileAnchorPoint) {
+                                    TileAnchorPoint entryAnchorPoint = (TileAnchorPoint) world.getTileEntity(e.getValue().pos);
                                     ((EntityPlayerMP) entityPlayer).connection.sendPacket(entryAnchorPoint.getUpdatePacket());
                                 } else {
                                     DavincisVesselsMod.modLog.error("Invalid entries in anchor tile: " + anchorPoint.toString() + ", cleaning.");

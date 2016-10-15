@@ -1,9 +1,9 @@
 package io.github.elytra.davincisvessels.common.api.tileentity;
 
 import io.github.elytra.davincisvessels.common.entity.ShipCapabilities;
-import io.github.elytra.movingworld.api.IMovingWorldTileEntity;
+import io.github.elytra.movingworld.api.IMovingTile;
 
-public interface ITileEngineModifier extends IMovingWorldTileEntity {
+public interface ITileEngineModifier extends IMovingTile {
 
     /**
      * Return the power of the tile that is added to the ePower variable in the ship's datawatcher

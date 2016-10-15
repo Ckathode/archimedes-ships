@@ -2,7 +2,7 @@ package io.github.elytra.davincisvessels.common.object.block;
 
 import io.github.elytra.davincisvessels.DavincisVesselsMod;
 import io.github.elytra.davincisvessels.common.object.DavincisVesselsObjects;
-import io.github.elytra.davincisvessels.common.tileentity.TileEntityEngine;
+import io.github.elytra.davincisvessels.common.tileentity.TileEngine;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -41,7 +41,7 @@ public class BlockEngine extends BlockContainer {
 
     @Override
     public TileEntity createNewTileEntity(World var1, int var2) {
-        return new TileEntityEngine(enginePower, engineFuelConsumption);
+        return new TileEngine(enginePower, engineFuelConsumption);
     }
 
     @Override

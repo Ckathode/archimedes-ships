@@ -1,6 +1,6 @@
 package io.github.elytra.davincisvessels.client.gui;
 
-import io.github.elytra.davincisvessels.common.tileentity.TileEntityHelm;
+import io.github.elytra.davincisvessels.common.tileentity.TileHelm;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -8,10 +8,10 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class ContainerHelm extends Container {
-    public final TileEntityHelm tileEntity;
+    public final TileHelm tileEntity;
     public final EntityPlayer player;
 
-    public ContainerHelm(TileEntityHelm te, EntityPlayer entityplayer) {
+    public ContainerHelm(TileHelm te, EntityPlayer entityplayer) {
         super();
         tileEntity = te;
         player = entityplayer;

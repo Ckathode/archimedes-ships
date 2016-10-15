@@ -6,7 +6,7 @@ import io.github.elytra.davincisvessels.common.DavincisVesselsConfig;
 import io.github.elytra.davincisvessels.common.api.tileentity.ITileEngineModifier;
 import io.github.elytra.davincisvessels.common.control.ShipControllerCommon;
 import io.github.elytra.davincisvessels.common.object.DavincisVesselsObjects;
-import io.github.elytra.davincisvessels.common.tileentity.TileEntityHelm;
+import io.github.elytra.davincisvessels.common.tileentity.TileHelm;
 import io.github.elytra.movingworld.common.chunk.LocatedBlock;
 import io.github.elytra.movingworld.common.chunk.MovingWorldAssemblyInteractor;
 import io.github.elytra.movingworld.common.chunk.assembly.AssembleResult;
@@ -110,8 +110,8 @@ public class EntityShip extends EntityMovingWorld {
         this.submerge = submerge;
         if (worldObj != null && !worldObj.isRemote) {
             getDataManager().set(IS_SUBMERGED, submerge ? new Byte((byte) 1) : new Byte((byte) 0));
-            if (getMobileChunk().marker != null && getMobileChunk().marker.tileEntity != null && getMobileChunk().marker.tileEntity instanceof TileEntityHelm) {
-                TileEntityHelm helm = (TileEntityHelm) getMobileChunk().marker.tileEntity;
+            if (getMobileChunk().marker != null && getMobileChunk().marker.tileEntity != null && getMobileChunk().marker.tileEntity instanceof TileHelm) {
+                TileHelm helm = (TileHelm) getMobileChunk().marker.tileEntity;
 
                 helm.submerge = submerge;
             }
@@ -428,9 +428,9 @@ public class EntityShip extends EntityMovingWorld {
         AssembleResult result = disassembler.doDisassemble(getNewAssemblyInteractor());
         if (result.getShipMarker() != null) {
             TileEntity te = result.getShipMarker().tileEntity;
-            if (te instanceof TileEntityHelm) {
-                ((TileEntityHelm) te).setAssembleResult(result);
-                ((TileEntityHelm) te).setInfo(getInfo());
+            if (te instanceof TileHelm) {
+                ((TileHelm) te).setAssembleResult(result);
+                ((TileHelm) te).setInfo(getInfo());
             }
         }
 

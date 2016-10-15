@@ -3,7 +3,7 @@ package io.github.elytra.davincisvessels.common.tileentity;
 import io.github.elytra.davincisvessels.client.gui.GuiAnchorPoint;
 import io.github.elytra.davincisvessels.common.LanguageEntries;
 import io.github.elytra.davincisvessels.common.object.DavincisVesselsObjects;
-import io.github.elytra.movingworld.api.IMovingWorldTileEntity;
+import io.github.elytra.movingworld.api.IMovingTile;
 import io.github.elytra.movingworld.common.chunk.mobilechunk.MobileChunk;
 import io.github.elytra.movingworld.common.entity.EntityMovingWorld;
 import net.minecraft.client.Minecraft;
@@ -25,7 +25,7 @@ import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
-public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTileEntity, IInventory, ITickable {
+public class TileAnchorPoint extends TileEntity implements IMovingTile, IInventory, ITickable {
 
 
     public ItemStack content;
@@ -33,7 +33,7 @@ public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTil
     private AnchorInstance instance;
     private EntityMovingWorld activeShip;
 
-    public TileEntityAnchorPoint() {
+    public TileAnchorPoint() {
         super();
         activeShip = null;
         instance = new AnchorInstance();
@@ -116,9 +116,9 @@ public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTil
     }
 
     @Override
-    public void setParentMovingWorld(BlockPos pos, EntityMovingWorld entityMovingWorld) {
+    public void setParentMovingWorld(EntityMovingWorld movingWorld, BlockPos chunkPos) {
         chunkPos = pos;
-        activeShip = entityMovingWorld;
+        activeShip = movingWorld;
     }
 
     @Override
@@ -128,7 +128,7 @@ public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTil
 
     @Override
     public void setParentMovingWorld(EntityMovingWorld entityMovingWorld) {
-        setParentMovingWorld(new BlockPos(BlockPos.ORIGIN), entityMovingWorld);
+        setParentMovingWorld(entityMovingWorld, new BlockPos(BlockPos.ORIGIN));
     }
 
     public AnchorInstance getInstance() {
@@ -143,6 +143,11 @@ public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTil
     @Override
     public BlockPos getChunkPos() {
         return chunkPos;
+    }
+
+    @Override
+    public void setChunkPos(BlockPos chunkPos) {
+        this.chunkPos = chunkPos;
     }
 
     @Override
@@ -161,7 +166,7 @@ public class TileEntityAnchorPoint extends TileEntity implements IMovingWorldTil
 
     @Override
     public String toString() {
-        return String.format("TileEntityAnchorPoint at {X: %s Y: %s Z: %s} with state {%s} and instance {%s}", pos.getX(), pos.getY(), pos.getZ(), worldObj.getBlockState(pos), instance.toString());
+        return String.format("TileAnchorPoint at {X: %s Y: %s Z: %s} with state {%s} and instance {%s}", pos.getX(), pos.getY(), pos.getZ(), worldObj.getBlockState(pos), instance.toString());
     }
 
     @Override

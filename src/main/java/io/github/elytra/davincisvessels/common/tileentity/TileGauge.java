@@ -1,6 +1,6 @@
 package io.github.elytra.davincisvessels.common.tileentity;
 
-import io.github.elytra.movingworld.api.IMovingWorldTileEntity;
+import io.github.elytra.movingworld.api.IMovingTile;
 import io.github.elytra.movingworld.common.chunk.mobilechunk.MobileChunk;
 import io.github.elytra.movingworld.common.entity.EntityMovingWorld;
 import net.minecraft.entity.Entity;
@@ -10,18 +10,18 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
-public class TileEntityGauge extends TileEntity implements IMovingWorldTileEntity {
+public class TileGauge extends TileEntity implements IMovingTile {
     public EntityMovingWorld parentShip;
     private BlockPos chunkPos;
 
-    public TileEntityGauge() {
+    public TileGauge() {
         parentShip = null;
     }
 
     @Override
-    public void setParentMovingWorld(BlockPos pos, EntityMovingWorld entityMovingWorld) {
+    public void setParentMovingWorld(EntityMovingWorld movingWorld, BlockPos pos) {
         this.chunkPos = pos;
-        parentShip = entityMovingWorld;
+        parentShip = movingWorld;
     }
 
     @Override
@@ -31,12 +31,17 @@ public class TileEntityGauge extends TileEntity implements IMovingWorldTileEntit
 
     @Override
     public void setParentMovingWorld(EntityMovingWorld entityMovingWorld) {
-        setParentMovingWorld(new BlockPos(BlockPos.ORIGIN), entityMovingWorld);
+        setParentMovingWorld(entityMovingWorld, new BlockPos(BlockPos.ORIGIN));
     }
 
     @Override
     public BlockPos getChunkPos() {
         return chunkPos;
+    }
+
+    @Override
+    public void setChunkPos(BlockPos chunkPos) {
+        this.chunkPos = chunkPos;
     }
 
     @Override

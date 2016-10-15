@@ -1,6 +1,6 @@
 package io.github.elytra.davincisvessels.common.object.block;
 
-import io.github.elytra.davincisvessels.common.tileentity.TileEntityCrate;
+import io.github.elytra.davincisvessels.common.tileentity.TileCrate;
 import io.github.elytra.movingworld.common.entity.EntityMovingWorld;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -106,9 +106,9 @@ public class BlockCrate extends BlockContainer {
 
         if (entity != null && !(entity instanceof EntityPlayer || entity instanceof EntityMovingWorld)) {
             TileEntity te = world.getTileEntity(pos);
-            if (te != null && te instanceof TileEntityCrate) {
-                if (((TileEntityCrate) te).canCatchEntity() && ((TileEntityCrate) te).getContainedEntity() == null) {
-                    ((TileEntityCrate) te).setContainedEntity(entity);
+            if (te != null && te instanceof TileCrate) {
+                if (((TileCrate) te).canCatchEntity() && ((TileCrate) te).getContainedEntity() == null) {
+                    ((TileCrate) te).setContainedEntity(entity);
                 }
             }
         }
@@ -116,14 +116,14 @@ public class BlockCrate extends BlockContainer {
 
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
-        return new TileEntityCrate();
+        return new TileCrate();
     }
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         TileEntity te = world.getTileEntity(pos);
-        if (te != null && te instanceof TileEntityCrate) {
-            ((TileEntityCrate) te).releaseEntity();
+        if (te != null && te instanceof TileCrate) {
+            ((TileCrate) te).releaseEntity();
             return true;
         }
         return false;
@@ -153,8 +153,8 @@ public class BlockCrate extends BlockContainer {
 
         if (powered) {
             TileEntity te = world.getTileEntity(pos);
-            if (te != null && te instanceof TileEntityCrate) {
-                ((TileEntityCrate) te).releaseEntity();
+            if (te != null && te instanceof TileCrate) {
+                ((TileCrate) te).releaseEntity();
                 world.setBlockState(pos, world.getBlockState(pos).withProperty(POWERED, Boolean.TRUE));
             }
         } else {

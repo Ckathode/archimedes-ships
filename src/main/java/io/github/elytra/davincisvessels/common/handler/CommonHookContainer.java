@@ -1,7 +1,7 @@
 package io.github.elytra.davincisvessels.common.handler;
 
 
-import io.github.elytra.davincisvessels.common.tileentity.TileEntityCrate;
+import io.github.elytra.davincisvessels.common.tileentity.TileCrate;
 import io.github.elytra.davincisvessels.common.tileentity.TileEntitySecuredBed;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -21,8 +21,8 @@ public class CommonHookContainer {
             int z = MathHelper.floor_double(event.getTarget().posZ);
 
             TileEntity te = event.getEntity().worldObj.getTileEntity(new BlockPos(x, y, z));
-            if (te instanceof TileEntityCrate && ((TileEntityCrate) te).getContainedEntity() == event.getTarget()) {
-                ((TileEntityCrate) te).releaseEntity();
+            if (te instanceof TileCrate && ((TileCrate) te).getContainedEntity() == event.getTarget()) {
+                ((TileCrate) te).releaseEntity();
                 event.setCanceled(true);
             }
         }

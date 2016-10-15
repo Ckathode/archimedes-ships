@@ -5,7 +5,7 @@ import io.github.elytra.davincisvessels.common.LanguageEntries;
 import io.github.elytra.davincisvessels.common.entity.ShipAssemblyInteractor;
 import io.github.elytra.davincisvessels.common.network.DavincisVesselsNetworking;
 import io.github.elytra.davincisvessels.common.network.HelmClientAction;
-import io.github.elytra.davincisvessels.common.tileentity.TileEntityHelm;
+import io.github.elytra.davincisvessels.common.tileentity.TileHelm;
 import io.github.elytra.movingworld.common.chunk.assembly.AssembleResult;
 import io.github.elytra.movingworld.common.chunk.assembly.AssembleResult.ResultType;
 import net.minecraft.client.gui.GuiButton;
@@ -25,14 +25,14 @@ import static io.github.elytra.movingworld.common.chunk.assembly.AssembleResult.
 public class GuiHelm extends GuiContainer {
     public static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("davincisvessels", "textures/gui/shipstatus.png");
 
-    public final TileEntityHelm tileEntity;
+    public final TileHelm tileEntity;
     public final EntityPlayer player;
 
     private GuiButton btnRename, btnAssemble, btnUndo, btnMount;
     private GuiTextField txtShipName;
     private boolean busyCompiling;
 
-    public GuiHelm(TileEntityHelm tileentity, EntityPlayer entityplayer) {
+    public GuiHelm(TileHelm tileentity, EntityPlayer entityplayer) {
         super(new ContainerHelm(tileentity, entityplayer));
         tileEntity = tileentity;
         player = entityplayer;

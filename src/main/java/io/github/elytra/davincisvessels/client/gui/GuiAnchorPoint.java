@@ -4,7 +4,7 @@ import io.github.elytra.davincisvessels.common.LanguageEntries;
 import io.github.elytra.davincisvessels.common.network.DavincisVesselsNetworking;
 import io.github.elytra.davincisvessels.common.object.DavincisVesselsObjects;
 import io.github.elytra.davincisvessels.common.tileentity.BlockLocation;
-import io.github.elytra.davincisvessels.common.tileentity.TileEntityAnchorPoint;
+import io.github.elytra.davincisvessels.common.tileentity.TileAnchorPoint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -24,12 +24,12 @@ import java.util.UUID;
 public class GuiAnchorPoint extends GuiContainer {
 
     public static final ResourceLocation GUI_TEXTURES = new ResourceLocation("davincisvessels", "textures/gui/anchorPoint.png");
-    public TileEntityAnchorPoint anchorPoint;
+    public TileAnchorPoint anchorPoint;
     private int selectedRelation;
     private String[] relations;
     private GuiButton btnLink, btnSwitch, btnNextRelation, btnPrevRelation;
 
-    public GuiAnchorPoint(TileEntityAnchorPoint te, EntityPlayer entityplayer) {
+    public GuiAnchorPoint(TileAnchorPoint te, EntityPlayer entityplayer) {
         super(new ContainerAnchorPoint(te, entityplayer));
         this.anchorPoint = te;
 

@@ -10,7 +10,7 @@ import io.github.elytra.movingworld.common.chunk.assembly.AssembleResult;
 import io.github.elytra.movingworld.common.chunk.mobilechunk.MobileChunk;
 import io.github.elytra.movingworld.common.entity.EntityMovingWorld;
 import io.github.elytra.movingworld.common.entity.MovingWorldInfo;
-import io.github.elytra.movingworld.common.tile.TileMovingWorldMarkingBlock;
+import io.github.elytra.movingworld.common.tile.TileMovingMarkingBlock;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,7 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class TileEntityHelm extends TileMovingWorldMarkingBlock {
+public class TileHelm extends TileMovingMarkingBlock {
 
     public boolean submerge;
     private ShipAssemblyInteractor interactor;
@@ -26,7 +26,7 @@ public class TileEntityHelm extends TileMovingWorldMarkingBlock {
     private MovingWorldInfo info;
     private BlockPos chunkPos;
 
-    public TileEntityHelm() {
+    public TileHelm() {
         super();
         activeShip = null;
     }
@@ -39,11 +39,10 @@ public class TileEntityHelm extends TileMovingWorldMarkingBlock {
         player.addStat(getAssembleResult().isOK() ? DavincisVesselsObjects.achievementAssembleSuccess : DavincisVesselsObjects.achievementAssembleFailure);
     }
 
-
     @Override
-    public void setParentMovingWorld(BlockPos pos, EntityMovingWorld entityMovingWorld) {
+    public void setParentMovingWorld(EntityMovingWorld movingWorld, BlockPos chunkPos) {
         chunkPos = pos;
-        activeShip = (EntityShip) entityMovingWorld;
+        activeShip = (EntityShip) movingWorld;
     }
 
     @Override
@@ -53,13 +52,18 @@ public class TileEntityHelm extends TileMovingWorldMarkingBlock {
 
     @Override
     public void setParentMovingWorld(EntityMovingWorld entityMovingWorld) {
-        setParentMovingWorld(new BlockPos(BlockPos.ORIGIN), entityMovingWorld);
+        setParentMovingWorld(entityMovingWorld, new BlockPos(BlockPos.ORIGIN));
     }
 
     @Override
     public BlockPos getChunkPos() {
 
         return chunkPos;
+    }
+
+    @Override
+    public void setChunkPos(BlockPos chunkPos) {
+        this.chunkPos = chunkPos;
     }
 
     @Override

@@ -4,7 +4,7 @@ import io.github.elytra.davincisvessels.DavincisVesselsMod;
 import io.github.elytra.davincisvessels.common.object.DavincisVesselsObjects;
 import io.github.elytra.davincisvessels.common.tileentity.AnchorInstance;
 import io.github.elytra.davincisvessels.common.tileentity.BlockLocation;
-import io.github.elytra.davincisvessels.common.tileentity.TileEntityAnchorPoint;
+import io.github.elytra.davincisvessels.common.tileentity.TileAnchorPoint;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -98,9 +98,9 @@ public class BlockAnchorPoint extends BlockContainer {
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        if (worldIn != null && !worldIn.isRemote && worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos) instanceof TileEntityAnchorPoint) {
+        if (worldIn != null && !worldIn.isRemote && worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos) instanceof TileAnchorPoint) {
             if (stack != null && stack.getTagCompound() != null && stack.getTagCompound().hasKey("instance")) {
-                TileEntityAnchorPoint anchorPoint = (TileEntityAnchorPoint) worldIn.getTileEntity(pos);
+                TileAnchorPoint anchorPoint = (TileAnchorPoint) worldIn.getTileEntity(pos);
                 AnchorInstance instance = new AnchorInstance();
                 instance.deserializeNBT(stack.getTagCompound().getCompoundTag("instance"));
                 instance.setIdentifier(UUID.randomUUID());
@@ -111,8 +111,8 @@ public class BlockAnchorPoint extends BlockContainer {
                     IBlockState relationState = relationWorld.getBlockState(relation.getValue().pos);
                     if (relationState.getBlock().equals(DavincisVesselsObjects.blockAnchorPoint)) {
                         TileEntity relationTile = relationWorld.getTileEntity(relation.getValue().pos);
-                        if (relationTile != null && relationTile instanceof TileEntityAnchorPoint) {
-                            TileEntityAnchorPoint relationAnchor = (TileEntityAnchorPoint) relationTile;
+                        if (relationTile != null && relationTile instanceof TileAnchorPoint) {
+                            TileAnchorPoint relationAnchor = (TileAnchorPoint) relationTile;
                             if (!relationAnchor.getInstance().getType().equals(anchorPoint.getInstance().getType())) {
                                 if (relationAnchor.getInstance().getIdentifier().equals(relation.getKey())) {
                                     relationAnchor.getInstance().addRelation(anchorPoint.getInstance().getIdentifier(), new BlockLocation(pos, worldIn.provider.getDimension()));
@@ -152,6 +152,6 @@ public class BlockAnchorPoint extends BlockContainer {
 
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
-        return new TileEntityAnchorPoint();
+        return new TileAnchorPoint();
     }
 }

@@ -1,6 +1,6 @@
 package io.github.elytra.davincisvessels.common.object.block;
 
-import io.github.elytra.davincisvessels.common.tileentity.TileEntityGauge;
+import io.github.elytra.davincisvessels.common.tileentity.TileGauge;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockFence;
@@ -106,7 +106,7 @@ public class BlockGauge extends BlockContainer {
 
     @Override
     public TileEntity createNewTileEntity(World world, int metadata) {
-        TileEntityGauge tileentitygauge = new TileEntityGauge();
+        TileGauge tileentitygauge = new TileGauge();
         return tileentitygauge;
     }
 

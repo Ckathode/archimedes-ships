@@ -3,8 +3,8 @@ package io.github.elytra.davincisvessels.client.render;
 import io.github.elytra.davincisvessels.DavincisVesselsMod;
 import io.github.elytra.davincisvessels.common.entity.EntityShip;
 import io.github.elytra.davincisvessels.common.object.block.BlockHelm;
-import io.github.elytra.davincisvessels.common.tileentity.TileEntityHelm;
-import io.github.elytra.movingworld.api.IMovingWorldTileEntity;
+import io.github.elytra.davincisvessels.common.tileentity.TileHelm;
+import io.github.elytra.movingworld.api.IMovingTile;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -20,7 +20,7 @@ public class TileEntityHelmRenderer extends TileEntitySpecialRenderer {
     @Override
     public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage) {
         try {
-            renderHelm((TileEntityHelm) te, x, y, z, partialTicks);
+            renderHelm((TileHelm) te, x, y, z, partialTicks);
         } catch (Exception e) {
             if (e instanceof IOException)
                 e.printStackTrace();
@@ -29,15 +29,15 @@ public class TileEntityHelmRenderer extends TileEntitySpecialRenderer {
         }
     }
 
-    private void renderHelm(TileEntityHelm helm, double x, double y, double z, float partialTicks) throws Exception {
+    private void renderHelm(TileHelm helm, double x, double y, double z, float partialTicks) throws Exception {
         EntityShip ship = null;
         IBlockState blockState = getWorld().getBlockState(helm.getPos());
         EnumFacing blockStateFacing = EnumFacing.UP;
 
         if (blockState.getBlock() instanceof BlockHelm)
             blockStateFacing = blockState.getValue(BlockHelm.FACING);
-        if (((IMovingWorldTileEntity) helm).getParentMovingWorld() != null && ((IMovingWorldTileEntity) helm).getParentMovingWorld() instanceof EntityShip) {
-            ship = (EntityShip) ((IMovingWorldTileEntity) helm).getParentMovingWorld();
+        if (((IMovingTile) helm).getParentMovingWorld() != null && ((IMovingTile) helm).getParentMovingWorld() instanceof EntityShip) {
+            ship = (EntityShip) ((IMovingTile) helm).getParentMovingWorld();
         }
 
         GlStateManager.pushMatrix();

@@ -2,7 +2,7 @@ package io.github.elytra.davincisvessels.client.render;
 
 import com.google.common.base.Function;
 import io.github.elytra.davincisvessels.DavincisVesselsMod;
-import io.github.elytra.davincisvessels.common.tileentity.TileEntityHelm;
+import io.github.elytra.davincisvessels.common.tileentity.TileHelm;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -44,7 +44,7 @@ public class ModelHelmWheel {
         }
     }
 
-    public void render(double x, double y, double z, IBlockState state, TileEntityHelm helm, EnumFacing direction) {
+    public void render(double x, double y, double z, IBlockState state, TileHelm helm, EnumFacing direction) {
         GlStateManager.pushMatrix();
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);

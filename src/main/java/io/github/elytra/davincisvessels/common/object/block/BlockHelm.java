@@ -2,7 +2,7 @@ package io.github.elytra.davincisvessels.common.object.block;
 
 import io.github.elytra.davincisvessels.DavincisVesselsMod;
 import io.github.elytra.davincisvessels.common.object.DavincisVesselsObjects;
-import io.github.elytra.davincisvessels.common.tileentity.TileEntityHelm;
+import io.github.elytra.davincisvessels.common.tileentity.TileHelm;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
@@ -104,7 +104,7 @@ public class BlockHelm extends BlockDirectional implements ITileEntityProvider {
 
     @Override
     public TileEntity createNewTileEntity(World var1, int var2) {
-        return new TileEntityHelm();
+        return new TileHelm();
     }
 
     @Override

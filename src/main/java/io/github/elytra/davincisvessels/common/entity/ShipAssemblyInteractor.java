@@ -6,9 +6,9 @@ import io.github.elytra.davincisvessels.common.handler.ConnectionHandler;
 import io.github.elytra.davincisvessels.common.object.DavincisVesselsObjects;
 import io.github.elytra.davincisvessels.common.object.block.BlockHelm;
 import io.github.elytra.davincisvessels.common.tileentity.AnchorInstance;
-import io.github.elytra.davincisvessels.common.tileentity.TileEntityAnchorPoint;
-import io.github.elytra.davincisvessels.common.tileentity.TileEntityHelm;
+import io.github.elytra.davincisvessels.common.tileentity.TileAnchorPoint;
 import io.github.elytra.davincisvessels.common.tileentity.TileEntitySecuredBed;
+import io.github.elytra.davincisvessels.common.tileentity.TileHelm;
 import io.github.elytra.movingworld.MovingWorldMod;
 import io.github.elytra.movingworld.common.chunk.LocatedBlock;
 import io.github.elytra.movingworld.common.chunk.MovingWorldAssemblyInteractor;
@@ -99,7 +99,7 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
     @Override
     public boolean isTileMovingWorldMarker(TileEntity tile) {
         if (tile != null)
-            return tile instanceof TileEntityHelm;
+            return tile instanceof TileHelm;
         else
             return false;
     }
@@ -113,8 +113,8 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
         if (state.getBlock() == DavincisVesselsObjects.blockStickyBuffer || DavincisVesselsMod.instance.getNetworkConfig().isSticky(state.getBlock()))
             canAssemble.assembleThenCancel = true;
 
-        if (lb.tileEntity != null && lb.tileEntity instanceof TileEntityAnchorPoint
-                && ((TileEntityAnchorPoint) lb.tileEntity).getInstance().getType() == AnchorInstance.InstanceType.FORLAND)
+        if (lb.tileEntity != null && lb.tileEntity instanceof TileAnchorPoint
+                && ((TileAnchorPoint) lb.tileEntity).getInstance().getType() == AnchorInstance.InstanceType.FORLAND)
             canAssemble.justCancel = true;
 
         return canAssemble;

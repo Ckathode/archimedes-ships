@@ -1,9 +1,9 @@
 package io.github.elytra.davincisvessels.client.gui;
 
 import io.github.elytra.davincisvessels.common.entity.EntityShip;
-import io.github.elytra.davincisvessels.common.tileentity.TileEntityAnchorPoint;
-import io.github.elytra.davincisvessels.common.tileentity.TileEntityEngine;
-import io.github.elytra.davincisvessels.common.tileentity.TileEntityHelm;
+import io.github.elytra.davincisvessels.common.tileentity.TileAnchorPoint;
+import io.github.elytra.davincisvessels.common.tileentity.TileEngine;
+import io.github.elytra.davincisvessels.common.tileentity.TileHelm;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -18,8 +18,8 @@ public class DavincisVesselsGuiHandler implements IGuiHandler {
         switch (ID) {
             case 1:
                 te = world.getTileEntity(pos);
-                if (te instanceof TileEntityHelm) {
-                    return new ContainerHelm((TileEntityHelm) te, player);
+                if (te instanceof TileHelm) {
+                    return new ContainerHelm((TileHelm) te, player);
                 }
                 return null;
             case 2:
@@ -30,14 +30,14 @@ public class DavincisVesselsGuiHandler implements IGuiHandler {
                 return null;
             case 3:
                 te = world.getTileEntity(pos);
-                if (te instanceof TileEntityEngine) {
-                    return new ContainerEngine((TileEntityEngine) te, player);
+                if (te instanceof TileEngine) {
+                    return new ContainerEngine((TileEngine) te, player);
                 }
                 return null;
             case 4:
                 te = world.getTileEntity(pos);
-                if (te instanceof TileEntityAnchorPoint) {
-                    return new ContainerAnchorPoint((TileEntityAnchorPoint) te, player);
+                if (te instanceof TileAnchorPoint) {
+                    return new ContainerAnchorPoint((TileAnchorPoint) te, player);
                 }
             default:
                 return null;
@@ -51,8 +51,8 @@ public class DavincisVesselsGuiHandler implements IGuiHandler {
         switch (ID) {
             case 1:
                 te = world.getTileEntity(pos);
-                if (te instanceof TileEntityHelm) {
-                    return new GuiHelm((TileEntityHelm) te, player);
+                if (te instanceof TileHelm) {
+                    return new GuiHelm((TileHelm) te, player);
                 }
             case 2:
                 if (player.getRidingEntity() instanceof EntityShip) {
@@ -61,13 +61,13 @@ public class DavincisVesselsGuiHandler implements IGuiHandler {
                 }
             case 3:
                 te = world.getTileEntity(pos);
-                if (te instanceof TileEntityEngine) {
-                    return new GuiEngine((TileEntityEngine) te, player);
+                if (te instanceof TileEngine) {
+                    return new GuiEngine((TileEngine) te, player);
                 }
             case 4:
                 te = world.getTileEntity(pos);
-                if (te instanceof TileEntityAnchorPoint) {
-                    return new GuiAnchorPoint((TileEntityAnchorPoint) te, player);
+                if (te instanceof TileAnchorPoint) {
+                    return new GuiAnchorPoint((TileAnchorPoint) te, player);
                 }
             default:
                 return null;

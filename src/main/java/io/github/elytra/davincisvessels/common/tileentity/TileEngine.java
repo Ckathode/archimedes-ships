@@ -19,7 +19,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 
 
-public class TileEntityEngine extends TileEntity implements IInventory, ITileEngineModifier {
+public class TileEngine extends TileEntity implements IInventory, ITileEngineModifier {
     public float enginePower;
     public int engineFuelConsumption;
     ItemStack[] itemStacks;
@@ -27,13 +27,13 @@ public class TileEntityEngine extends TileEntity implements IInventory, ITileEng
     private boolean running;
     private BlockPos chunkPos;
 
-    public TileEntityEngine() {
+    public TileEngine() {
         itemStacks = new ItemStack[getSizeInventory()];
         burnTime = 0;
         running = false;
     }
 
-    public TileEntityEngine(float power, int fuelconsumption) {
+    public TileEngine(float power, int fuelconsumption) {
         this();
 
         enginePower = power;
@@ -226,9 +226,10 @@ public class TileEntityEngine extends TileEntity implements IInventory, ITileEng
     }
 
     @Override
-    public void setParentMovingWorld(BlockPos pos, EntityMovingWorld entityMovingWorld) {
-        this.chunkPos = pos;
+    public void setParentMovingWorld(EntityMovingWorld movingWorld, BlockPos chunkPos) {
         // We don't bother with our parent.
+
+        this.chunkPos = pos;
     }
 
     @Override
@@ -244,6 +245,11 @@ public class TileEntityEngine extends TileEntity implements IInventory, ITileEng
     @Override
     public BlockPos getChunkPos() {
         return chunkPos;
+    }
+
+    @Override
+    public void setChunkPos(BlockPos chunkPos) {
+
     }
 
     @Override

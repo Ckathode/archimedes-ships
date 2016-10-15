@@ -7,8 +7,8 @@ import io.github.elytra.davincisvessels.common.api.tileentity.ITileEngineModifie
 import io.github.elytra.davincisvessels.common.object.DavincisVesselsObjects;
 import io.github.elytra.davincisvessels.common.tileentity.AnchorInstance;
 import io.github.elytra.davincisvessels.common.tileentity.BlockLocation;
-import io.github.elytra.davincisvessels.common.tileentity.TileEntityAnchorPoint;
-import io.github.elytra.davincisvessels.common.tileentity.TileEntityHelm;
+import io.github.elytra.davincisvessels.common.tileentity.TileAnchorPoint;
+import io.github.elytra.davincisvessels.common.tileentity.TileHelm;
 import io.github.elytra.movingworld.common.chunk.LocatedBlock;
 import io.github.elytra.movingworld.common.entity.EntityMovingWorld;
 import io.github.elytra.movingworld.common.entity.MovingWorldCapabilities;
@@ -80,7 +80,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
 
         if (anchorPoints != null) {
             for (LocatedBlock anchorLB : anchorPoints) {
-                TileEntityAnchorPoint anchorTile = (TileEntityAnchorPoint) anchorLB.tileEntity;
+                TileAnchorPoint anchorTile = (TileAnchorPoint) anchorLB.tileEntity;
                 AnchorInstance anchor = anchorTile.getInstance();
                 if (anchor.getRelatedAnchors().isEmpty())
                     continue;
@@ -90,8 +90,8 @@ public class ShipCapabilities extends MovingWorldCapabilities {
                     Map.Entry<UUID, BlockLocation> relation = relationIterator.next();
                     if (relation.getValue().dimID == ship.worldObj.provider.getDimension()) {
                         TileEntity relatedTile = ship.worldObj.getTileEntity(relation.getValue().pos);
-                        if (relatedTile != null && relatedTile instanceof TileEntityAnchorPoint) {
-                            TileEntityAnchorPoint relatedAnchor = (TileEntityAnchorPoint) relatedTile;
+                        if (relatedTile != null && relatedTile instanceof TileAnchorPoint) {
+                            TileAnchorPoint relatedAnchor = (TileAnchorPoint) relatedTile;
                             if (relatedAnchor.getInstance().getRelatedAnchors().containsKey(anchor.getIdentifier())
                                     && relatedAnchor.getInstance().getType().equals(AnchorInstance.InstanceType.FORLAND)) {
                                 int xDist = (int) Math.abs(Math.round(ship.posX) - relatedAnchor.getPos().getX());
@@ -222,8 +222,8 @@ public class ShipCapabilities extends MovingWorldCapabilities {
             floaters++;
         } else if (block == DavincisVesselsObjects.blockAnchorPoint) {
             TileEntity te = ship.getMobileChunk().getTileEntity(pos);
-            if (te != null && te instanceof TileEntityAnchorPoint && ((TileEntityAnchorPoint) te).getInstance() != null
-                    && ((TileEntityAnchorPoint) te).getInstance().getType().equals(AnchorInstance.InstanceType.FORSHIP)) {
+            if (te != null && te instanceof TileAnchorPoint && ((TileAnchorPoint) te).getInstance() != null
+                    && ((TileAnchorPoint) te).getInstance().getType().equals(AnchorInstance.InstanceType.FORSHIP)) {
                 if (anchorPoints == null) {
                     anchorPoints = new ArrayList<>();
                 }
@@ -261,8 +261,8 @@ public class ShipCapabilities extends MovingWorldCapabilities {
 
     @Override
     public void postBlockAdding() {
-        if (ship.getMobileChunk() != null && ship.getMobileChunk().marker != null && ship.getMobileChunk().marker.tileEntity != null && ship.getMobileChunk().marker.tileEntity instanceof TileEntityHelm) {
-            if (((TileEntityHelm) ship.getMobileChunk().marker.tileEntity).submerge && canSubmerge()) {
+        if (ship.getMobileChunk() != null && ship.getMobileChunk().marker != null && ship.getMobileChunk().marker.tileEntity != null && ship.getMobileChunk().marker.tileEntity instanceof TileHelm) {
+            if (((TileHelm) ship.getMobileChunk().marker.tileEntity).submerge && canSubmerge()) {
                 ship.setSubmerge(true);
             }
         }
