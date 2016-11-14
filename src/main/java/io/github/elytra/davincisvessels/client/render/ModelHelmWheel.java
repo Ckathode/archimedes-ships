@@ -32,7 +32,7 @@ public class ModelHelmWheel {
             try {
                 model = ModelLoaderRegistry.getModel(new ResourceLocation(DavincisVesselsMod.RESOURCE_DOMAIN + "block/helmWheel"));
             } catch (Exception e) {
-                DavincisVesselsMod.modLog.error("A critical exception occurred when rendering a helm model, " + e.getLocalizedMessage());
+                DavincisVesselsMod.LOG.error("A critical exception occurred when rendering a helm model, " + e.getLocalizedMessage());
             }
 
             if (model != null) {
@@ -95,7 +95,7 @@ public class ModelHelmWheel {
             try {
                 model = ModelLoaderRegistry.getModel(new ResourceLocation(DavincisVesselsMod.RESOURCE_DOMAIN + "block/helmWheel"));
             } catch (Exception e) {
-                DavincisVesselsMod.modLog.error("A critical exception occurred when rendering a helm model, " + e.getLocalizedMessage());
+                DavincisVesselsMod.LOG.error("A critical exception occurred when rendering a helm model, " + e.getLocalizedMessage());
             }
 
             if (model != null) {

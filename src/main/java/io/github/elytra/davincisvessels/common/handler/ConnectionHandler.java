@@ -19,7 +19,7 @@ import java.util.UUID;
 
 public class ConnectionHandler {
 
-    public static HashMap<UUID, TileEntitySecuredBed> playerBedMap = new HashMap<UUID, TileEntitySecuredBed>();
+    public static HashMap<UUID, TileEntitySecuredBed> playerBedMap = new HashMap<>();
 
     @SubscribeEvent
     public void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
@@ -29,7 +29,8 @@ public class ConnectionHandler {
             handleParachuteLogout(event);
             handleConfigDesync(event);
 
-            if (event.player.getRidingEntity() != null && event.player.getRidingEntity() instanceof EntityShip) {
+            if (event.player.getRidingEntity() != null && event.player.getRidingEntity() instanceof EntityShip
+                    && !event.player.worldObj.getMinecraftServer().isSinglePlayer()) {
                 ((EntityShip) event.player.getRidingEntity()).disassemble(true);
             }
         }
@@ -48,7 +49,7 @@ public class ConnectionHandler {
 
     private void handlerConfigSync(PlayerEvent.PlayerLoggedInEvent event) {
         if (FMLCommonHandler.instance().getEffectiveSide().isServer()) {
-            NBTTagCompound tagCompound = DavincisVesselsMod.instance.getNetworkConfig().getShared().serialize();
+            NBTTagCompound tagCompound = DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().serialize();
             tagCompound.setBoolean("restore", false);
 
             DavincisVesselsNetworking.NETWORK.send().packet("ConfigMessage")
@@ -71,7 +72,7 @@ public class ConnectionHandler {
     private void handleBedLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (playerBedMap.containsKey(event.player.getGameProfile().getId())) {
             TileEntitySecuredBed bed = playerBedMap.get(event.player.getGameProfile().getId());
-            bed.playerID = event.player.getGameProfile().getId();
+            bed.setPlayer(event.player);
             bed.moveBed(bed.getPos());
         }
     }
@@ -107,13 +108,15 @@ public class ConnectionHandler {
         if (event.player.getRidingEntity() != null && event.player.getRidingEntity() instanceof EntitySeat) {
             EntityPlayer player = event.player;
             EntitySeat seat = (EntitySeat) player.getRidingEntity();
-            EntityShip ship = seat.getParentShip();
+            EntityShip ship = seat.getShip();
 
-            player.startRiding(null);
-            if (ship != null && seat.getPos() != null) {
+            player.dismountRidingEntity();
+            if (ship != null && seat.getChunkPos() != null) {
                 NBTTagCompound nbt = new NBTTagCompound();
 
-                Vec3dMod vec = new Vec3dMod(seat.getPos().getX() - ship.getMobileChunk().getCenterX(), seat.getPos().getY() - ship.getMobileChunk().minY(), seat.getPos().getZ() - ship.getMobileChunk().getCenterZ());
+                Vec3dMod vec = new Vec3dMod(seat.getChunkPos().getX() - ship.getMobileChunk().getCenterX(),
+                        seat.getChunkPos().getY() - ship.getMobileChunk().minY(),
+                        seat.getChunkPos().getZ() - ship.getMobileChunk().getCenterZ());
                 vec = vec.rotateAroundY((float) Math.toRadians(ship.rotationYaw));
 
                 nbt.setDouble("vecX", vec.xCoord);

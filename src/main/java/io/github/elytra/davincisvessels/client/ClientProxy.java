@@ -4,11 +4,13 @@ import io.github.elytra.davincisvessels.DavincisVesselsMod;
 import io.github.elytra.davincisvessels.client.control.ShipKeyHandler;
 import io.github.elytra.davincisvessels.client.handler.ClientHookContainer;
 import io.github.elytra.davincisvessels.client.render.RenderParachute;
+import io.github.elytra.davincisvessels.client.render.RenderSeat;
 import io.github.elytra.davincisvessels.client.render.TileEntityGaugeRenderer;
 import io.github.elytra.davincisvessels.client.render.TileEntityHelmRenderer;
 import io.github.elytra.davincisvessels.common.CommonProxy;
 import io.github.elytra.davincisvessels.common.DavincisVesselsConfig;
 import io.github.elytra.davincisvessels.common.entity.EntityParachute;
+import io.github.elytra.davincisvessels.common.entity.EntitySeat;
 import io.github.elytra.davincisvessels.common.entity.EntityShip;
 import io.github.elytra.davincisvessels.common.object.DavincisVesselsObjects;
 import io.github.elytra.davincisvessels.common.tileentity.TileGauge;
@@ -66,19 +68,9 @@ public class ClientProxy extends CommonProxy {
     }
 
     public void registerEntityRenderers() {
-        RenderingRegistry.registerEntityRenderingHandler(EntityShip.class, new IRenderFactory<EntityShip>() {
-            @Override
-            public Render<? super EntityShip> createRenderFor(RenderManager manager) {
-                return new RenderMovingWorld(manager);
-            }
-        });
-
-        RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, new IRenderFactory<EntityParachute>() {
-            @Override
-            public Render<? super EntityParachute> createRenderFor(RenderManager manager) {
-                return new RenderParachute(manager);
-            }
-        });
+        RenderingRegistry.registerEntityRenderingHandler(EntityShip.class, manager -> new RenderMovingWorld(manager));
+        RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, manager -> new RenderParachute(manager));
+        RenderingRegistry.registerEntityRenderingHandler(EntitySeat.class, manager -> new RenderSeat(manager)); // memes
     }
 
     public void registerTileEntitySpeacialRenderers() {
@@ -117,7 +109,7 @@ public class ClientProxy extends CommonProxy {
 
         ItemModelMesher modelMesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
 
-        // Do some general render registrations for objects, not considering meta.
+        // Do some general render registrations for OBJECTS, not considering meta.
         for (int i = 0; i < DavincisVesselsObjects.registeredBlocks.size(); i++) {
             modelResourceLocation = new ModelResourceLocation(DavincisVesselsMod.RESOURCE_DOMAIN + DavincisVesselsObjects.registeredBlocks.keySet().toArray()[i], "inventory");
             itemToRegister = Item.getItemFromBlock((Block) DavincisVesselsObjects.registeredBlocks.values().toArray()[i]);
@@ -131,7 +123,7 @@ public class ClientProxy extends CommonProxy {
             modelMesher.register(itemToRegister, 0, modelResourceLocation);
         }
 
-        // Some specific meta registrations for objects, like for extended gauges.
+        // Some specific meta registrations for OBJECTS, like for extended gauges.
         itemToRegister = Item.getItemFromBlock(DavincisVesselsObjects.blockGauge);
         modelResourceLocation = new ModelResourceLocation(DavincisVesselsMod.RESOURCE_DOMAIN + "gauge_ext", "inventory");
 

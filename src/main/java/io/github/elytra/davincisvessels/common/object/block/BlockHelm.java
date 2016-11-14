@@ -95,7 +95,7 @@ public class BlockHelm extends BlockDirectional implements ITileEntityProvider {
         if (!playerIn.isSneaking()) {
             TileEntity tileentity = worldIn.getTileEntity(pos);
             if (tileentity != null) {
-                playerIn.openGui(DavincisVesselsMod.instance, 1, worldIn, pos.getX(), pos.getY(), pos.getZ());
+                playerIn.openGui(DavincisVesselsMod.INSTANCE, 1, worldIn, pos.getX(), pos.getY(), pos.getZ());
                 return true;
             }
         }

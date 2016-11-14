@@ -37,7 +37,7 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
         this.motionY = motion.yCoord;
         this.motionZ = motion.zCoord;
 
-        mounter.startRiding(null);
+        mounter.dismountRidingEntity();
         mounter.startRiding(this, true);
     }
 

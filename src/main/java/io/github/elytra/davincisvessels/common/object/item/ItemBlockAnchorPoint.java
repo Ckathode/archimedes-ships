@@ -18,17 +18,17 @@ public class ItemBlockAnchorPoint extends ItemBlock {
     public ItemBlockAnchorPoint(Block block) {
         super(block);
         setMaxStackSize(1);
-        setCreativeTab(DavincisVesselsMod.creativeTab);
+        setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
     }
 
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
-        if (stack.getTagCompound() == null || !stack.getTagCompound().hasKey("instance"))
+        if (stack.getTagCompound() == null || !stack.getTagCompound().hasKey("INSTANCE"))
             return;
 
         if (GuiScreen.isShiftKeyDown()) {
             AnchorInstance instance = new AnchorInstance();
-            instance.deserializeNBT(stack.getTagCompound().getCompoundTag("instance"));
+            instance.deserializeNBT(stack.getTagCompound().getCompoundTag("INSTANCE"));
             String readablePosition = ((BlockLocation) instance.getRelatedAnchors().values().toArray()[0]).pos
                     .toString().substring(9).replace("}", "").replaceAll("=", ":");
             String pos = I18n.format(LanguageEntries.GUI_ANCHOR_POS, (ChatFormatting.YELLOW + readablePosition).toString());

@@ -65,41 +65,41 @@ public class DavincisVesselsObjects {
 
         materialFloater = new Material(MapColor.CLOTH);
 
-        itemSecuredBed = new ItemSecuredBed().setMaxStackSize(1).setCreativeTab(DavincisVesselsMod.creativeTab);
+        itemSecuredBed = new ItemSecuredBed().setMaxStackSize(1).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
         registerItem("securedBed", itemSecuredBed);
 
-        blockMarkShip = (BlockHelm) new BlockHelm().setCreativeTab(DavincisVesselsMod.creativeTab);
+        blockMarkShip = (BlockHelm) new BlockHelm().setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
         blockMarkShip.setHardness(1F).setResistance(1F);
         registerBlock("marker", blockMarkShip);
 
-        blockFloater = new BlockAS(materialFloater, SoundType.WOOD).setCreativeTab(DavincisVesselsMod.creativeTab);
+        blockFloater = new BlockAS(materialFloater, SoundType.WOOD).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
         blockFloater.setHardness(1F).setResistance(1F);
         registerBlock("floater", blockFloater);
 
-        blockBalloon = new BlockRecolourable(Material.CLOTH, SoundType.CLOTH).setCreativeTab(DavincisVesselsMod.creativeTab);
+        blockBalloon = new BlockRecolourable(Material.CLOTH, SoundType.CLOTH).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
         blockBalloon.setHardness(0.35F).setResistance(1F);
         registerBlock("balloon", blockBalloon, ItemCloth.class);
 
-        blockGauge = (BlockGauge) new BlockGauge().setCreativeTab(DavincisVesselsMod.creativeTab);
+        blockGauge = (BlockGauge) new BlockGauge().setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
         blockGauge.setHardness(1F).setResistance(1F);
         registerBlock("gauge", blockGauge, ItemGaugeBlock.class);
 
-        blockSeat = (BlockSeat) new BlockSeat().setHardness(1F).setResistance(1F).setCreativeTab(DavincisVesselsMod.creativeTab);
+        blockSeat = (BlockSeat) new BlockSeat().setHardness(1F).setResistance(1F).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
         registerBlock("seat", blockSeat);
 
-        blockBuffer = new BlockAS(Material.CLOTH, SoundType.WOOD).setHardness(1F).setResistance(1F).setCreativeTab(DavincisVesselsMod.creativeTab);
+        blockBuffer = new BlockAS(Material.CLOTH, SoundType.WOOD).setHardness(1F).setResistance(1F).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
         registerBlock("buffer", blockBuffer);
 
-        blockStickyBuffer = new BlockAS(Material.CLOTH, SoundType.CLOTH).setHardness(1F).setResistance(1F).setCreativeTab(DavincisVesselsMod.creativeTab);
+        blockStickyBuffer = new BlockAS(Material.CLOTH, SoundType.CLOTH).setHardness(1F).setResistance(1F).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
         registerBlock("stickyBuffer", blockStickyBuffer);
 
-        blockEngine = new BlockEngine(Material.IRON, 1F, 10).setHardness(2F).setResistance(3F).setCreativeTab(DavincisVesselsMod.creativeTab);
+        blockEngine = new BlockEngine(Material.IRON, 1F, 10).setHardness(2F).setResistance(3F).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
         registerBlock("engine", blockEngine);
 
-        blockCrateWood = new BlockCrate(Material.WOOD).setHardness(1f).setResistance(1f).setCreativeTab(DavincisVesselsMod.creativeTab);
+        blockCrateWood = new BlockCrate(Material.WOOD).setHardness(1f).setResistance(1f).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
         registerBlock("crate_wood", blockCrateWood);
 
-        blockAnchorPoint = new BlockAnchorPoint(Material.WOOD).setHardness(1f).setResistance(1F).setCreativeTab(DavincisVesselsMod.creativeTab);
+        blockAnchorPoint = new BlockAnchorPoint(Material.WOOD).setHardness(1f).setResistance(1F).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
         registerBlock("anchorPoint", blockAnchorPoint, ItemBlockAnchorPoint.class);
 
         blockSecuredBed = new BlockSecuredBed().setHardness(0.2F);
@@ -199,7 +199,7 @@ public class DavincisVesselsObjects {
             GameRegistry.register(itemBlock);
             DavincisVesselsObjects.registeredBlocks.put(id, block);
         } catch (Exception e) {
-            DavincisVesselsMod.modLog.error("Caught exception while registering " + block, e);
+            DavincisVesselsMod.LOG.error("Caught exception while registering " + block, e);
         }
     }
 

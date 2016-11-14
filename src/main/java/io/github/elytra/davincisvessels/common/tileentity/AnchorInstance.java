@@ -22,7 +22,7 @@ public class AnchorInstance implements INBTSerializable<NBTTagCompound> {
     private InstanceType type;
     private boolean changed;
     /**
-     * The anchors related to our instance, stores their position in world as well as their
+     * The anchors related to our INSTANCE, stores their position in world as well as their
      * UUID, used for checking if we're in range as well as notifying an anchor if one is
      * removed from the world.
      **/
@@ -112,7 +112,7 @@ public class AnchorInstance implements INBTSerializable<NBTTagCompound> {
     public NBTTagCompound serializeNBT() {
         NBTTagCompound tag = new NBTTagCompound();
 
-        tag.setBoolean("instance", true);
+        tag.setBoolean("INSTANCE", true);
         tag.setBoolean("type", type == InstanceType.FORSHIP);
         tag.setUniqueId("identifier", identifier);
 
@@ -135,7 +135,7 @@ public class AnchorInstance implements INBTSerializable<NBTTagCompound> {
 
     @Override
     public void deserializeNBT(NBTTagCompound tag) {
-        if (!tag.hasKey("instance"))
+        if (!tag.hasKey("INSTANCE"))
             throw new IllegalArgumentException("NBT provided for deserialization is not valid for an anchor point! " + tag.toString());
 
         this.type = tag.getBoolean("type") ? InstanceType.FORSHIP : InstanceType.FORLAND;

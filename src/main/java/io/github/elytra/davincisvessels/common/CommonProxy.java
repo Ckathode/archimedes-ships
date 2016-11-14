@@ -20,7 +20,7 @@ public class CommonProxy {
     }
 
     public void registerEventHandlers() {
-        NetworkRegistry.INSTANCE.registerGuiHandler(DavincisVesselsMod.instance, new DavincisVesselsGuiHandler());
+        NetworkRegistry.INSTANCE.registerGuiHandler(DavincisVesselsMod.INSTANCE, new DavincisVesselsGuiHandler());
 
         playerTicker = new CommonPlayerTicker();
         MinecraftForge.EVENT_BUS.register(playerTicker);

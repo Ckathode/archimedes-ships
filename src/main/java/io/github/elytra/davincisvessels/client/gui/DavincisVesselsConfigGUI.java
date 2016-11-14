@@ -14,15 +14,15 @@ public class DavincisVesselsConfigGUI extends GuiConfig {
 
     public DavincisVesselsConfigGUI(GuiScreen parentScreen) {
         super(parentScreen, generateConfigList(), DavincisVesselsMod.MOD_ID,
-                false, false, GuiConfig.getAbridgedConfigPath(DavincisVesselsMod.instance.getNetworkConfig().getConfig().toString()));
+                false, false, GuiConfig.getAbridgedConfigPath(DavincisVesselsMod.INSTANCE.getNetworkConfig().getConfig().toString()));
     }
 
     public static List<IConfigElement> generateConfigList() {
 
         ArrayList<IConfigElement> elements = new ArrayList<IConfigElement>();
 
-        for (String name : DavincisVesselsMod.instance.getNetworkConfig().getConfig().getCategoryNames())
-            elements.add(new ConfigElement(DavincisVesselsMod.instance.getNetworkConfig().getConfig().getCategory(name)));
+        for (String name : DavincisVesselsMod.INSTANCE.getNetworkConfig().getConfig().getCategoryNames())
+            elements.add(new ConfigElement(DavincisVesselsMod.INSTANCE.getNetworkConfig().getConfig().getCategory(name)));
 
         return elements;
     }

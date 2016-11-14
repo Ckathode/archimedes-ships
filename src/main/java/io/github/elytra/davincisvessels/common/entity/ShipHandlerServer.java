@@ -27,17 +27,8 @@ public class ShipHandlerServer extends MovingWorldHandlerServer {
     }
 
     @Override
-    public boolean interact(EntityPlayer player, ItemStack stack, EnumHand hand) {
-        if (!movingWorld.isBeingRidden()) {
-            return player.startRiding(movingWorld);
-        } else {
-            if (player.getRidingEntity() != null) {
-                player.dismountRidingEntity();
-            }
-            if (!movingWorld.isPassenger(player))
-                return movingWorld.getCapabilities().mountEntity(player);
-        }
-        return false;
+    public boolean processInitialInteract(EntityPlayer player, ItemStack stack, EnumHand hand) {
+        return movingWorld.getCapabilities().mountEntity(player);
     }
 
     @Override

@@ -46,6 +46,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     public ShipCapabilities(EntityMovingWorld movingWorld, boolean autoCalcMass) {
         super(movingWorld, autoCalcMass);
         ship = (EntityShip) movingWorld;
+        seats = new ArrayList<>();
     }
 
     @Override
@@ -130,7 +131,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
 
     @Override
     public boolean canFly() {
-        return (DavincisVesselsMod.instance.getNetworkConfig().getShared().enableAirShips && getBalloonCount() >= blockCount * DavincisVesselsMod.instance.getNetworkConfig().getShared().flyBalloonRatio)
+        return (DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().enableAirShips && getBalloonCount() >= blockCount * DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().flyBalloonRatio)
                 || ship.areSubmerged();
     }
 
@@ -141,9 +142,9 @@ public class ShipCapabilities extends MovingWorldCapabilities {
             int filledBlockCount = filledBlocks.size();
 
             canSubmerge = false;
-            if (DavincisVesselsMod.instance.getNetworkConfig().getShared().enableSubmersibles)
+            if (DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().enableSubmersibles)
                 canSubmerge =
-                        filledBlockCount < (nonAirBlockCount * DavincisVesselsMod.instance.getNetworkConfig().getShared().submersibleFillRatio);
+                        filledBlockCount < (nonAirBlockCount * DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().submersibleFillRatio);
             submerseFound = true;
         }
 
@@ -159,16 +160,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
         return balloonCount;
     }
 
-    public void setBalloonCount(int balloonCount) {
-        this.balloonCount = balloonCount;
-    }
-
-    public int getFloaterCount() {
-        return floaters;
-    }
-
-    public void addAttachments(EntitySeat entity) {
-        if (seats == null) seats = new ArrayList<EntitySeat>();
+    public void addSeat(EntitySeat entity) {
         if (entity != null && entity instanceof EntitySeat) seats.add(entity);
     }
 
@@ -176,16 +168,51 @@ public class ShipCapabilities extends MovingWorldCapabilities {
         return ship.getDataManager().get(EntityShip.HAS_ENGINES) == 1;
     }
 
-    public List<EntitySeat> getAttachments() {
-        return seats;
-    }
-
     public List<ITileEngineModifier> getEngines() {
         return engines;
     }
 
-    public List<LocatedBlock> getAnchorPoints() {
-        return anchorPoints;
+    public boolean hasSeat(EntitySeat seat) {
+        if (seats != null && !seats.isEmpty()) {
+            return seats.contains(seat);
+        } else {
+            return true;
+        }
+    }
+
+    public EntitySeat getAvailableSeat() {
+        if (seats.stream().allMatch(seat -> seat.getControllingPassenger() == null))
+            return seats.stream().filter(seat -> seat.getControllingPassenger() == null).findFirst().get();
+        return null;
+    }
+
+    @Override
+    public boolean mountEntity(Entity player) {
+        if (player.isSneaking()) {
+            return false;
+        } else if (ship.isBeingRidden()) {
+            if (player instanceof EntityPlayer) {
+                tryMountSeat((EntityPlayer) player);
+            }
+            return true;
+        } else {
+            if (!ship.worldObj.isRemote) {
+                player.startRiding(ship);
+            }
+            return true;
+        }
+    }
+
+    private void tryMountSeat(EntityPlayer player) {
+        EntitySeat seat = getAvailableSeat();
+        if (seat != null) {
+            player.interact(seat, player.getActiveItemStack(), player.getActiveHand());
+        }
+    }
+
+    public void spawnSeatEntities() {
+        if (seats != null)
+            seats.forEach(seat -> ship.worldObj.spawnEntityInWorld(seat));
     }
 
     @Override
@@ -216,7 +243,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
             balloonCount += ((IBlockBalloon) block).getBalloonWorth(tile);
         } else if (block == DavincisVesselsObjects.blockBalloon) {
             balloonCount++;
-        } else if (DavincisVesselsMod.instance.getNetworkConfig().isBalloon(block)) {
+        } else if (DavincisVesselsMod.INSTANCE.getNetworkConfig().isBalloon(block)) {
             balloonCount++;
         } else if (block == DavincisVesselsObjects.blockFloater) {
             floaters++;
@@ -233,11 +260,11 @@ public class ShipCapabilities extends MovingWorldCapabilities {
             TileEntity te = ship.getMobileChunk().getTileEntity(pos);
             if (te instanceof ITileEngineModifier) {
                 if (engines == null) {
-                    engines = new ArrayList<ITileEngineModifier>(4);
+                    engines = new ArrayList<>(4);
                 }
                 engines.add((ITileEngineModifier) te);
             }
-        } else if (block == DavincisVesselsObjects.blockSeat || DavincisVesselsMod.instance.getNetworkConfig().isSeat(block) && !ship.worldObj.isRemote) {
+        } else if (block == DavincisVesselsObjects.blockSeat || DavincisVesselsMod.INSTANCE.getNetworkConfig().isSeat(block)) {
             int x1 = ship.riderDestination.getX(), y1 = ship.riderDestination.getY(), z1 = ship.riderDestination.getZ();
             int frontDir = ship.frontDirection.getHorizontalIndex();
 
@@ -253,8 +280,8 @@ public class ShipCapabilities extends MovingWorldCapabilities {
 
             if (pos.getX() != x1 || pos.getY() != y1 || pos.getZ() != z1) {
                 EntitySeat seat = new EntitySeat(ship.worldObj);
-                seat.setParentShip(ship, pos);
-                addAttachments(seat);
+                seat.setupShip(ship, pos);
+                addSeat(seat);
             }
         }
     }
@@ -264,50 +291,6 @@ public class ShipCapabilities extends MovingWorldCapabilities {
         if (ship.getMobileChunk() != null && ship.getMobileChunk().marker != null && ship.getMobileChunk().marker.tileEntity != null && ship.getMobileChunk().marker.tileEntity instanceof TileHelm) {
             if (((TileHelm) ship.getMobileChunk().marker.tileEntity).submerge && canSubmerge()) {
                 ship.setSubmerge(true);
-            }
-        }
-    }
-
-    public boolean hasSeat(EntitySeat seat) {
-        if (seats != null && !seats.isEmpty()) {
-            return seats.contains(seat);
-        } else {
-            return true;
-        }
-    }
-
-    public EntitySeat getAvailableSeat() {
-        for (EntitySeat seat : seats) {
-            if (seat.getControllingPassenger() == null || (seat.getControllingPassenger() != null &&
-                    (seat.getControllingPassenger().getRidingEntity() == null ||
-                            (seat.getControllingPassenger().getRidingEntity() != null &&
-                                    seat.getControllingPassenger().getRidingEntity() != seat)))) {
-                seat.startRiding(null);
-                return seat;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public boolean mountEntity(Entity entity) {
-        if (seats == null || entity == null || !(entity instanceof EntityPlayer)) {
-            return false;
-        }
-
-        EntityPlayer player = (EntityPlayer) entity;
-
-        for (EntitySeat seat : seats) {
-            if (seat.processInitialInteract(player, player.getActiveItemStack(), player.getActiveHand()))
-                return true;
-        }
-        return false;
-    }
-
-    public void spawnSeatEntities() {
-        if (seats != null && !seats.isEmpty()) {
-            for (EntitySeat seat : seats) {
-                ship.worldObj.spawnEntityInWorld(seat);
             }
         }
     }
@@ -328,11 +311,8 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     @Override
     public void clear() {
         if (seats != null) {
-            for (EntitySeat seat : seats) {
-                seat.killedBy();
-                seat.setDead();
-            }
-            seats = null;
+            seats.forEach(seat -> seat.setDead());
+            seats.clear();
         }
         if (engines != null) {
             engines.clear();
@@ -345,13 +325,12 @@ public class ShipCapabilities extends MovingWorldCapabilities {
 
     @Override
     public float getSpeedLimit() {
-        return DavincisVesselsMod.instance.getNetworkConfig().getShared().speedLimit;
+        return DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().speedLimit;
     }
 
     @Override
     public float getBankingMultiplier() {
-        return DavincisVesselsMod.instance.getNetworkConfig().getShared().bankingMultiplier;
+        return DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().bankingMultiplier;
     }
-
 
 }

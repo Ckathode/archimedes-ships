@@ -76,7 +76,7 @@ public class BlockEngine extends BlockContainer {
         if (!playerIn.isSneaking()) {
             TileEntity tileentity = worldIn.getTileEntity(pos);
             if (tileentity != null) {
-                playerIn.openGui(DavincisVesselsMod.instance, 3, worldIn, pos.getX(), pos.getY(), pos.getZ());
+                playerIn.openGui(DavincisVesselsMod.INSTANCE, 3, worldIn, pos.getX(), pos.getY(), pos.getZ());
                 return true;
             }
         }

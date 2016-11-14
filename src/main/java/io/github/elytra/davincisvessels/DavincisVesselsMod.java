@@ -41,28 +41,27 @@ public class DavincisVesselsMod {
     public static final String RESOURCE_DOMAIN = "davincisvessels:";
     public static final String MOD_GUIFACTORY = "io.github.elytra.davincisvessels.client.gui.DavincisVesselsGUIFactory";
 
-    public static CreativeTabs creativeTab = new CreativeTabs("davincisTab") {
+    @Mod.Instance(MOD_ID)
+    public static DavincisVesselsMod INSTANCE;
+    @SidedProxy(clientSide = "io.github.elytra.davincisvessels.client.ClientProxy", serverSide = "io.github.elytra.davincisvessels.common.CommonProxy")
+    public static CommonProxy PROXY;
+
+    public static final DavincisVesselsObjects OBJECTS = new DavincisVesselsObjects();
+    public static Logger LOG;
+
+    public static CreativeTabs CREATIVE_TAB = new CreativeTabs("davincisTab") {
         @Override
         public Item getTabIconItem() {
             return Item.getItemFromBlock(DavincisVesselsObjects.blockMarkShip);
         }
     };
 
-    @Mod.Instance(MOD_ID)
-    public static DavincisVesselsMod instance;
-
-    @SidedProxy(clientSide = "io.github.elytra.davincisvessels.client.ClientProxy", serverSide = "io.github.elytra.davincisvessels.common.CommonProxy")
-    public static CommonProxy proxy;
-
-    public static DavincisVesselsObjects objects;
-
-    public static Logger modLog;
     private DavincisVesselsConfig localConfig;
 
     public DavincisVesselsConfig getNetworkConfig() {
         if (FMLCommonHandler.instance().getSide().isClient()) {
-            if (((ClientProxy) proxy).syncedConfig != null)
-                return ((ClientProxy) proxy).syncedConfig;
+            if (((ClientProxy) PROXY).syncedConfig != null)
+                return ((ClientProxy) PROXY).syncedConfig;
         }
         return localConfig;
     }
@@ -73,42 +72,41 @@ public class DavincisVesselsMod {
 
     @Mod.EventHandler
     public void preInitMod(FMLPreInitializationEvent event) {
-        modLog = event.getModLog();
-        objects = new DavincisVesselsObjects();
+        LOG = event.getModLog();
 
         MinecraftForge.EVENT_BUS.register(this);
 
-        objects.preInit(event);
+        OBJECTS.preInit(event);
 
         localConfig = new DavincisVesselsConfig(new Configuration(event.getSuggestedConfigurationFile()));
         localConfig.loadAndSave();
 
         localConfig.postLoad();
-        proxy.registerRenderers(event.getModState());
+        PROXY.registerRenderers(event.getModState());
     }
 
     @Mod.EventHandler
     public void initMod(FMLInitializationEvent event) {
         DavincisVesselsNetworking.setupNetwork();
-        objects.init(event);
+        OBJECTS.init(event);
 
         MinecraftForge.EVENT_BUS.register(new ConnectionHandler());
         MinecraftForge.EVENT_BUS.register(new ConnectionHandler());
 
         EntityRegistry.registerModEntity(EntityShip.class, "shipmod", 1, this, 64, localConfig.getShared().shipEntitySyncRate, true);
-        EntityRegistry.registerModEntity(EntitySeat.class, "attachment.seat", 2, this, 64, 100, false);
+        EntityRegistry.registerModEntity(EntitySeat.class, "attachment.seat", 2, this, 64, 20, false);
         EntityRegistry.registerModEntity(EntityParachute.class, "parachute", 3, this, 32, localConfig.getShared().shipEntitySyncRate, true);
 
-        proxy.registerKeyHandlers(localConfig);
-        proxy.registerEventHandlers();
-        proxy.registerRenderers(event.getModState());
+        PROXY.registerKeyHandlers(localConfig);
+        PROXY.registerEventHandlers();
+        PROXY.registerRenderers(event.getModState());
 
         localConfig.addBlacklistWhitelistEntries();
     }
 
     @Mod.EventHandler
     public void postInitMod(FMLPostInitializationEvent event) {
-        proxy.registerRenderers(event.getModState());
+        PROXY.registerRenderers(event.getModState());
     }
 
     @Mod.EventHandler

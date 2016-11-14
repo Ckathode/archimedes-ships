@@ -57,12 +57,12 @@ public class DavincisVesselsConfig {
 
         shared.shipControlType = config.get("control", "control_type", CONTROL_TYPE_DAVINCI, "Set to 0 to use vanilla boat controls, set to 1 to use Davinci controls.").getInt();
         shared.turnSpeed = (float) config.get("control", "turn_speed", 1D, "A multiplier of the ship's turn speed.").getDouble(1D);
-        shared.speedLimit = (float) config.get("control", "speed_limit", 30D, "The maximum velocity a ship can have, in objects per second. This does not affect acceleration.").getDouble(30D);
+        shared.speedLimit = (float) config.get("control", "speed_limit", 30D, "The maximum velocity a ship can have, in OBJECTS per second. This does not affect acceleration.").getDouble(30D);
         shared.speedLimit /= 20F;
         shared.disassembleOnDismount = config.get("control", "decompile_on_dismount", false).getBoolean(false);
 
-        shared.maxShipChunkBlocks = config.get("mobile_chunk", "max_chunk_blocks", 2048, "The maximum amount of objects that a mobile ship chunk may contain.").getInt();
-        shared.flyBalloonRatio = (float) config.get("mobile_chunk", "airship_balloon_ratio", 0.4D, "The part of the total amount of objects that should be balloon objects in order to make an airship.").getDouble(0.4D);
+        shared.maxShipChunkBlocks = config.get("mobile_chunk", "max_chunk_blocks", 2048, "The maximum amount of OBJECTS that a mobile ship chunk may contain.").getInt();
+        shared.flyBalloonRatio = (float) config.get("mobile_chunk", "airship_balloon_ratio", 0.4D, "The part of the total amount of OBJECTS that should be balloon OBJECTS in order to make an airship.").getDouble(0.4D);
         shared.submersibleFillRatio = (float) config.get("mobile_chunk", "submersible_fill_ratio", 0.3D, "The part of the ship that needs to not be water fillable for it to be considered submersible.").getDouble(0.9D);
 
         if (FMLCommonHandler.instance().getSide().isClient()) {
@@ -73,16 +73,16 @@ public class DavincisVesselsConfig {
     }
 
     public void addBlacklistWhitelistEntries() {
-        MovingWorldMod.instance.getNetworkConfig().addBlacklistedBlock(DavincisVesselsObjects.blockBuffer);
+        MovingWorldMod.INSTANCE.getNetworkConfig().addBlacklistedBlock(DavincisVesselsObjects.blockBuffer);
 
-        MovingWorldMod.instance.getNetworkConfig().addWhitelistedBlock(DavincisVesselsObjects.blockMarkShip);
-        MovingWorldMod.instance.getNetworkConfig().addWhitelistedBlock(DavincisVesselsObjects.blockFloater);
-        MovingWorldMod.instance.getNetworkConfig().addWhitelistedBlock(DavincisVesselsObjects.blockBalloon);
-        MovingWorldMod.instance.getNetworkConfig().addWhitelistedBlock(DavincisVesselsObjects.blockGauge);
-        MovingWorldMod.instance.getNetworkConfig().addWhitelistedBlock(DavincisVesselsObjects.blockSeat);
-        MovingWorldMod.instance.getNetworkConfig().addWhitelistedBlock(DavincisVesselsObjects.blockEngine);
-        MovingWorldMod.instance.getNetworkConfig().addWhitelistedBlock(DavincisVesselsObjects.blockStickyBuffer);
-        MovingWorldMod.instance.getNetworkConfig().addWhitelistedBlock(DavincisVesselsObjects.blockAnchorPoint);
+        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsObjects.blockMarkShip);
+        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsObjects.blockFloater);
+        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsObjects.blockBalloon);
+        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsObjects.blockGauge);
+        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsObjects.blockSeat);
+        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsObjects.blockEngine);
+        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsObjects.blockStickyBuffer);
+        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsObjects.blockAnchorPoint);
     }
 
     public void postLoad() {

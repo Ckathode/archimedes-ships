@@ -4,44 +4,47 @@ import io.github.elytra.davincisvessels.common.handler.ConnectionHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.UUID;
 
-public class TileEntitySecuredBed extends TileEntity {
+public class TileEntitySecuredBed extends TileEntity implements ITickable {
 
-    public UUID playerID;
+    public boolean occupied;
+    private UUID playerID;
     public boolean doMove;
 
     public TileEntitySecuredBed() {
     }
 
     public void setPlayer(EntityPlayer player) {
-        if (worldObj != null && worldObj.isRemote)
-            return;
-
-        if (player != null) {
-            this.playerID = player.getGameProfile().getId();
-            addToConnectionMap(playerID);
-        } else
-            this.playerID = null;
-
-        doMove = false;
+        if (!worldObj.isRemote) {
+            if (player != null) {
+                this.playerID = player.getGameProfile().getId();
+                addToConnectionMap(playerID);
+            } else {
+                this.playerID = null;
+            }
+            doMove = false;
+        }
     }
 
-    public void addToConnectionMap(UUID playerID) {
-        if (worldObj != null && worldObj.isRemote)
-            return;
+    public UUID getPlayerID() {
+        return playerID;
+    }
 
-        if (!ConnectionHandler.playerBedMap.containsKey(playerID)) {
-            if ((ConnectionHandler.playerBedMap.containsKey(playerID) && ConnectionHandler.playerBedMap.get(playerID) != this)) {
-                TileEntitySecuredBed prevBed = ConnectionHandler.playerBedMap.get(playerID);
-
-                prevBed.setPlayer(null);
-                ConnectionHandler.playerBedMap.remove(playerID);
+    public void addToConnectionMap(UUID idForMap) {
+        if (!worldObj.isRemote && idForMap != null) {
+            if (ConnectionHandler.playerBedMap.containsKey(idForMap)) {
+                TileEntitySecuredBed prevBed = ConnectionHandler.playerBedMap.get(idForMap);
+                if (!prevBed.getPos().equals(getPos()) && !(prevBed.getWorld().provider.getDimension() == getWorld().provider.getDimension())) {
+                    prevBed.setPlayer(null);
+                    ConnectionHandler.playerBedMap.remove(idForMap);
+                }
+            } else {
+                ConnectionHandler.playerBedMap.put(idForMap, this);
             }
-
-            ConnectionHandler.playerBedMap.put(playerID, this);
         }
     }
 
@@ -55,9 +58,11 @@ public class TileEntitySecuredBed extends TileEntity {
             if (!doMove)
                 return;
 
-            if (worldObj.getPlayerEntityByUUID(playerID) != null) {
-                worldObj.getPlayerEntityByUUID(playerID).setSpawnChunk(newPos, true, worldObj.provider.getDimension());
-                worldObj.getPlayerEntityByUUID(playerID).setSpawnPoint(newPos, true);
+            EntityPlayer player = worldObj.getPlayerEntityByUUID(playerID);
+            if (player != null) {
+                player.bedLocation = pos;
+                player.setSpawnChunk(newPos, true, worldObj.provider.getDimension());
+                player.setSpawnPoint(newPos, true);
                 doMove = false;
             }
         }
@@ -66,11 +71,8 @@ public class TileEntitySecuredBed extends TileEntity {
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound tag) {
         tag = super.writeToNBT(tag);
-        if (worldObj != null && worldObj.isRemote)
-            return tag;
-
         if (playerID != null)
-            tag.setString("uuid", playerID.toString());
+            tag.setString("uuidStr", playerID.toString());
 
         tag.setBoolean("doMove", doMove);
 
@@ -80,16 +82,25 @@ public class TileEntitySecuredBed extends TileEntity {
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
-        if (worldObj != null && worldObj.isRemote)
-            return;
 
         if (tag.hasKey("uuid"))
-            playerID = UUID.fromString(tag.getString("uuid"));
+            playerID = UUID.fromString(tag.getString("uuidStr"));
 
         doMove = tag.getBoolean("doMove");
 
         if (playerID != null && !ConnectionHandler.playerBedMap.containsKey(playerID) && doMove) {
             ConnectionHandler.playerBedMap.put(playerID, this);
         }
+    }
+
+    @Override
+    public NBTTagCompound getUpdateTag() {
+        return this.writeToNBT(new NBTTagCompound());
+    }
+
+
+    @Override
+    public void update() {
+        // TODO: Stub for debugging, remove for builds.
     }
 }

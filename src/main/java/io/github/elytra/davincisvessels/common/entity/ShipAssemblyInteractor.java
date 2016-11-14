@@ -63,11 +63,11 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
             try {
                 balloonCount += ((IBlockBalloon) block).getBalloonWorth(locatedBlock.tileEntity);
             } catch (NullPointerException e) {
-                MovingWorldMod.logger.error("IBlockBalloon didn't check if something was null or not, report to mod author. " + block.toString());
+                MovingWorldMod.LOG.error("IBlockBalloon didn't check if something was null or not, report to mod author of the following block, " + block.toString());
             }
         } else if (block == DavincisVesselsObjects.blockBalloon) {
             balloonCount++;
-        } else if (DavincisVesselsMod.instance.getNetworkConfig().isBalloon(block)) {
+        } else if (DavincisVesselsMod.INSTANCE.getNetworkConfig().isBalloon(block)) {
             balloonCount++;
         }
     }
@@ -76,13 +76,13 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
     public void blockDisassembled(LocatedBlock locatedBlock) {
         super.blockDisassembled(locatedBlock); // Currently unimplemented but leaving there just in case.
 
-        if (locatedBlock.tileEntity != null && locatedBlock.tileEntity.getWorld() != null && !locatedBlock.tileEntity.getWorld().isRemote) {
-            if (locatedBlock.tileEntity instanceof TileEntitySecuredBed) {
+        if (locatedBlock.blockState.getBlock() == DavincisVesselsObjects.blockSecuredBed) {
+            if (locatedBlock.tileEntity != null && locatedBlock.tileEntity instanceof TileEntitySecuredBed) {
                 TileEntitySecuredBed securedBed = (TileEntitySecuredBed) locatedBlock.tileEntity;
 
                 securedBed.doMove = true;
-                ConnectionHandler.playerBedMap.remove(securedBed.playerID);
-                securedBed.addToConnectionMap(securedBed.playerID);
+                ConnectionHandler.playerBedMap.remove(securedBed.getPlayerID());
+                securedBed.addToConnectionMap(securedBed.getPlayerID());
                 securedBed.moveBed(locatedBlock.blockPos);
             }
         }
@@ -110,7 +110,7 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
         BlockPos pos = lb.blockPos;
         CanAssemble canAssemble = super.isBlockAllowed(world, lb);
 
-        if (state.getBlock() == DavincisVesselsObjects.blockStickyBuffer || DavincisVesselsMod.instance.getNetworkConfig().isSticky(state.getBlock()))
+        if (state.getBlock() == DavincisVesselsObjects.blockStickyBuffer || DavincisVesselsMod.INSTANCE.getNetworkConfig().isSticky(state.getBlock()))
             canAssemble.assembleThenCancel = true;
 
         if (lb.tileEntity != null && lb.tileEntity instanceof TileAnchorPoint

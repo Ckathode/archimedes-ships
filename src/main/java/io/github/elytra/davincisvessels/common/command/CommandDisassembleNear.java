@@ -39,7 +39,7 @@ public class CommandDisassembleNear extends CommandBase {
             } else {
                 double nd = 0D;
                 double d;
-                for (Entity entity : player.worldObj.getLoadedEntityList()) {
+                for (Entity entity : player.worldObj.getEntities(EntityShip.class, input -> true)) {
                     if (entity instanceof EntityShip) {
                         d = player.getDistanceSqToEntity(entity);
                         if (d < rangesqrd && (ne == null || d < nd)) {
@@ -51,7 +51,7 @@ public class CommandDisassembleNear extends CommandBase {
             }
 
             if (ne == null) {
-                sender.addChatMessage(new TextComponentString("No ship in a " + ((int) range) + " objects' range"));
+                sender.addChatMessage(new TextComponentString("No ship in a " + ((int) range) + " OBJECTS' range"));
                 return;
             }
             if (!ne.disassemble(false)) {

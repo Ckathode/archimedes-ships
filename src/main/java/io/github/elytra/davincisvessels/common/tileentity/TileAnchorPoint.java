@@ -81,8 +81,8 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
             }
         }
 
-        NBTTagCompound instanceCompound = tag.getCompoundTag("instance");
-        if (instanceCompound.getBoolean("instance")) {
+        NBTTagCompound instanceCompound = tag.getCompoundTag("INSTANCE");
+        if (instanceCompound.getBoolean("INSTANCE")) {
             instance = new AnchorInstance();
             instance.deserializeNBT(instanceCompound);
         }
@@ -103,7 +103,7 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
 
         if (instance != null) {
             NBTTagCompound instanceCompound = instance.serializeNBT();
-            tag.setTag("instance", instanceCompound);
+            tag.setTag("INSTANCE", instanceCompound);
         }
 
         if (content == null) {
@@ -166,7 +166,7 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
 
     @Override
     public String toString() {
-        return String.format("TileAnchorPoint at {X: %s Y: %s Z: %s} with state {%s} and instance {%s}", pos.getX(), pos.getY(), pos.getZ(), worldObj.getBlockState(pos), instance.toString());
+        return String.format("TileAnchorPoint at {X: %s Y: %s Z: %s} with state {%s} and INSTANCE {%s}", pos.getX(), pos.getY(), pos.getZ(), worldObj.getBlockState(pos), instance.toString());
     }
 
     @Override

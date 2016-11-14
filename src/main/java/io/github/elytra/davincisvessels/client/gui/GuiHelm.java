@@ -179,7 +179,7 @@ public class GuiHelm extends GuiContainer {
         if (rblocks == 0) {
             fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_TYPEUNKNOWN), col1, row, colorTitle);
         } else {
-            fontRendererObj.drawString(I18n.format(balloonratio > DavincisVesselsMod.instance.getNetworkConfig().getShared().flyBalloonRatio ? LanguageEntries.GUI_STATUS_TYPEAIRSHIP : LanguageEntries.GUI_STATUS_TYPEBOAT), col1, row, colorTitle);
+            fontRendererObj.drawString(I18n.format(balloonratio > DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().flyBalloonRatio ? LanguageEntries.GUI_STATUS_TYPEAIRSHIP : LanguageEntries.GUI_STATUS_TYPEBOAT), col1, row, colorTitle);
         }
 
         fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_COUNTBLOCK), col0, row += 10, colorTitle);

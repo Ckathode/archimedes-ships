@@ -23,6 +23,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Random;
 
 public class BlockSecuredBed extends BlockBed implements ITileEntityProvider {
@@ -31,6 +32,23 @@ public class BlockSecuredBed extends BlockBed implements ITileEntityProvider {
         super();
         this.setSoundType(SoundType.CLOTH);
         disableStats();
+    }
+
+    protected EntityPlayer getPlayerInBed(World worldIn, BlockPos pos) {
+        Iterator iterator = worldIn.playerEntities.iterator();
+        EntityPlayer entityplayer;
+
+        do {
+            if (!iterator.hasNext()) {
+                return null;
+            }
+
+            entityplayer = (EntityPlayer) iterator.next();
+        }
+
+        while (!entityplayer.isPlayerSleeping() || !entityplayer.bedLocation.equals(pos));
+
+        return entityplayer;
     }
 
     @Override
@@ -49,83 +67,59 @@ public class BlockSecuredBed extends BlockBed implements ITileEntityProvider {
                 }
             }
 
-            if (worldIn.provider.canRespawnHere() && worldIn.getBiome(pos) != Biome.REGISTRY.getObject(new ResourceLocation("hell"))) {
-                if (state.getValue(OCCUPIED).booleanValue()) {
-                    EntityPlayer entityplayer1 = this.getPlayerInBed(worldIn, pos);
+            if (worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos) instanceof TileEntitySecuredBed) {
+                TileEntitySecuredBed tile = (TileEntitySecuredBed) worldIn.getTileEntity(pos);
+                if (worldIn.provider.canRespawnHere() && worldIn.getBiome(pos) != Biome.REGISTRY.getObject(new ResourceLocation("hell"))) {
+                    if (tile.occupied) {
+                        EntityPlayer entityplayer1 = this.getPlayerInBed(worldIn, pos);
 
-                    if (entityplayer1 != null) {
-                        playerIn.addChatComponentMessage(new TextComponentTranslation("tile.bed.occupied"));
+                        if (entityplayer1 != null) {
+                            playerIn.addChatComponentMessage(new TextComponentTranslation("tile.bed.occupied"));
 
-                        bedUser = entityplayer1;
-                    }
-                }
-
-                if (bedUser == null) {
-                    state = state.withProperty(OCCUPIED, Boolean.valueOf(false));
-                    worldIn.setBlockState(pos, state, 4);
-
-                    EntityPlayer.SleepResult enumstatus = playerIn.trySleep(pos);
-
-                    if (enumstatus == EntityPlayer.SleepResult.OK) {
-                        state = state.withProperty(OCCUPIED, Boolean.valueOf(true));
-                        worldIn.setBlockState(pos, state, 4);
-
-                        bedUser = playerIn;
-                    } else {
-                        if (enumstatus == EntityPlayer.SleepResult.NOT_POSSIBLE_NOW) {
-                            playerIn.addChatComponentMessage(new TextComponentTranslation("tile.bed.noSleep"));
-                        } else if (enumstatus == EntityPlayer.SleepResult.NOT_SAFE) {
-                            playerIn.addChatComponentMessage(new TextComponentTranslation("tile.bed.notSafe"));
+                            bedUser = entityplayer1;
                         }
                     }
-                }
 
-                if (bedUser != null) {
-                    if (worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos) instanceof TileEntitySecuredBed) {
-                        TileEntitySecuredBed tile = (TileEntitySecuredBed) worldIn.getTileEntity(pos);
+                    if (bedUser == null) {
+                        tile.occupied = false;
 
+                        EntityPlayer.SleepResult sleepResult = playerIn.trySleep(pos);
+
+                        if (sleepResult == EntityPlayer.SleepResult.OK) {
+                            tile.occupied = true;
+                            bedUser = playerIn;
+                        } else {
+                            if (sleepResult == EntityPlayer.SleepResult.NOT_POSSIBLE_NOW) {
+                                playerIn.addChatComponentMessage(new TextComponentTranslation("tile.bed.noSleep"));
+                            } else if (sleepResult == EntityPlayer.SleepResult.NOT_SAFE) {
+                                playerIn.addChatComponentMessage(new TextComponentTranslation("tile.bed.notSafe"));
+                            }
+                        }
+                    }
+
+                    if (bedUser != null) {
                         tile.setPlayer(bedUser);
                     }
-                }
-            } else {
-                worldIn.setBlockToAir(pos);
-                BlockPos blockpos1 = pos.offset(state.getValue(FACING).getOpposite());
+                } else {
+                    worldIn.setBlockToAir(pos);
+                    BlockPos blockpos1 = pos.offset(state.getValue(FACING).getOpposite());
 
-                if (worldIn.getBlockState(blockpos1).getBlock() == this) {
-                    worldIn.setBlockToAir(blockpos1);
-                }
+                    if (worldIn.getBlockState(blockpos1).getBlock() == this) {
+                        worldIn.setBlockToAir(blockpos1);
+                    }
 
-                worldIn.newExplosion(null, (double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D, 5.0F, true, true);
-                return true;
+                    worldIn.newExplosion(null, (double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D, 5.0F, true, true);
+                    return true;
+                }
             }
         }
 
         return true;
     }
 
-    protected EntityPlayer getPlayerInBed(World worldIn, BlockPos pos) {
-        Iterator iterator = worldIn.playerEntities.iterator();
-        EntityPlayer entityplayer;
-
-        do {
-            if (!iterator.hasNext()) {
-                return null;
-            }
-
-            entityplayer = (EntityPlayer) iterator.next();
-        }
-        while (!entityplayer.isPlayerSleeping() || !entityplayer.playerLocation.equals(pos));
-
-        return entityplayer;
-    }
-
     @SideOnly(Side.CLIENT)
     public Item getItem(World worldIn, BlockPos pos) {
         return DavincisVesselsObjects.itemSecuredBed;
-    }
-
-    public boolean isBed(IBlockAccess world, BlockPos pos, Entity player) {
-        return this instanceof BlockBed;
     }
 
     @Override
@@ -135,9 +129,15 @@ public class BlockSecuredBed extends BlockBed implements ITileEntityProvider {
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        if (this.getStateFromMeta(meta).getValue(BlockBed.PART) == EnumPartType.HEAD)
+        if (this.getStateFromMeta(meta).getValue(BlockBed.PART) == EnumPartType.HEAD){
             return new TileEntitySecuredBed();
+        }
 
         return null;
+    }
+
+    @Override
+    public boolean isBed(IBlockState state, IBlockAccess world, BlockPos pos, Entity player) {
+        return Objects.equals(state.getBlock(), DavincisVesselsObjects.blockSecuredBed);
     }
 }

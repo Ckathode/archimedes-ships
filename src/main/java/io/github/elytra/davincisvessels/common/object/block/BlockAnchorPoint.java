@@ -99,10 +99,10 @@ public class BlockAnchorPoint extends BlockContainer {
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         if (worldIn != null && !worldIn.isRemote && worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos) instanceof TileAnchorPoint) {
-            if (stack != null && stack.getTagCompound() != null && stack.getTagCompound().hasKey("instance")) {
+            if (stack != null && stack.getTagCompound() != null && stack.getTagCompound().hasKey("INSTANCE")) {
                 TileAnchorPoint anchorPoint = (TileAnchorPoint) worldIn.getTileEntity(pos);
                 AnchorInstance instance = new AnchorInstance();
-                instance.deserializeNBT(stack.getTagCompound().getCompoundTag("instance"));
+                instance.deserializeNBT(stack.getTagCompound().getCompoundTag("INSTANCE"));
                 instance.setIdentifier(UUID.randomUUID());
                 anchorPoint.setInstance(instance);
 
@@ -137,7 +137,7 @@ public class BlockAnchorPoint extends BlockContainer {
         if (!playerIn.isSneaking()) {
             TileEntity tileentity = worldIn.getTileEntity(pos);
             if (tileentity != null) {
-                playerIn.openGui(DavincisVesselsMod.instance, 4, worldIn, pos.getX(), pos.getY(), pos.getZ());
+                playerIn.openGui(DavincisVesselsMod.INSTANCE, 4, worldIn, pos.getX(), pos.getY(), pos.getZ());
                 return true;
             }
         }

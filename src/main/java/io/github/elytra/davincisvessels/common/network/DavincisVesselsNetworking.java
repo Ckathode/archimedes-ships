@@ -36,9 +36,9 @@ public class DavincisVesselsNetworking {
     public static LambdaNetwork NETWORK;
 
     public static void setupNetwork() {
-        DavincisVesselsMod.modLog.info("Setting up network...");
+        DavincisVesselsMod.LOG.info("Setting up network...");
         DavincisVesselsNetworking.NETWORK = registerPackets(LambdaNetwork.builder().channel("ArchimedesShipsPlus")).build();
-        DavincisVesselsMod.modLog.info("Setup network! " + DavincisVesselsNetworking.NETWORK.toString());
+        DavincisVesselsMod.LOG.info("Setup network! " + DavincisVesselsNetworking.NETWORK.toString());
     }
 
     private static LambdaNetworkBuilder registerPackets(LambdaNetworkBuilder builder) {
@@ -143,7 +143,7 @@ public class DavincisVesselsNetworking {
                 .with(DataType.INT, "guiID").handledOnMainThreadBy(new BiConsumer<EntityPlayer, Token>() {
                     @Override
                     public void accept(EntityPlayer entityPlayer, Token token) {
-                        entityPlayer.openGui(DavincisVesselsMod.instance, token.getInt("guiID"), entityPlayer.worldObj, 0, 0, 0);
+                        entityPlayer.openGui(DavincisVesselsMod.INSTANCE, token.getInt("guiID"), entityPlayer.worldObj, 0, 0, 0);
                     }
                 });
 
@@ -173,7 +173,7 @@ public class DavincisVesselsNetworking {
                                     TileAnchorPoint entryAnchorPoint = (TileAnchorPoint) world.getTileEntity(e.getValue().pos);
                                     ((EntityPlayerMP) entityPlayer).connection.sendPacket(entryAnchorPoint.getUpdatePacket());
                                 } else {
-                                    DavincisVesselsMod.modLog.error("Invalid entries in anchor tile: " + anchorPoint.toString() + ", cleaning.");
+                                    DavincisVesselsMod.LOG.error("Invalid entries in anchor tile: " + anchorPoint.toString() + ", cleaning.");
                                 }
                             }
 
@@ -191,21 +191,21 @@ public class DavincisVesselsNetworking {
                                 if (anchorPoint.content.getTagCompound() == null) {
                                     anchorPoint.content.setTagCompound(new NBTTagCompound());
                                 }
-                                if (anchorPoint.content.getTagCompound().hasKey("instance"))
-                                    anchorPoint.content.getTagCompound().removeTag("instance");
+                                if (anchorPoint.content.getTagCompound().hasKey("INSTANCE"))
+                                    anchorPoint.content.getTagCompound().removeTag("INSTANCE");
                                 AnchorInstance itemAnchorInstanceTag = new AnchorInstance();
 
                                 itemAnchorInstanceTag.setType(AnchorInstance.InstanceType.FORSHIP);
                                 itemAnchorInstanceTag.setIdentifier(UUID.randomUUID());
                                 itemAnchorInstanceTag.addRelation(anchorPoint.getInstance().getIdentifier(),
                                         new BlockLocation(anchorPos, entityPlayer.worldObj.provider.getDimension()));
-                                anchorPoint.content.getTagCompound().setTag("instance", itemAnchorInstanceTag.serializeNBT());
+                                anchorPoint.content.getTagCompound().setTag("INSTANCE", itemAnchorInstanceTag.serializeNBT());
                             } else {
                                 if (anchorPoint.content.getTagCompound() == null) {
                                     anchorPoint.content.setTagCompound(new NBTTagCompound());
                                 }
-                                if (anchorPoint.content.getTagCompound().hasKey("instance"))
-                                    anchorPoint.content.getTagCompound().removeTag("instance");
+                                if (anchorPoint.content.getTagCompound().hasKey("INSTANCE"))
+                                    anchorPoint.content.getTagCompound().removeTag("INSTANCE");
 
                                 AnchorInstance itemAnchorInstanceTag = new AnchorInstance();
 
@@ -213,7 +213,7 @@ public class DavincisVesselsNetworking {
                                 itemAnchorInstanceTag.setIdentifier(UUID.randomUUID());
                                 itemAnchorInstanceTag.addRelation(anchorPoint.getInstance().getIdentifier(),
                                         new BlockLocation(anchorPos, entityPlayer.worldObj.provider.getDimension()));
-                                anchorPoint.content.getTagCompound().setTag("instance", itemAnchorInstanceTag.serializeNBT());
+                                anchorPoint.content.getTagCompound().setTag("INSTANCE", itemAnchorInstanceTag.serializeNBT());
                             }
                         }
                         anchorPoint.markDirty();
@@ -276,16 +276,16 @@ public class DavincisVesselsNetworking {
                         DavincisVesselsConfig.SharedConfig config = null;
 
                         if (!tag.getBoolean("restore")) {
-                            config = DavincisVesselsMod.instance.getLocalConfig().getShared()
+                            config = DavincisVesselsMod.INSTANCE.getLocalConfig().getShared()
                                     .deserialize(tag);
                         }
 
-                        if (DavincisVesselsMod.proxy != null && DavincisVesselsMod.proxy instanceof ClientProxy) {
+                        if (DavincisVesselsMod.PROXY != null && DavincisVesselsMod.PROXY instanceof ClientProxy) {
                             if (config != null) {
-                                ((ClientProxy) DavincisVesselsMod.proxy).syncedConfig = DavincisVesselsMod.instance.getLocalConfig();
-                                ((ClientProxy) DavincisVesselsMod.proxy).syncedConfig.setShared(config);
+                                ((ClientProxy) DavincisVesselsMod.PROXY).syncedConfig = DavincisVesselsMod.INSTANCE.getLocalConfig();
+                                ((ClientProxy) DavincisVesselsMod.PROXY).syncedConfig.setShared(config);
                             } else {
-                                ((ClientProxy) DavincisVesselsMod.proxy).syncedConfig = null;
+                                ((ClientProxy) DavincisVesselsMod.PROXY).syncedConfig = null;
                             }
                         }
 

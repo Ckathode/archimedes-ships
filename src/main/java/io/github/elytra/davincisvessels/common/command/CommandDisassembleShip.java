@@ -28,14 +28,14 @@ public class CommandDisassembleShip extends CommandBase {
                 int mode = 0;
                 if (args != null && args.length > 2) {
                     if (args[0].equals("overwrite") || args[0].equals("override")) {
-                        sender.addChatMessage(new TextComponentString("Overwriting existing objects with ship objects"));
+                        sender.addChatMessage(new TextComponentString("Overwriting existing OBJECTS with ship OBJECTS"));
                         mode = 1;
                     } else if (args[1].equals("drop")) {
                         sender.addChatMessage(new TextComponentString("Dropping to items if rejoining ship with the world fails"));
                         mode = 2;
                     }
                 } else {
-                    sender.addChatMessage(new TextComponentString("Trying to add ship objects to world"));
+                    sender.addChatMessage(new TextComponentString("Trying to add ship OBJECTS to world"));
                 }
 
                 if (!ship.disassemble(mode == 1)) {

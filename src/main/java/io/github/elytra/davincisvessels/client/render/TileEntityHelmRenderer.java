@@ -25,7 +25,7 @@ public class TileEntityHelmRenderer extends TileEntitySpecialRenderer {
             if (e instanceof IOException)
                 e.printStackTrace();
             else
-                DavincisVesselsMod.modLog.error("Error when rendering helm, ", e);
+                DavincisVesselsMod.LOG.error("Error when rendering helm, ", e);
         }
     }
 

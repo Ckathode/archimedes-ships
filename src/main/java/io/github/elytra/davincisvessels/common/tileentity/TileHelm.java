@@ -98,7 +98,7 @@ public class TileHelm extends TileMovingMarkingBlock {
 
     @Override
     public int getMaxBlocks() {
-        return DavincisVesselsMod.instance.
+        return DavincisVesselsMod.INSTANCE.
                 getNetworkConfig().
                 getShared()
                 .maxShipChunkBlocks;
