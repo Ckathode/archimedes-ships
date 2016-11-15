@@ -1,7 +1,5 @@
 package io.github.elytra.davincisvessels.common.object.block;
 
-import io.github.elytra.davincisvessels.common.object.DavincisVesselsObjects;
-import io.github.elytra.davincisvessels.common.tileentity.TileEntitySecuredBed;
 import net.minecraft.block.BlockBed;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
@@ -25,6 +23,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Random;
+
+import io.github.elytra.davincisvessels.common.object.DavincisVesselsObjects;
+import io.github.elytra.davincisvessels.common.tileentity.TileEntitySecuredBed;
 
 public class BlockSecuredBed extends BlockBed implements ITileEntityProvider {
 
@@ -129,7 +130,7 @@ public class BlockSecuredBed extends BlockBed implements ITileEntityProvider {
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        if (this.getStateFromMeta(meta).getValue(BlockBed.PART) == EnumPartType.HEAD){
+        if (this.getStateFromMeta(meta).getValue(BlockBed.PART) == EnumPartType.HEAD) {
             return new TileEntitySecuredBed();
         }
 

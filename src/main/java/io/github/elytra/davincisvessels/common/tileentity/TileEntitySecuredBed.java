@@ -1,19 +1,19 @@
 package io.github.elytra.davincisvessels.common.tileentity;
 
-import io.github.elytra.davincisvessels.common.handler.ConnectionHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.UUID;
 
-public class TileEntitySecuredBed extends TileEntity implements ITickable {
+import io.github.elytra.davincisvessels.common.handler.ConnectionHandler;
+
+public class TileEntitySecuredBed extends TileEntity {
 
     public boolean occupied;
-    private UUID playerID;
     public boolean doMove;
+    private UUID playerID;
 
     public TileEntitySecuredBed() {
     }
@@ -72,7 +72,7 @@ public class TileEntitySecuredBed extends TileEntity implements ITickable {
     public NBTTagCompound writeToNBT(NBTTagCompound tag) {
         tag = super.writeToNBT(tag);
         if (playerID != null)
-            tag.setString("uuidStr", playerID.toString());
+            tag.setUniqueId("uuid", playerID);
 
         tag.setBoolean("doMove", doMove);
 
@@ -83,8 +83,8 @@ public class TileEntitySecuredBed extends TileEntity implements ITickable {
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
 
-        if (tag.hasKey("uuid"))
-            playerID = UUID.fromString(tag.getString("uuidStr"));
+        if (tag.hasKey("uuidMost") && tag.hasKey("uuidLeast"))
+            playerID = tag.getUniqueId("uuid");
 
         doMove = tag.getBoolean("doMove");
 
@@ -95,12 +95,9 @@ public class TileEntitySecuredBed extends TileEntity implements ITickable {
 
     @Override
     public NBTTagCompound getUpdateTag() {
-        return this.writeToNBT(new NBTTagCompound());
+        NBTTagCompound writtenTag = new NBTTagCompound();
+        writtenTag = this.writeToNBT(writtenTag);
+        return writtenTag;
     }
 
-
-    @Override
-    public void update() {
-        // TODO: Stub for debugging, remove for builds.
-    }
 }

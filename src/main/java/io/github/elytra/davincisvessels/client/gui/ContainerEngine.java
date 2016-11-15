@@ -1,6 +1,5 @@
 package io.github.elytra.davincisvessels.client.gui;
 
-import io.github.elytra.davincisvessels.common.tileentity.TileEngine;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -8,6 +7,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
+
+import io.github.elytra.davincisvessels.common.tileentity.TileEngine;
 
 public class ContainerEngine extends Container {
     public final TileEngine tileEntity;

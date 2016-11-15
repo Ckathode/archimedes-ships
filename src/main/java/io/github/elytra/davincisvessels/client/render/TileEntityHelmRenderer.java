@@ -1,10 +1,5 @@
 package io.github.elytra.davincisvessels.client.render;
 
-import io.github.elytra.davincisvessels.DavincisVesselsMod;
-import io.github.elytra.davincisvessels.common.entity.EntityShip;
-import io.github.elytra.davincisvessels.common.object.block.BlockHelm;
-import io.github.elytra.davincisvessels.common.tileentity.TileHelm;
-import io.github.elytra.movingworld.api.IMovingTile;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -13,12 +8,22 @@ import net.minecraft.util.EnumFacing;
 
 import java.io.IOException;
 
+import io.github.elytra.davincisvessels.DavincisVesselsMod;
+import io.github.elytra.davincisvessels.common.entity.EntityShip;
+import io.github.elytra.davincisvessels.common.object.block.BlockHelm;
+import io.github.elytra.davincisvessels.common.tileentity.TileHelm;
+import io.github.elytra.movingworld.api.IMovingTile;
+
 public class TileEntityHelmRenderer extends TileEntitySpecialRenderer {
 
-    public ModelHelmWheel wheel = new ModelHelmWheel();
+    public ModelHelmWheel wheel;
 
     @Override
     public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage) {
+        if (wheel == null) {
+            wheel = new ModelHelmWheel();
+        }
+
         try {
             renderHelm((TileHelm) te, x, y, z, partialTicks);
         } catch (Exception e) {

@@ -1,16 +1,17 @@
 package io.github.elytra.davincisvessels.client.control;
 
-import io.github.elytra.davincisvessels.common.DavincisVesselsConfig;
-import io.github.elytra.davincisvessels.common.entity.EntityShip;
-import io.github.elytra.davincisvessels.common.network.DavincisVesselsNetworking;
-import io.github.elytra.movingworld.common.network.MovingWorldClientAction;
-import io.github.elytra.movingworld.common.network.MovingWorldNetworking;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import io.github.elytra.davincisvessels.common.DavincisVesselsConfig;
+import io.github.elytra.davincisvessels.common.entity.EntityShip;
+import io.github.elytra.davincisvessels.common.network.DavincisVesselsNetworking;
+import io.github.elytra.movingworld.common.network.MovingWorldClientAction;
+import io.github.elytra.movingworld.common.network.MovingWorldNetworking;
 
 @SideOnly(Side.CLIENT)
 public class ShipKeyHandler {

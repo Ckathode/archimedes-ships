@@ -1,10 +1,7 @@
 package io.github.elytra.davincisvessels.common.object.item;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
-import io.github.elytra.davincisvessels.DavincisVesselsMod;
-import io.github.elytra.davincisvessels.common.LanguageEntries;
-import io.github.elytra.davincisvessels.common.tileentity.AnchorInstance;
-import io.github.elytra.davincisvessels.common.tileentity.BlockLocation;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -13,6 +10,11 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
 import java.util.List;
+
+import io.github.elytra.davincisvessels.DavincisVesselsMod;
+import io.github.elytra.davincisvessels.common.LanguageEntries;
+import io.github.elytra.davincisvessels.common.tileentity.AnchorInstance;
+import io.github.elytra.davincisvessels.common.tileentity.BlockLocation;
 
 public class ItemBlockAnchorPoint extends ItemBlock {
     public ItemBlockAnchorPoint(Block block) {

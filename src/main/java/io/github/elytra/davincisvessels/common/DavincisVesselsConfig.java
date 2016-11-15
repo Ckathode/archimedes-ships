@@ -1,9 +1,7 @@
 package io.github.elytra.davincisvessels.common;
 
 import com.google.gson.Gson;
-import io.github.elytra.davincisvessels.DavincisVesselsMod;
-import io.github.elytra.davincisvessels.common.object.DavincisVesselsObjects;
-import io.github.elytra.movingworld.MovingWorldMod;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
@@ -16,12 +14,17 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.input.Keyboard;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
+import io.github.elytra.davincisvessels.DavincisVesselsMod;
+import io.github.elytra.davincisvessels.common.object.DavincisVesselsObjects;
+import io.github.elytra.movingworld.MovingWorldMod;
 
 public class DavincisVesselsConfig {
     public static final int CONTROL_TYPE_VANILLA = 0, CONTROL_TYPE_DAVINCI = 1;

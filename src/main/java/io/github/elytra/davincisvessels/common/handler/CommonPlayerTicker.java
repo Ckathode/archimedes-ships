@@ -1,8 +1,9 @@
 package io.github.elytra.davincisvessels.common.handler;
 
-import io.github.elytra.davincisvessels.common.entity.EntityParachute;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+
+import io.github.elytra.davincisvessels.common.entity.EntityParachute;
 
 public class CommonPlayerTicker {
     @SubscribeEvent

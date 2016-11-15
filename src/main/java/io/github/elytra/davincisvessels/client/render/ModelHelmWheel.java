@@ -1,8 +1,7 @@
 package io.github.elytra.davincisvessels.client.render;
 
 import com.google.common.base.Function;
-import io.github.elytra.davincisvessels.DavincisVesselsMod;
-import io.github.elytra.davincisvessels.common.tileentity.TileHelm;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -18,6 +17,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 
+import io.github.elytra.davincisvessels.DavincisVesselsMod;
+import io.github.elytra.davincisvessels.common.tileentity.TileHelm;
+
 public class ModelHelmWheel {
 
     public static ReloadListener reloadListener;
@@ -25,26 +27,28 @@ public class ModelHelmWheel {
     Function<ResourceLocation, TextureAtlasSprite> textureGetter = location ->
             Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
 
-    public ModelHelmWheel() {
-        if (helmModel == null) {
-            IModel model = null;
+    private void loadModel() {
+        IModel model = null;
 
-            try {
-                model = ModelLoaderRegistry.getModel(new ResourceLocation(DavincisVesselsMod.RESOURCE_DOMAIN + "block/helmWheel"));
-            } catch (Exception e) {
-                DavincisVesselsMod.LOG.error("A critical exception occurred when rendering a helm model, " + e.getLocalizedMessage());
-            }
-
-            if (model != null) {
-                helmModel = model.bake(model.getDefaultState(), DefaultVertexFormats.BLOCK, textureGetter);
-            }
-
-            reloadListener = new ReloadListener();
-            ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(reloadListener);
+        try {
+            model = ModelLoaderRegistry.getModel(new ResourceLocation(DavincisVesselsMod.RESOURCE_DOMAIN + "block/helmWheel"));
+        } catch (Exception e) {
+            DavincisVesselsMod.LOG.error("A critical exception occurred when rendering a helm model, " + e.getLocalizedMessage());
         }
+
+        if (model != null) {
+            helmModel = model.bake(model.getDefaultState(), DefaultVertexFormats.BLOCK, textureGetter);
+        }
+
+        reloadListener = new ReloadListener();
+        ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(reloadListener);
     }
 
     public void render(double x, double y, double z, IBlockState state, TileHelm helm, EnumFacing direction) {
+        if (helmModel == null) {
+            loadModel();
+        }
+
         GlStateManager.pushMatrix();
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);

@@ -1,6 +1,5 @@
 package io.github.elytra.davincisvessels.client.render;
 
-import io.github.elytra.davincisvessels.common.tileentity.TileGauge;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
@@ -12,7 +11,10 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+
 import org.lwjgl.opengl.GL11;
+
+import io.github.elytra.davincisvessels.common.tileentity.TileGauge;
 
 public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
 

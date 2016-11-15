@@ -1,6 +1,5 @@
 package io.github.elytra.davincisvessels.client.gui;
 
-import io.github.elytra.davincisvessels.DavincisVesselsMod;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.config.ConfigElement;
@@ -9,6 +8,8 @@ import net.minecraftforge.fml.client.config.IConfigElement;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.github.elytra.davincisvessels.DavincisVesselsMod;
 
 public class DavincisVesselsConfigGUI extends GuiConfig {
 

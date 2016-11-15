@@ -1,9 +1,10 @@
 package io.github.elytra.davincisvessels.client.control;
 
+import net.minecraft.entity.player.EntityPlayer;
+
 import io.github.elytra.davincisvessels.common.control.ShipControllerCommon;
 import io.github.elytra.davincisvessels.common.entity.EntityShip;
 import io.github.elytra.davincisvessels.common.network.DavincisVesselsNetworking;
-import net.minecraft.entity.player.EntityPlayer;
 
 public class ShipControllerClient extends ShipControllerCommon {
     @Override

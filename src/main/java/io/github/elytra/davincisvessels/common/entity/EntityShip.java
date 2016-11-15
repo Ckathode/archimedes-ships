@@ -1,22 +1,5 @@
 package io.github.elytra.davincisvessels.common.entity;
 
-import io.github.elytra.davincisvessels.DavincisVesselsMod;
-import io.github.elytra.davincisvessels.client.control.ShipControllerClient;
-import io.github.elytra.davincisvessels.common.DavincisVesselsConfig;
-import io.github.elytra.davincisvessels.common.api.tileentity.ITileEngineModifier;
-import io.github.elytra.davincisvessels.common.control.ShipControllerCommon;
-import io.github.elytra.davincisvessels.common.object.DavincisVesselsObjects;
-import io.github.elytra.davincisvessels.common.tileentity.TileHelm;
-import io.github.elytra.movingworld.common.chunk.LocatedBlock;
-import io.github.elytra.movingworld.common.chunk.MovingWorldAssemblyInteractor;
-import io.github.elytra.movingworld.common.chunk.assembly.AssembleResult;
-import io.github.elytra.movingworld.common.chunk.assembly.ChunkDisassembler;
-import io.github.elytra.movingworld.common.entity.EntityMovingWorld;
-import io.github.elytra.movingworld.common.entity.MovingWorldCapabilities;
-import io.github.elytra.movingworld.common.entity.MovingWorldHandlerCommon;
-import io.github.elytra.movingworld.common.util.MathHelperMod;
-import io.github.elytra.movingworld.common.util.Vec3dMod;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -40,9 +23,28 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.util.Set;
+
+import io.github.elytra.davincisvessels.DavincisVesselsMod;
+import io.github.elytra.davincisvessels.client.control.ShipControllerClient;
+import io.github.elytra.davincisvessels.common.DavincisVesselsConfig;
+import io.github.elytra.davincisvessels.common.api.tileentity.ITileEngineModifier;
+import io.github.elytra.davincisvessels.common.control.ShipControllerCommon;
+import io.github.elytra.davincisvessels.common.object.DavincisVesselsObjects;
+import io.github.elytra.davincisvessels.common.tileentity.TileHelm;
+import io.github.elytra.movingworld.common.chunk.LocatedBlock;
+import io.github.elytra.movingworld.common.chunk.MovingWorldAssemblyInteractor;
+import io.github.elytra.movingworld.common.chunk.assembly.AssembleResult;
+import io.github.elytra.movingworld.common.chunk.assembly.ChunkDisassembler;
+import io.github.elytra.movingworld.common.entity.EntityMovingWorld;
+import io.github.elytra.movingworld.common.entity.MovingWorldCapabilities;
+import io.github.elytra.movingworld.common.entity.MovingWorldHandlerCommon;
+import io.github.elytra.movingworld.common.util.MathHelperMod;
+import io.github.elytra.movingworld.common.util.Vec3dMod;
+import io.netty.buffer.ByteBuf;
 
 public class EntityShip extends EntityMovingWorld {
 

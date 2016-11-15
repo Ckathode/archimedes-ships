@@ -1,9 +1,10 @@
 package io.github.elytra.davincisvessels.client.render;
 
-import io.github.elytra.davincisvessels.common.entity.EntitySeat;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
+
+import io.github.elytra.davincisvessels.common.entity.EntitySeat;
 
 public class RenderSeat extends Render<EntitySeat> {
     public RenderSeat(RenderManager renderManager) {

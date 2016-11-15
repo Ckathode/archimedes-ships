@@ -2,16 +2,7 @@ package io.github.elytra.davincisvessels;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ListMultimap;
-import io.github.elytra.davincisvessels.client.ClientProxy;
-import io.github.elytra.davincisvessels.common.CommonProxy;
-import io.github.elytra.davincisvessels.common.DavincisVesselsConfig;
-import io.github.elytra.davincisvessels.common.command.*;
-import io.github.elytra.davincisvessels.common.entity.EntityParachute;
-import io.github.elytra.davincisvessels.common.entity.EntitySeat;
-import io.github.elytra.davincisvessels.common.entity.EntityShip;
-import io.github.elytra.davincisvessels.common.handler.ConnectionHandler;
-import io.github.elytra.davincisvessels.common.network.DavincisVesselsNetworking;
-import io.github.elytra.davincisvessels.common.object.DavincisVesselsObjects;
+
 import net.minecraft.block.Block;
 import net.minecraft.command.CommandBase;
 import net.minecraft.creativetab.CreativeTabs;
@@ -22,15 +13,35 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Collections;
 import java.util.List;
+
+import io.github.elytra.davincisvessels.client.ClientProxy;
+import io.github.elytra.davincisvessels.common.CommonProxy;
+import io.github.elytra.davincisvessels.common.DavincisVesselsConfig;
+import io.github.elytra.davincisvessels.common.command.CommandASHelp;
+import io.github.elytra.davincisvessels.common.command.CommandASTP;
+import io.github.elytra.davincisvessels.common.command.CommandDisassembleNear;
+import io.github.elytra.davincisvessels.common.command.CommandDisassembleShip;
+import io.github.elytra.davincisvessels.common.command.CommandShipInfo;
+import io.github.elytra.davincisvessels.common.entity.EntityParachute;
+import io.github.elytra.davincisvessels.common.entity.EntitySeat;
+import io.github.elytra.davincisvessels.common.entity.EntityShip;
+import io.github.elytra.davincisvessels.common.handler.ConnectionHandler;
+import io.github.elytra.davincisvessels.common.network.DavincisVesselsNetworking;
+import io.github.elytra.davincisvessels.common.object.DavincisVesselsObjects;
 
 @Mod(modid = DavincisVesselsMod.MOD_ID, name = DavincisVesselsMod.MOD_NAME, version = DavincisVesselsMod.MOD_VERSION, dependencies = "required-after:movingworld", guiFactory = DavincisVesselsMod.MOD_GUIFACTORY)
 public class DavincisVesselsMod {
@@ -40,13 +51,11 @@ public class DavincisVesselsMod {
     public static final String MOD_NAME = "Davinci's Vessels";
     public static final String RESOURCE_DOMAIN = "davincisvessels:";
     public static final String MOD_GUIFACTORY = "io.github.elytra.davincisvessels.client.gui.DavincisVesselsGUIFactory";
-
+    public static final DavincisVesselsObjects OBJECTS = new DavincisVesselsObjects();
     @Mod.Instance(MOD_ID)
     public static DavincisVesselsMod INSTANCE;
     @SidedProxy(clientSide = "io.github.elytra.davincisvessels.client.ClientProxy", serverSide = "io.github.elytra.davincisvessels.common.CommonProxy")
     public static CommonProxy PROXY;
-
-    public static final DavincisVesselsObjects OBJECTS = new DavincisVesselsObjects();
     public static Logger LOG;
 
     public static CreativeTabs CREATIVE_TAB = new CreativeTabs("davincisTab") {

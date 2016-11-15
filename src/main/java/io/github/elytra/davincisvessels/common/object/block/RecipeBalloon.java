@@ -1,6 +1,5 @@
 package io.github.elytra.davincisvessels.common.object.block;
 
-import io.github.elytra.davincisvessels.common.object.DavincisVesselsObjects;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
@@ -8,6 +7,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
+
+import io.github.elytra.davincisvessels.common.object.DavincisVesselsObjects;
 
 public class RecipeBalloon implements IRecipe {
     @Override

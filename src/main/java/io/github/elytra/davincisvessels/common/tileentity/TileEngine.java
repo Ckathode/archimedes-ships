@@ -1,10 +1,5 @@
 package io.github.elytra.davincisvessels.common.tileentity;
 
-import io.github.elytra.davincisvessels.common.LanguageEntries;
-import io.github.elytra.davincisvessels.common.api.tileentity.ITileEngineModifier;
-import io.github.elytra.davincisvessels.common.entity.ShipCapabilities;
-import io.github.elytra.movingworld.common.chunk.mobilechunk.MobileChunk;
-import io.github.elytra.movingworld.common.entity.EntityMovingWorld;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -17,6 +12,12 @@ import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+
+import io.github.elytra.davincisvessels.common.LanguageEntries;
+import io.github.elytra.davincisvessels.common.api.tileentity.ITileEngineModifier;
+import io.github.elytra.davincisvessels.common.entity.ShipCapabilities;
+import io.github.elytra.movingworld.common.chunk.mobilechunk.MobileChunk;
+import io.github.elytra.movingworld.common.entity.EntityMovingWorld;
 
 
 public class TileEngine extends TileEntity implements IInventory, ITileEngineModifier {
