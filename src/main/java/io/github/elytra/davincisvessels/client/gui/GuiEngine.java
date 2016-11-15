@@ -11,7 +11,7 @@ import io.github.elytra.davincisvessels.common.LanguageEntries;
 import io.github.elytra.davincisvessels.common.tileentity.TileEngine;
 
 public class GuiEngine extends GuiContainer {
-    public static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("archimedesshipsplus", "textures/gui/engine.png");
+    public static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("davincisvessels", "textures/gui/engine.png");
 
     public GuiEngine(TileEngine te, EntityPlayer entityplayer) {
         super(new ContainerEngine(te, entityplayer));
