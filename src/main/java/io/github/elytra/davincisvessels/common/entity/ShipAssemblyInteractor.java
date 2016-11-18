@@ -108,7 +108,6 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
     @Override
     public CanAssemble isBlockAllowed(World world, LocatedBlock lb) {
         IBlockState state = lb.blockState;
-        BlockPos pos = lb.blockPos;
         CanAssemble canAssemble = super.isBlockAllowed(world, lb);
 
         if (state.getBlock() == DavincisVesselsObjects.blockStickyBuffer || DavincisVesselsMod.INSTANCE.getNetworkConfig().isSticky(state.getBlock()))

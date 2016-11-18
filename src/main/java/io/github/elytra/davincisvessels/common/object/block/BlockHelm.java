@@ -4,6 +4,7 @@ import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -26,12 +27,13 @@ import io.github.elytra.davincisvessels.common.tileentity.TileHelm;
 
 public class BlockHelm extends BlockDirectional implements ITileEntityProvider {
 
+    public static final PropertyBool IS_WHEEL = PropertyBool.create("wheel");
+
     public BlockHelm() {
         super(Material.WOOD);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(IS_WHEEL, false));
         this.setSoundType(SoundType.WOOD);
     }
-
 
     @Override
     public BlockRenderLayer getBlockLayer() {
@@ -181,7 +183,7 @@ public class BlockHelm extends BlockDirectional implements ITileEntityProvider {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, FACING);
+        return new BlockStateContainer(this, FACING, IS_WHEEL);
     }
 
 }

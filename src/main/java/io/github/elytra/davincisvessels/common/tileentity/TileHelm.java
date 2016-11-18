@@ -173,4 +173,5 @@ public class TileHelm extends TileMovingMarkingBlock {
         super.readFromNBT(tag);
         submerge = tag.getBoolean("submergeShipOnAssemble");
     }
+
 }

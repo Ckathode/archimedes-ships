@@ -1,30 +1,27 @@
 package io.github.elytra.davincisvessels.client.render;
 
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.util.EnumFacing;
+
+import java.io.IOException;
+
 import io.github.elytra.davincisvessels.DavincisVesselsMod;
 import io.github.elytra.davincisvessels.common.entity.EntityShip;
 import io.github.elytra.davincisvessels.common.object.block.BlockHelm;
 import io.github.elytra.davincisvessels.common.tileentity.TileHelm;
 import io.github.elytra.movingworld.api.IMovingTile;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
 
-import java.io.IOException;
-
-public class TileEntityHelmRenderer extends TileEntitySpecialRenderer {
-
-    public ModelHelmWheel wheel;
+public class TileEntityHelmRenderer extends TileEntitySpecialRenderer<TileHelm> {
 
     @Override
-    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage) {
-        if (wheel == null) {
-            wheel = new ModelHelmWheel();
-        }
-
+    public void renderTileEntityAt(TileHelm te, double x, double y, double z, float partialTicks, int destroyStage) {
         try {
-            renderHelm((TileHelm) te, x, y, z, partialTicks);
+            renderHelm(te, x, y, z, partialTicks);
         } catch (Exception e) {
             if (e instanceof IOException)
                 e.printStackTrace();
@@ -44,8 +41,6 @@ public class TileEntityHelmRenderer extends TileEntitySpecialRenderer {
             ship = (EntityShip) ((IMovingTile) helm).getParentMovingWorld();
         }
 
-        GlStateManager.pushMatrix();
-
         float shipPitch = 0;
         if (ship != null)
             shipPitch = ship.prevRotationPitch + (ship.rotationPitch - ship.prevRotationPitch) * partialTicks;
@@ -53,26 +48,49 @@ public class TileEntityHelmRenderer extends TileEntitySpecialRenderer {
         if (blockStateFacing == EnumFacing.NORTH || blockStateFacing == EnumFacing.WEST) {
             shipPitch *= -1;
         }
-
         boolean onZAxis = blockStateFacing.getAxis() == EnumFacing.Axis.Z;
 
         float translateX, translateY, translateZ;
 
         if (onZAxis) {
-            translateX = 4.5F;
-            translateY = 1.65F;
+            translateX = .5F;
+            translateY = 10F / 16F;
             translateZ = 0F;
         } else {
             translateX = 0F;
-            translateY = 1.65F;
-            translateZ = 4.5F;
+            translateY = 10F / 16F;
+            translateZ = -.5F;
         }
+
+        GlStateManager.pushMatrix();
+        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.enableBlend();
+        GlStateManager.disableCull();
+        GlStateManager.enableRescaleNormal();
+
+        if (Minecraft.isAmbientOcclusionEnabled()) {
+            GlStateManager.shadeModel(7425);
+        } else {
+            GlStateManager.shadeModel(7424);
+        }
+
+        GlStateManager.translate(x, y, z + 1);
 
         GlStateManager.translate(translateX, translateY, translateZ);
         GlStateManager.rotate(shipPitch * 10, onZAxis ? 0 : 1, 0, onZAxis ? 1 : 0);
         GlStateManager.translate(-translateX, -translateY, -translateZ);
 
-        wheel.render(x, y, z, blockState, helm, blockStateFacing);
+        IBlockState wheelState = blockState.withProperty(BlockHelm.IS_WHEEL, true);
+        IBakedModel stateModel = Minecraft.getMinecraft().getBlockRendererDispatcher()
+                .getModelForState(wheelState);
+        Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelRenderer()
+                .renderModelBrightness(stateModel, wheelState, 1, false);
+
+        GlStateManager.disableBlend();
+        GlStateManager.enableCull();
+        GlStateManager.disableRescaleNormal();
         GlStateManager.popMatrix();
+
     }
 }
