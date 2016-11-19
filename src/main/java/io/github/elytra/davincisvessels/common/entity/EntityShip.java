@@ -50,7 +50,7 @@ public class EntityShip extends EntityMovingWorld {
 
     public static final DataParameter<Float> ENGINE_POWER = EntityDataManager.createKey(EntityShip.class, DataSerializers.FLOAT);
     public static final DataParameter<Byte> HAS_ENGINES = EntityDataManager.createKey(EntityShip.class, DataSerializers.BYTE);
-    public static final DataParameter<Byte> CAN_SUBMERGE = EntityDataManager.createKey(EntityShip.class, DataSerializers.BYTE);
+    public static final DataParameter<Boolean> CAN_SUBMERGE = EntityDataManager.createKey(EntityShip.class, DataSerializers.BOOLEAN);
     public static final DataParameter<Byte> IS_SUBMERGED = EntityDataManager.createKey(EntityShip.class, DataSerializers.BYTE);
 
     public static final float BASE_FORWARD_SPEED = 0.005F, BASE_TURN_SPEED = 0.5F, BASE_LIFT_SPEED = 0.004F;
@@ -151,7 +151,7 @@ public class EntityShip extends EntityMovingWorld {
     public void initMovingWorld() {
         dataManager.register(ENGINE_POWER, 0F);
         dataManager.register(HAS_ENGINES, (byte) 0);
-        dataManager.register(CAN_SUBMERGE, (byte) 0);
+        dataManager.register(CAN_SUBMERGE, false);
         dataManager.register(IS_SUBMERGED, (byte) 0);
     }
 
@@ -277,9 +277,17 @@ public class EntityShip extends EntityMovingWorld {
         super.updatePassengerPosition(passenger, riderDestination, flags);
 
         if (submerge && passenger != null && passenger instanceof EntityLivingBase && worldObj != null && !worldObj.isRemote) {
+            //Apply water breathing so we don't die and apply night vision so we're not blind.
+
             Potion waterBreathing = Potion.REGISTRY.getObject(new ResourceLocation("water_breathing"));
-            if (!((EntityLivingBase) passenger).isPotionActive(waterBreathing))
-                ((EntityLivingBase) passenger).addPotionEffect(new PotionEffect(waterBreathing, 20, 1));
+            if (((EntityLivingBase) passenger).getActivePotionEffect(waterBreathing) == null ||
+                    ((EntityLivingBase) passenger).getActivePotionEffect(waterBreathing).getDuration() <= 20 * 11)
+                ((EntityLivingBase) passenger).addPotionEffect(new PotionEffect(waterBreathing, 20 * 12, 1));
+
+            Potion nightVision = Potion.REGISTRY.getObject(new ResourceLocation("night_vision"));
+            if (((EntityLivingBase) passenger).getActivePotionEffect(nightVision) == null ||
+                    ((EntityLivingBase) passenger).getActivePotionEffect(nightVision).getDuration() <= 20 * 11)
+                ((EntityLivingBase) passenger).addPotionEffect(new PotionEffect(nightVision, 20 * 12, 1));
         }
     }
 
@@ -556,6 +564,6 @@ public class EntityShip extends EntityMovingWorld {
     }
 
     public boolean canSubmerge() {
-        return !dataManager.isEmpty() ? dataManager.get(CAN_SUBMERGE) == new Byte((byte) 1) : false;
+        return !dataManager.isEmpty() ? dataManager.get(CAN_SUBMERGE) : false;
     }
 }
