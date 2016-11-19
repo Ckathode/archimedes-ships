@@ -29,9 +29,6 @@ public class CommonHookContainer {
         }
     }
 
-    @SubscribeEvent
-    public void onPlayerTick(TickEvent.PlayerTickEvent e) {
-    }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onPlayerSpawnSet(PlayerSetSpawnEvent e) {

@@ -50,7 +50,7 @@ public class ConnectionHandler {
 
     private void handlerConfigSync(PlayerEvent.PlayerLoggedInEvent event) {
         if (FMLCommonHandler.instance().getEffectiveSide().isServer()) {
-            NBTTagCompound tagCompound = DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().serialize();
+            NBTTagCompound tagCompound = DavincisVesselsMod.INSTANCE.getLocalConfig().getShared().serialize();
             tagCompound.setBoolean("restore", false);
 
             DavincisVesselsNetworking.NETWORK.send().packet("ConfigMessage")
@@ -61,12 +61,6 @@ public class ConnectionHandler {
 
     private void handleConfigDesync(PlayerEvent.PlayerLoggedOutEvent event) {
         if (FMLCommonHandler.instance().getEffectiveSide().isServer()) {
-            NBTTagCompound tag = new NBTTagCompound();
-            tag.setBoolean("restore", true);
-
-            DavincisVesselsNetworking.NETWORK.send().packet("ConfigMessage")
-                    .with("data", tag)
-                    .to(event.player);
         }
     }
 
