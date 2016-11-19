@@ -28,7 +28,7 @@ repositories {
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = '1.10.2-0004'
+version = '1.10.2-0005'
 group = 'io.github.elytra.davincisvessels'
 archivesBaseName = 'davincisvessels'
 
