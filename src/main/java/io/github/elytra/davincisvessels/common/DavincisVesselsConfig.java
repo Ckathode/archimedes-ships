@@ -124,12 +124,12 @@ public class DavincisVesselsConfig {
 
     @SideOnly(Side.CLIENT)
     private void loadKeybindings() {
-        kbUp = new KeyBinding("key.archimedes.up", getKeyIndex(config, "key_ascent", Keyboard.KEY_X), "Archimedes");
-        kbDown = new KeyBinding("key.archimedes.down", getKeyIndex(config, "key_descent", Keyboard.KEY_Z), "Archimedes");
-        kbBrake = new KeyBinding("key.archimedes.brake", getKeyIndex(config, "key_brake", Keyboard.KEY_C), "Archimedes");
-        kbAlign = new KeyBinding("key.archimedes.align", getKeyIndex(config, "key_align", Keyboard.KEY_EQUALS), "Archimedes");
-        kbDisassemble = new KeyBinding("key.archimedes.decompile", getKeyIndex(config, "key_decompile", Keyboard.KEY_BACKSLASH), "Archimedes");
-        kbShipInv = new KeyBinding("key.archimedes.shipinv", getKeyIndex(config, "key_shipinv", Keyboard.KEY_K), "Archimedes");
+        kbUp = new KeyBinding("key.davincis.up", getKeyIndex(config, "key_ascent", Keyboard.KEY_X), "Archimedes");
+        kbDown = new KeyBinding("key.davincis.down", getKeyIndex(config, "key_descent", Keyboard.KEY_Z), "Archimedes");
+        kbBrake = new KeyBinding("key.davincis.brake", getKeyIndex(config, "key_brake", Keyboard.KEY_C), "Archimedes");
+        kbAlign = new KeyBinding("key.davincis.align", getKeyIndex(config, "key_align", Keyboard.KEY_EQUALS), "Archimedes");
+        kbDisassemble = new KeyBinding("key.davincis.decompile", getKeyIndex(config, "key_decompile", Keyboard.KEY_BACKSLASH), "Archimedes");
+        kbShipInv = new KeyBinding("key.davincis.shipinv", getKeyIndex(config, "key_shipinv", Keyboard.KEY_K), "Archimedes");
         Minecraft mc = Minecraft.getMinecraft();
         mc.gameSettings.keyBindings = ArrayUtils.addAll(mc.gameSettings.keyBindings, kbUp, kbDown, kbBrake, kbAlign, kbDisassemble, kbShipInv);
     }
