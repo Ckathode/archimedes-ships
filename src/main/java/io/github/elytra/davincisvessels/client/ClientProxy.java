@@ -68,7 +68,7 @@ public class ClientProxy extends CommonProxy {
     public void registerEntityRenderers() {
         RenderingRegistry.registerEntityRenderingHandler(EntityShip.class, manager -> new RenderMovingWorld(manager));
         RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, manager -> new RenderParachute(manager));
-        RenderingRegistry.registerEntityRenderingHandler(EntitySeat.class, manager -> new RenderSeat(manager)); // memes
+        RenderingRegistry.registerEntityRenderingHandler(EntitySeat.class, manager -> new RenderSeat(manager));
     }
 
     public void registerTileEntitySpeacialRenderers() {
