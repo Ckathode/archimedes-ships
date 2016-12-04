@@ -103,9 +103,9 @@ public class DavincisVesselsMod {
         MinecraftForge.EVENT_BUS.register(new ConnectionHandler());
         MinecraftForge.EVENT_BUS.register(new ConnectionHandler());
 
-        EntityRegistry.registerModEntity(new ResourceLocation(RESOURCE_DOMAIN, "ship"), EntityShip.class, "shipmod", 1, this, 64, localConfig.getShared().shipEntitySyncRate, true);
-        EntityRegistry.registerModEntity(new ResourceLocation(RESOURCE_DOMAIN, "seat"), EntitySeat.class, "attachment.seat", 2, this, 64, 20, false);
-        EntityRegistry.registerModEntity(new ResourceLocation(RESOURCE_DOMAIN, "parachute"), EntityParachute.class, "parachute", 3, this, 32, localConfig.getShared().shipEntitySyncRate, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "ship"), EntityShip.class, "shipmod", 1, this, 64, localConfig.getShared().shipEntitySyncRate, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "seat"), EntitySeat.class, "attachment.seat", 2, this, 64, 20, false);
+        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "parachute"), EntityParachute.class, "parachute", 3, this, 32, localConfig.getShared().shipEntitySyncRate, true);
 
         PROXY.registerKeyHandlers(localConfig);
         PROXY.registerEventHandlers();
