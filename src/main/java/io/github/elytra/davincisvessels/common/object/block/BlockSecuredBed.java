@@ -7,7 +7,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -53,7 +52,7 @@ public class BlockSecuredBed extends BlockBed implements ITileEntityProvider {
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (worldIn.isRemote) {
             return true;
         } else {
@@ -75,7 +74,7 @@ public class BlockSecuredBed extends BlockBed implements ITileEntityProvider {
                         EntityPlayer entityplayer1 = this.getPlayerInBed(worldIn, pos);
 
                         if (entityplayer1 != null) {
-                            playerIn.addChatComponentMessage(new TextComponentTranslation("tile.bed.occupied"));
+                            playerIn.sendStatusMessage(new TextComponentTranslation("tile.bed.occupied", new Object[0]), true);
 
                             bedUser = entityplayer1;
                         }
@@ -91,9 +90,9 @@ public class BlockSecuredBed extends BlockBed implements ITileEntityProvider {
                             bedUser = playerIn;
                         } else {
                             if (sleepResult == EntityPlayer.SleepResult.NOT_POSSIBLE_NOW) {
-                                playerIn.addChatComponentMessage(new TextComponentTranslation("tile.bed.noSleep"));
+                                playerIn.sendStatusMessage(new TextComponentTranslation("tile.bed.noSleep", new Object[0]), true);
                             } else if (sleepResult == EntityPlayer.SleepResult.NOT_SAFE) {
-                                playerIn.addChatComponentMessage(new TextComponentTranslation("tile.bed.notSafe"));
+                                playerIn.sendStatusMessage(new TextComponentTranslation("tile.bed.notSafe", new Object[0]), true);
                             }
                         }
                     }

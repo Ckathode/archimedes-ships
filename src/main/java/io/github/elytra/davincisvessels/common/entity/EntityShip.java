@@ -75,8 +75,8 @@ public class EntityShip extends EntityMovingWorld {
     public void onEntityUpdate() {
         super.onEntityUpdate();
 
-        if (worldObj != null) {
-            if (!worldObj.isRemote) {
+        if (world != null) {
+            if (!world.isRemote) {
                 driftCooldown -= 1;
                 boolean hasEngines = false;
                 if (capabilities.getEngines() != null) {
@@ -91,7 +91,7 @@ public class EntityShip extends EntityMovingWorld {
                 else
                     getDataManager().set(HAS_ENGINES, new Byte((byte) 1));
             }
-            if (worldObj.isRemote) {
+            if (world.isRemote) {
                 if (dataManager != null && !dataManager.isEmpty() && dataManager.isDirty()) {
                     submerge = dataManager.get(IS_SUBMERGED) == new Byte((byte) 1);
                 }
@@ -110,7 +110,7 @@ public class EntityShip extends EntityMovingWorld {
 
     public void setSubmerge(boolean submerge) {
         this.submerge = submerge;
-        if (worldObj != null && !worldObj.isRemote) {
+        if (world != null && !world.isRemote) {
             getDataManager().set(IS_SUBMERGED, submerge ? new Byte((byte) 1) : new Byte((byte) 0));
             if (getMobileChunk().marker != null && getMobileChunk().marker.tileEntity != null && getMobileChunk().marker.tileEntity instanceof TileHelm) {
                 TileHelm helm = (TileHelm) getMobileChunk().marker.tileEntity;
@@ -249,10 +249,10 @@ public class EntityShip extends EntityMovingWorld {
                     updatePassengerPosition(prevRiddenByEntity, riderDestination, 1);
                     disassemble(false);
                 } else {
-                    if (!worldObj.isRemote && isFlying()) {
+                    if (!world.isRemote && isFlying()) {
                         driftCooldown = 20 * 6;
-                        EntityParachute parachute = new EntityParachute(worldObj, this, riderDestination);
-                        if (worldObj.spawnEntityInWorld(parachute)) {
+                        EntityParachute parachute = new EntityParachute(world, this, riderDestination);
+                        if (world.spawnEntity(parachute)) {
                             prevRiddenByEntity.startRiding(parachute);
                             prevRiddenByEntity.setSneaking(false);
                         }
@@ -276,7 +276,7 @@ public class EntityShip extends EntityMovingWorld {
     public void updatePassengerPosition(Entity passenger, BlockPos riderDestination, int flags) {
         super.updatePassengerPosition(passenger, riderDestination, flags);
 
-        if (submerge && passenger != null && passenger instanceof EntityLivingBase && worldObj != null && !worldObj.isRemote) {
+        if (submerge && passenger != null && passenger instanceof EntityLivingBase && world != null && !world.isRemote) {
             //Apply water breathing so we don't die and apply night vision so we're not blind.
 
             Potion waterBreathing = Potion.REGISTRY.getObject(new ResourceLocation("water_breathing"));
@@ -317,7 +317,7 @@ public class EntityShip extends EntityMovingWorld {
                     vec = vec.setY(((TileEntity) engine).getPos().getY());
                     vec = vec.setZ(((TileEntity) engine).getPos().getZ() - getMobileChunk().getCenterZ() + 0.5f);
                     vec = vec.rotateAroundY(yaw);
-                    worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX + vec.xCoord, posY + vec.yCoord + 1d, posZ + vec.zCoord, 0d, 0d, 0d);
+                    world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX + vec.xCoord, posY + vec.yCoord + 1d, posZ + vec.zCoord, 0d, 0d, 0d);
                 }
             }
         }
@@ -333,7 +333,7 @@ public class EntityShip extends EntityMovingWorld {
             double d2 = getEntityBoundingBox().minY + (getEntityBoundingBox().maxY - getEntityBoundingBox().minY) * (belowWater + 1) / blocksPerMeter;
             axisalignedbb = new AxisAlignedBB(getEntityBoundingBox().minX, d1, getEntityBoundingBox().minZ, getEntityBoundingBox().maxX, d2, getEntityBoundingBox().maxZ);
 
-            if (!isAABBInLiquidNotFall(worldObj, axisalignedbb)) {
+            if (!isAABBInLiquidNotFall(world, axisalignedbb)) {
                 break;
             }
         }
@@ -355,7 +355,7 @@ public class EntityShip extends EntityMovingWorld {
             double d2 = getEntityBoundingBox().minY + (getEntityBoundingBox().maxY - getEntityBoundingBox().minY) * (belowWater + 1) / blocksPerMeter;
             axisalignedbb = new AxisAlignedBB(getEntityBoundingBox().minX, d1, getEntityBoundingBox().minZ, getEntityBoundingBox().maxX, d2, getEntityBoundingBox().maxZ);
 
-            if (!isAABBInLiquidNotFall(worldObj, axisalignedbb)) {
+            if (!isAABBInLiquidNotFall(world, axisalignedbb)) {
                 break;
             }
         }
@@ -419,7 +419,7 @@ public class EntityShip extends EntityMovingWorld {
 
     @Override
     public boolean disassemble(boolean overwrite) {
-        if (worldObj.isRemote) return true;
+        if (world.isRemote) return true;
 
         updatePassenger(getControllingPassenger());
 
@@ -429,7 +429,7 @@ public class EntityShip extends EntityMovingWorld {
         if (!disassembler.canDisassemble(getNewAssemblyInteractor())) {
             if (prevRiddenByEntity instanceof EntityPlayer) {
                 TextComponentString testMessage = new TextComponentString("Cannot disassemble ship here");
-                prevRiddenByEntity.addChatMessage(testMessage);
+                ((EntityPlayer) prevRiddenByEntity).sendStatusMessage(testMessage, true);
             }
             return false;
         }

@@ -12,8 +12,8 @@ import io.github.elytra.davincisvessels.common.entity.EntityShip;
 
 public class CommandDisassembleNear extends CommandBase {
     @Override
-    public String getCommandName() {
-        return "asdisassemblenear";
+    public String getName() {
+        return "dvdisassemblenear";
     }
 
     @Override
@@ -40,7 +40,7 @@ public class CommandDisassembleNear extends CommandBase {
             } else {
                 double nd = 0D;
                 double d;
-                for (Entity entity : player.worldObj.getEntities(EntityShip.class, input -> true)) {
+                for (Entity entity : player.world.getEntities(EntityShip.class, input -> true)) {
                     if (entity instanceof EntityShip) {
                         d = player.getDistanceSqToEntity(entity);
                         if (d < rangesqrd && (ne == null || d < nd)) {
@@ -52,11 +52,11 @@ public class CommandDisassembleNear extends CommandBase {
             }
 
             if (ne == null) {
-                sender.addChatMessage(new TextComponentString("No ship in a " + ((int) range) + " OBJECTS' range"));
+                sender.sendMessage(new TextComponentString("No ship in a " + ((int) range) + " OBJECTS' range"));
                 return;
             }
             if (!ne.disassemble(false)) {
-                sender.addChatMessage(new TextComponentString("Failed to disassemble ship; dropping to items"));
+                sender.sendMessage(new TextComponentString("Failed to disassemble ship; dropping to items"));
                 ne.dropAsItems();
             }
             ne.setDead();
@@ -64,8 +64,8 @@ public class CommandDisassembleNear extends CommandBase {
     }
 
     @Override
-    public String getCommandUsage(ICommandSender icommandsender) {
-        return "/" + getCommandName() + " [range]";
+    public String getUsage(ICommandSender icommandsender) {
+        return "/" + getName() + " [range]";
     }
 
     @Override

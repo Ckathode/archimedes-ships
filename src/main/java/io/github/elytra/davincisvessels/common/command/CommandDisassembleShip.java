@@ -11,8 +11,8 @@ import io.github.elytra.davincisvessels.common.entity.EntityShip;
 
 public class CommandDisassembleShip extends CommandBase {
     @Override
-    public String getCommandName() {
-        return "asdisassemble";
+    public String getName() {
+        return "dvdisassemble";
     }
 
     @Override
@@ -29,14 +29,14 @@ public class CommandDisassembleShip extends CommandBase {
                 int mode = 0;
                 if (args != null && args.length > 2) {
                     if (args[0].equals("overwrite") || args[0].equals("override")) {
-                        sender.addChatMessage(new TextComponentString("Overwriting existing OBJECTS with ship OBJECTS"));
+                        sender.sendMessage(new TextComponentString("Overwriting existing OBJECTS with ship OBJECTS"));
                         mode = 1;
                     } else if (args[1].equals("drop")) {
-                        sender.addChatMessage(new TextComponentString("Dropping to items if rejoining ship with the world fails"));
+                        sender.sendMessage(new TextComponentString("Dropping to items if rejoining ship with the world fails"));
                         mode = 2;
                     }
                 } else {
-                    sender.addChatMessage(new TextComponentString("Trying to add ship OBJECTS to world"));
+                    sender.sendMessage(new TextComponentString("Trying to add ship OBJECTS to world"));
                 }
 
                 if (!ship.disassemble(mode == 1)) {
@@ -48,7 +48,7 @@ public class CommandDisassembleShip extends CommandBase {
                 return;
             }
         }
-        sender.addChatMessage(new TextComponentString("Not steering a ship"));
+        sender.sendMessage(new TextComponentString("Not steering a ship"));
     }
 
     @Override
@@ -57,7 +57,7 @@ public class CommandDisassembleShip extends CommandBase {
     }
 
     @Override
-    public String getCommandUsage(ICommandSender icommandsender) {
-        return "/" + getCommandName() + " [overwrite OR drop]";
+    public String getUsage(ICommandSender icommandsender) {
+        return "/" + getName() + " [overwrite OR drop]";
     }
 }

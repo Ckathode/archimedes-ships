@@ -93,7 +93,7 @@ public class BlockAnchorPoint extends BlockContainer {
     }
 
     @Override
-    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
         return this.getDefaultState().withProperty(AXIS, placer.getHorizontalFacing().getAxis());
     }
 
@@ -134,7 +134,7 @@ public class BlockAnchorPoint extends BlockContainer {
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!playerIn.isSneaking()) {
             TileEntity tileentity = worldIn.getTileEntity(pos);
             if (tileentity != null) {

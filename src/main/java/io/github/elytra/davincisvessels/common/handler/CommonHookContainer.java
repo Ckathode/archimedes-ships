@@ -17,11 +17,11 @@ public class CommonHookContainer {
     @SubscribeEvent
     public void onInteractWithEntity(PlayerInteractEvent.EntityInteract event) {
         if (event.getEntityPlayer() != null) {
-            int x = MathHelper.floor_double(event.getTarget().posX);
-            int y = MathHelper.floor_double(event.getTarget().posY);
-            int z = MathHelper.floor_double(event.getTarget().posZ);
+            int x = MathHelper.floor(event.getTarget().posX);
+            int y = MathHelper.floor(event.getTarget().posY);
+            int z = MathHelper.floor(event.getTarget().posZ);
 
-            TileEntity te = event.getEntity().worldObj.getTileEntity(new BlockPos(x, y, z));
+            TileEntity te = event.getEntity().world.getTileEntity(new BlockPos(x, y, z));
             if (te instanceof TileCrate && ((TileCrate) te).getContainedEntity() == event.getTarget()) {
                 ((TileCrate) te).releaseEntity();
                 event.setCanceled(true);

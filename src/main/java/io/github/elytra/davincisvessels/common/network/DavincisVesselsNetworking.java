@@ -85,7 +85,7 @@ public class DavincisVesselsNetworking {
 
                                 if (submerse && !ship.canSubmerge()) {
                                     if (entityPlayer != null && entityPlayer instanceof EntityPlayerMP)
-                                        ((EntityPlayerMP) entityPlayer).connection.kickPlayerFromServer("Oi, stop hacking ya moron.  \n XOXO ~Archimedes");
+                                        ((EntityPlayerMP) entityPlayer).connection.disconnect("Oi, stop hacking ya moron.  \n XOXO ~Da Vinci");
                                     return;
                                 }
 
@@ -108,8 +108,8 @@ public class DavincisVesselsNetworking {
                                 token.getInt("tileY"), token.getInt("tileZ"));
                         HelmClientAction action = HelmClientAction.fromInt((byte) token.getInt("action"));
 
-                        if (entityPlayer.worldObj.getTileEntity(pos) != null && entityPlayer.worldObj.getTileEntity(pos) instanceof TileHelm) {
-                            TileHelm tileEntity = (TileHelm) entityPlayer.worldObj.getTileEntity(pos);
+                        if (entityPlayer.world.getTileEntity(pos) != null && entityPlayer.world.getTileEntity(pos) instanceof TileHelm) {
+                            TileHelm tileEntity = (TileHelm) entityPlayer.world.getTileEntity(pos);
                             switch (action) {
                                 case ASSEMBLE:
                                     tileEntity.assembleMovingWorld(entityPlayer);
@@ -138,8 +138,8 @@ public class DavincisVesselsNetworking {
                         BlockPos pos = new BlockPos(token.getInt("tileX"),
                                 token.getInt("tileY"), token.getInt("tileZ"));
 
-                        if (entityPlayer.worldObj.getTileEntity(pos) != null && entityPlayer.worldObj.getTileEntity(pos) instanceof TileHelm) {
-                            TileHelm helm = (TileHelm) entityPlayer.worldObj.getTileEntity(pos);
+                        if (entityPlayer.world.getTileEntity(pos) != null && entityPlayer.world.getTileEntity(pos) instanceof TileHelm) {
+                            TileHelm helm = (TileHelm) entityPlayer.world.getTileEntity(pos);
                             helm.getInfo().setName(token.getString("newName"));
                         }
                     }
@@ -149,7 +149,7 @@ public class DavincisVesselsNetworking {
                 .with(DataType.INT, "guiID").handledOnMainThreadBy(new BiConsumer<EntityPlayer, Token>() {
                     @Override
                     public void accept(EntityPlayer entityPlayer, Token token) {
-                        entityPlayer.openGui(DavincisVesselsMod.INSTANCE, token.getInt("guiID"), entityPlayer.worldObj, 0, 0, 0);
+                        entityPlayer.openGui(DavincisVesselsMod.INSTANCE, token.getInt("guiID"), entityPlayer.world, 0, 0, 0);
                     }
                 });
 
@@ -161,7 +161,7 @@ public class DavincisVesselsNetworking {
                 .handledOnMainThreadBy(new BiConsumer<EntityPlayer, Token>() {
                     @Override
                     public void accept(EntityPlayer entityPlayer, Token token) {
-                        World world = entityPlayer.worldObj;
+                        World world = entityPlayer.world;
                         BlockPos anchorPos = new BlockPos(token.getInt("tileX"), token.getInt("tileY"), token.getInt("tileZ"));
                         if (world == null || world.getTileEntity(anchorPos) == null || !(world.getTileEntity(anchorPos) instanceof TileAnchorPoint))
                             return;
@@ -204,7 +204,7 @@ public class DavincisVesselsNetworking {
                                 itemAnchorInstanceTag.setType(AnchorInstance.InstanceType.FORSHIP);
                                 itemAnchorInstanceTag.setIdentifier(UUID.randomUUID());
                                 itemAnchorInstanceTag.addRelation(anchorPoint.getInstance().getIdentifier(),
-                                        new BlockLocation(anchorPos, entityPlayer.worldObj.provider.getDimension()));
+                                        new BlockLocation(anchorPos, entityPlayer.world.provider.getDimension()));
                                 anchorPoint.content.getTagCompound().setTag("INSTANCE", itemAnchorInstanceTag.serializeNBT());
                             } else {
                                 if (anchorPoint.content.getTagCompound() == null) {
@@ -218,7 +218,7 @@ public class DavincisVesselsNetworking {
                                 itemAnchorInstanceTag.setType(AnchorInstance.InstanceType.FORLAND);
                                 itemAnchorInstanceTag.setIdentifier(UUID.randomUUID());
                                 itemAnchorInstanceTag.addRelation(anchorPoint.getInstance().getIdentifier(),
-                                        new BlockLocation(anchorPos, entityPlayer.worldObj.provider.getDimension()));
+                                        new BlockLocation(anchorPos, entityPlayer.world.provider.getDimension()));
                                 anchorPoint.content.getTagCompound().setTag("INSTANCE", itemAnchorInstanceTag.serializeNBT());
                             }
                         }
@@ -269,7 +269,7 @@ public class DavincisVesselsNetworking {
                             }
                         }
 
-                        entityPlayer.addChatComponentMessage(text);
+                        entityPlayer.sendMessage(text);
                     }
                 });
 

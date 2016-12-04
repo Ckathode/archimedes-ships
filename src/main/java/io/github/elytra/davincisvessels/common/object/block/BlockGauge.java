@@ -17,12 +17,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import java.util.List;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import io.github.elytra.davincisvessels.common.tileentity.TileGauge;
 
@@ -58,7 +59,8 @@ public class BlockGauge extends BlockContainer {
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, @SuppressWarnings("rawtypes") List list) {
+    @SideOnly(Side.CLIENT)
+    public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
         list.add(new ItemStack(item, 1, 0));
         list.add(new ItemStack(item, 1, 1));
     }
@@ -78,7 +80,7 @@ public class BlockGauge extends BlockContainer {
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
         if (!this.canBePlacedOn(worldIn, pos.down())) {
             this.dropBlockAsItem(worldIn, pos, state, 0);
             worldIn.setBlockToAir(pos);
@@ -96,7 +98,7 @@ public class BlockGauge extends BlockContainer {
     }
 
     @Override
-    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite()).withProperty(EXTENDED, meta == 1);
     }
 

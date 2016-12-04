@@ -62,7 +62,7 @@ public class GuiShip extends GuiContainer {
 
     @Override
     public void updateScreen() {
-        if (this.mc != null && this.mc.thePlayer != null) super.updateScreen();
+        if (this.mc != null && this.mc.player != null) super.updateScreen();
 
         if (btnDisassemble == null || btnAlign == null) {
             return;
@@ -99,14 +99,14 @@ public class GuiShip extends GuiContainer {
     protected void actionPerformed(GuiButton button) {
         if (button == btnDisassemble) {
             MovingWorldNetworking.NETWORK.send().packet("MovingWorldClientActionMessage")
-                    .with("dimID", ship.worldObj.provider.getDimension())
+                    .with("dimID", ship.world.provider.getDimension())
                     .with("entityID", ship.getEntityId())
                     .with("action", MovingWorldClientAction.DISASSEMBLE.toByte())
                     .toServer();
             mc.displayGuiScreen(null);
         } else if (button == btnAlign) {
             MovingWorldNetworking.NETWORK.send().packet("MovingWorldClientActionMessage")
-                    .with("dimID", ship.worldObj.provider.getDimension())
+                    .with("dimID", ship.world.provider.getDimension())
                     .with("entityID", ship.getEntityId())
                     .with("action", MovingWorldClientAction.ALIGN.toByte())
                     .toServer();
@@ -116,7 +116,7 @@ public class GuiShip extends GuiContainer {
             GuiButtonSubmersible subButton = (GuiButtonSubmersible) button;
 
             DavincisVesselsNetworking.NETWORK.send().packet("ClientRequestSubmerseMessage")
-                    .with("dimID", ship.worldObj.provider.getDimension())
+                    .with("dimID", ship.world.provider.getDimension())
                     .with("entityID", ship.getEntityId())
                     .with("submerse", !subButton.submerse).toServer();
 

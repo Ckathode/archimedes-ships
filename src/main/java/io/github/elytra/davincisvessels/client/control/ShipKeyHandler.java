@@ -39,7 +39,7 @@ public class ShipKeyHandler {
 
             if (config.kbDisassemble.isKeyDown() && !kbDisassemblePrevState) {
                 MovingWorldNetworking.NETWORK.send().packet("MovingWorldClientActionMessage")
-                        .with("dimID", e.player.worldObj.provider.getDimension())
+                        .with("dimID", e.player.world.provider.getDimension())
                         .with("entityID", e.player.getRidingEntity().getEntityId())
                         .with("action", MovingWorldClientAction.DISASSEMBLE.toByte())
                         .toServer();
@@ -48,7 +48,7 @@ public class ShipKeyHandler {
 
             if (config.kbAlign.isKeyDown() && !kbAlignPrevState) {
                 MovingWorldNetworking.NETWORK.send().packet("MovingWorldClientActionMessage")
-                        .with("dimID", e.player.worldObj.provider.getDimension())
+                        .with("dimID", e.player.world.provider.getDimension())
                         .with("entityID", e.player.getRidingEntity().getEntityId())
                         .with("action", MovingWorldClientAction.ALIGN.toByte())
                         .toServer();

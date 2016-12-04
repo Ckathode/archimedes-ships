@@ -45,7 +45,7 @@ public class EntitySeat extends Entity {
         } else if (this.isBeingRidden()) {
             return true;
         } else {
-            if (!this.worldObj.isRemote) {
+            if (!this.world.isRemote) {
                 player.startRiding(this);
             }
 
@@ -80,7 +80,7 @@ public class EntitySeat extends Entity {
     }
 
     public EntityShip getShip() {
-        Entity foundEntity = worldObj.getEntityByID(dataManager.get(SHIP_ID));
+        Entity foundEntity = world.getEntityByID(dataManager.get(SHIP_ID));
         EntityShip ship = null;
 
         if (foundEntity != null && foundEntity instanceof EntityShip)

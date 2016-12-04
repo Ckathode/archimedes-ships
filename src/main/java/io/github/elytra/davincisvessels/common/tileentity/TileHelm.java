@@ -137,7 +137,7 @@ public class TileHelm extends TileMovingMarkingBlock {
     }
 
     public void sendAssembleResult(EntityPlayer player, boolean prev) {
-        if (!worldObj.isRemote) {
+        if (!world.isRemote) {
             AssembleResult res;
             if (prev) {
                 res = getPrevAssembleResult();
@@ -157,7 +157,7 @@ public class TileHelm extends TileMovingMarkingBlock {
             byte[] bufArray = new byte[buf.readableBytes()];
             buf.readBytes(bufArray);
             DavincisVesselsNetworking.NETWORK.send().packet("AssembleResultMessage")
-                    .with("result", bufArray).toAllAround(player.worldObj, player, 64);
+                    .with("result", bufArray).toAllAround(player.world, player, 64);
         }
     }
 

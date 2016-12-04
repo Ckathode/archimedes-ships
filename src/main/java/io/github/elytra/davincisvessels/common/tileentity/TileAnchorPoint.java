@@ -1,5 +1,7 @@
 package io.github.elytra.davincisvessels.common.tileentity;
 
+import com.google.common.collect.Lists;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,7 +30,6 @@ import io.github.elytra.movingworld.common.chunk.mobilechunk.MobileChunk;
 import io.github.elytra.movingworld.common.entity.EntityMovingWorld;
 
 public class TileAnchorPoint extends TileEntity implements IMovingTile, IInventory, ITickable {
-
 
     public ItemStack content;
     public BlockPos chunkPos;
@@ -60,7 +61,7 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
     @Override
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
         readFromNBT(packet.getNbtCompound());
-        worldObj.markBlockRangeForRenderUpdate(pos, pos);
+        world.markBlockRangeForRenderUpdate(pos, pos);
 
         if (FMLLaunchHandler.side().isClient()) {
             if (Minecraft.getMinecraft().currentScreen != null && Minecraft.getMinecraft().currentScreen instanceof GuiAnchorPoint) {
@@ -75,9 +76,9 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
-        if (worldObj != null && tag.hasKey("vehicle") && worldObj != null) {
+        if (world != null && tag.hasKey("vehicle") && world != null) {
             int id = tag.getInteger("vehicle");
-            Entity entity = worldObj.getEntityByID(id);
+            Entity entity = world.getEntityByID(id);
             if (entity != null && entity instanceof EntityMovingWorld) {
                 activeShip = (EntityMovingWorld) entity;
             }
@@ -90,7 +91,7 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
         }
 
         if (tag.hasKey("item")) {
-            content = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("item"));
+            content = new ItemStack(tag.getCompoundTag("item"));
         } else {
             content = null;
         }
@@ -168,12 +169,17 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
 
     @Override
     public String toString() {
-        return String.format("TileAnchorPoint at {X: %s Y: %s Z: %s} with state {%s} and INSTANCE {%s}", pos.getX(), pos.getY(), pos.getZ(), worldObj.getBlockState(pos), instance.toString());
+        return String.format("TileAnchorPoint at {X: %s Y: %s Z: %s} with state {%s} and INSTANCE {%s}", pos.getX(), pos.getY(), pos.getZ(), world.getBlockState(pos), instance.toString());
     }
 
     @Override
     public int getSizeInventory() {
         return 1;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return content.isEmpty();
     }
 
     @Nullable
@@ -187,7 +193,7 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
     @Nullable
     @Override
     public ItemStack decrStackSize(int index, int count) {
-        ItemStack splitResult = ItemStackHelper.getAndSplit(new ItemStack[]{content}, index, count);
+        ItemStack splitResult = ItemStackHelper.getAndSplit(Lists.newArrayList(content), index, count);
         content = splitResult;
         return splitResult;
     }
@@ -198,7 +204,7 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
     @Nullable
     @Override
     public ItemStack removeStackFromSlot(int index) {
-        ItemStack removeResult = ItemStackHelper.getAndRemove(new ItemStack[]{content}, index);
+        ItemStack removeResult = ItemStackHelper.getAndRemove(Lists.newArrayList(content), index);
         content = removeResult;
         return removeResult;
     }
@@ -209,8 +215,8 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
             throw new IndexOutOfBoundsException();
 
         this.content = stack;
-        if (stack != null && stack.stackSize > this.getInventoryStackLimit()) {
-            stack.stackSize = this.getInventoryStackLimit();
+        if (stack != null && stack.getCount() > this.getInventoryStackLimit()) {
+            stack.setCount(this.getInventoryStackLimit());
         }
     }
 
@@ -220,8 +226,8 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
-        return this.worldObj.getTileEntity(this.pos) != this ? false : player.getDistanceSq((double) this.pos.getX() + 0.5D, (double) this.pos.getY() + 0.5D, (double) this.pos.getZ() + 0.5D) <= 64.0D;
+    public boolean isUsableByPlayer(EntityPlayer player) {
+        return this.world.getTileEntity(this.pos) != this ? false : player.getDistanceSq((double) this.pos.getX() + 0.5D, (double) this.pos.getY() + 0.5D, (double) this.pos.getZ() + 0.5D) <= 64.0D;
     }
 
     @Override
@@ -265,8 +271,8 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
         if (instance != null && instance.hasChanged()) {
             instance.setChanged(false);
 
-            if (worldObj instanceof WorldServer) {
-                ((WorldServer) worldObj).getPlayerChunkMap().markBlockForUpdate(pos);
+            if (world instanceof WorldServer) {
+                ((WorldServer) world).getPlayerChunkMap().markBlockForUpdate(pos);
                 markDirty();
             }
         }

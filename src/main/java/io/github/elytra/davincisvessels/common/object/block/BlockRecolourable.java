@@ -21,9 +21,10 @@ public class BlockRecolourable extends BlockColored {
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (worldIn != null && playerIn != null && !playerIn.isSneaking()) {
             IBlockState blockState = worldIn.getBlockState(pos);
+            ItemStack heldItem = playerIn.getHeldItem(hand);
             if (blockState == null || heldItem == null) return false;
 
             if (heldItem.getItem() != null && heldItem.getItem() instanceof ItemDye) {
@@ -32,7 +33,7 @@ public class BlockRecolourable extends BlockColored {
                         blockState = blockState.withProperty(BlockColored.COLOR, EnumDyeColor.byDyeDamage(playerIn.getHeldItem(hand).getItemDamage()));
                         worldIn.setBlockState(pos, blockState);
                         if (!playerIn.capabilities.isCreativeMode)
-                            playerIn.getHeldItem(hand).stackSize -= 1;
+                            playerIn.getHeldItem(hand).setCount(playerIn.getHeldItem(hand).getCount() - 1);
                     } else {
                         playerIn.swingArm(hand);
                     }

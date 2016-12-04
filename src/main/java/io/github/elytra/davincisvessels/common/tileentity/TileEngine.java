@@ -63,7 +63,7 @@ public class TileEngine extends TileEntity implements IInventory, ITileEngineMod
         for (int i = 0; i < list.tagCount(); i++) {
             NBTTagCompound comp = list.getCompoundTagAt(i);
             int j = comp.getByte("i");
-            itemStacks[j] = ItemStack.loadItemStackFromNBT(comp);
+            itemStacks[j] = new ItemStack(comp);
         }
     }
 
@@ -102,7 +102,7 @@ public class TileEngine extends TileEntity implements IInventory, ITileEngineMod
 
         for (int i = 0; i < getSizeInventory(); i++) {
             ItemStack is = decrStackSize(i, 1);
-            if (is != null && is.stackSize > 0) {
+            if (is != null && is.getCount() > 0) {
                 burnTime += TileEntityFurnace.getItemBurnTime(is);
                 return consumeFuel(f);
             }
@@ -116,6 +116,17 @@ public class TileEngine extends TileEntity implements IInventory, ITileEngineMod
     }
 
     @Override
+    public boolean isEmpty() {
+        for (ItemStack itemstack : this.itemStacks) {
+            if (!itemstack.isEmpty()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
     public ItemStack getStackInSlot(int i) {
         return i >= 0 && i < 4 ? itemStacks[i] : null;
     }
@@ -125,7 +136,7 @@ public class TileEngine extends TileEntity implements IInventory, ITileEngineMod
         if (itemStacks[i] != null) {
             ItemStack itemstack;
 
-            if (itemStacks[i].stackSize <= n) {
+            if (itemStacks[i].getCount() <= n) {
                 itemstack = itemStacks[i];
                 itemStacks[i] = null;
                 markDirty();
@@ -133,7 +144,7 @@ public class TileEngine extends TileEntity implements IInventory, ITileEngineMod
             }
 
             itemstack = itemStacks[i].splitStack(n);
-            if (itemStacks[i].stackSize <= 0) {
+            if (itemStacks[i].getCount() <= 0) {
                 itemStacks[i] = null;
             }
 
@@ -167,8 +178,8 @@ public class TileEngine extends TileEntity implements IInventory, ITileEngineMod
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
-        return worldObj.getTileEntity(pos) == this && player.getDistanceSq(pos.getX() + 0.5d, pos.getY() + 0.5d, pos.getZ() + 0.5d) <= 64d;
+    public boolean isUsableByPlayer(EntityPlayer player) {
+        return world.getTileEntity(pos) == this && player.getDistanceSq(pos.getX() + 0.5d, pos.getY() + 0.5d, pos.getZ() + 0.5d) <= 64d;
     }
 
     @Override

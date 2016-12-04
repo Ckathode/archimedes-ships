@@ -10,11 +10,11 @@ import net.minecraft.util.text.TextComponentString;
 public class FuelInventory implements IInventory {
 
     private EntityShip ship;
-    private ItemStack[] itemstacks;
+    private ItemStack[] contents;
 
     public FuelInventory(EntityShip entityship) {
         ship = entityship;
-        itemstacks = new ItemStack[getSizeInventory()];
+        contents = new ItemStack[getSizeInventory()];
     }
 
     @Override
@@ -23,25 +23,36 @@ public class FuelInventory implements IInventory {
     }
 
     @Override
+    public boolean isEmpty() {
+        for (ItemStack itemstack : this.contents) {
+            if (!itemstack.isEmpty()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
     public ItemStack getStackInSlot(int i) {
-        return i >= 0 && i < 4 ? itemstacks[i] : null;
+        return i >= 0 && i < 4 ? contents[i] : null;
     }
 
     @Override
     public ItemStack decrStackSize(int i, int n) {
-        if (itemstacks[i] != null) {
+        if (contents[i] != null) {
             ItemStack itemstack;
 
-            if (itemstacks[i].stackSize <= n) {
-                itemstack = itemstacks[i];
-                itemstacks[i] = null;
+            if (contents[i].getCount() <= n) {
+                itemstack = contents[i];
+                contents[i] = null;
                 markDirty();
                 return itemstack;
             }
 
-            itemstack = itemstacks[i].splitStack(n);
-            if (itemstacks[i].stackSize <= 0) {
-                itemstacks[i] = null;
+            itemstack = contents[i].splitStack(n);
+            if (contents[i].getCount() <= 0) {
+                contents[i] = null;
             }
 
             markDirty();
@@ -52,8 +63,8 @@ public class FuelInventory implements IInventory {
 
     @Override
     public ItemStack removeStackFromSlot(int i) {
-        ItemStack content = itemstacks[i].copy();
-        itemstacks[i] = null;
+        ItemStack content = contents[i].copy();
+        contents[i] = null;
 
         return content;
     }
@@ -61,7 +72,7 @@ public class FuelInventory implements IInventory {
     @Override
     public void setInventorySlotContents(int i, ItemStack is) {
         if (i >= 0 && i < 4) {
-            itemstacks[i] = is;
+            contents[i] = is;
         }
     }
 
@@ -91,7 +102,7 @@ public class FuelInventory implements IInventory {
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
+    public boolean isUsableByPlayer(EntityPlayer player) {
         return player.getRidingEntity() == ship;
     }
 

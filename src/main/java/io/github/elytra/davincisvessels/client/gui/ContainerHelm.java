@@ -22,7 +22,7 @@ public class ContainerHelm extends Container {
 
     @Override
     public boolean canInteractWith(EntityPlayer player) {
-        return player.worldObj.getTileEntity(tileEntity.getPos()) == tileEntity && player.getDistanceSq(tileEntity.getPos()) < 25D;
+        return player.world.getTileEntity(tileEntity.getPos()) == tileEntity && player.getDistanceSq(tileEntity.getPos()) < 25D;
     }
 
     protected void bindPlayerInventory(InventoryPlayer inventoryPlayer) {
@@ -62,16 +62,16 @@ public class ContainerHelm extends Container {
                 return null;
             }
 
-            if (stackInSlot.stackSize == 0) {
+            if (stackInSlot.getCount() == 0) {
                 slotObject.putStack(null);
             } else {
                 slotObject.onSlotChanged();
             }
 
-            if (stackInSlot.stackSize == stack.stackSize) {
+            if (stackInSlot.getCount() == stack.getCount()) {
                 return null;
             }
-            slotObject.onPickupFromSlot(player, stackInSlot);
+            slotObject.onTake(player, stackInSlot);
         }
         return stack;
     }

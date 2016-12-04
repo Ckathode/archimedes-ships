@@ -91,7 +91,7 @@ public class BlockCrate extends BlockContainer {
     }
 
     @Override
-    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
         return this.getDefaultState().withProperty(AXIS, placer.getHorizontalFacing().getAxis());
     }
 
@@ -121,7 +121,7 @@ public class BlockCrate extends BlockContainer {
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         TileEntity te = world.getTileEntity(pos);
         if (te != null && te instanceof TileCrate) {
             ((TileCrate) te).releaseEntity();
@@ -141,25 +141,25 @@ public class BlockCrate extends BlockContainer {
 
 
     @Override
-    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn) {
-        if (world.isRemote)
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+        if (worldIn.isRemote)
             return;
 
-        if (!canBePlacedOn(world, pos.down())) {
-            dropBlockAsItem(world, pos, state, 0);
-            world.setBlockToAir(pos);
+        if (!canBePlacedOn(worldIn, pos.down())) {
+            dropBlockAsItem(worldIn, pos, state, 0);
+            worldIn.setBlockToAir(pos);
         }
 
-        boolean powered = world.isBlockPowered(pos) || world.isBlockPowered(pos.up());
+        boolean powered = worldIn.isBlockPowered(pos) || worldIn.isBlockPowered(pos.up());
 
         if (powered) {
-            TileEntity te = world.getTileEntity(pos);
+            TileEntity te = worldIn.getTileEntity(pos);
             if (te != null && te instanceof TileCrate) {
                 ((TileCrate) te).releaseEntity();
-                world.setBlockState(pos, world.getBlockState(pos).withProperty(POWERED, Boolean.TRUE));
+                worldIn.setBlockState(pos, worldIn.getBlockState(pos).withProperty(POWERED, Boolean.TRUE));
             }
         } else {
-            world.setBlockState(pos, world.getBlockState(pos).withProperty(POWERED, Boolean.FALSE));
+            worldIn.setBlockState(pos, worldIn.getBlockState(pos).withProperty(POWERED, Boolean.FALSE));
         }
     }
 }

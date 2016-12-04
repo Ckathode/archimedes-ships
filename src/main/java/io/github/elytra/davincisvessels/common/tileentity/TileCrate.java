@@ -112,10 +112,10 @@ public class TileCrate extends TileEntity implements IMovingTile, ITickable {
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         if (tag.hasKey("contained")) {
-            if (worldObj == null) {
+            if (world == null) {
                 containedEntityId = tag.getInteger("contained");
             } else {
-                setContainedEntity(worldObj.getEntityByID(tag.getInteger("contained")));
+                setContainedEntity(world.getEntityByID(tag.getInteger("contained")));
             }
         }
     }
@@ -131,13 +131,13 @@ public class TileCrate extends TileEntity implements IMovingTile, ITickable {
 
     @Override
     public void update() {
-        if (worldObj.isRemote) {
+        if (world.isRemote) {
             if (parentShip != null && parentShip.isDead) {
                 parentShip = null;
             }
             if (containedEntity == null) {
                 if (containedEntityId != 0) {
-                    setContainedEntity(worldObj.getEntityByID(containedEntityId));
+                    setContainedEntity(world.getEntityByID(containedEntityId));
                 }
             }
         }

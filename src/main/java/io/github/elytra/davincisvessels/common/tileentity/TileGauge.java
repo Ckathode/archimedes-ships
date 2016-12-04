@@ -65,9 +65,9 @@ public class TileGauge extends TileEntity implements IMovingTile {
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
-        if (tag.hasKey("vehicle") && worldObj != null) {
+        if (tag.hasKey("vehicle") && world != null) {
             int id = tag.getInteger("vehicle");
-            Entity entity = worldObj.getEntityByID(id);
+            Entity entity = world.getEntityByID(id);
             if (entity instanceof EntityMovingWorld) {
                 parentShip = (EntityMovingWorld) entity;
             }

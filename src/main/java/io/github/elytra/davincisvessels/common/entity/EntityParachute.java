@@ -2,6 +2,7 @@ package io.github.elytra.davincisvessels.common.entity;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.MoverType;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -57,7 +58,7 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
         prevPosY = posY;
         prevPosZ = posZ;
 
-        if (!worldObj.isRemote
+        if (!world.isRemote
                 &&
                 (getControllingPassenger() == null
                         || onGround
@@ -66,14 +67,14 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
             return;
         }
 
-        if (!worldObj.isRemote && getControllingPassenger() != null) {
+        if (!world.isRemote && getControllingPassenger() != null) {
             motionX += getControllingPassenger().motionX;
             motionZ += getControllingPassenger().motionZ;
         }
         if (motionY > -.5)
             motionY -= 0.025D;
 
-        moveEntity(motionX, motionY, motionZ);
+        move(MoverType.SELF, motionX, motionY, motionZ);
     }
 
     @Override
@@ -121,10 +122,10 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 
     @Override
     public void readSpawnData(ByteBuf additionalData) {
-        if (additionalData.readBoolean() && worldObj != null) {
+        if (additionalData.readBoolean() && world != null) {
             int entityID = additionalData.readInt();
-            if (worldObj.getEntityByID(entityID) != null) {
-                worldObj.getEntityByID(entityID).startRiding(this);
+            if (world.getEntityByID(entityID) != null) {
+                world.getEntityByID(entityID).startRiding(this);
             }
         }
     }

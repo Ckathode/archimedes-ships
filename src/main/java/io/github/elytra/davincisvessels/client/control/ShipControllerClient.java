@@ -11,7 +11,7 @@ public class ShipControllerClient extends ShipControllerCommon {
     public void updateControl(EntityShip ship, EntityPlayer player, int control) {
         super.updateControl(ship, player, control);
         DavincisVesselsNetworking.NETWORK.send().packet("ControlInputMessage")
-                .with("dimID", ship.worldObj.provider.getDimension())
+                .with("dimID", ship.world.provider.getDimension())
                 .with("entityID", ship.getEntityId())
                 .with("control", control).toServer();
     }

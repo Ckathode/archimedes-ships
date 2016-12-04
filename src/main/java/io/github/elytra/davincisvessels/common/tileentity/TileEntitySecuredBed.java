@@ -19,7 +19,7 @@ public class TileEntitySecuredBed extends TileEntity {
     }
 
     public void setPlayer(EntityPlayer player) {
-        if (!worldObj.isRemote) {
+        if (!world.isRemote) {
             if (player != null) {
                 this.playerID = player.getGameProfile().getId();
                 addToConnectionMap(playerID);
@@ -35,7 +35,7 @@ public class TileEntitySecuredBed extends TileEntity {
     }
 
     public void addToConnectionMap(UUID idForMap) {
-        if (!worldObj.isRemote && idForMap != null) {
+        if (!world.isRemote && idForMap != null) {
             if (ConnectionHandler.playerBedMap.containsKey(idForMap)) {
                 TileEntitySecuredBed prevBed = ConnectionHandler.playerBedMap.get(idForMap);
                 if (!prevBed.getPos().equals(getPos()) && !(prevBed.getWorld().provider.getDimension() == getWorld().provider.getDimension())) {
@@ -49,7 +49,7 @@ public class TileEntitySecuredBed extends TileEntity {
     }
 
     public void moveBed(BlockPos newPos) {
-        if (worldObj != null && worldObj.isRemote)
+        if (world != null && world.isRemote)
             return;
 
         if (playerID != null) {
@@ -58,10 +58,10 @@ public class TileEntitySecuredBed extends TileEntity {
             if (!doMove)
                 return;
 
-            EntityPlayer player = worldObj.getPlayerEntityByUUID(playerID);
+            EntityPlayer player = world.getPlayerEntityByUUID(playerID);
             if (player != null) {
                 player.bedLocation = pos;
-                player.setSpawnChunk(newPos, true, worldObj.provider.getDimension());
+                player.setSpawnChunk(newPos, true, world.provider.getDimension());
                 player.setSpawnPoint(newPos, true);
                 doMove = false;
             }

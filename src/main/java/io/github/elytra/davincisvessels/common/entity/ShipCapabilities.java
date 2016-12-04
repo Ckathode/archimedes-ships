@@ -95,8 +95,8 @@ public class ShipCapabilities extends MovingWorldCapabilities {
                 Iterator<Map.Entry<UUID, BlockLocation>> relationIterator = anchor.getRelatedAnchors().entrySet().iterator();
                 while (relationIterator.hasNext()) {
                     Map.Entry<UUID, BlockLocation> relation = relationIterator.next();
-                    if (relation.getValue().dimID == ship.worldObj.provider.getDimension()) {
-                        TileEntity relatedTile = ship.worldObj.getTileEntity(relation.getValue().pos);
+                    if (relation.getValue().dimID == ship.world.provider.getDimension()) {
+                        TileEntity relatedTile = ship.world.getTileEntity(relation.getValue().pos);
                         if (relatedTile != null && relatedTile instanceof TileAnchorPoint) {
                             TileAnchorPoint relatedAnchor = (TileAnchorPoint) relatedTile;
                             if (relatedAnchor.getInstance().getRelatedAnchors().containsKey(anchor.getIdentifier())
@@ -131,7 +131,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
                 ePower += te.getPowerIncrement(this);
             }
         }
-        if (!ship.worldObj.isRemote)
+        if (!ship.world.isRemote)
             ship.getDataManager().set(EntityShip.ENGINE_POWER, ePower);
     }
 
@@ -202,7 +202,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
             }
             return true;
         } else {
-            if (!ship.worldObj.isRemote) {
+            if (!ship.world.isRemote) {
                 player.startRiding(ship);
             }
             return true;
@@ -212,13 +212,13 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     private void tryMountSeat(EntityPlayer player) {
         EntitySeat seat = getAvailableSeat();
         if (seat != null) {
-            player.interact(seat, player.getActiveItemStack(), player.getActiveHand());
+            player.interactOn(seat, player.getActiveHand());
         }
     }
 
     public void spawnSeatEntities() {
         if (seats != null)
-            seats.forEach(seat -> ship.worldObj.spawnEntityInWorld(seat));
+            seats.forEach(seat -> ship.world.spawnEntity(seat));
     }
 
     @Override
@@ -285,7 +285,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
             }
 
             if (pos.getX() != x1 || pos.getY() != y1 || pos.getZ() != z1) {
-                EntitySeat seat = new EntitySeat(ship.worldObj);
+                EntitySeat seat = new EntitySeat(ship.world);
                 seat.setupShip(ship, pos);
                 addSeat(seat);
             }

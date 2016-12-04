@@ -97,7 +97,7 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
             if (tileEntity.parentShip == null) {
                 vertGaugeAng = 0F;
             } else {
-                vertGaugeAng = MathHelper.clamp_float(((float) tileEntity.parentShip.motionY * 3.6F * 20) / 40F * 360F, -90F, 90F);
+                vertGaugeAng = MathHelper.clamp(((float) tileEntity.parentShip.motionY * 3.6F * 20) / 40F * 360F, -90F, 90F);
                 height += (float) tileEntity.parentShip.posY;
             }
             float heightGaugeLongAng = -height / 10F * 360F;

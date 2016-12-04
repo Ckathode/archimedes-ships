@@ -40,7 +40,7 @@ public class ContainerEngine extends Container {
 
     @Override
     public boolean canInteractWith(EntityPlayer player) {
-        return tileEntity.isUseableByPlayer(player);
+        return tileEntity.isUsableByPlayer(player);
     }
 
     /**
@@ -64,7 +64,7 @@ public class ContainerEngine extends Container {
                 return null;
             }
 
-            if (stack.stackSize == 0) {
+            if (stack.getCount() == 0) {
                 slot.putStack(null);
             } else {
                 slot.onSlotChanged();

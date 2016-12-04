@@ -11,11 +11,11 @@ import net.minecraft.util.text.TextComponentString;
 import io.github.elytra.davincisvessels.common.entity.EntityShip;
 
 
-public class CommandASTP extends CommandBase {
+public class CommandDVTP extends CommandBase {
 
     @Override
-    public String getCommandName() {
-        return "astp";
+    public String getName() {
+        return "dvtp";
     }
 
     @Override
@@ -38,7 +38,7 @@ public class CommandASTP extends CommandBase {
             ship.alignToGrid(false);
             return;
         }
-        sender.addChatMessage(new TextComponentString("Not steering a ship"));
+        sender.sendMessage(new TextComponentString("Not steering a ship"));
     }
 
     @Override
@@ -51,7 +51,7 @@ public class CommandASTP extends CommandBase {
     }
 
     @Override
-    public String getCommandUsage(ICommandSender icommandsender) {
-        return "/".concat(getCommandName());
+    public String getUsage(ICommandSender icommandsender) {
+        return "/".concat(getName());
     }
 }

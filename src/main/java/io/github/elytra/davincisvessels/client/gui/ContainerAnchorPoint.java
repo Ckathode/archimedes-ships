@@ -26,7 +26,7 @@ public class ContainerAnchorPoint extends Container {
 
     @Override
     public boolean canInteractWith(EntityPlayer player) {
-        return tileEntity.isUseableByPlayer(player);
+        return tileEntity.isUsableByPlayer(player);
     }
 
     protected void bindPlayerInventory(InventoryPlayer inventoryPlayer) {
@@ -58,7 +58,7 @@ public class ContainerAnchorPoint extends Container {
                 return null;
             }
 
-            if (itemstack1.stackSize == 0) {
+            if (itemstack1.getCount() == 0) {
                 slot.putStack(null);
             } else {
                 slot.onSlotChanged();

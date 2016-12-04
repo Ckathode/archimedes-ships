@@ -18,8 +18,8 @@ import io.github.elytra.davincisvessels.common.entity.ShipCapabilities;
 public class CommandShipInfo extends CommandBase {
 
     @Override
-    public String getCommandName() {
-        return "asinfo";
+    public String getName() {
+        return "dvinfo";
     }
 
     @Override
@@ -34,18 +34,18 @@ public class CommandShipInfo extends CommandBase {
             }
         }
         if (ship != null) {
-            sender.addChatMessage(new TextComponentString(ChatFormatting.GREEN.toString() + ChatFormatting.BOLD.toString() + "Ship information"));
-            sender.addChatMessage(new TextComponentString(String.format(Locale.ENGLISH, "Airship: %b", ship.getCapabilities().canFly())));
-            sender.addChatMessage(new TextComponentString(String.format(Locale.ENGLISH, "Position: %.2f, %.2f, %.2f", ship.posX, ship.posY, ship.posZ)));
-            sender.addChatMessage(new TextComponentString(String.format(Locale.ENGLISH, "Speed: %.2f km/h", ship.getHorizontalVelocity() * 20 * 3.6F)));
+            sender.sendMessage(new TextComponentString(ChatFormatting.GREEN.toString() + ChatFormatting.BOLD.toString() + "Ship information"));
+            sender.sendMessage(new TextComponentString(String.format(Locale.ENGLISH, "Airship: %b", ship.getCapabilities().canFly())));
+            sender.sendMessage(new TextComponentString(String.format(Locale.ENGLISH, "Position: %.2f, %.2f, %.2f", ship.posX, ship.posY, ship.posZ)));
+            sender.sendMessage(new TextComponentString(String.format(Locale.ENGLISH, "Speed: %.2f km/h", ship.getHorizontalVelocity() * 20 * 3.6F)));
             float f = 100F * ((ShipCapabilities) ship.getCapabilities()).getBalloonCount() / ship.getCapabilities().getBlockCount();
-            sender.addChatMessage(new TextComponentString(String.format(Locale.ENGLISH, "Block count: %d", ship.getCapabilities().getBlockCount())));
-            sender.addChatMessage(new TextComponentString(String.format(Locale.ENGLISH, "Balloon count: %d", ((ShipCapabilities) ship.getCapabilities()).getBalloonCount())));
-            sender.addChatMessage(new TextComponentString(String.format(Locale.ENGLISH, "Balloon percentage: %.0f%%", f)));
-            sender.addChatMessage(new TextComponentString(""));
+            sender.sendMessage(new TextComponentString(String.format(Locale.ENGLISH, "Block count: %d", ship.getCapabilities().getBlockCount())));
+            sender.sendMessage(new TextComponentString(String.format(Locale.ENGLISH, "Balloon count: %d", ((ShipCapabilities) ship.getCapabilities()).getBalloonCount())));
+            sender.sendMessage(new TextComponentString(String.format(Locale.ENGLISH, "Balloon percentage: %.0f%%", f)));
+            sender.sendMessage(new TextComponentString(""));
             return;
         }
-        sender.addChatMessage(new TextComponentString("Not steering a ship"));
+        sender.sendMessage(new TextComponentString("Not steering a ship"));
     }
 
     @Override
@@ -58,7 +58,7 @@ public class CommandShipInfo extends CommandBase {
     }
 
     @Override
-    public String getCommandUsage(ICommandSender icommandsender) {
-        return "/".concat(getCommandName());
+    public String getUsage(ICommandSender icommandsender) {
+        return "/".concat(getName());
     }
 }

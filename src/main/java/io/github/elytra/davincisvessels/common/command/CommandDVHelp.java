@@ -12,12 +12,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CommandASHelp extends CommandBase {
+public class CommandDVHelp extends CommandBase {
     public static List<CommandBase> asCommands = new ArrayList<CommandBase>();
 
     @Override
-    public String getCommandName() {
-        return "ashelp";
+    public String getName() {
+        return "dvhelp";
     }
 
     @Override
@@ -31,20 +31,20 @@ public class CommandASHelp extends CommandBase {
     }
 
     @Override
-    public List<String> getCommandAliases() {
-        return Arrays.asList("as?");
+    public List<String> getAliases() {
+        return Arrays.asList("dv?");
     }
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        sender.addChatMessage(new TextComponentString(ChatFormatting.AQUA.toString() + "Archimedes' Ships mod commands:"));
+        sender.sendMessage(new TextComponentString(ChatFormatting.AQUA.toString() + "Archimedes' Ships mod commands:"));
         for (CommandBase cb : asCommands) {
-            sender.addChatMessage(new TextComponentString(cb.getCommandUsage(sender)));
+            sender.sendMessage(new TextComponentString(cb.getUsage(sender)));
         }
     }
 
     @Override
-    public String getCommandUsage(ICommandSender icommandsender) {
-        return "/ashelp OR /as?";
+    public String getUsage(ICommandSender icommandsender) {
+        return "/dvhelp OR /dv?";
     }
 }

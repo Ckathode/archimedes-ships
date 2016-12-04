@@ -26,12 +26,12 @@ public class ConnectionHandler {
     public void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
         if (event.isCanceled())
             return;
-        if (event.player != null && event.player.worldObj != null && !event.player.worldObj.isRemote) {
+        if (event.player != null && event.player.world != null && !event.player.world.isRemote) {
             handleParachuteLogout(event);
             handleConfigDesync(event);
 
             if (event.player.getRidingEntity() != null && event.player.getRidingEntity() instanceof EntityShip
-                    && !event.player.worldObj.getMinecraftServer().isSinglePlayer()) {
+                    && !event.player.world.getMinecraftServer().isSinglePlayer()) {
                 ((EntityShip) event.player.getRidingEntity()).disassemble(true);
             }
         }
@@ -41,7 +41,7 @@ public class ConnectionHandler {
     public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.isCanceled())
             return;
-        if (event.player != null && event.player.worldObj != null && !event.player.worldObj.isRemote) {
+        if (event.player != null && event.player.world != null && !event.player.world.isRemote) {
             handleParachuteLogin(event);
             handleBedLogin(event);
             handlerConfigSync(event);
@@ -74,7 +74,7 @@ public class ConnectionHandler {
 
     private void handleParachuteLogin(PlayerEvent.PlayerLoggedInEvent event) {
         EntityPlayer player = event.player;
-        World worldObj = player.worldObj;
+        World worldObj = player.world;
         if (player.getEntityData().getBoolean("reqParachute") == true) {
             NBTTagCompound nbt = player.getEntityData().getCompoundTag("parachuteInfo");
 
@@ -92,7 +92,7 @@ public class ConnectionHandler {
             Vec3dMod motionVec = new Vec3dMod(motionX, motionY, motionZ);
 
             EntityParachute parachute = new EntityParachute(worldObj, player, vec, shipVec, motionVec);
-            worldObj.spawnEntityInWorld(parachute);
+            worldObj.spawnEntity(parachute);
 
             player.getEntityData().removeTag("parachuteInfo");
             player.getEntityData().setBoolean("reqParachute", false);

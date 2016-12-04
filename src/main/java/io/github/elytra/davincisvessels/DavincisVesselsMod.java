@@ -7,6 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.command.CommandBase;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -31,8 +32,8 @@ import java.util.List;
 import io.github.elytra.davincisvessels.client.ClientProxy;
 import io.github.elytra.davincisvessels.common.CommonProxy;
 import io.github.elytra.davincisvessels.common.DavincisVesselsConfig;
-import io.github.elytra.davincisvessels.common.command.CommandASHelp;
-import io.github.elytra.davincisvessels.common.command.CommandASTP;
+import io.github.elytra.davincisvessels.common.command.CommandDVHelp;
+import io.github.elytra.davincisvessels.common.command.CommandDVTP;
 import io.github.elytra.davincisvessels.common.command.CommandDisassembleNear;
 import io.github.elytra.davincisvessels.common.command.CommandDisassembleShip;
 import io.github.elytra.davincisvessels.common.command.CommandShipInfo;
@@ -60,8 +61,8 @@ public class DavincisVesselsMod {
 
     public static CreativeTabs CREATIVE_TAB = new CreativeTabs("davincisTab") {
         @Override
-        public Item getTabIconItem() {
-            return Item.getItemFromBlock(DavincisVesselsObjects.blockMarkShip);
+        public ItemStack getTabIconItem() {
+            return new ItemStack(DavincisVesselsObjects.blockMarkShip);
         }
     };
 
@@ -102,9 +103,9 @@ public class DavincisVesselsMod {
         MinecraftForge.EVENT_BUS.register(new ConnectionHandler());
         MinecraftForge.EVENT_BUS.register(new ConnectionHandler());
 
-        EntityRegistry.registerModEntity(EntityShip.class, "shipmod", 1, this, 64, localConfig.getShared().shipEntitySyncRate, true);
-        EntityRegistry.registerModEntity(EntitySeat.class, "attachment.seat", 2, this, 64, 20, false);
-        EntityRegistry.registerModEntity(EntityParachute.class, "parachute", 3, this, 32, localConfig.getShared().shipEntitySyncRate, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(RESOURCE_DOMAIN, "ship"), EntityShip.class, "shipmod", 1, this, 64, localConfig.getShared().shipEntitySyncRate, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(RESOURCE_DOMAIN, "seat"), EntitySeat.class, "attachment.seat", 2, this, 64, 20, false);
+        EntityRegistry.registerModEntity(new ResourceLocation(RESOURCE_DOMAIN, "parachute"), EntityParachute.class, "parachute", 3, this, 32, localConfig.getShared().shipEntitySyncRate, true);
 
         PROXY.registerKeyHandlers(localConfig);
         PROXY.registerEventHandlers();
@@ -138,7 +139,7 @@ public class DavincisVesselsMod {
                             if (mapping.type == GameRegistry.Type.BLOCK) {
                                 mapping.remap(Block.REGISTRY.getObject(new ResourceLocation(DavincisVesselsMod.MOD_ID, name)));
                             } else {
-                                mapping.remap(Item.getItemFromBlock(GameRegistry.findBlock(DavincisVesselsMod.MOD_ID, name)));
+                                mapping.remap(Item.getItemFromBlock(Block.REGISTRY.getObject(new ResourceLocation(DavincisVesselsObjects.REGISTRY_PREFIX, name))));
                             }
 
                             log.debug("archimedesshipsplus:" + name + " ~~~> " + DavincisVesselsMod.MOD_ID + name);
@@ -153,17 +154,17 @@ public class DavincisVesselsMod {
 
     @Mod.EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
-        registerASCommand(event, new CommandASHelp());
+        registerASCommand(event, new CommandDVHelp());
         registerASCommand(event, new CommandDisassembleShip());
         registerASCommand(event, new CommandShipInfo());
         registerASCommand(event, new CommandDisassembleNear());
-        registerASCommand(event, new CommandASTP());
-        Collections.sort(CommandASHelp.asCommands);
+        registerASCommand(event, new CommandDVTP());
+        Collections.sort(CommandDVHelp.asCommands);
     }
 
     private void registerASCommand(FMLServerStartingEvent event, CommandBase commandbase) {
         event.registerServerCommand(commandbase);
-        CommandASHelp.asCommands.add(commandbase);
+        CommandDVHelp.asCommands.add(commandbase);
     }
 
 }

@@ -38,7 +38,7 @@ public class ItemSecuredBed extends Item {
                 pos = pos.up();
             }
 
-            int i = MathHelper.floor_double((double) (playerIn.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+            int i = MathHelper.floor((double) (playerIn.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
             EnumFacing enumfacing = EnumFacing.getHorizontal(i);
             BlockPos blockpos = pos.offset(enumfacing);
 
@@ -56,8 +56,8 @@ public class ItemSecuredBed extends Item {
                     }
 
                     SoundType soundtype = iblockstate1.getBlock().getSoundType();
-                    worldIn.playSound((EntityPlayer) null, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
-                    --stack.stackSize;
+                    worldIn.playSound(null, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
+                    stack.setCount(stack.getCount() - 1);
                     return EnumActionResult.SUCCESS;
                 } else {
                     return EnumActionResult.FAIL;

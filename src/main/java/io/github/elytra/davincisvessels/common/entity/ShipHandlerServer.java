@@ -28,7 +28,7 @@ public class ShipHandlerServer extends MovingWorldHandlerServer {
     }
 
     @Override
-    public boolean processInitialInteract(EntityPlayer player, ItemStack stack, EnumHand hand) {
+    public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
         return movingWorld.getCapabilities().mountEntity(player);
     }
 
