@@ -22,25 +22,25 @@
       "model": "davincisvessels:helm"
     },
     "facing=north,wheel=true": {
-      "model": "davincisvessels:helmWheel",
+      "model": "davincisvessels:helmwheel",
       "y": 90
     },
     "facing=south,wheel=true": {
-      "model": "davincisvessels:helmWheel",
+      "model": "davincisvessels:helmwheel",
       "y": 270
     },
     "facing=west,wheel=true": {
-      "model": "davincisvessels:helmWheel"
+      "model": "davincisvessels:helmwheel"
     },
     "facing=east,wheel=true": {
-      "model": "davincisvessels:helmWheel",
+      "model": "davincisvessels:helmwheel",
       "y": 180
     },
     "facing=up,wheel=true": {
-      "model": "davincisvessels:helmWheel"
+      "model": "davincisvessels:helmwheel"
     },
     "facing=down,wheel=true": {
-      "model": "davincisvessels:helmWheel"
+      "model": "davincisvessels:helmwheel"
     }
   }
 }

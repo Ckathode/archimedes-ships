@@ -2,8 +2,8 @@
   "parent": "block/block",
   "ambientocclusion": true,
   "textures": {
-    "anchorTexture": "davincisvessels:blocks/anchorPoint",
-    "particle": "davincisvessels:blocks/anchorPoint"
+    "anchorTexture": "davincisvessels:blocks/anchorpoint",
+    "particle": "davincisvessels:blocks/anchorpoint"
   },
   "elements": [
     {

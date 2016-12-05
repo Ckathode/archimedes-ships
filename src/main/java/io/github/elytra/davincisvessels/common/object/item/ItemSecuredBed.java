@@ -24,7 +24,8 @@ public class ItemSecuredBed extends Item {
         super();
     }
 
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    @Override
+    public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (worldIn.isRemote) {
             return EnumActionResult.SUCCESS;
         } else if (facing != EnumFacing.UP) {
@@ -41,6 +42,7 @@ public class ItemSecuredBed extends Item {
             int i = MathHelper.floor((double) (playerIn.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
             EnumFacing enumfacing = EnumFacing.getHorizontal(i);
             BlockPos blockpos = pos.offset(enumfacing);
+            ItemStack stack = playerIn.getHeldItem(hand);
 
             if (playerIn.canPlayerEdit(pos, facing, stack) && playerIn.canPlayerEdit(blockpos, facing, stack)) {
                 boolean flag1 = worldIn.getBlockState(blockpos).getBlock().isReplaceable(worldIn, blockpos);

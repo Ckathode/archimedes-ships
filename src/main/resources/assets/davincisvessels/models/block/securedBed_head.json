@@ -4,8 +4,8 @@
     "particle": "minecraft:blocks/bed_head_top",
     "top": "minecraft:blocks/bed_head_top",
     "bottom": "minecraft:blocks/planks_oak",
-    "end": "davincisvessels:blocks/securedBed_head_end",
-    "side": "davincisvessels:blocks/securedBed_head_side"
+    "end": "davincisvessels:blocks/securedbed_head_end",
+    "side": "davincisvessels:blocks/securedbed_head_side"
   },
   "elements": [
     {
