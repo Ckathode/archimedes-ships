@@ -49,7 +49,7 @@ public class ContainerEngine extends Container {
      */
     @Override
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int slotNum) {
-        ItemStack stackClone = null;
+        ItemStack stackClone = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(slotNum);
 
         if (slot != null && slot.getHasStack()) {
@@ -58,14 +58,14 @@ public class ContainerEngine extends Container {
 
             if (slotNum < this.tileEntity.getSizeInventory()) {
                 if (!this.mergeItemStack(stack, this.tileEntity.getSizeInventory(), this.inventorySlots.size(), true)) {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
             } else if (!this.mergeItemStack(stack, 0, this.tileEntity.getSizeInventory(), false)) {
-                return null;
+                return ItemStack.EMPTY;
             }
 
             if (stack.getCount() == 0) {
-                slot.putStack(null);
+                slot.putStack(ItemStack.EMPTY);
             } else {
                 slot.onSlotChanged();
             }

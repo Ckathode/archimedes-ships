@@ -14,7 +14,6 @@ public class ContainerAnchorPoint extends Container {
     public final TileAnchorPoint tileEntity;
     public final EntityPlayer player;
 
-
     public ContainerAnchorPoint(TileAnchorPoint te, EntityPlayer entityplayer) {
         super();
         tileEntity = te;
@@ -43,7 +42,7 @@ public class ContainerAnchorPoint extends Container {
 
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int slotNum) {
-        ItemStack itemstack = null;
+        ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(slotNum);
 
         if (slot != null && slot.getHasStack()) {
@@ -52,14 +51,14 @@ public class ContainerAnchorPoint extends Container {
 
             if (slotNum < 4) {
                 if (!this.mergeItemStack(itemstack1, 4, this.inventorySlots.size(), true)) {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
             } else if (!this.mergeItemStack(itemstack1, 0, 4, false)) {
-                return null;
+                return ItemStack.EMPTY;
             }
 
             if (itemstack1.getCount() == 0) {
-                slot.putStack(null);
+                slot.putStack(ItemStack.EMPTY);
             } else {
                 slot.onSlotChanged();
             }

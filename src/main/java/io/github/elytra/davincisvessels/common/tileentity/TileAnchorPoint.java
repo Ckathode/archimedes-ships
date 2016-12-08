@@ -40,11 +40,11 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
         super();
         activeShip = null;
         instance = new AnchorInstance();
-        content = null;
+        content = ItemStack.EMPTY;
     }
 
     public static boolean isItemAnchor(ItemStack itemstack) {
-        return itemstack != null && Objects.equals(itemstack.getItem(), Item.getItemFromBlock(DavincisVesselsObjects.blockAnchorPoint));
+        return itemstack != ItemStack.EMPTY && Objects.equals(itemstack.getItem(), Item.getItemFromBlock(DavincisVesselsObjects.blockAnchorPoint));
     }
 
     @Nullable
@@ -93,7 +93,7 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
         if (tag.hasKey("item")) {
             content = new ItemStack(tag.getCompoundTag("item"));
         } else {
-            content = null;
+            content = ItemStack.EMPTY;
         }
     }
 
@@ -109,7 +109,7 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
             tag.setTag("INSTANCE", instanceCompound);
         }
 
-        if (content == null) {
+        if (content == ItemStack.EMPTY) {
             tag.removeTag("item");
         } else {
             content.writeToNBT(tag.getCompoundTag("item"));
@@ -215,7 +215,7 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
             throw new IndexOutOfBoundsException();
 
         this.content = stack;
-        if (stack != null && stack.getCount() > this.getInventoryStackLimit()) {
+        if (stack != ItemStack.EMPTY && stack.getCount() > this.getInventoryStackLimit()) {
             stack.setCount(this.getInventoryStackLimit());
         }
     }
@@ -243,7 +243,7 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
         boolean accepted = index == 0 &&
-                (stack == null || Objects.equals(stack.getItem(), Item.getItemFromBlock(DavincisVesselsObjects.blockAnchorPoint)));
+                (stack == ItemStack.EMPTY || Objects.equals(stack.getItem(), Item.getItemFromBlock(DavincisVesselsObjects.blockAnchorPoint)));
         return accepted;
     }
 
@@ -263,7 +263,7 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
 
     @Override
     public void clear() {
-        content = null;
+        content = ItemStack.EMPTY;
     }
 
     @Override

@@ -75,7 +75,7 @@ public class TileEngine extends TileEntity implements IInventory, ITileEngineMod
         tag.setFloat("power", enginePower);
         NBTTagList list = new NBTTagList();
         for (int i = 0; i < getSizeInventory(); i++) {
-            if (itemStacks[i] != null) {
+            if (itemStacks[i] != ItemStack.EMPTY) {
                 NBTTagCompound comp = new NBTTagCompound();
                 comp.setByte("i", (byte) i);
                 itemStacks[i].writeToNBT(comp);
@@ -102,7 +102,7 @@ public class TileEngine extends TileEntity implements IInventory, ITileEngineMod
 
         for (int i = 0; i < getSizeInventory(); i++) {
             ItemStack is = decrStackSize(i, 1);
-            if (is != null && is.getCount() > 0) {
+            if (is != ItemStack.EMPTY && is.getCount() > 0) {
                 burnTime += TileEntityFurnace.getItemBurnTime(is);
                 return consumeFuel(f);
             }
@@ -128,36 +128,36 @@ public class TileEngine extends TileEntity implements IInventory, ITileEngineMod
 
     @Override
     public ItemStack getStackInSlot(int i) {
-        return i >= 0 && i < 4 ? itemStacks[i] : null;
+        return i >= 0 && i < 4 ? itemStacks[i] : ItemStack.EMPTY;
     }
 
     @Override
     public ItemStack decrStackSize(int i, int n) {
-        if (itemStacks[i] != null) {
+        if (itemStacks[i] != ItemStack.EMPTY) {
             ItemStack itemstack;
 
             if (itemStacks[i].getCount() <= n) {
                 itemstack = itemStacks[i];
-                itemStacks[i] = null;
+                itemStacks[i] = ItemStack.EMPTY;
                 markDirty();
                 return itemstack;
             }
 
             itemstack = itemStacks[i].splitStack(n);
             if (itemStacks[i].getCount() <= 0) {
-                itemStacks[i] = null;
+                itemStacks[i] = ItemStack.EMPTY;
             }
 
             markDirty();
             return itemstack;
         }
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override
     public ItemStack removeStackFromSlot(int i) {
         ItemStack content = itemStacks[i].copy();
-        itemStacks[i] = null;
+        itemStacks[i] = ItemStack.EMPTY;
         return content;
     }
 
