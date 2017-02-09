@@ -1,5 +1,6 @@
 package io.github.elytra.davincisvessels.common.handler;
 
+import io.github.elytra.davincisvessels.common.network.message.ConfigMessage;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -53,9 +54,7 @@ public class ConnectionHandler {
             NBTTagCompound tagCompound = DavincisVesselsMod.INSTANCE.getLocalConfig().getShared().serialize();
             tagCompound.setBoolean("restore", false);
 
-            DavincisVesselsNetworking.NETWORK.send().packet("ConfigMessage")
-                    .with("data", tagCompound)
-                    .to(event.player);
+            new ConfigMessage(tagCompound).sendTo(event.player);
         }
     }
 

@@ -28,10 +28,10 @@ public class GuiEngine extends GuiContainer {
         int row = 8;
         int col0 = 8;
 
-        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_ENGINE_TITLE), col0, row, color);
+        fontRenderer.drawString(I18n.format(LanguageEntries.GUI_ENGINE_TITLE), col0, row, color);
         row += 5;
 
-        fontRendererObj.drawString(I18n.format("container.inventory"), 8, ySize - 96 + 2, color);
+        fontRenderer.drawString(I18n.format("container.inventory"), 8, ySize - 96 + 2, color);
     }
 
     @Override

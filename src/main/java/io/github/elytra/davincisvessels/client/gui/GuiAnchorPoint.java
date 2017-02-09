@@ -1,5 +1,6 @@
 package io.github.elytra.davincisvessels.client.gui;
 
+import io.github.elytra.davincisvessels.common.network.message.AnchorPointMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -44,7 +45,7 @@ public class GuiAnchorPoint extends GuiContainer {
         super.initGui();
 
         buttonList.clear();
-        FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
+        FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
         int linkWidth = fontRenderer.getStringWidth(I18n.format(LanguageEntries.GUI_ANCHOR_LINK)) + 6;
         int switchWidth = fontRenderer.getStringWidth(I18n.format(LanguageEntries.GUI_ANCHOR_SWITCH)) + 6;
         int width = linkWidth > switchWidth ? linkWidth : switchWidth;
@@ -98,12 +99,12 @@ public class GuiAnchorPoint extends GuiContainer {
         GlStateManager.disableRescaleNormal();
         GlStateManager.popMatrix();
 
-        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_ANCHOR_POS, anchorPoint.getPos()
+        fontRenderer.drawString(I18n.format(LanguageEntries.GUI_ANCHOR_POS, anchorPoint.getPos()
                 .toString().substring(9).replace("}", "").replaceAll("=", ":")), 78, 30 - 10, 0);
-        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_ANCHOR_TYPE, anchorPoint.getInstance().getType()
+        fontRenderer.drawString(I18n.format(LanguageEntries.GUI_ANCHOR_TYPE, anchorPoint.getInstance().getType()
                 .toString()), 78, 45 - 10, 0);
-        fontRendererObj.drawString(relations[selectedRelation],
-                156 - (fontRendererObj.getStringWidth(relations[selectedRelation]) / 2), 64, 0);
+        fontRenderer.drawString(relations[selectedRelation],
+                156 - (fontRenderer.getStringWidth(relations[selectedRelation]) / 2), 64, 0);
     }
 
     @Override
@@ -118,18 +119,9 @@ public class GuiAnchorPoint extends GuiContainer {
     @Override
     protected void actionPerformed(GuiButton button) {
         if (button == btnLink) {
-            DavincisVesselsNetworking.NETWORK.send().packet("ClientAnchorPointActionMessage")
-                    .with("actionID", 1)
-                    .with("tileX", anchorPoint.getPos().getX())
-                    .with("tileY", anchorPoint.getPos().getY())
-                    .with("tileZ", anchorPoint.getPos().getZ())
-                    .toServer();
+            new AnchorPointMessage(anchorPoint, TileAnchorPoint.AnchorPointAction.LINK).sendToServer();
         } else if (button == btnSwitch) {
-            DavincisVesselsNetworking.NETWORK.send().packet("ClientAnchorPointActionMessage")
-                    .with("actionID", 0)
-                    .with("tileX", anchorPoint.getPos().getX())
-                    .with("tileY", anchorPoint.getPos().getY())
-                    .with("tileZ", anchorPoint.getPos().getZ()).toServer();
+            new AnchorPointMessage(anchorPoint, TileAnchorPoint.AnchorPointAction.SWITCH).sendToServer();
         } else if (button == btnNextRelation) {
             if (selectedRelation < relations.length - 1) {
                 selectedRelation++;

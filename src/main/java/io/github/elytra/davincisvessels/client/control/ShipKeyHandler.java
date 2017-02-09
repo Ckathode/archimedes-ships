@@ -1,5 +1,8 @@
 package io.github.elytra.davincisvessels.client.control;
 
+import io.github.elytra.davincisvessels.common.network.message.OpenGuiMessage;
+import io.github.elytra.movingworld.common.entity.EntityMovingWorld;
+import io.github.elytra.movingworld.common.network.message.MovingWorldClientActionMessage;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
@@ -32,26 +35,19 @@ public class ShipKeyHandler {
     public void updateControl(TickEvent.PlayerTickEvent e) {
         if (e.phase == TickEvent.Phase.START && e.side == Side.CLIENT && e.player == FMLClientHandler.instance().getClientPlayerEntity() && e.player.getRidingEntity() != null && e.player.getRidingEntity() instanceof EntityShip) {
             if (config.kbShipInv.isKeyDown() && !kbShipGuiPrevState) {
-                DavincisVesselsNetworking.NETWORK.send().packet("ClientOpenGUIMessage")
-                        .with("guiID", 2).toServer();
+                new OpenGuiMessage(2).sendToServer();
             }
             kbShipGuiPrevState = config.kbShipInv.isKeyDown();
 
             if (config.kbDisassemble.isKeyDown() && !kbDisassemblePrevState) {
-                MovingWorldNetworking.NETWORK.send().packet("MovingWorldClientActionMessage")
-                        .with("dimID", e.player.world.provider.getDimension())
-                        .with("entityID", e.player.getRidingEntity().getEntityId())
-                        .with("action", MovingWorldClientAction.DISASSEMBLE.toByte())
-                        .toServer();
+                new MovingWorldClientActionMessage((EntityMovingWorld) e.player.getRidingEntity(),
+                        MovingWorldClientAction.DISASSEMBLE).sendToServer();
             }
             kbDisassemblePrevState = config.kbDisassemble.isKeyDown();
 
             if (config.kbAlign.isKeyDown() && !kbAlignPrevState) {
-                MovingWorldNetworking.NETWORK.send().packet("MovingWorldClientActionMessage")
-                        .with("dimID", e.player.world.provider.getDimension())
-                        .with("entityID", e.player.getRidingEntity().getEntityId())
-                        .with("action", MovingWorldClientAction.ALIGN.toByte())
-                        .toServer();
+                new MovingWorldClientActionMessage((EntityMovingWorld) e.player.getRidingEntity(),
+                        MovingWorldClientAction.ALIGN).sendToServer();
             }
             kbAlignPrevState = config.kbAlign.isKeyDown();
 

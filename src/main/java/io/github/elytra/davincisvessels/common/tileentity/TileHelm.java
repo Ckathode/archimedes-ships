@@ -1,14 +1,9 @@
 package io.github.elytra.davincisvessels.common.tileentity;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
 import io.github.elytra.davincisvessels.DavincisVesselsMod;
 import io.github.elytra.davincisvessels.common.entity.EntityShip;
 import io.github.elytra.davincisvessels.common.entity.ShipAssemblyInteractor;
-import io.github.elytra.davincisvessels.common.network.DavincisVesselsNetworking;
+import io.github.elytra.davincisvessels.common.network.message.AssembleResultMessage;
 import io.github.elytra.davincisvessels.common.object.DavincisVesselsObjects;
 import io.github.elytra.movingworld.common.chunk.MovingWorldAssemblyInteractor;
 import io.github.elytra.movingworld.common.chunk.assembly.AssembleResult;
@@ -16,8 +11,10 @@ import io.github.elytra.movingworld.common.chunk.mobilechunk.MobileChunk;
 import io.github.elytra.movingworld.common.entity.EntityMovingWorld;
 import io.github.elytra.movingworld.common.entity.MovingWorldInfo;
 import io.github.elytra.movingworld.common.tile.TileMovingMarkingBlock;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class TileHelm extends TileMovingMarkingBlock {
 
@@ -136,28 +133,20 @@ public class TileHelm extends TileMovingMarkingBlock {
         return new ShipAssemblyInteractor();
     }
 
-    public void sendAssembleResult(EntityPlayer player, boolean prev) {
+    public void sendAssembleResult(EntityPlayer player, boolean sendPrev) {
         if (!world.isRemote) {
             AssembleResult res;
-            if (prev) {
+            if (sendPrev) {
                 res = getPrevAssembleResult();
             } else {
                 res = getAssembleResult();
             }
 
-            ByteBuf buf = Unpooled.buffer(1, 32);
-
-            buf.writeBoolean(prev);
             if (res == null) {
-                buf.writeByte(AssembleResult.ResultType.RESULT_NONE.toByte());
-            } else {
-                buf = res.toByteBuf(buf);
+                res = new AssembleResult(AssembleResult.ResultType.RESULT_NONE, null);
             }
 
-            byte[] bufArray = new byte[buf.readableBytes()];
-            buf.readBytes(bufArray);
-            DavincisVesselsNetworking.NETWORK.send().packet("AssembleResultMessage")
-                    .with("result", bufArray).toAllAround(player.world, player, 64);
+            new AssembleResultMessage(res, sendPrev).sendToAllWatching(this);
         }
     }
 

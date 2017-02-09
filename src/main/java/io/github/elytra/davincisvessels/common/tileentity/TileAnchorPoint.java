@@ -277,4 +277,8 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
             }
         }
     }
+
+    public enum AnchorPointAction{
+        LINK, SWITCH
+    }
 }

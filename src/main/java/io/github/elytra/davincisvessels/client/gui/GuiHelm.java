@@ -1,5 +1,7 @@
 package io.github.elytra.davincisvessels.client.gui;
 
+import io.github.elytra.davincisvessels.common.network.message.HelmActionMessage;
+import io.github.elytra.davincisvessels.common.network.message.RenameShipMessage;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -70,7 +72,7 @@ public class GuiHelm extends GuiContainer {
         btnMount.enabled = tileEntity.getAssembleResult() != null && tileEntity.getAssembleResult().getType() == RESULT_OK;
         buttonList.add(btnMount);
 
-        txtShipName = new GuiTextField(0, fontRendererObj, guiLeft + 8 + xSize / 2, guiTop + 21, 120, 10); // TODO: Might be incorrect not sure about 0 in GuiTextField()
+        txtShipName = new GuiTextField(0, fontRenderer, guiLeft + 8 + xSize / 2, guiTop + 21, 120, 10); // TODO: Might be incorrect not sure about 0 in GuiTextField()
         txtShipName.setMaxStringLength(127);
         txtShipName.setEnableBackgroundDrawing(false);
         txtShipName.setVisible(true);
@@ -109,9 +111,9 @@ public class GuiHelm extends GuiContainer {
         int col0 = 8;
         int col1 = col0 + xSize / 2;
 
-        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_TITLE), col0, row, colorTitle);
+        fontRenderer.drawString(I18n.format(LanguageEntries.GUI_STATUS_TITLE), col0, row, colorTitle);
         row += 5;
-        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_NAME), col0, row += 10, colorTitle);
+        fontRenderer.drawString(I18n.format(LanguageEntries.GUI_STATUS_NAME), col0, row += 10, colorTitle);
 
         ResultType rType;
         int rblocks;
@@ -175,28 +177,28 @@ public class GuiHelm extends GuiContainer {
                 break;
         }
 
-        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_COMPILERESULT), col0, row += 10, colorTitle);
-        fontRendererObj.drawString(I18n.format(rcodename), col1, row, valueColor);
+        fontRenderer.drawString(I18n.format(LanguageEntries.GUI_STATUS_COMPILERESULT), col0, row += 10, colorTitle);
+        fontRenderer.drawString(I18n.format(rcodename), col1, row, valueColor);
 
         float balloonratio = (float) rballoons / rblocks;
-        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_SHIPTYPE), col0, row += 10, colorTitle);
+        fontRenderer.drawString(I18n.format(LanguageEntries.GUI_STATUS_SHIPTYPE), col0, row += 10, colorTitle);
         if (rblocks == 0) {
-            fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_TYPEUNKNOWN), col1, row, colorTitle);
+            fontRenderer.drawString(I18n.format(LanguageEntries.GUI_STATUS_TYPEUNKNOWN), col1, row, colorTitle);
         } else {
-            fontRendererObj.drawString(I18n.format(balloonratio > DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().flyBalloonRatio ? LanguageEntries.GUI_STATUS_TYPEAIRSHIP : LanguageEntries.GUI_STATUS_TYPEBOAT), col1, row, colorTitle);
+            fontRenderer.drawString(I18n.format(balloonratio > DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().flyBalloonRatio ? LanguageEntries.GUI_STATUS_TYPEAIRSHIP : LanguageEntries.GUI_STATUS_TYPEBOAT), col1, row, colorTitle);
         }
 
-        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_COUNTBLOCK), col0, row += 10, colorTitle);
-        fontRendererObj.drawString(String.valueOf(rblocks), col1, row, colorTitle);
+        fontRenderer.drawString(I18n.format(LanguageEntries.GUI_STATUS_COUNTBLOCK), col0, row += 10, colorTitle);
+        fontRenderer.drawString(String.valueOf(rblocks), col1, row, colorTitle);
 
-        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_COUNTBALLOON), col0, row += 10, colorTitle);
-        fontRendererObj.drawString(String.valueOf(rballoons) + " (" + (int) (balloonratio * 100f) + "%)", col1, row, colorTitle);
+        fontRenderer.drawString(I18n.format(LanguageEntries.GUI_STATUS_COUNTBALLOON), col0, row += 10, colorTitle);
+        fontRenderer.drawString(String.valueOf(rballoons) + " (" + (int) (balloonratio * 100f) + "%)", col1, row, colorTitle);
 
-        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_COUNTTILE), col0, row += 10, colorTitle);
-        fontRendererObj.drawString(String.valueOf(rtes), col1, row, colorTitle);
+        fontRenderer.drawString(I18n.format(LanguageEntries.GUI_STATUS_COUNTTILE), col0, row += 10, colorTitle);
+        fontRenderer.drawString(String.valueOf(rtes), col1, row, colorTitle);
 
-        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_STATUS_MASS), col0, row += 10, colorTitle);
-        fontRendererObj.drawString(String.format(Locale.ROOT, "%.1f %s", rmass, I18n.format(LanguageEntries.GUI_STATUS_MASSUNIT)), col1, row, colorTitle);
+        fontRenderer.drawString(I18n.format(LanguageEntries.GUI_STATUS_MASS), col0, row += 10, colorTitle);
+        fontRenderer.drawString(String.format(Locale.ROOT, "%.1f %s", rmass, I18n.format(LanguageEntries.GUI_STATUS_MASSUNIT)), col1, row, colorTitle);
     }
 
     @Override
@@ -217,38 +219,19 @@ public class GuiHelm extends GuiContainer {
                 btnRename.displayString = I18n.format(LanguageEntries.GUI_STATUS_RENAME);
                 tileEntity.getInfo().setName(txtShipName.getText());
                 txtShipName.setFocused(false);
-                //txtShipName.setEnableBackgroundDrawing(false);
-
-                DavincisVesselsNetworking.NETWORK.send().packet("ClientRenameShipMessage")
-                        .with("tileX", tileEntity.getPos().getX())
-                        .with("tileY", tileEntity.getPos().getY())
-                        .with("tileZ", tileEntity.getPos().getZ())
-                        .with("newName", tileEntity.getInfo().getName()).toServer();
+                new RenameShipMessage(tileEntity, tileEntity.getInfo().getName()).sendToServer();
             } else {
                 btnRename.displayString = I18n.format(LanguageEntries.GUI_STATUS_DONE);
                 txtShipName.setFocused(true);
-                //txtShipName.setEnableBackgroundDrawing(true);
             }
         } else if (button == btnAssemble) {
-            DavincisVesselsNetworking.NETWORK.send().packet("ClientHelmActionMessage")
-                    .with("tileX", tileEntity.getPos().getX())
-                    .with("tileY", tileEntity.getPos().getY())
-                    .with("tileZ", tileEntity.getPos().getZ())
-                    .with("action", HelmClientAction.ASSEMBLE.toInt()).toServer();
+            new HelmActionMessage(tileEntity, HelmClientAction.ASSEMBLE).sendToServer();
             tileEntity.setAssembleResult(null);
             busyCompiling = true;
         } else if (button == btnMount) {
-            DavincisVesselsNetworking.NETWORK.send().packet("ClientHelmActionMessage")
-                    .with("tileX", tileEntity.getPos().getX())
-                    .with("tileY", tileEntity.getPos().getY())
-                    .with("tileZ", tileEntity.getPos().getZ())
-                    .with("action", HelmClientAction.MOUNT.toInt()).toServer();
+            new HelmActionMessage(tileEntity, HelmClientAction.MOUNT).sendToServer();
         } else if (button == btnUndo) {
-            DavincisVesselsNetworking.NETWORK.send().packet("ClientHelmActionMessage")
-                    .with("tileX", tileEntity.getPos().getX())
-                    .with("tileY", tileEntity.getPos().getY())
-                    .with("tileZ", tileEntity.getPos().getZ())
-                    .with("action", HelmClientAction.UNDOCOMPILE.toInt()).toServer();
+            new HelmActionMessage(tileEntity, HelmClientAction.UNDOCOMPILE).sendToServer();
         }
     }
 

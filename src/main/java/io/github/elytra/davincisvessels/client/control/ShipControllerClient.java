@@ -1,5 +1,6 @@
 package io.github.elytra.davincisvessels.client.control;
 
+import io.github.elytra.davincisvessels.common.network.message.ControlInputMessage;
 import net.minecraft.entity.player.EntityPlayer;
 
 import io.github.elytra.davincisvessels.common.control.ShipControllerCommon;
@@ -10,9 +11,6 @@ public class ShipControllerClient extends ShipControllerCommon {
     @Override
     public void updateControl(EntityShip ship, EntityPlayer player, int control) {
         super.updateControl(ship, player, control);
-        DavincisVesselsNetworking.NETWORK.send().packet("ControlInputMessage")
-                .with("dimID", ship.world.provider.getDimension())
-                .with("entityID", ship.getEntityId())
-                .with("control", control).toServer();
+        new ControlInputMessage(ship, (byte) control).sendToServer();
     }
 }

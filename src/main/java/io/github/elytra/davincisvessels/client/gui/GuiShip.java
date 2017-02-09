@@ -2,6 +2,8 @@ package io.github.elytra.davincisvessels.client.gui;
 
 import com.google.common.collect.Lists;
 
+import io.github.elytra.davincisvessels.common.network.message.RequestSubmerseMessage;
+import io.github.elytra.movingworld.common.network.message.MovingWorldClientActionMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -80,10 +82,10 @@ public class GuiShip extends GuiContainer {
         int row = 8;
         int col0 = 8;
 
-        fontRendererObj.drawString(I18n.format(LanguageEntries.GUI_SHIPINV_TITLE) + " - " + ship.getInfo().getName(), col0, row, color);
+        fontRenderer.drawString(I18n.format(LanguageEntries.GUI_SHIPINV_TITLE) + " - " + ship.getInfo().getName(), col0, row, color);
         row += 5;
 
-        fontRendererObj.drawString(I18n.format("container.inventory"), 8, ySize - 96 + 2, color);
+        fontRenderer.drawString(I18n.format("container.inventory"), 8, ySize - 96 + 2, color);
     }
 
     @Override
@@ -98,28 +100,14 @@ public class GuiShip extends GuiContainer {
     @Override
     protected void actionPerformed(GuiButton button) {
         if (button == btnDisassemble) {
-            MovingWorldNetworking.NETWORK.send().packet("MovingWorldClientActionMessage")
-                    .with("dimID", ship.world.provider.getDimension())
-                    .with("entityID", ship.getEntityId())
-                    .with("action", MovingWorldClientAction.DISASSEMBLE.toByte())
-                    .toServer();
+            new MovingWorldClientActionMessage(ship, MovingWorldClientAction.DISASSEMBLE).sendToServer();
             mc.displayGuiScreen(null);
         } else if (button == btnAlign) {
-            MovingWorldNetworking.NETWORK.send().packet("MovingWorldClientActionMessage")
-                    .with("dimID", ship.world.provider.getDimension())
-                    .with("entityID", ship.getEntityId())
-                    .with("action", MovingWorldClientAction.ALIGN.toByte())
-                    .toServer();
-
+            new MovingWorldClientActionMessage(ship, MovingWorldClientAction.ALIGN).sendToServer();
             ship.alignToGrid(true);
         } else if (button == btnSubmersible && ((GuiButtonSubmersible) btnSubmersible).canDo) {
             GuiButtonSubmersible subButton = (GuiButtonSubmersible) button;
-
-            DavincisVesselsNetworking.NETWORK.send().packet("ClientRequestSubmerseMessage")
-                    .with("dimID", ship.world.provider.getDimension())
-                    .with("entityID", ship.getEntityId())
-                    .with("submerse", !subButton.submerse).toServer();
-
+            new RequestSubmerseMessage(ship,!subButton.submerse).sendToServer();
             subButton.submerse = !subButton.submerse;
         }
     }
@@ -159,9 +147,9 @@ public class GuiShip extends GuiContainer {
 
                 if (mouseOver) {
                     String message = !canDo ? "Can't Submerse" : (submerse ? "Submerse Ship" : "Don't Submerse Ship");
-                    int stringWidth = Minecraft.getMinecraft().fontRendererObj.getStringWidth(message);
+                    int stringWidth = Minecraft.getMinecraft().fontRenderer.getStringWidth(message);
                     drawHoveringText(Lists.newArrayList(message),
-                            mouseX + (stringWidth / 2) + 32, mouseY - 12, Minecraft.getMinecraft().fontRendererObj);
+                            mouseX + (stringWidth / 2) + 32, mouseY - 12, Minecraft.getMinecraft().fontRenderer);
                 }
             }
         }
