@@ -7,7 +7,7 @@ import io.netty.buffer.ByteBuf;
 
 public class AssembleResultMarshaller implements Marshaller<AssembleResult> {
 
-    public static final String MARSHALLER_NAME = "io.github.elytra.davincisvessels.common.network.marshallers.AssembleResultMarshaller";
+    public static final String MARSHALLER_NAME = "com.elytradev.davincisvessels.common.network.marshallers.AssembleResultMarshaller";
     public static final AssembleResultMarshaller INSTANCE = new AssembleResultMarshaller();
 
     @Override

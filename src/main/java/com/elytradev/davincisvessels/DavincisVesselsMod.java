@@ -51,11 +51,11 @@ public class DavincisVesselsMod {
     public static final String MOD_VERSION = "@DVESSELSVER@";
     public static final String MOD_NAME = "Davinci's Vessels";
     public static final String RESOURCE_DOMAIN = "davincisvessels:";
-    public static final String MOD_GUIFACTORY = "io.github.elytra.davincisvessels.client.gui.DavincisVesselsGUIFactory";
+    public static final String MOD_GUIFACTORY = "com.elytradev.davincisvessels.client.gui.DavincisVesselsGUIFactory";
     public static final DavincisVesselsObjects OBJECTS = new DavincisVesselsObjects();
     @Mod.Instance(MOD_ID)
     public static DavincisVesselsMod INSTANCE;
-    @SidedProxy(clientSide = "io.github.elytra.davincisvessels.client.ClientProxy", serverSide = "io.github.elytra.davincisvessels.common.CommonProxy")
+    @SidedProxy(clientSide = "com.elytradev.davincisvessels.client.ClientProxy", serverSide = "com.elytradev.davincisvessels.common.CommonProxy")
     public static CommonProxy PROXY;
     public static Logger LOG;
 

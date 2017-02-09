@@ -11,7 +11,7 @@ import net.minecraftforge.common.DimensionManager;
  */
 public class TileEntityMarshaller implements Marshaller<TileEntity> {
 
-    public static final String MARSHALLER_NAME = "io.github.elytra.davincisvessels.common.network.marshallers.TileEntityMarshaller";
+    public static final String MARSHALLER_NAME = "com.elytradev.davincisvessels.common.network.marshallers.TileEntityMarshaller";
     public static final TileEntityMarshaller INSTANCE = new TileEntityMarshaller();
 
     @Override
