@@ -29,7 +29,7 @@ repositories {
 apply plugin: 'net.minecraftforge.gradle.forge'
 
 version = '1.11-0000'
-group = 'io.github.elytra.davincisvessels'
+group = 'com.elytradev.movingworld'
 archivesBaseName = 'davincisvessels'
 
 sourceCompatibility = 1.8
@@ -56,7 +56,7 @@ shadowJar {
     classifier = 'full'
 
     // Shaded under movingworld because of some references to MovingWorld networking.
-	relocate 'io.github.elytraconcrete', "io.github.elytra.movingworld.repackage.io.github.elytra.concrete"
+	relocate 'io.github.elytra.concrete', "io.github.elytra.movingworld.repackage.io.github.elytra.concrete"
 }
 
 reobf {
@@ -115,12 +115,12 @@ idea {
                 it.@name == 'Minecraft Server' && it.@type == 'Application'
             }
 
-            def minecraftClientVMArgs = '-Xincgc -Xmx1024M -Xms1024M -Dfml.coreMods.load=io.github.elytra.movingworld.common.asm.coremod.MovingWorldCoreMod -Dmixin.debug=true'
+            def minecraftClientVMArgs = '-Xincgc -Xmx1024M -Xms1024M -Dfml.coreMods.load=com.elytradev.movingworld.common.asm.coremod.MovingWorldCoreMod -Dmixin.debug=true'
             minecraftClientDefaults.option.find { it.@name == 'VM_PARAMETERS' }.replaceNode {
                 option(name: 'VM_PARAMETERS', value: minecraftClientVMArgs)
             }
 
-            def minecraftServerVMArgs = '-Xincgc -Dfml.ignoreInvalidMinecraftCertificates=true -Dfml.coreMods.load=io.github.elytra.movingworld.common.asm.coremod.MovingWorldCoreMod -Dmixin.debug=true'
+            def minecraftServerVMArgs = '-Xincgc -Dfml.ignoreInvalidMinecraftCertificates=true -Dfml.coreMods.load=com.elytradev.movingworld.common.asm.coremod.MovingWorldCoreMod -Dmixin.debug=true'
             minecraftServerDefaults.option.find { it.@name == 'VM_PARAMETERS' }.replaceNode {
                 option(name: 'VM_PARAMETERS', value: minecraftServerVMArgs)
             }
