@@ -12,4 +12,4 @@ Want to help make this mod even better, and make sure that it stays updated for 
 
 ####<p style='text-align: center;'>Contact</p>
 
-The best way to get in contact with me is to go on #DavincisVessels on irc.esper.net
+The best way to get in contact with me is to go on #unascribed on irc.esper.net
