@@ -18,15 +18,14 @@ public class ControlInputMessage extends Message {
 
     @MarshalledAs(EntityMarshaller.MARSHALLER_NAME)
     public EntityShip ship;
+    @MarshalledAs("i8")
+    public int control;
 
-    public ControlInputMessage(EntityShip ship, byte control) {
+    public ControlInputMessage(EntityShip ship, int control) {
         super(DavincisVesselsNetworking.NETWORK);
         this.ship = ship;
         this.control = control;
     }
-
-    @MarshalledAs("byte")
-    public byte control;
 
     public ControlInputMessage(NetworkContext ctx) {
         super(ctx);

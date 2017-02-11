@@ -12,7 +12,7 @@ import net.minecraftforge.fml.relauncher.Side;
 /**
  * Created by darkevilmac on 2/2/2017.
  */
-@ReceivedOn(Side.CLIENT)
+@ReceivedOn(Side.SERVER)
 public class OpenGuiMessage extends Message {
 
     @MarshalledAs("i8")
