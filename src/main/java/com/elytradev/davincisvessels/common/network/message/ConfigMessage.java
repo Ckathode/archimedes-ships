@@ -1,8 +1,8 @@
 package com.elytradev.davincisvessels.common.network.message;
 
-import io.github.elytra.concrete.Message;
-import io.github.elytra.concrete.NetworkContext;
-import io.github.elytra.concrete.annotation.type.ReceivedOn;
+import com.elytradev.concrete.Message;
+import com.elytradev.concrete.NetworkContext;
+import com.elytradev.concrete.annotation.type.ReceivedOn;
 import com.elytradev.davincisvessels.DavincisVesselsMod;
 import com.elytradev.davincisvessels.client.ClientProxy;
 import com.elytradev.davincisvessels.common.DavincisVesselsConfig;

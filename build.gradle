@@ -22,7 +22,7 @@ plugins {
 
 repositories {
     maven {
-        url = 'http://unascribed.com/maven/releases'
+        url = 'http://repo.elytradev.com/'
     }
 }
 
@@ -56,7 +56,7 @@ shadowJar {
     classifier = 'full'
 
     // Shaded under movingworld because of some references to MovingWorld networking.
-	relocate 'io.github.elytra.concrete', "io.github.elytra.movingworld.repackage.io.github.elytra.concrete"
+	relocate 'com.elytradev.concrete', "com.elytradev.movingworld.repackage.com.elytradev.concrete"
 }
 
 reobf {
@@ -68,11 +68,11 @@ artifacts {
 }
 
 dependencies {
-    compile 'io.github.elytra:concrete:0.0.6'
+    compile 'com.elytradev:concrete:0.1.0'
 }
 
 configurations {
-    runtime.exclude group: 'io.github.elytra.movingworld'
+    runtime.exclude group: 'com.elytradev.movingworld'
 }
 
 processResources

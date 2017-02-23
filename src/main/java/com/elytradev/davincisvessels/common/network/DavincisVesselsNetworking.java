@@ -2,7 +2,7 @@ package com.elytradev.davincisvessels.common.network;
 
 import com.elytradev.davincisvessels.DavincisVesselsMod;
 import com.elytradev.davincisvessels.common.network.message.*;
-import io.github.elytra.concrete.NetworkContext;
+import com.elytradev.concrete.NetworkContext;
 
 
 public class DavincisVesselsNetworking {

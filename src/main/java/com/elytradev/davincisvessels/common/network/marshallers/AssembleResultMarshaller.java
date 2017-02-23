@@ -1,6 +1,6 @@
 package com.elytradev.davincisvessels.common.network.marshallers;
 
-import io.github.elytra.concrete.Marshaller;
+import com.elytradev.concrete.Marshaller;
 import com.elytradev.davincisvessels.common.entity.ShipAssemblyInteractor;
 import com.elytradev.movingworld.common.chunk.assembly.AssembleResult;
 import io.netty.buffer.ByteBuf;

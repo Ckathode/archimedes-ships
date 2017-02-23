@@ -2,10 +2,10 @@ package com.elytradev.davincisvessels.common.network.message;
 
 import com.elytradev.davincisvessels.DavincisVesselsMod;
 import com.elytradev.davincisvessels.common.network.DavincisVesselsNetworking;
-import io.github.elytra.concrete.Message;
-import io.github.elytra.concrete.NetworkContext;
-import io.github.elytra.concrete.annotation.field.MarshalledAs;
-import io.github.elytra.concrete.annotation.type.ReceivedOn;
+import com.elytradev.concrete.Message;
+import com.elytradev.concrete.NetworkContext;
+import com.elytradev.concrete.annotation.field.MarshalledAs;
+import com.elytradev.concrete.annotation.type.ReceivedOn;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 
