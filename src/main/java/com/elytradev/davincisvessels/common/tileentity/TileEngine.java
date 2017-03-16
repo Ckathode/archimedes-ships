@@ -3,6 +3,8 @@ package com.elytradev.davincisvessels.common.tileentity;
 import com.elytradev.davincisvessels.common.LanguageEntries;
 import com.elytradev.davincisvessels.common.api.tileentity.ITileEngineModifier;
 import com.elytradev.davincisvessels.common.entity.ShipCapabilities;
+import com.elytradev.movingworld.common.chunk.mobilechunk.MobileChunk;
+import com.elytradev.movingworld.common.entity.EntityMovingWorld;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -16,9 +18,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 
-import com.elytradev.movingworld.common.chunk.mobilechunk.MobileChunk;
-import com.elytradev.movingworld.common.entity.EntityMovingWorld;
-
 
 public class TileEngine extends TileEntity implements IInventory, ITileEngineModifier {
     public float enginePower;
@@ -30,6 +29,9 @@ public class TileEngine extends TileEntity implements IInventory, ITileEngineMod
 
     public TileEngine() {
         itemStacks = new ItemStack[getSizeInventory()];
+        for (int i = 0; i < itemStacks.length; i++) {
+            itemStacks[i] = ItemStack.EMPTY;
+        }
         burnTime = 0;
         running = false;
     }
@@ -39,18 +41,6 @@ public class TileEngine extends TileEntity implements IInventory, ITileEngineMod
 
         enginePower = power;
         engineFuelConsumption = fuelconsumption;
-    }
-
-    @Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        NBTTagCompound compound = new NBTTagCompound();
-        writeToNBT(compound);
-        return new SPacketUpdateTileEntity(pos, 1, compound);
-    }
-
-    @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
-        readFromNBT(packet.getNbtCompound());
     }
 
     @Override
@@ -84,6 +74,27 @@ public class TileEngine extends TileEntity implements IInventory, ITileEngineMod
         }
         tag.setTag("inv", list);
         return tag;
+    }
+
+    @Override
+    public void markDirty() {
+    }
+
+    @Override
+    public SPacketUpdateTileEntity getUpdatePacket() {
+        NBTTagCompound compound = new NBTTagCompound();
+        writeToNBT(compound);
+        return new SPacketUpdateTileEntity(pos, 1, compound);
+    }
+
+    @Override
+    public ITextComponent getDisplayName() {
+        return new TextComponentString("Engine Inventory");
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
+        readFromNBT(packet.getNbtCompound());
     }
 
     public boolean isRunning() {
@@ -174,10 +185,6 @@ public class TileEngine extends TileEntity implements IInventory, ITileEngineMod
     }
 
     @Override
-    public void markDirty() {
-    }
-
-    @Override
     public boolean isUsableByPlayer(EntityPlayer player) {
         return world.getTileEntity(pos) == this && player.getDistanceSq(pos.getX() + 0.5d, pos.getY() + 0.5d, pos.getZ() + 0.5d) <= 64d;
     }
@@ -225,11 +232,6 @@ public class TileEngine extends TileEntity implements IInventory, ITileEngineMod
     @Override
     public boolean hasCustomName() {
         return false; //No custom names for this.
-    }
-
-    @Override
-    public ITextComponent getDisplayName() {
-        return new TextComponentString("Engine Inventory");
     }
 
     @Override
