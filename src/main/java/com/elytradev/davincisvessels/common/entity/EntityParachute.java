@@ -26,7 +26,7 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
         Vec3dMod vec = new Vec3dMod(pos.getX() - ship.getMobileChunk().getCenterX(), pos.getY() - ship.getMobileChunk().minY(), pos.getZ() - ship.getMobileChunk().getCenterZ());
         vec = vec.rotateAroundY((float) Math.toRadians(ship.rotationYaw));
 
-        setLocationAndAngles(ship.posX + vec.xCoord, ship.posY + vec.yCoord - 2D, ship.posZ + vec.zCoord, 0F, 0F);
+        setLocationAndAngles(ship.posX + vec.x, ship.posY + vec.y - 2D, ship.posZ + vec.z, 0F, 0F);
         motionX = ship.motionX;
         motionY = ship.motionY;
         motionZ = ship.motionZ;
@@ -35,10 +35,10 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
     public EntityParachute(World world, Entity mounter, Vec3dMod vec, Vec3dMod shipPos, Vec3dMod motion) {
         this(world);
 
-        setLocationAndAngles(shipPos.xCoord + vec.xCoord, shipPos.yCoord + vec.yCoord - 2D, shipPos.zCoord + vec.zCoord, 0F, 0F);
-        this.motionX = motion.xCoord;
-        this.motionY = motion.yCoord;
-        this.motionZ = motion.zCoord;
+        setLocationAndAngles(shipPos.x + vec.x, shipPos.y + vec.y - 2D, shipPos.z + vec.z, 0F, 0F);
+        this.motionX = motion.x;
+        this.motionY = motion.y;
+        this.motionZ = motion.z;
 
         mounter.dismountRidingEntity();
         mounter.startRiding(this, true);

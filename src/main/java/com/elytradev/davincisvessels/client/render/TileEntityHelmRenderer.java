@@ -19,7 +19,7 @@ import com.elytradev.movingworld.api.IMovingTile;
 public class TileEntityHelmRenderer extends TileEntitySpecialRenderer<TileHelm> {
 
     @Override
-    public void renderTileEntityAt(TileHelm te, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void func_192841_a(TileHelm te, double x, double y, double z, float partialTicks, int destroyStage, float idk) {
         try {
             renderHelm(te, x, y, z, partialTicks);
         } catch (Exception e) {

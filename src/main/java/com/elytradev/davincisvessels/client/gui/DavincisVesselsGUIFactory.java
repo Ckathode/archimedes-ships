@@ -12,6 +12,17 @@ public class DavincisVesselsGUIFactory implements IModGuiFactory {
     public void initialize(Minecraft minecraftInstance) {
     }
 
+
+    @Override
+    public boolean hasConfigGui() {
+        return true;
+    }
+
+    @Override
+    public GuiScreen createConfigGui(GuiScreen parentScreen) {
+        return new DavincisVesselsConfigGUI(parentScreen);
+    }
+
     @Override
     public Class<? extends GuiScreen> mainConfigGuiClass() {
         return DavincisVesselsConfigGUI.class;

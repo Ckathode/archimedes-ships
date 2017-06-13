@@ -29,9 +29,9 @@ public class CommandDVTP extends CommandBase {
         if (ship != null) {
             Vec3d vec3d = sender.getPositionVector();
 
-            CommandBase.CoordinateArg coordArgX = parseCoordinate(vec3d.xCoord, args[0], true);
-            CommandBase.CoordinateArg coordArgY = parseCoordinate(vec3d.yCoord, args[1], -4096, 4096, false);
-            CommandBase.CoordinateArg coordArgZ = parseCoordinate(vec3d.zCoord, args[2], true);
+            CommandBase.CoordinateArg coordArgX = parseCoordinate(vec3d.x, args[0], true);
+            CommandBase.CoordinateArg coordArgY = parseCoordinate(vec3d.y, args[1], -4096, 4096, false);
+            CommandBase.CoordinateArg coordArgZ = parseCoordinate(vec3d.z, args[2], true);
 
             ship.setPosition(coordArgX.getResult(), coordArgY.getResult(), coordArgZ.getResult());
             ship.alignToGrid(false);

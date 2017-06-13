@@ -198,7 +198,7 @@ public class EntityShip extends EntityMovingWorld {
             Vec3dMod vec = vecB;
             vec = vec.rotateAroundY(yaw);
 
-            BlockPos pos = new BlockPos(MathHelperMod.round_double(vec.xCoord), 0, MathHelperMod.round_double(vec.zCoord));
+            BlockPos pos = new BlockPos(MathHelperMod.round_double(vec.x), 0, MathHelperMod.round_double(vec.z));
             setPositionAndUpdate(worldAnchor.getX() + -pos.getX(), worldAnchor.getY() + 2, worldAnchor.getZ() + -pos.getZ());
 
             super.alignToGrid(false);
@@ -317,7 +317,7 @@ public class EntityShip extends EntityMovingWorld {
                     vec = vec.setY(((TileEntity) engine).getPos().getY());
                     vec = vec.setZ(((TileEntity) engine).getPos().getZ() - getMobileChunk().getCenterZ() + 0.5f);
                     vec = vec.rotateAroundY(yaw);
-                    world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX + vec.xCoord, posY + vec.yCoord + 1d, posZ + vec.zCoord, 0d, 0d, 0d);
+                    world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX + vec.x, posY + vec.y + 1d, posZ + vec.z, 0d, 0d, 0d);
                 }
             }
         }
@@ -465,12 +465,12 @@ public class EntityShip extends EntityMovingWorld {
                 vec = vec.setX(motionX);
                 vec = vec.setZ(motionZ);
                 vec = vec.rotateAroundY(yaw);
-                vec = vec.setX(vec.xCoord * 0.9D);
-                vec = vec.setZ(vec.zCoord - throttle * BASE_FORWARD_SPEED * capabilities.getSpeedMult());
+                vec = vec.setX(vec.x * 0.9D);
+                vec = vec.setZ(vec.z - throttle * BASE_FORWARD_SPEED * capabilities.getSpeedMult());
                 vec = vec.rotateAroundY(-yaw);
 
-                motionX = vec.xCoord;
-                motionZ = vec.zCoord;
+                motionX = vec.x;
+                motionZ = vec.z;
             } else if (DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().shipControlType == DavincisVesselsConfig.CONTROL_TYPE_VANILLA) {
                 if (throttle > 0.0D) {
                     double dsin = -Math.sin(Math.toRadians(getControllingPassenger().rotationYaw));
@@ -499,9 +499,10 @@ public class EntityShip extends EntityMovingWorld {
                     i = -1;
                 }
                 motionY += i * BASE_LIFT_SPEED * capabilities.getLiftMult();
-                if (getControllingPassenger() != null && getControllingPassenger() instanceof EntityPlayer
-                        && !((EntityPlayer) getControllingPassenger()).hasAchievement(DavincisVesselsObjects.achievementFlyShip))
-                    ((EntityPlayer) getControllingPassenger()).addStat(DavincisVesselsObjects.achievementFlyShip);
+                // TODO: Achievements are gone
+                //if (getControllingPassenger() != null && getControllingPassenger() instanceof EntityPlayer
+                //        && !((EntityPlayer) getControllingPassenger()).hasAchievement(DavincisVesselsObjects.achievementFlyShip))
+                //    ((EntityPlayer) getControllingPassenger()).addStat(DavincisVesselsObjects.achievementFlyShip);
             }
         }
     }

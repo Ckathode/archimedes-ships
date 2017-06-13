@@ -3,14 +3,15 @@ package com.elytradev.davincisvessels.common.network.message;
 import com.elytradev.davincisvessels.DavincisVesselsMod;
 import com.elytradev.davincisvessels.common.entity.EntityShip;
 import com.elytradev.davincisvessels.common.object.DavincisVesselsObjects;
-import com.elytradev.concrete.Message;
-import com.elytradev.concrete.NetworkContext;
-import com.elytradev.concrete.annotation.field.MarshalledAs;
-import com.elytradev.concrete.annotation.type.ReceivedOn;
+import com.elytradev.concrete.network.Message;
+import com.elytradev.concrete.network.NetworkContext;
+import com.elytradev.concrete.network.annotation.field.MarshalledAs;
+import com.elytradev.concrete.network.annotation.type.ReceivedOn;
 import com.elytradev.davincisvessels.common.network.DavincisVesselsNetworking;
 import com.elytradev.movingworld.common.network.marshallers.EntityMarshaller;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.relauncher.Side;
 
 /**
@@ -38,8 +39,8 @@ public class RequestSubmerseMessage extends Message {
         if (ship != null) {
             if (doSumberse && !ship.canSubmerge()) {
                 if (sender != null && sender instanceof EntityPlayerMP) {
-                    ((EntityPlayerMP) sender).connection.disconnect("Invalid submerse request!" +
-                            "\nCheating to go underwater... reconsider your life choices.");
+                    ((EntityPlayerMP) sender).connection.func_194028_b(new TextComponentString("Invalid submerse request!" +
+                            "\nCheating to go underwater... reconsider your life choices."));
                     if (sender != null && sender.getGameProfile() != null)
                         DavincisVesselsMod.LOG.warn("A user tried to submerse in a vessel that can't, user info: " + sender.getGameProfile().toString());
                 }
@@ -47,7 +48,8 @@ public class RequestSubmerseMessage extends Message {
             }
 
             ship.setSubmerge(doSumberse);
-            sender.addStat(DavincisVesselsObjects.achievementSubmerseShip);
+            // TODO: Achievements are gone.
+            //sender.addStat(DavincisVesselsObjects.achievementSubmerseShip);
         }
     }
 }

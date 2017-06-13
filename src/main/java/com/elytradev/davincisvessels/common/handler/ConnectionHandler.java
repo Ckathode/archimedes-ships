@@ -112,9 +112,9 @@ public class ConnectionHandler {
                         seat.getChunkPos().getZ() - ship.getMobileChunk().getCenterZ());
                 vec = vec.rotateAroundY((float) Math.toRadians(ship.rotationYaw));
 
-                nbt.setDouble("vecX", vec.xCoord);
-                nbt.setDouble("vecY", vec.yCoord);
-                nbt.setDouble("vecZ", vec.zCoord);
+                nbt.setDouble("vecX", vec.x);
+                nbt.setDouble("vecY", vec.y);
+                nbt.setDouble("vecZ", vec.z);
                 nbt.setDouble("shipX", ship.posX);
                 nbt.setDouble("shipY", ship.posY);
                 nbt.setDouble("shipZ", ship.posZ);

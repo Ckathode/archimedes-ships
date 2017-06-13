@@ -87,7 +87,8 @@ public class BlockEngine extends BlockContainer {
     @Override
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         if (placer != null && placer instanceof EntityPlayer) {
-            ((EntityPlayer) placer).addStat(DavincisVesselsObjects.achievementCreateEngine);
+            // TODO: Achievements are gone.
+            //((EntityPlayer) placer).addStat(DavincisVesselsObjects.achievementCreateEngine);
         }
 
         return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());

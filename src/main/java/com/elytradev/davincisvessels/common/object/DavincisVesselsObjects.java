@@ -1,5 +1,6 @@
 package com.elytradev.davincisvessels.common.object;
 
+import net.minecraft.advancements.Advancement;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -11,7 +12,6 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemCloth;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
-import net.minecraft.stats.Achievement;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -20,8 +20,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import java.util.HashMap;
 
 import com.elytradev.davincisvessels.DavincisVesselsMod;
-import com.elytradev.davincisvessels.common.LanguageEntries;
-import com.elytradev.davincisvessels.common.object.achievement.SmartAchievementPage;
+
 import com.elytradev.davincisvessels.common.object.block.BlockAS;
 import com.elytradev.davincisvessels.common.object.block.BlockAnchorPoint;
 import com.elytradev.davincisvessels.common.object.block.BlockCrate;
@@ -61,15 +60,16 @@ public class DavincisVesselsObjects {
 
     public static Item itemSecuredBed;
 
-    public static SmartAchievementPage achievementPage;
+    // TODO: Achievements are gone.
+    //public static SmartAchievementPage achievementPage;
 
-    public static Achievement achievementAssembleFailure;
-    public static Achievement achievementAssembleSuccess;
-    public static Achievement achievementAssembleMount;
-    public static Achievement achievementCreateHelm;
-    public static Achievement achievementCreateEngine;
-    public static Achievement achievementSubmerseShip;
-    public static Achievement achievementFlyShip;
+    public static Advancement achievementAssembleFailure;
+    public static Advancement achievementAssembleSuccess;
+    public static Advancement achievementAssembleMount;
+    public static Advancement achievementCreateHelm;
+    public static Advancement achievementCreateEngine;
+    public static Advancement achievementSubmerseShip;
+    public static Advancement achievementFlyShip;
 
     public static Material materialFloater;
     public static HashMap<String, Block> registeredBlocks;
@@ -162,32 +162,33 @@ public class DavincisVesselsObjects {
         GameRegistry.addShapelessRecipe(new ItemStack(blockSecuredBed), Blocks.BED, Items.IRON_INGOT);
         GameRegistry.registerTileEntity(TileEntitySecuredBed.class, "archiSecuredBed");
 
-        achievementCreateHelm = new Achievement("achievement.archimedes.create.helm",
-                LanguageEntries.ACHIEVEMENT_CREATE_HELM, 0, 0, Item.getItemFromBlock(blockMarkShip), null);
-        achievementCreateEngine = new Achievement("achievement.archimedes.create.engine",
-                LanguageEntries.ACHIEVEMENT_CREATE_ENGINE, 0, -3, Item.getItemFromBlock(blockEngine), null);
-        achievementAssembleFailure = new Achievement("achievement.archimedes.assemble.failure",
-                LanguageEntries.ACHIEVEMENT_ASSEMBLE_FAILURE, 3, 2, Item.getItemFromBlock(blockMarkShip), achievementCreateHelm);
-        achievementAssembleSuccess = new Achievement("achievement.archimedes.assemble.success",
-                LanguageEntries.ACHIEVEMENT_ASSEMBLE_SUCCESS, 3, 0, Item.getItemFromBlock(blockMarkShip), achievementCreateHelm);
-        achievementAssembleMount = new Achievement("achievement.archimedes.assemble.mount",
-                LanguageEntries.ACHIEVEMENT_ASSEMBLE_MOUNT, 3, -2, Item.getItemFromBlock(blockSeat), achievementAssembleSuccess);
-        achievementFlyShip = new Achievement("achievement.archimedes.fly",
-                LanguageEntries.ACHIEVEMENT_FLY_SHIP, 5, -4, Item.getItemFromBlock(blockBalloon), achievementAssembleMount);
-        achievementSubmerseShip = new Achievement("achievement.archimedes.submerse",
-                LanguageEntries.ACHIEVEMENT_SUBMERSE_SHIP, 5, -2, Item.getItemFromBlock(blockAnchorPoint), achievementAssembleMount);
+        // TODO: Achievements are gone.
+        //achievementCreateHelm = new Advancement("achievement.archimedes.create.helm",
+        //        LanguageEntries.ACHIEVEMENT_CREATE_HELM, 0, 0, Item.getItemFromBlock(blockMarkShip), null);
+        //achievementCreateEngine = new Achievement("achievement.archimedes.create.engine",
+        //        LanguageEntries.ACHIEVEMENT_CREATE_ENGINE, 0, -3, Item.getItemFromBlock(blockEngine), null);
+        //achievementAssembleFailure = new Achievement("achievement.archimedes.assemble.failure",
+        //        LanguageEntries.ACHIEVEMENT_ASSEMBLE_FAILURE, 3, 2, Item.getItemFromBlock(blockMarkShip), achievementCreateHelm);
+        //achievementAssembleSuccess = new Achievement("achievement.archimedes.assemble.success",
+        //        LanguageEntries.ACHIEVEMENT_ASSEMBLE_SUCCESS, 3, 0, Item.getItemFromBlock(blockMarkShip), achievementCreateHelm);
+        //achievementAssembleMount = new Achievement("achievement.archimedes.assemble.mount",
+        //        LanguageEntries.ACHIEVEMENT_ASSEMBLE_MOUNT, 3, -2, Item.getItemFromBlock(blockSeat), achievementAssembleSuccess);
+        //achievementFlyShip = new Achievement("achievement.archimedes.fly",
+        //        LanguageEntries.ACHIEVEMENT_FLY_SHIP, 5, -4, Item.getItemFromBlock(blockBalloon), achievementAssembleMount);
+        //achievementSubmerseShip = new Achievement("achievement.archimedes.submerse",
+        //        LanguageEntries.ACHIEVEMENT_SUBMERSE_SHIP, 5, -2, Item.getItemFromBlock(blockAnchorPoint), achievementAssembleMount);
 
-        achievementPage = new SmartAchievementPage(DavincisVesselsMod.MOD_NAME);
+        //achievementPage = new SmartAchievementPage(DavincisVesselsMod.MOD_NAME);
 
-        achievementPage.registerAchievement(achievementCreateHelm);
-        achievementPage.registerAchievement(achievementCreateEngine);
-        achievementPage.registerAchievement(achievementAssembleFailure);
-        achievementPage.registerAchievement(achievementAssembleSuccess);
-        achievementPage.registerAchievement(achievementAssembleMount);
-        achievementPage.registerAchievement(achievementFlyShip);
-        achievementPage.registerAchievement(achievementSubmerseShip);
+        //achievementPage.registerAchievement(achievementCreateHelm);
+        //achievementPage.registerAchievement(achievementCreateEngine);
+        //achievementPage.registerAchievement(achievementAssembleFailure);
+        //achievementPage.registerAchievement(achievementAssembleSuccess);
+        //achievementPage.registerAchievement(achievementAssembleMount);
+        //achievementPage.registerAchievement(achievementFlyShip);
+        //achievementPage.registerAchievement(achievementSubmerseShip);
 
-        achievementPage.finalize();
+        //achievementPage.finalize();
     }
 
     public void postInit(FMLPostInitializationEvent e) {

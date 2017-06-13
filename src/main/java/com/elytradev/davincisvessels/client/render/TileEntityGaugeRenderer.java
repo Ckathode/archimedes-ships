@@ -2,10 +2,10 @@ package com.elytradev.davincisvessels.client.render;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.tileentity.TileEntity;
@@ -26,7 +26,7 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
         int meta = tileEntity.getBlockMetadata() & 3;
 
         Tessellator tess = Tessellator.getInstance();
-        VertexBuffer vertexBuffer = tess.getBuffer();
+        BufferBuilder buffer = tess.getBuffer();
 
         Vec3d dVec = new Vec3d(0, 0, 0);
         if (tileEntity.parentShip == null) {
@@ -40,7 +40,7 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
                     tileEntity.parentShip.posY - Minecraft.getMinecraft().getRenderManager().viewerPosY,
                     tileEntity.parentShip.posZ - Minecraft.getMinecraft().getRenderManager().viewerPosZ);
         }
-        double d = dVec.xCoord * dVec.xCoord + dVec.yCoord * dVec.yCoord + dVec.zCoord * dVec.zCoord;
+        double d = dVec.x * dVec.x + dVec.y * dVec.y + dVec.z * dVec.z;
         if (d > 256D) return;
 
         GL11.glLineWidth(6);
@@ -69,13 +69,13 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
         GlStateManager.translate(-0.28125F, 0.02F, -0.28125F);
         GlStateManager.rotate(northGaugeAngle, 0F, 1F, 0F);
 
-        vertexBuffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
+        buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
         GlStateManager.color(1F, 0F, 0F, 1F);
-        vertexBuffer.pos(0D, 0D, 0D).endVertex();
-        vertexBuffer.pos(0D, 0D, 0.15D).endVertex();
+        buffer.pos(0D, 0D, 0D).endVertex();
+        buffer.pos(0D, 0D, 0.15D).endVertex();
         GlStateManager.color(1F, 1F, 1F, 1F);
-        vertexBuffer.pos(0D, 0D, 0D).endVertex();
-        vertexBuffer.pos(0D, 0D, -0.15D).endVertex();
+        buffer.pos(0D, 0D, 0D).endVertex();
+        buffer.pos(0D, 0D, -0.15D).endVertex();
         tess.draw();
         GlStateManager.popMatrix();
 
@@ -84,10 +84,10 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
         GlStateManager.translate(0.25F, 0.02F, -0.25F);
         GlStateManager.rotate(velGaugeAngle, 0F, 1F, 0F);
 
-        vertexBuffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
+        buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
         GlStateManager.color(0F, 0F, 0.5F, 1F);
-        vertexBuffer.pos(0D, 0D, 0D).endVertex();
-        vertexBuffer.pos(0D, 0D, 0.2D).endVertex();
+        buffer.pos(0D, 0D, 0D).endVertex();
+        buffer.pos(0D, 0D, 0.2D).endVertex();
         tess.draw();
         GlStateManager.popMatrix();
 
@@ -108,10 +108,10 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
             GlStateManager.translate(0.25F, 0.02F, 0.25F);
             GlStateManager.rotate(vertGaugeAng, 0F, 1F, 0F);
 
-            vertexBuffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
+            buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
             GlStateManager.color(0F, 0F, 0.5F, 1F);
-            vertexBuffer.pos(0D, 0D, 0D).endVertex();
-            vertexBuffer.pos(0.2D, 0D, 0D).endVertex();
+            buffer.pos(0D, 0D, 0D).endVertex();
+            buffer.pos(0.2D, 0D, 0D).endVertex();
             tess.draw();
             GlStateManager.popMatrix();
 
@@ -121,19 +121,19 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
             GlStateManager.pushMatrix();
             GlStateManager.rotate(heightGaugeLongAng, 0F, 1F, 0F);
 
-            vertexBuffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
+            buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
             GlStateManager.color(0.9F, 0.9F, 0F, 1F);
-            vertexBuffer.pos(0D, 0D, 0D).endVertex();
-            vertexBuffer.pos(0D, 0D, -0.2D).endVertex();
+            buffer.pos(0D, 0D, 0D).endVertex();
+            buffer.pos(0D, 0D, -0.2D).endVertex();
             tess.draw();
             GlStateManager.popMatrix();
 
             GlStateManager.rotate(heightGaugeShortAng, 0F, 1F, 0F);
 
-            vertexBuffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
+            buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
             GlStateManager.color(0.7F, 0.7F, 0F, 1F);
-            vertexBuffer.pos(0D, -0.01D, 0D).endVertex();
-            vertexBuffer.pos(0D, -0.01, -0.15D).endVertex();
+            buffer.pos(0D, -0.01D, 0D).endVertex();
+            buffer.pos(0D, -0.01, -0.15D).endVertex();
             tess.draw();
 
             GlStateManager.popMatrix();
@@ -146,7 +146,7 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
 
 
     @Override
-    public void renderTileEntityAt(TileEntity tileEntity, double posX, double posY, double posZ, float partialTicks, int par6) {
+    public void func_192841_a(TileEntity tileEntity, double posX, double posY, double posZ, float partialTicks, int par6, float idk) {
         renderGauge((TileGauge) tileEntity, posX, posY, posZ, partialTicks);
     }
 }

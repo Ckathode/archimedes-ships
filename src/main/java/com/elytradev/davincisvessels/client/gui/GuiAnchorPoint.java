@@ -158,7 +158,7 @@ public class GuiAnchorPoint extends GuiContainer {
             if (this.visible) {
                 mc.getTextureManager().bindTexture(GUI_TEXTURES);
                 GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-                boolean mouseOver = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
+                boolean mouseOver = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
                 int yOffset = 220 + (enabled ? 12 : 0);
                 int xOffset = 0;
 
@@ -168,12 +168,12 @@ public class GuiAnchorPoint extends GuiContainer {
                     }
                 }
 
-                this.drawTexturedModalRect(this.xPosition, this.yPosition, xOffset, yOffset, this.width, this.height);
+                this.drawTexturedModalRect(this.x, this.y, xOffset, yOffset, this.width, this.height);
                 int arrowX = 175 + (down ? 32 : 0);
                 if (mouseOver) {
-                    this.drawTexturedModalRect(this.xPosition + (width / 2) - 8, this.yPosition - 1, arrowX + 16, 220, 16, 12);
+                    this.drawTexturedModalRect(this.x + (width / 2) - 8, this.y - 1, arrowX + 16, 220, 16, 12);
                 } else {
-                    this.drawTexturedModalRect(this.xPosition + (width / 2) - 8, this.yPosition - 1, arrowX, 220, 16, 12);
+                    this.drawTexturedModalRect(this.x + (width / 2) - 8, this.y - 1, arrowX, 220, 16, 12);
                 }
             }
         }

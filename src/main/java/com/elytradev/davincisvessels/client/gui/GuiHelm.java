@@ -92,13 +92,13 @@ public class GuiHelm extends GuiContainer {
         btnUndo.enabled = tileEntity.getPrevAssembleResult() != null && tileEntity.getPrevAssembleResult().getType() != RESULT_NONE;
         btnMount.enabled = tileEntity.getAssembleResult() != null && tileEntity.getAssembleResult().getType() == RESULT_OK;
 
-        btnRename.xPosition = btnAssemble.xPosition = btnUndo.xPosition = btnMount.xPosition = guiLeft - 100;
+        btnRename.x = btnAssemble.x = btnUndo.x = btnMount.x = guiLeft - 100;
 
         int y = guiTop + 20;
-        btnRename.yPosition = y;
-        btnAssemble.yPosition = y += 20;
-        btnUndo.yPosition = y += 20;
-        btnMount.yPosition = y += 20;
+        btnRename.y = y;
+        btnAssemble.y = y += 20;
+        btnUndo.y = y += 20;
+        btnMount.y = y += 20;
     }
 
     @Override

@@ -68,10 +68,10 @@ public class GuiShip extends GuiContainer {
             return;
         }
 
-        btnDisassemble.xPosition = btnAlign.xPosition = guiLeft + 4;
+        btnDisassemble.x = btnAlign.x = guiLeft + 4;
         int y = guiTop + 20;
-        btnDisassemble.yPosition = y;
-        btnAlign.yPosition = y += 20;
+        btnDisassemble.y = y;
+        btnAlign.y = y += 20;
     }
 
     @Override
@@ -124,7 +124,7 @@ public class GuiShip extends GuiContainer {
             if (this.visible) {
                 mc.getTextureManager().bindTexture(new ResourceLocation("davincisvessels", "textures/gui/submerse.png"));
                 GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-                boolean mouseOver = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
+                boolean mouseOver = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
                 int yOffset = 0;
                 int xOffset = 0;
 
@@ -141,7 +141,7 @@ public class GuiShip extends GuiContainer {
                     xOffset = 0;
                 }
 
-                this.drawTexturedModalRect(this.xPosition, this.yPosition, xOffset, yOffset, this.width, this.height);
+                this.drawTexturedModalRect(this.x, this.y, xOffset, yOffset, this.width, this.height);
 
                 if (mouseOver) {
                     String message = !canDo ? "Can't Submerse" : (submerse ? "Submerse Ship" : "Don't Submerse Ship");

@@ -153,7 +153,8 @@ public class BlockHelm extends BlockDirectional implements ITileEntityProvider {
     @Override
     public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand){
         if (placer != null && placer instanceof EntityPlayer) {
-            ((EntityPlayer) placer).addStat(DavincisVesselsObjects.achievementCreateHelm);
+            // TODO: Achievements are gone.
+            //((EntityPlayer) placer).addStat(DavincisVesselsObjects.achievementCreateHelm);
         }
 
         return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());

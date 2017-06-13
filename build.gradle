@@ -11,7 +11,7 @@ buildscript {
             url = 'https://oss.sonatype.org/content/repositories/snapshots'
         }
         dependencies {
-            classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+            classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
         }
     }
 }
@@ -28,23 +28,33 @@ repositories {
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = '1.11-0000'
-group = 'com.elytradev.movingworld'
-archivesBaseName = 'davincisvessels'
+def branch
+if (System.env.BRANCH_NAME) {
+    // Jenkins support
+    branch = System.env.BRANCH_NAME
+    branch = branch.substring(branch.lastIndexOf('/') + 1)
+} else {
+    branch = 'git rev-parse --abbrev-ref HEAD'.execute().in.text.trim()
+}
+def commits = 'git rev-list --count HEAD'.execute().in.text.trim()
+def dirty = !'git diff-index HEAD'.execute().in.text.trim().isEmpty()
+
+version = branch + '-' + modVersion + '.' + commits + (dirty ? '-dirty' : '')
+group = modGroup
+archivesBaseName = modBaseName
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 minecraft {
-    version = "1.11.2-13.20.0.2255"
+    version = project.forgeVersion
     runDir = 'run'
-
+    mappings = project.mcpVersion
+    
     def replacementVersion = 'MOD_VERSION = \"' + project.version + '\"'
 
     replace("MOD_VERSION = \"@AS+VER@\"",
             replacementVersion)
-
-    mappings = "snapshot_20170308"
 }
 
 dependencies {
@@ -68,29 +78,31 @@ artifacts {
 }
 
 dependencies {
-    compile 'com.elytradev:concrete:0.1.0'
+    compile 'com.elytradev:concrete:0.2.2:all'
 }
 
 configurations {
     runtime.exclude group: 'com.elytradev.movingworld'
 }
 
-processResources
-        {
-            inputs.property 'version', project.version
-            inputs.property 'mcversion', project.minecraft.version
+processResources {
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
 
-            from(sourceSets.main.resources.srcDirs) {
-                include 'mcmod.info'
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include "mcmod.info"
 
-                expand 'version': project.version, 'mcversion': project.minecraft.version
-            }
+        // replace version and mcversion
+        expand "version": project.version, "mcversion": project.minecraft.version
+    }
 
-            from(sourceSets.main.resources.srcDirs) {
-                exclude 'mcmod.info'
-            }
-        }
-
+    // copy everything else, thats not the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude "mcmod.info"
+    }
+}
 
 repositories {
     mavenCentral()

@@ -1,9 +1,9 @@
 package com.elytradev.davincisvessels.client.render;
 
 import com.elytradev.davincisvessels.common.entity.EntityParachute;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -13,7 +13,6 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 //TODO: possible rewrite?
-
 public class RenderParachute extends Render {
     public static final ResourceLocation PARACHUTE_TEXTURE = new ResourceLocation("davincisvessels", "textures/entity/parachute.png");
 
@@ -39,22 +38,22 @@ public class RenderParachute extends Render {
         GlStateManager.color(0F, 0F, 0F, 1F);
         GL11.glLineWidth(4F);
         Tessellator tess = Tessellator.getInstance();
-        VertexBuffer vertexBuffer = tess.getBuffer();
+        BufferBuilder buffer = tess.getBuffer();
         GlStateManager.color(0, 0, 0);
-        vertexBuffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
-        vertexBuffer.pos(0D, -3D, 0D).endVertex();
-        vertexBuffer.pos(-1D, 0D, 1D).endVertex();
+        buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
+        buffer.pos(0D, -3D, 0D).endVertex();
+        buffer.pos(-1D, 0D, 1D).endVertex();
 
-        vertexBuffer.pos(0D, -3D, 0D).endVertex();
-        vertexBuffer.pos(-1D, 0D, -1D).endVertex();
+        buffer.pos(0D, -3D, 0D).endVertex();
+        buffer.pos(-1D, 0D, -1D).endVertex();
 
-        vertexBuffer.pos(0D, -3D, 0D).endVertex();
-        vertexBuffer.pos(1D, 0D, 1D).endVertex();
+        buffer.pos(0D, -3D, 0D).endVertex();
+        buffer.pos(1D, 0D, 1D).endVertex();
 
-        vertexBuffer.pos(0D, -3D, 0D).endVertex();
-        vertexBuffer.pos(1D, 0D, -1D).endVertex();
+        buffer.pos(0D, -3D, 0D).endVertex();
+        buffer.pos(1D, 0D, -1D).endVertex();
         tess.draw();
-        vertexBuffer.setTranslation(0F, 0F, 0F);
+        buffer.setTranslation(0F, 0F, 0F);
 
         GL11.glPopMatrix();
     }

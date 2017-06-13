@@ -13,6 +13,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.Objects;
+
 public class BlockRecolourable extends BlockColored {
 
     public BlockRecolourable(Material materialIn, SoundType soundType) {
@@ -28,7 +30,7 @@ public class BlockRecolourable extends BlockColored {
             if (blockState == null || heldItem == null) return false;
 
             if (heldItem.getItem() != null && heldItem.getItem() instanceof ItemDye) {
-                if (EnumDyeColor.byDyeDamage(heldItem.getItemDamage()).getMapColor() != blockState.getValue(COLOR).getMapColor()) {
+                if (!Objects.equals(EnumDyeColor.byDyeDamage(heldItem.getItemDamage()), blockState.getValue(COLOR))) {
                     if (!worldIn.isRemote) {
                         blockState = blockState.withProperty(BlockColored.COLOR, EnumDyeColor.byDyeDamage(playerIn.getHeldItem(hand).getItemDamage()));
                         worldIn.setBlockState(pos, blockState);
