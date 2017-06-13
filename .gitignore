@@ -27,8 +27,6 @@ node_modules
 tmp
 vendor
 /MovingWorld/project_libraries
-.idea/workspace.xml
-.idea/misc.xml
 ArchimedesShips.iws
 /MovingWorld/MovingWorld.iws
 gradle-app.setting
@@ -36,4 +34,5 @@ ui/native/19/windows-amd64/native-platform.dll.lock
 Compilation
 src/main/resources/referenceassets/
 build/
+.idea/
 *.hprof
