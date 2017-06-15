@@ -146,7 +146,7 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
 
 
     @Override
-    public void func_192841_a(TileEntity tileEntity, double posX, double posY, double posZ, float partialTicks, int par6, float idk) {
+    public void renderTileEntityAt(TileEntity tileEntity, double posX, double posY, double posZ, float partialTicks, int par6, float idk) {
         renderGauge((TileGauge) tileEntity, posX, posY, posZ, partialTicks);
     }
 }

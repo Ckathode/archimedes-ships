@@ -27,7 +27,7 @@ public class BlockRecolourable extends BlockColored {
         if (worldIn != null && playerIn != null && !playerIn.isSneaking()) {
             IBlockState blockState = worldIn.getBlockState(pos);
             ItemStack heldItem = playerIn.getHeldItem(hand);
-            if (blockState == null || heldItem == null) return false;
+            if (blockState == null || heldItem.isEmpty()) return false;
 
             if (heldItem.getItem() != null && heldItem.getItem() instanceof ItemDye) {
                 if (!Objects.equals(EnumDyeColor.byDyeDamage(heldItem.getItemDamage()), blockState.getValue(COLOR))) {

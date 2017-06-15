@@ -49,7 +49,6 @@ public class GuiShip extends GuiContainer {
         btnAlign = new GuiButton(2, guiLeft + 4, guiTop + 40, 100, 20, I18n.format(LanguageEntries.GUI_SHIPINV_ALIGN));
         buttonList.add(btnAlign);
 
-
         btnSubmersible = new GuiButtonSubmersible(3, guiLeft + xSize + 2, guiTop);
         ((GuiButtonSubmersible) btnSubmersible).canDo = ship.canSubmerge();
         if (ship.canSubmerge())
@@ -88,11 +87,13 @@ public class GuiShip extends GuiContainer {
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3) {
+        GlStateManager.pushMatrix();
         GL11.glColor4f(1F, 1F, 1F, 1F);
         mc.renderEngine.bindTexture(BACKGROUND_TEXTURE);
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
         drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
+        GlStateManager.popMatrix();
     }
 
     @Override
@@ -120,7 +121,8 @@ public class GuiShip extends GuiContainer {
             super(buttonId, x, y, 32, 32, "");
         }
 
-        public void drawButton(Minecraft mc, int mouseX, int mouseY) {
+        @Override
+        public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks){
             if (this.visible) {
                 mc.getTextureManager().bindTexture(new ResourceLocation("davincisvessels", "textures/gui/submerse.png"));
                 GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);

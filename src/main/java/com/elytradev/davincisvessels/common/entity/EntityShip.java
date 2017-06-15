@@ -446,33 +446,30 @@ public class EntityShip extends EntityMovingWorld {
 
     private void handlePlayerControl() {
         if (getControllingPassenger() instanceof EntityLivingBase && ((ShipCapabilities) getCapabilities()).canMove()) {
-            double throttle = ((EntityLivingBase) getControllingPassenger()).moveForward;
+            double throttle = ((EntityLivingBase) getControllingPassenger()).field_191988_bg;
             if (isFlying()) {
                 throttle *= 0.5D;
             }
 
-            boolean davinciControlType = DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().shipControlType == DavincisVesselsConfig.CONTROL_TYPE_DAVINCI;
-            if (davinciControlType) {
-                Vec3dMod move = new Vec3dMod(getControllingPassenger().motionX, 0D, getControllingPassenger().motionZ);
-                move.rotateAroundY((float) Math.toRadians(getControllingPassenger().rotationYaw));
+            if (DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().shipControlType == DavincisVesselsConfig.CONTROL_TYPE_DAVINCI) {
+                Vec3dMod vec = new Vec3dMod(getControllingPassenger().motionX, 0D, getControllingPassenger().motionZ);
+                vec.rotateAroundY((float) Math.toRadians(getControllingPassenger().rotationYaw));
 
                 double steer = ((EntityLivingBase) getControllingPassenger()).moveStrafing;
 
                 motionYaw += steer * BASE_TURN_SPEED * capabilities.getRotationMult() * DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().turnSpeed;
 
                 float yaw = (float) Math.toRadians(180F - rotationYaw + frontDirection.getHorizontalIndex() * 90F);
-                move = move.setX(motionX);
-                move = move.setZ(motionZ);
-                move = move.rotateAroundY(yaw);
-                move = move.setX(move.x * 0.9D);
-                move = move.setZ(move.z - throttle * BASE_FORWARD_SPEED * capabilities.getSpeedMult());
-                move = move.rotateAroundY(-yaw);
+                vec = vec.setX(motionX);
+                vec = vec.setZ(motionZ);
+                vec = vec.rotateAroundY(yaw);
+                vec = vec.setX(vec.x * 0.9D);
+                vec = vec.setZ(vec.z - throttle * BASE_FORWARD_SPEED * capabilities.getSpeedMult());
+                vec = vec.rotateAroundY(-yaw);
 
-                System.out.println(move.toString());
-
-                motionX = move.x;
-                motionZ = move.z;
-            } else {
+                motionX = vec.x;
+                motionZ = vec.z;
+            } else if (DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().shipControlType == DavincisVesselsConfig.CONTROL_TYPE_VANILLA) {
                 if (throttle > 0.0D) {
                     double dsin = -Math.sin(Math.toRadians(getControllingPassenger().rotationYaw));
                     double dcos = Math.cos(Math.toRadians(getControllingPassenger().rotationYaw));
@@ -500,7 +497,7 @@ public class EntityShip extends EntityMovingWorld {
                     i = -1;
                 }
                 motionY += i * BASE_LIFT_SPEED * capabilities.getLiftMult();
-                // TODO: Achievements are gone
+                // TODO: Achievements are gone.
                 //if (getControllingPassenger() != null && getControllingPassenger() instanceof EntityPlayer
                 //        && !((EntityPlayer) getControllingPassenger()).hasAchievement(DavincisVesselsObjects.achievementFlyShip))
                 //    ((EntityPlayer) getControllingPassenger()).addStat(DavincisVesselsObjects.achievementFlyShip);

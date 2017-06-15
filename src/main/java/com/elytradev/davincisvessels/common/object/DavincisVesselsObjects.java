@@ -28,7 +28,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import java.util.HashMap;
 
-import static com.elytradev.davincisvessels.DavincisVesselsMod.RESOURCE_DOMAIN;
+import static com.elytradev.davincisvessels.DavincisVesselsMod.MOD_ID;
 
 /**
  * Block registration is here, to keep the mod class nice and small.
@@ -128,23 +128,30 @@ public class DavincisVesselsObjects {
 
     @SubscribeEvent
     public void onRecipeRegisterEvent(RegistryEvent.Register<IRecipe> recipeRegister) {
+        DavincisVesselsMod.LOG.info("Registering recipes for Davincis Vessels...");
         registerShapedRecipe(recipeRegister.getRegistry(), new ItemStack(blockMarkShip, 1), "X#X", "#O#", "X#X", Character.valueOf('X'), "plankWood", Character.valueOf('#'), "stickWood", Character.valueOf('O'), "ingotIron");
         registerShapedRecipe(recipeRegister.getRegistry(), new ItemStack(blockGauge, 1, 0), "VXV", "XO#", " # ", Character.valueOf('X'), "ingotIron", Character.valueOf('#'), "ingotGold", Character.valueOf('O'), "dustRedstone", Character.valueOf('V'), Blocks.GLASS_PANE);
         registerShapedRecipe(recipeRegister.getRegistry(), new ItemStack(blockGauge, 1, 0), "VXV", "XO#", " # ", Character.valueOf('X'), "ingotGold", Character.valueOf('#'), "ingotIron", Character.valueOf('O'), "dustRedstone", Character.valueOf('V'), Blocks.GLASS_PANE);
         registerShapedRecipe(recipeRegister.getRegistry(), new ItemStack(blockGauge, 1, 1), "VXV", "XO#", "V#V", Character.valueOf('X'), "ingotIron", Character.valueOf('#'), "ingotGold", Character.valueOf('O'), Item.getItemFromBlock(blockGauge), Character.valueOf('V'), Blocks.GLASS_PANE);
         registerShapedRecipe(recipeRegister.getRegistry(), new ItemStack(blockGauge, 1, 1), "VXV", "XO#", "V#V", Character.valueOf('X'), "ingotGold", Character.valueOf('#'), "ingotIron", Character.valueOf('O'), Item.getItemFromBlock(blockGauge), Character.valueOf('V'), Blocks.GLASS_PANE);
         registerShapedRecipe(recipeRegister.getRegistry(), new ItemStack(blockSeat), "X ", "XX", Character.valueOf('X'), Blocks.WOOL);
-        registerShapedRecipe(recipeRegister.getRegistry(), new ItemStack(blockCrateWood, 3), " # ", "# #", "XXX", Character.valueOf('#'),"leather", Character.valueOf('X'), "plankWood");
+        registerShapedRecipe(recipeRegister.getRegistry(), new ItemStack(blockCrateWood, 3), " # ", "# #", "XXX", Character.valueOf('#'), "leather", Character.valueOf('X'), "plankWood");
         registerShapedRecipe(recipeRegister.getRegistry(), new ItemStack(blockEngine, 1), "#O#", "#X#", "###", Character.valueOf('#'), "ingotIron", Character.valueOf('O'), Items.WATER_BUCKET, Character.valueOf('X'), Blocks.FURNACE);
         registerShapedRecipe(recipeRegister.getRegistry(), new ItemStack(blockAnchorPoint, 1), " X ", "XXX", "ZYZ", Character.valueOf('X'), "ingotIron", Character.valueOf('Y'), "blockIron", Character.valueOf('Z'), "dustRedstone");
-        
+
         registerShapelessRecipe(recipeRegister.getRegistry(), new ItemStack(blockSecuredBed), Blocks.BED, "ironIngot");
         registerShapelessRecipe(recipeRegister.getRegistry(), new ItemStack(blockBuffer), blockFloater, "dye");
         registerShapelessRecipe(recipeRegister.getRegistry(), new ItemStack(blockStickyBuffer), blockBuffer, "slimeball");
         registerShapelessRecipe(recipeRegister.getRegistry(), new ItemStack(blockFloater, 1), "logWood", Blocks.WOOL);
+
         for (int i = 0; i < ItemDye.DYE_COLORS.length; i++) {
-            registerShapelessRecipe(recipeRegister.getRegistry(), new ItemStack(blockBalloon, 1, i), "X", "#", Character.valueOf('X'), new ItemStack(Blocks.WOOL, 1, i), Character.valueOf('#'), "string");
+            EnumDyeColor dyeColor = EnumDyeColor.byMetadata(i);
+            registerShapelessRecipe(recipeRegister.getRegistry(), new ItemStack(blockBalloon, 1, dyeColor.getMetadata()), new ItemStack(Blocks.WOOL, 1, dyeColor.getMetadata()), "string");
+            registerShapelessRecipe(recipeRegister.getRegistry(), new ItemStack(blockBalloon, 1, dyeColor.getMetadata()),
+                    "dye" + dyeColor.getUnlocalizedName().substring(0, 1).toUpperCase() + dyeColor.getUnlocalizedName().substring(1),
+                    blockBalloon);
         }
+        DavincisVesselsMod.LOG.info("Registration complete!");
     }
 
     public void postInit(FMLPostInitializationEvent e) {
@@ -153,13 +160,13 @@ public class DavincisVesselsObjects {
     private int recipeID = 0;
 
     private void registerShapedRecipe(IForgeRegistry<IRecipe> registry, ItemStack out, Object... input) {
-        ShapedOreRecipe recipe = new ShapedOreRecipe(new ResourceLocation(RESOURCE_DOMAIN, out.getUnlocalizedName() + recipeID++), out, input);
-        registry.register(recipe);
+        ResourceLocation resourceLocation = new ResourceLocation(MOD_ID, out.getUnlocalizedName() + recipeID++);
+        registry.register(new ShapedOreRecipe(resourceLocation, out, input).setRegistryName(resourceLocation));
     }
 
     private void registerShapelessRecipe(IForgeRegistry<IRecipe> registry, ItemStack out, Object... input) {
-        ShapelessOreRecipe recipe = new ShapelessOreRecipe(new ResourceLocation(RESOURCE_DOMAIN, out.getUnlocalizedName() + recipeID++), out, input);
-        registry.register(recipe);
+        ResourceLocation resourceLocation = new ResourceLocation(MOD_ID, out.getUnlocalizedName() + recipeID++);
+        registry.register(new ShapelessOreRecipe(resourceLocation, out, input).setRegistryName(resourceLocation));
     }
 
     private void registerBlock(String id, Block block) {

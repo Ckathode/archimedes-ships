@@ -39,7 +39,7 @@ public class RequestSubmerseMessage extends Message {
         if (ship != null) {
             if (doSumberse && !ship.canSubmerge()) {
                 if (sender != null && sender instanceof EntityPlayerMP) {
-                    ((EntityPlayerMP) sender).connection.func_194028_b(new TextComponentString("Invalid submerse request!" +
+                    ((EntityPlayerMP) sender).connection.disconnect(new TextComponentString("Invalid submerse request!" +
                             "\nCheating to go underwater... reconsider your life choices."));
                     if (sender != null && sender.getGameProfile() != null)
                         DavincisVesselsMod.LOG.warn("A user tried to submerse in a vessel that can't, user info: " + sender.getGameProfile().toString());
