@@ -1,5 +1,6 @@
 package com.elytradev.davincisvessels.common.object.block;
 
+import com.elytradev.davincisvessels.common.object.DavincisVesselsObjects;
 import com.elytradev.davincisvessels.common.tileentity.TileGauge;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -12,7 +13,6 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
@@ -23,8 +23,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockGauge extends BlockContainer {
 
@@ -57,11 +55,11 @@ public class BlockGauge extends BlockContainer {
         return EnumBlockRenderType.MODEL;
     }
 
+
     @Override
-    @SideOnly(Side.CLIENT)
-    public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
-        list.add(new ItemStack(item, 1, 0));
-        list.add(new ItemStack(item, 1, 1));
+    public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
+        list.add(new ItemStack(DavincisVesselsObjects.blockGauge, 1, 0));
+        list.add(new ItemStack(DavincisVesselsObjects.blockGauge, 1, 1));
     }
 
     public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
@@ -69,7 +67,8 @@ public class BlockGauge extends BlockContainer {
     }
 
     @Override
-    public boolean isPassable(IBlockAccess worldIn, BlockPos pos) {
+    public boolean isPassable(IBlockAccess worldIn, BlockPos pos)
+    {
         return true;
     }
 

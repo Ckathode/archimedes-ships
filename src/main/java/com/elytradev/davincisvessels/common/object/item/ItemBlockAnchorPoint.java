@@ -2,19 +2,19 @@ package com.elytradev.davincisvessels.common.object.item;
 
 import com.elytradev.davincisvessels.DavincisVesselsMod;
 import com.elytradev.davincisvessels.common.LanguageEntries;
+import com.elytradev.davincisvessels.common.tileentity.AnchorInstance;
 import com.elytradev.davincisvessels.common.tileentity.BlockLocation;
 import com.mojang.realmsclient.gui.ChatFormatting;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.List;
-
-import com.elytradev.davincisvessels.common.tileentity.AnchorInstance;
 
 public class ItemBlockAnchorPoint extends ItemBlock {
     public ItemBlockAnchorPoint(Block block) {
@@ -24,7 +24,7 @@ public class ItemBlockAnchorPoint extends ItemBlock {
     }
 
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced) {
         if (stack.getTagCompound() == null || !stack.getTagCompound().hasKey("INSTANCE"))
             return;
 
@@ -42,4 +42,5 @@ public class ItemBlockAnchorPoint extends ItemBlock {
                     + I18n.format(LanguageEntries.GUI_ITEM_TOOLTIP_SHIFT));
         }
     }
+
 }

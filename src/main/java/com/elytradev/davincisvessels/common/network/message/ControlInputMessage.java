@@ -10,9 +10,6 @@ import com.elytradev.movingworld.common.network.marshallers.EntityMarshaller;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 
-/**
- * Created by darkevilmac on 2/2/2017.
- */
 @ReceivedOn(Side.SERVER)
 public class ControlInputMessage extends Message {
 
@@ -25,6 +22,8 @@ public class ControlInputMessage extends Message {
         super(DavincisVesselsNetworking.NETWORK);
         this.ship = ship;
         this.control = control;
+
+        System.out.println("Manufactured a ship control message, " + control);
     }
 
     public ControlInputMessage(NetworkContext ctx) {

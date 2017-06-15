@@ -13,6 +13,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.elytradev.davincisvessels.common.DavincisVesselsConfig;
 import com.elytradev.movingworld.common.network.MovingWorldClientAction;
+import org.lwjgl.Sys;
 
 @SideOnly(Side.CLIENT)
 public class ShipKeyHandler {
@@ -31,7 +32,9 @@ public class ShipKeyHandler {
 
     @SubscribeEvent
     public void updateControl(TickEvent.PlayerTickEvent e) {
-        if (e.phase == TickEvent.Phase.START && e.side == Side.CLIENT && e.player == FMLClientHandler.instance().getClientPlayerEntity() && e.player.getRidingEntity() != null && e.player.getRidingEntity() instanceof EntityShip) {
+        if (e.phase == TickEvent.Phase.START && e.side == Side.CLIENT
+                && e.player == FMLClientHandler.instance().getClientPlayerEntity()
+                && e.player.getRidingEntity() instanceof EntityShip) {
             if (config.kbShipInv.isKeyDown() && !kbShipGuiPrevState) {
                 new OpenGuiMessage(2).sendToServer();
             }

@@ -1,5 +1,11 @@
 package com.elytradev.davincisvessels.common.object;
 
+import com.elytradev.davincisvessels.DavincisVesselsMod;
+import com.elytradev.davincisvessels.common.object.block.*;
+import com.elytradev.davincisvessels.common.object.item.ItemBlockAnchorPoint;
+import com.elytradev.davincisvessels.common.object.item.ItemGaugeBlock;
+import com.elytradev.davincisvessels.common.object.item.ItemSecuredBed;
+import com.elytradev.davincisvessels.common.tileentity.*;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -7,38 +13,22 @@ import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemCloth;
-import net.minecraft.item.ItemDye;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.IForgeRegistry;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import java.util.HashMap;
 
-import com.elytradev.davincisvessels.DavincisVesselsMod;
-
-import com.elytradev.davincisvessels.common.object.block.BlockAS;
-import com.elytradev.davincisvessels.common.object.block.BlockAnchorPoint;
-import com.elytradev.davincisvessels.common.object.block.BlockCrate;
-import com.elytradev.davincisvessels.common.object.block.BlockEngine;
-import com.elytradev.davincisvessels.common.object.block.BlockGauge;
-import com.elytradev.davincisvessels.common.object.block.BlockHelm;
-import com.elytradev.davincisvessels.common.object.block.BlockRecolourable;
-import com.elytradev.davincisvessels.common.object.block.BlockSeat;
-import com.elytradev.davincisvessels.common.object.block.BlockSecuredBed;
-import com.elytradev.davincisvessels.common.object.item.ItemBlockAnchorPoint;
-import com.elytradev.davincisvessels.common.object.item.ItemGaugeBlock;
-import com.elytradev.davincisvessels.common.object.item.ItemSecuredBed;
-import com.elytradev.davincisvessels.common.tileentity.TileAnchorPoint;
-import com.elytradev.davincisvessels.common.tileentity.TileCrate;
-import com.elytradev.davincisvessels.common.tileentity.TileEngine;
-import com.elytradev.davincisvessels.common.tileentity.TileEntitySecuredBed;
-import com.elytradev.davincisvessels.common.tileentity.TileGauge;
-import com.elytradev.davincisvessels.common.tileentity.TileHelm;
+import static com.elytradev.davincisvessels.DavincisVesselsMod.RESOURCE_DOMAIN;
 
 /**
  * Block registration is here, to keep the mod class nice and small.
@@ -62,7 +52,6 @@ public class DavincisVesselsObjects {
 
     // TODO: Achievements are gone.
     //public static SmartAchievementPage achievementPage;
-
     public static Advancement achievementAssembleFailure;
     public static Advancement achievementAssembleSuccess;
     public static Advancement achievementAssembleMount;
@@ -125,73 +114,52 @@ public class DavincisVesselsObjects {
     }
 
     public void init(FMLInitializationEvent e) {
-        GameRegistry.addRecipe(new ItemStack(blockMarkShip, 1), "X#X", "#O#", "X#X", Character.valueOf('X'), Blocks.PLANKS, Character.valueOf('#'), Items.STICK, Character.valueOf('O'), Items.IRON_INGOT);
-        GameRegistry.registerTileEntity(TileHelm.class, "archiHelm");
         Blocks.FIRE.setFireInfo(blockMarkShip, 5, 5);
-
-        GameRegistry.addShapelessRecipe(new ItemStack(blockFloater, 1), Blocks.LOG, Blocks.WOOL);
-        GameRegistry.addShapelessRecipe(new ItemStack(blockFloater, 1), Blocks.LOG2, Blocks.WOOL);
-
-        //GameRegistry.addRecipe(new ItemStack(blockBalloon, 1), "X", "#", Character.valueOf('X'), Block.cloth, Character.valueOf('#'), Item.silk);
-        for (int i = 0; i < ItemDye.DYE_COLORS.length; i++) {
-            GameRegistry.addRecipe(new ItemStack(blockBalloon, 1, i), "X", "#", Character.valueOf('X'), new ItemStack(Blocks.WOOL, 1, i), Character.valueOf('#'), Items.STRING);
-        }
         Blocks.FIRE.setFireInfo(blockBalloon, 30, 60);
-
-        GameRegistry.addShapedRecipe(new ItemStack(blockGauge, 1, 0), "VXV", "XO#", " # ", Character.valueOf('X'), Items.IRON_INGOT, Character.valueOf('#'), Items.GOLD_INGOT, Character.valueOf('O'), Items.REDSTONE, Character.valueOf('V'), Blocks.GLASS_PANE);
-        GameRegistry.addShapedRecipe(new ItemStack(blockGauge, 1, 0), "VXV", "XO#", " # ", Character.valueOf('X'), Items.GOLD_INGOT, Character.valueOf('#'), Items.IRON_INGOT, Character.valueOf('O'), Items.REDSTONE, Character.valueOf('V'), Blocks.GLASS_PANE);
-        GameRegistry.addShapedRecipe(new ItemStack(blockGauge, 1, 1), "VXV", "XO#", "V#V", Character.valueOf('X'), Items.IRON_INGOT, Character.valueOf('#'), Items.GOLD_INGOT, Character.valueOf('O'), Item.getItemFromBlock(blockGauge), Character.valueOf('V'), Blocks.GLASS_PANE);
-        GameRegistry.addShapedRecipe(new ItemStack(blockGauge, 1, 1), "VXV", "XO#", "V#V", Character.valueOf('X'), Items.GOLD_INGOT, Character.valueOf('#'), Items.IRON_INGOT, Character.valueOf('O'), Item.getItemFromBlock(blockGauge), Character.valueOf('V'), Blocks.GLASS_PANE);
-        GameRegistry.registerTileEntity(TileGauge.class, "archiGauge");
-
-        GameRegistry.addShapedRecipe(new ItemStack(blockSeat), "X ", "XX", Character.valueOf('X'), Blocks.WOOL);
         Blocks.FIRE.setFireInfo(blockSeat, 30, 30);
 
-        GameRegistry.addShapelessRecipe(new ItemStack(blockBuffer), blockFloater, new ItemStack(Items.DYE, 1));
-        GameRegistry.addShapelessRecipe(new ItemStack(blockStickyBuffer), blockBuffer, new ItemStack(Items.SLIME_BALL, 1));
-
-        GameRegistry.addRecipe(new ItemStack(blockCrateWood, 3), " # ", "# #", "XXX", Character.valueOf('#'), Items.LEATHER, Character.valueOf('X'), Blocks.PLANKS);
+        GameRegistry.registerTileEntity(TileHelm.class, "archiHelm");
+        GameRegistry.registerTileEntity(TileGauge.class, "archiGauge");
         GameRegistry.registerTileEntity(TileCrate.class, "archiCrate");
-
-        GameRegistry.addRecipe(new ItemStack(blockEngine, 1), "#O#", "#X#", "###", Character.valueOf('#'), Items.IRON_INGOT, Character.valueOf('O'), Items.WATER_BUCKET, Character.valueOf('X'), Blocks.FURNACE);
         GameRegistry.registerTileEntity(TileEngine.class, "archiEngine");
-
-        GameRegistry.addRecipe(new ItemStack(blockAnchorPoint, 1), " X ", "XXX", "ZYZ", Character.valueOf('X'), Items.IRON_INGOT, Character.valueOf('Y'), Blocks.IRON_BLOCK, Character.valueOf('Z'), Items.REDSTONE);
         GameRegistry.registerTileEntity(TileAnchorPoint.class, "archiAnchor");
-
-        GameRegistry.addShapelessRecipe(new ItemStack(blockSecuredBed), Blocks.BED, Items.IRON_INGOT);
         GameRegistry.registerTileEntity(TileEntitySecuredBed.class, "archiSecuredBed");
+    }
 
-        // TODO: Achievements are gone.
-        //achievementCreateHelm = new Advancement("achievement.archimedes.create.helm",
-        //        LanguageEntries.ACHIEVEMENT_CREATE_HELM, 0, 0, Item.getItemFromBlock(blockMarkShip), null);
-        //achievementCreateEngine = new Achievement("achievement.archimedes.create.engine",
-        //        LanguageEntries.ACHIEVEMENT_CREATE_ENGINE, 0, -3, Item.getItemFromBlock(blockEngine), null);
-        //achievementAssembleFailure = new Achievement("achievement.archimedes.assemble.failure",
-        //        LanguageEntries.ACHIEVEMENT_ASSEMBLE_FAILURE, 3, 2, Item.getItemFromBlock(blockMarkShip), achievementCreateHelm);
-        //achievementAssembleSuccess = new Achievement("achievement.archimedes.assemble.success",
-        //        LanguageEntries.ACHIEVEMENT_ASSEMBLE_SUCCESS, 3, 0, Item.getItemFromBlock(blockMarkShip), achievementCreateHelm);
-        //achievementAssembleMount = new Achievement("achievement.archimedes.assemble.mount",
-        //        LanguageEntries.ACHIEVEMENT_ASSEMBLE_MOUNT, 3, -2, Item.getItemFromBlock(blockSeat), achievementAssembleSuccess);
-        //achievementFlyShip = new Achievement("achievement.archimedes.fly",
-        //        LanguageEntries.ACHIEVEMENT_FLY_SHIP, 5, -4, Item.getItemFromBlock(blockBalloon), achievementAssembleMount);
-        //achievementSubmerseShip = new Achievement("achievement.archimedes.submerse",
-        //        LanguageEntries.ACHIEVEMENT_SUBMERSE_SHIP, 5, -2, Item.getItemFromBlock(blockAnchorPoint), achievementAssembleMount);
-
-        //achievementPage = new SmartAchievementPage(DavincisVesselsMod.MOD_NAME);
-
-        //achievementPage.registerAchievement(achievementCreateHelm);
-        //achievementPage.registerAchievement(achievementCreateEngine);
-        //achievementPage.registerAchievement(achievementAssembleFailure);
-        //achievementPage.registerAchievement(achievementAssembleSuccess);
-        //achievementPage.registerAchievement(achievementAssembleMount);
-        //achievementPage.registerAchievement(achievementFlyShip);
-        //achievementPage.registerAchievement(achievementSubmerseShip);
-
-        //achievementPage.finalize();
+    @SubscribeEvent
+    public void onRecipeRegisterEvent(RegistryEvent.Register<IRecipe> recipeRegister) {
+        registerShapedRecipe(recipeRegister.getRegistry(), new ItemStack(blockMarkShip, 1), "X#X", "#O#", "X#X", Character.valueOf('X'), "plankWood", Character.valueOf('#'), "stickWood", Character.valueOf('O'), "ingotIron");
+        registerShapedRecipe(recipeRegister.getRegistry(), new ItemStack(blockGauge, 1, 0), "VXV", "XO#", " # ", Character.valueOf('X'), "ingotIron", Character.valueOf('#'), "ingotGold", Character.valueOf('O'), "dustRedstone", Character.valueOf('V'), Blocks.GLASS_PANE);
+        registerShapedRecipe(recipeRegister.getRegistry(), new ItemStack(blockGauge, 1, 0), "VXV", "XO#", " # ", Character.valueOf('X'), "ingotGold", Character.valueOf('#'), "ingotIron", Character.valueOf('O'), "dustRedstone", Character.valueOf('V'), Blocks.GLASS_PANE);
+        registerShapedRecipe(recipeRegister.getRegistry(), new ItemStack(blockGauge, 1, 1), "VXV", "XO#", "V#V", Character.valueOf('X'), "ingotIron", Character.valueOf('#'), "ingotGold", Character.valueOf('O'), Item.getItemFromBlock(blockGauge), Character.valueOf('V'), Blocks.GLASS_PANE);
+        registerShapedRecipe(recipeRegister.getRegistry(), new ItemStack(blockGauge, 1, 1), "VXV", "XO#", "V#V", Character.valueOf('X'), "ingotGold", Character.valueOf('#'), "ingotIron", Character.valueOf('O'), Item.getItemFromBlock(blockGauge), Character.valueOf('V'), Blocks.GLASS_PANE);
+        registerShapedRecipe(recipeRegister.getRegistry(), new ItemStack(blockSeat), "X ", "XX", Character.valueOf('X'), Blocks.WOOL);
+        registerShapedRecipe(recipeRegister.getRegistry(), new ItemStack(blockCrateWood, 3), " # ", "# #", "XXX", Character.valueOf('#'),"leather", Character.valueOf('X'), "plankWood");
+        registerShapedRecipe(recipeRegister.getRegistry(), new ItemStack(blockEngine, 1), "#O#", "#X#", "###", Character.valueOf('#'), "ingotIron", Character.valueOf('O'), Items.WATER_BUCKET, Character.valueOf('X'), Blocks.FURNACE);
+        registerShapedRecipe(recipeRegister.getRegistry(), new ItemStack(blockAnchorPoint, 1), " X ", "XXX", "ZYZ", Character.valueOf('X'), "ingotIron", Character.valueOf('Y'), "blockIron", Character.valueOf('Z'), "dustRedstone");
+        
+        registerShapelessRecipe(recipeRegister.getRegistry(), new ItemStack(blockSecuredBed), Blocks.BED, "ironIngot");
+        registerShapelessRecipe(recipeRegister.getRegistry(), new ItemStack(blockBuffer), blockFloater, "dye");
+        registerShapelessRecipe(recipeRegister.getRegistry(), new ItemStack(blockStickyBuffer), blockBuffer, "slimeball");
+        registerShapelessRecipe(recipeRegister.getRegistry(), new ItemStack(blockFloater, 1), "logWood", Blocks.WOOL);
+        for (int i = 0; i < ItemDye.DYE_COLORS.length; i++) {
+            registerShapelessRecipe(recipeRegister.getRegistry(), new ItemStack(blockBalloon, 1, i), "X", "#", Character.valueOf('X'), new ItemStack(Blocks.WOOL, 1, i), Character.valueOf('#'), "string");
+        }
     }
 
     public void postInit(FMLPostInitializationEvent e) {
+    }
+
+    private int recipeID = 0;
+
+    private void registerShapedRecipe(IForgeRegistry<IRecipe> registry, ItemStack out, Object... input) {
+        ShapedOreRecipe recipe = new ShapedOreRecipe(new ResourceLocation(RESOURCE_DOMAIN, out.getUnlocalizedName() + recipeID++), out, input);
+        registry.register(recipe);
+    }
+
+    private void registerShapelessRecipe(IForgeRegistry<IRecipe> registry, ItemStack out, Object... input) {
+        ShapelessOreRecipe recipe = new ShapelessOreRecipe(new ResourceLocation(RESOURCE_DOMAIN, out.getUnlocalizedName() + recipeID++), out, input);
+        registry.register(recipe);
     }
 
     private void registerBlock(String id, Block block) {

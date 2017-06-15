@@ -85,6 +85,7 @@ public class DavincisVesselsMod {
         LOG = event.getModLog();
 
         MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(OBJECTS);
 
         OBJECTS.preInit(event);
 
@@ -100,7 +101,6 @@ public class DavincisVesselsMod {
         DavincisVesselsNetworking.setupNetwork();
         OBJECTS.init(event);
 
-        MinecraftForge.EVENT_BUS.register(new ConnectionHandler());
         MinecraftForge.EVENT_BUS.register(new ConnectionHandler());
 
         EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "ship"), EntityShip.class, "shipmod", 1, this, 64, localConfig.getShared().shipEntitySyncRate, true);
