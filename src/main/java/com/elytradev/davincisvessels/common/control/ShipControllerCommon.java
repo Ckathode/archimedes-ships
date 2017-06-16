@@ -7,7 +7,6 @@ public class ShipControllerCommon {
     private int shipControl = 0;
 
     public void updateControl(EntityShip ship, EntityPlayer player, int i) {
-        System.out.println(i);
         shipControl = i;
     }
 

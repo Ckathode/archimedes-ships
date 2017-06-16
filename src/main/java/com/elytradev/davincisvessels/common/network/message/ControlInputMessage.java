@@ -22,8 +22,6 @@ public class ControlInputMessage extends Message {
         super(DavincisVesselsNetworking.NETWORK);
         this.ship = ship;
         this.control = control;
-
-        System.out.println("Manufactured a ship control message, " + control);
     }
 
     public ControlInputMessage(NetworkContext ctx) {
