@@ -21,6 +21,10 @@ plugins {
 }
 
 repositories {
+    mavenCentral()
+    maven {
+        url 'http://repo.spongepowered.org/maven'
+    }
     maven {
         url = 'http://repo.elytradev.com/'
     }
@@ -48,17 +52,19 @@ targetCompatibility = 1.8
 
 minecraft {
     version = project.forgeVersion
-    runDir = 'run'
     mappings = project.mcpVersion
     
+    runDir = 'run'
+    
     def replacementVersion = 'MOD_VERSION = \"' + project.version + '\"'
-
     replace("MOD_VERSION = \"@AS+VER@\"",
             replacementVersion)
 }
 
 dependencies {
-    compile project(':MovingWorld')
+    compileOnly project(':MovingWorld')
+    
+    compile 'com.elytradev:concrete:0.2.2:all'
 }
 
 shadowJar {
@@ -67,7 +73,6 @@ shadowJar {
 
     // Shaded under movingworld because of some references to MovingWorld networking.
 	relocate 'com.elytradev.concrete', "com.elytradev.movingworld.repackage.com.elytradev.concrete"
-    configurations = [project.configurations.shadow]
 }
 
 reobf {
@@ -76,10 +81,6 @@ reobf {
 
 artifacts {
     archives shadowJar
-}
-
-dependencies {
-    compile 'com.elytradev:concrete:0.2.2:all'
 }
 
 configurations {
@@ -105,15 +106,6 @@ processResources {
     }
 }
 
-repositories {
-    mavenCentral()
-    maven {
-        url 'http://repo.spongepowered.org/maven'
-    }
-    maven {
-        url 'https://oss.sonatype.org/content/groups/public'
-    }
-}
 idea {
     workspace {
         iws.withXml { xmlFile ->
