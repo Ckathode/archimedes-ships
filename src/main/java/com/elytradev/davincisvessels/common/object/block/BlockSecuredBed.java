@@ -10,6 +10,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
@@ -139,4 +140,10 @@ public class BlockSecuredBed extends BlockBed implements ITileEntityProvider {
     public boolean isBed(IBlockState state, IBlockAccess world, BlockPos pos, Entity player) {
         return Objects.equals(state.getBlock(), DavincisVesselsObjects.blockSecuredBed);
     }
+
+    @Override
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.MODEL;
+    }
+
 }

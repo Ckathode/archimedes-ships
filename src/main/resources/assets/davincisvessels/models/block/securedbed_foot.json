@@ -1,8 +1,8 @@
 {
   "parent": "block/block",
   "textures": {
-    "particle": "minecraft:blocks/bed_feet_top",
-    "top": "minecraft:blocks/bed_feet_top",
+    "particle": "davincisvessels:blocks/securedbed_feet_top",
+    "top": "davincisvessels:blocks/securedbed_feet_top",
     "bottom": "minecraft:blocks/planks_oak",
     "end": "davincisvessels:blocks/securedbed_feet_end",
     "side": "davincisvessels:blocks/securedbed_feet_side"
