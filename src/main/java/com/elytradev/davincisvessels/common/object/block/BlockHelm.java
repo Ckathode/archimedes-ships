@@ -1,7 +1,6 @@
 package com.elytradev.davincisvessels.common.object.block;
 
 import com.elytradev.davincisvessels.DavincisVesselsMod;
-import com.elytradev.davincisvessels.common.object.DavincisVesselsObjects;
 import com.elytradev.davincisvessels.common.tileentity.TileHelm;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.ITileEntityProvider;
@@ -151,7 +150,7 @@ public class BlockHelm extends BlockDirectional implements ITileEntityProvider {
     }
 
     @Override
-    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand){
+    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
         if (placer != null && placer instanceof EntityPlayer) {
             // TODO: Achievements are gone.
             //((EntityPlayer) placer).addStat(DavincisVesselsObjects.achievementCreateHelm);

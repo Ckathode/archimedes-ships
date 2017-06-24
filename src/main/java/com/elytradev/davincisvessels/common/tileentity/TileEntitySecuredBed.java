@@ -1,13 +1,12 @@
 package com.elytradev.davincisvessels.common.tileentity;
 
+import com.elytradev.davincisvessels.common.handler.ConnectionHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.UUID;
-
-import com.elytradev.davincisvessels.common.handler.ConnectionHandler;
 
 public class TileEntitySecuredBed extends TileEntity {
 

@@ -1,15 +1,15 @@
 package com.elytradev.davincisvessels.common.network.message;
 
-import com.elytradev.davincisvessels.DavincisVesselsMod;
-import com.elytradev.davincisvessels.common.network.DavincisVesselsNetworking;
-import com.elytradev.davincisvessels.common.network.marshallers.TileEntityMarshaller;
-import com.elytradev.davincisvessels.common.tileentity.BlockLocation;
-import com.elytradev.davincisvessels.common.tileentity.TileAnchorPoint;
 import com.elytradev.concrete.network.Message;
 import com.elytradev.concrete.network.NetworkContext;
 import com.elytradev.concrete.network.annotation.field.MarshalledAs;
 import com.elytradev.concrete.network.annotation.type.ReceivedOn;
+import com.elytradev.davincisvessels.DavincisVesselsMod;
+import com.elytradev.davincisvessels.common.network.DavincisVesselsNetworking;
+import com.elytradev.davincisvessels.common.network.marshallers.TileEntityMarshaller;
 import com.elytradev.davincisvessels.common.tileentity.AnchorInstance;
+import com.elytradev.davincisvessels.common.tileentity.BlockLocation;
+import com.elytradev.davincisvessels.common.tileentity.TileAnchorPoint;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,14 +28,13 @@ public class AnchorPointMessage extends Message {
 
     @MarshalledAs(TileEntityMarshaller.MARSHALLER_NAME)
     public TileAnchorPoint anchorPoint;
+    public TileAnchorPoint.AnchorPointAction action;
 
-    public AnchorPointMessage( TileAnchorPoint anchorPoint, TileAnchorPoint.AnchorPointAction action) {
+    public AnchorPointMessage(TileAnchorPoint anchorPoint, TileAnchorPoint.AnchorPointAction action) {
         super(DavincisVesselsNetworking.NETWORK);
         this.anchorPoint = anchorPoint;
         this.action = action;
     }
-
-    public TileAnchorPoint.AnchorPointAction action;
 
     public AnchorPointMessage(NetworkContext ctx) {
         super(ctx);

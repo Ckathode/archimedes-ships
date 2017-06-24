@@ -1,11 +1,21 @@
 package com.elytradev.davincisvessels.common.entity;
 
 import com.elytradev.davincisvessels.DavincisVesselsMod;
+import com.elytradev.davincisvessels.common.api.block.IBlockBalloon;
 import com.elytradev.davincisvessels.common.api.block.IBlockCustomMass;
 import com.elytradev.davincisvessels.common.api.tileentity.ITileEngineModifier;
 import com.elytradev.davincisvessels.common.object.DavincisVesselsObjects;
+import com.elytradev.davincisvessels.common.tileentity.AnchorInstance;
 import com.elytradev.davincisvessels.common.tileentity.BlockLocation;
+import com.elytradev.davincisvessels.common.tileentity.TileAnchorPoint;
 import com.elytradev.davincisvessels.common.tileentity.TileHelm;
+import com.elytradev.movingworld.common.chunk.LocatedBlock;
+import com.elytradev.movingworld.common.entity.EntityMovingWorld;
+import com.elytradev.movingworld.common.entity.MovingWorldCapabilities;
+import com.elytradev.movingworld.common.util.FloodFiller;
+import com.elytradev.movingworld.common.util.LocatedBlockList;
+import com.elytradev.movingworld.common.util.MaterialDensity;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
 import net.minecraft.block.state.IBlockState;
@@ -13,24 +23,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import com.elytradev.davincisvessels.common.api.block.IBlockBalloon;
-import com.elytradev.davincisvessels.common.tileentity.AnchorInstance;
-import com.elytradev.davincisvessels.common.tileentity.TileAnchorPoint;
-import com.elytradev.movingworld.common.chunk.LocatedBlock;
-import com.elytradev.movingworld.common.entity.EntityMovingWorld;
-import com.elytradev.movingworld.common.entity.MovingWorldCapabilities;
-import com.elytradev.movingworld.common.util.FloodFiller;
-import com.elytradev.movingworld.common.util.LocatedBlockList;
-import com.elytradev.movingworld.common.util.MaterialDensity;
+import java.util.*;
 
 public class ShipCapabilities extends MovingWorldCapabilities {
 
@@ -166,6 +161,10 @@ public class ShipCapabilities extends MovingWorldCapabilities {
         return balloonCount;
     }
 
+    public ImmutableList<EntitySeat> getSeats() {
+        return ImmutableList.copyOf(seats);
+    }
+
     public void addSeat(EntitySeat entity) {
         if (entity != null && entity instanceof EntitySeat) seats.add(entity);
     }
@@ -187,7 +186,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     }
 
     public EntitySeat getAvailableSeat() {
-        if (seats.stream().allMatch(seat -> seat.getControllingPassenger() == null))
+        if (seats.stream().anyMatch(seat -> seat.getControllingPassenger() == null))
             return seats.stream().filter(seat -> seat.getControllingPassenger() == null).findFirst().get();
         return null;
     }

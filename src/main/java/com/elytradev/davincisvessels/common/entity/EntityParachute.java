@@ -1,5 +1,7 @@
 package com.elytradev.davincisvessels.common.entity;
 
+import com.elytradev.movingworld.common.util.Vec3dMod;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
@@ -8,12 +10,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
-import java.util.List;
-
 import javax.annotation.Nullable;
-
-import com.elytradev.movingworld.common.util.Vec3dMod;
-import io.netty.buffer.ByteBuf;
+import java.util.List;
 
 public class EntityParachute extends Entity implements IEntityAdditionalSpawnData {
 

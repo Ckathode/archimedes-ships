@@ -1,12 +1,11 @@
 package com.elytradev.davincisvessels.client.gui;
 
+import com.elytradev.davincisvessels.common.tileentity.TileHelm;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-
-import com.elytradev.davincisvessels.common.tileentity.TileHelm;
 
 public class ContainerHelm extends Container {
     public final TileHelm tileEntity;

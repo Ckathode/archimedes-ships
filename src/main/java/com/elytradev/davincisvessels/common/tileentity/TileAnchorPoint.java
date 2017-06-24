@@ -1,9 +1,12 @@
 package com.elytradev.davincisvessels.common.tileentity;
 
+import com.elytradev.davincisvessels.client.gui.GuiAnchorPoint;
 import com.elytradev.davincisvessels.common.LanguageEntries;
 import com.elytradev.davincisvessels.common.object.DavincisVesselsObjects;
+import com.elytradev.movingworld.api.IMovingTile;
+import com.elytradev.movingworld.common.chunk.mobilechunk.MobileChunk;
+import com.elytradev.movingworld.common.entity.EntityMovingWorld;
 import com.google.common.collect.Lists;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,14 +23,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 
-import java.util.Objects;
-
 import javax.annotation.Nullable;
-
-import com.elytradev.davincisvessels.client.gui.GuiAnchorPoint;
-import com.elytradev.movingworld.api.IMovingTile;
-import com.elytradev.movingworld.common.chunk.mobilechunk.MobileChunk;
-import com.elytradev.movingworld.common.entity.EntityMovingWorld;
+import java.util.Objects;
 
 public class TileAnchorPoint extends TileEntity implements IMovingTile, IInventory, ITickable {
 
@@ -278,7 +275,7 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
         }
     }
 
-    public enum AnchorPointAction{
+    public enum AnchorPointAction {
         LINK, SWITCH
     }
 }

@@ -2,7 +2,9 @@ package com.elytradev.davincisvessels.client.render;
 
 import com.elytradev.davincisvessels.DavincisVesselsMod;
 import com.elytradev.davincisvessels.common.entity.EntityShip;
+import com.elytradev.davincisvessels.common.object.block.BlockHelm;
 import com.elytradev.davincisvessels.common.tileentity.TileHelm;
+import com.elytradev.movingworld.api.IMovingTile;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -13,13 +15,10 @@ import net.minecraft.util.EnumFacing;
 
 import java.io.IOException;
 
-import com.elytradev.davincisvessels.common.object.block.BlockHelm;
-import com.elytradev.movingworld.api.IMovingTile;
-
 public class TileEntityHelmRenderer extends TileEntitySpecialRenderer<TileHelm> {
 
     @Override
-    public void renderTileEntityAt(TileHelm te, double x, double y, double z, float partialTicks, int destroyStage, float idk) {
+    public void render(TileHelm te, double x, double y, double z, float partialTicks, int destroyStage, float idk) {
         try {
             renderHelm(te, x, y, z, partialTicks);
         } catch (Exception e) {

@@ -1,9 +1,9 @@
 package com.elytradev.davincisvessels.common.network.message;
 
-import com.elytradev.davincisvessels.common.network.DavincisVesselsNetworking;
 import com.elytradev.concrete.network.Message;
 import com.elytradev.concrete.network.NetworkContext;
 import com.elytradev.concrete.network.annotation.type.ReceivedOn;
+import com.elytradev.davincisvessels.common.network.DavincisVesselsNetworking;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;

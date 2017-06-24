@@ -6,6 +6,8 @@ import com.elytradev.davincisvessels.common.object.item.ItemBlockAnchorPoint;
 import com.elytradev.davincisvessels.common.object.item.ItemGaugeBlock;
 import com.elytradev.davincisvessels.common.object.item.ItemSecuredBed;
 import com.elytradev.davincisvessels.common.tileentity.*;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -22,11 +24,12 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.common.registry.IForgeRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.HashMap;
+import java.util.List;
 
 import static com.elytradev.davincisvessels.DavincisVesselsMod.MOD_ID;
 
@@ -63,54 +66,11 @@ public class DavincisVesselsObjects {
     public static Material materialFloater;
     public static HashMap<String, Block> registeredBlocks;
     public static HashMap<String, Item> registeredItems;
-
     public static String REGISTRY_PREFIX = DavincisVesselsMod.MOD_ID.toLowerCase();
+    private static List<Item> itemBlocksToRegister;
+    private int recipeID = 0;
 
     public void preInit(FMLPreInitializationEvent e) {
-        registeredBlocks = new HashMap<String, Block>();
-        registeredItems = new HashMap<String, Item>();
-
-        materialFloater = new Material(MapColor.CLOTH);
-
-        itemSecuredBed = new ItemSecuredBed().setMaxStackSize(1).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
-        registerItem("securedBed", itemSecuredBed);
-
-        blockMarkShip = (BlockHelm) new BlockHelm().setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
-        blockMarkShip.setHardness(1F).setResistance(1F);
-        registerBlock("marker", blockMarkShip);
-
-        blockFloater = new BlockAS(materialFloater, SoundType.WOOD).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
-        blockFloater.setHardness(1F).setResistance(1F);
-        registerBlock("floater", blockFloater);
-
-        blockBalloon = new BlockRecolourable(Material.CLOTH, SoundType.CLOTH).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
-        blockBalloon.setHardness(0.35F).setResistance(1F);
-        registerBlock("balloon", blockBalloon, ItemCloth.class);
-
-        blockGauge = (BlockGauge) new BlockGauge().setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
-        blockGauge.setHardness(1F).setResistance(1F);
-        registerBlock("gauge", blockGauge, ItemGaugeBlock.class);
-
-        blockSeat = (BlockSeat) new BlockSeat().setHardness(1F).setResistance(1F).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
-        registerBlock("seat", blockSeat);
-
-        blockBuffer = new BlockAS(Material.CLOTH, SoundType.WOOD).setHardness(1F).setResistance(1F).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
-        registerBlock("buffer", blockBuffer);
-
-        blockStickyBuffer = new BlockAS(Material.CLOTH, SoundType.CLOTH).setHardness(1F).setResistance(1F).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
-        registerBlock("stickyBuffer", blockStickyBuffer);
-
-        blockEngine = new BlockEngine(Material.IRON, 1F, 10).setHardness(2F).setResistance(3F).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
-        registerBlock("engine", blockEngine);
-
-        blockCrateWood = new BlockCrate(Material.WOOD).setHardness(1f).setResistance(1f).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
-        registerBlock("crate_wood", blockCrateWood);
-
-        blockAnchorPoint = new BlockAnchorPoint(Material.WOOD).setHardness(1f).setResistance(1F).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
-        registerBlock("anchorPoint", blockAnchorPoint, ItemBlockAnchorPoint.class);
-
-        blockSecuredBed = new BlockSecuredBed().setHardness(0.2F);
-        registerBlock("securedBed", blockSecuredBed, false);
     }
 
     public void init(FMLInitializationEvent e) {
@@ -127,7 +87,65 @@ public class DavincisVesselsObjects {
     }
 
     @SubscribeEvent
-    public void onRecipeRegisterEvent(RegistryEvent.Register<IRecipe> recipeRegister) {
+    public void onItemRegister(RegistryEvent.Register<Item> blockRegister) {
+        IForgeRegistry<Item> registry = blockRegister.getRegistry();
+        registeredItems = new HashMap<String, Item>();
+
+        itemSecuredBed = new ItemSecuredBed().setMaxStackSize(1).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
+        registerItem(registry, "securedBed", itemSecuredBed);
+
+        for (Item item : itemBlocksToRegister) {
+            registry.register(item);
+        }
+    }
+
+    @SubscribeEvent
+    public void onBlockRegister(RegistryEvent.Register<Block> blockRegister) {
+        IForgeRegistry<Block> registry = blockRegister.getRegistry();
+        registeredBlocks = Maps.newHashMap();
+        itemBlocksToRegister = Lists.newArrayList();
+        materialFloater = new Material(MapColor.CLOTH);
+
+        blockMarkShip = (BlockHelm) new BlockHelm().setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
+        blockMarkShip.setHardness(1F).setResistance(1F);
+        registerBlock(registry, "marker", blockMarkShip);
+
+        blockFloater = new BlockAS(materialFloater, SoundType.WOOD).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
+        blockFloater.setHardness(1F).setResistance(1F);
+        registerBlock(registry, "floater", blockFloater);
+
+        blockBalloon = new BlockRecolourable(Material.CLOTH, SoundType.CLOTH).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
+        blockBalloon.setHardness(0.35F).setResistance(1F);
+        registerBlock(registry, "balloon", blockBalloon, ItemCloth.class);
+
+        blockGauge = (BlockGauge) new BlockGauge().setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
+        blockGauge.setHardness(1F).setResistance(1F);
+        registerBlock(registry, "gauge", blockGauge, ItemGaugeBlock.class);
+
+        blockSeat = (BlockSeat) new BlockSeat().setHardness(1F).setResistance(1F).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
+        registerBlock(registry, "seat", blockSeat);
+
+        blockBuffer = new BlockAS(Material.CLOTH, SoundType.WOOD).setHardness(1F).setResistance(1F).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
+        registerBlock(registry, "buffer", blockBuffer);
+
+        blockStickyBuffer = new BlockAS(Material.CLOTH, SoundType.CLOTH).setHardness(1F).setResistance(1F).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
+        registerBlock(registry, "stickyBuffer", blockStickyBuffer);
+
+        blockEngine = new BlockEngine(Material.IRON, 1F, 10).setHardness(2F).setResistance(3F).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
+        registerBlock(registry, "engine", blockEngine);
+
+        blockCrateWood = new BlockCrate(Material.WOOD).setHardness(1f).setResistance(1f).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
+        registerBlock(registry, "crate_wood", blockCrateWood);
+
+        blockAnchorPoint = new BlockAnchorPoint(Material.WOOD).setHardness(1f).setResistance(1F).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
+        registerBlock(registry, "anchorPoint", blockAnchorPoint, ItemBlockAnchorPoint.class);
+
+        blockSecuredBed = new BlockSecuredBed().setHardness(0.2F);
+        registerBlock(registry, "securedBed", blockSecuredBed, false);
+    }
+
+    @SubscribeEvent
+    public void onRecipeRegister(RegistryEvent.Register<IRecipe> recipeRegister) {
         DavincisVesselsMod.LOG.info("Registering recipes for Davincis Vessels...");
         registerShapedRecipe(recipeRegister.getRegistry(), new ItemStack(blockMarkShip, 1), "X#X", "#O#", "X#X", Character.valueOf('X'), "plankWood", Character.valueOf('#'), "stickWood", Character.valueOf('O'), "ingotIron");
         registerShapedRecipe(recipeRegister.getRegistry(), new ItemStack(blockGauge, 1, 0), "VXV", "XO#", " # ", Character.valueOf('X'), "ingotIron", Character.valueOf('#'), "ingotGold", Character.valueOf('O'), "dustRedstone", Character.valueOf('V'), Blocks.GLASS_PANE);
@@ -157,8 +175,6 @@ public class DavincisVesselsObjects {
     public void postInit(FMLPostInitializationEvent e) {
     }
 
-    private int recipeID = 0;
-
     private void registerShapedRecipe(IForgeRegistry<IRecipe> registry, ItemStack out, Object... input) {
         ResourceLocation resourceLocation = new ResourceLocation(MOD_ID, out.getUnlocalizedName() + recipeID++);
         registry.register(new ShapedOreRecipe(resourceLocation, out, input).setRegistryName(resourceLocation));
@@ -169,38 +185,38 @@ public class DavincisVesselsObjects {
         registry.register(new ShapelessOreRecipe(resourceLocation, out, input).setRegistryName(resourceLocation));
     }
 
-    private void registerBlock(String id, Block block) {
-        registerBlock(id, block, true);
+    private void registerBlock(IForgeRegistry<Block> registry, String id, Block block) {
+        registerBlock(registry, id, block, true);
     }
 
-    private void registerBlock(String id, Block block, boolean withItemBlock) {
+    private void registerBlock(IForgeRegistry<Block> registry, String id, Block block, boolean withItemBlock) {
         block.setUnlocalizedName("davincis." + id);
         block.setRegistryName(REGISTRY_PREFIX, id);
-        GameRegistry.register(block);
+        registry.register(block);
         if (withItemBlock)
-            GameRegistry.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
+            itemBlocksToRegister.add(new ItemBlock(block).setRegistryName(block.getRegistryName()));
         DavincisVesselsObjects.registeredBlocks.put(id, block);
     }
 
-    private void registerBlock(String id, Block block, Class<? extends ItemBlock> itemBlockClass) {
+    private void registerBlock(IForgeRegistry<Block> registry, String id, Block block, Class<? extends ItemBlock> itemBlockClass) {
         try {
             block.setUnlocalizedName("davincis." + id);
             block.setRegistryName(REGISTRY_PREFIX, id);
-            GameRegistry.register(block);
+            registry.register(block);
 
             ItemBlock itemBlock = itemBlockClass.getDeclaredConstructor(Block.class).newInstance(block);
             itemBlock.setRegistryName(REGISTRY_PREFIX, id);
-            GameRegistry.register(itemBlock);
+            itemBlocksToRegister.add(itemBlock);
             DavincisVesselsObjects.registeredBlocks.put(id, block);
         } catch (Exception e) {
             DavincisVesselsMod.LOG.error("Caught exception while registering " + block, e);
         }
     }
 
-    private void registerItem(String id, Item item) {
+    private void registerItem(IForgeRegistry<Item> registry, String id, Item item) {
         item.setUnlocalizedName("davincis." + id);
         item.setRegistryName(REGISTRY_PREFIX, id);
-        GameRegistry.register(item);
+        registry.register(item);
         DavincisVesselsObjects.registeredItems.put(id, item);
     }
 }

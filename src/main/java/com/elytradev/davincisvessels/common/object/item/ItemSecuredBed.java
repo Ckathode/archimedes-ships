@@ -2,6 +2,7 @@ package com.elytradev.davincisvessels.common.object.item;
 
 
 import com.elytradev.davincisvessels.common.object.DavincisVesselsObjects;
+import com.elytradev.davincisvessels.common.object.block.BlockSecuredBed;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -15,8 +16,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-
-import com.elytradev.davincisvessels.common.object.block.BlockSecuredBed;
 
 public class ItemSecuredBed extends Item {
 

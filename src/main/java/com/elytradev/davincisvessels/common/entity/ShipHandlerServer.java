@@ -1,10 +1,9 @@
 package com.elytradev.davincisvessels.common.entity;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumHand;
-
 import com.elytradev.movingworld.common.entity.EntityMovingWorld;
 import com.elytradev.movingworld.common.entity.MovingWorldHandlerServer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumHand;
 
 public class ShipHandlerServer extends MovingWorldHandlerServer {
 

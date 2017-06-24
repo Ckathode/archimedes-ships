@@ -2,12 +2,11 @@ package com.elytradev.davincisvessels.common;
 
 import com.elytradev.davincisvessels.DavincisVesselsMod;
 import com.elytradev.davincisvessels.client.gui.DavincisVesselsGuiHandler;
+import com.elytradev.davincisvessels.common.handler.CommonHookContainer;
+import com.elytradev.davincisvessels.common.handler.CommonPlayerTicker;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.LoaderState;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-
-import com.elytradev.davincisvessels.common.handler.CommonHookContainer;
-import com.elytradev.davincisvessels.common.handler.CommonPlayerTicker;
 
 public class CommonProxy {
     public CommonPlayerTicker playerTicker;

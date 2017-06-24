@@ -1,9 +1,21 @@
 package com.elytradev.davincisvessels.client;
 
 import com.elytradev.davincisvessels.DavincisVesselsMod;
+import com.elytradev.davincisvessels.client.control.ShipKeyHandler;
+import com.elytradev.davincisvessels.client.handler.ClientHookContainer;
+import com.elytradev.davincisvessels.client.render.RenderParachute;
+import com.elytradev.davincisvessels.client.render.RenderSeat;
+import com.elytradev.davincisvessels.client.render.TileEntityGaugeRenderer;
+import com.elytradev.davincisvessels.client.render.TileEntityHelmRenderer;
 import com.elytradev.davincisvessels.common.CommonProxy;
+import com.elytradev.davincisvessels.common.DavincisVesselsConfig;
+import com.elytradev.davincisvessels.common.entity.EntityParachute;
+import com.elytradev.davincisvessels.common.entity.EntitySeat;
 import com.elytradev.davincisvessels.common.entity.EntityShip;
 import com.elytradev.davincisvessels.common.object.DavincisVesselsObjects;
+import com.elytradev.davincisvessels.common.tileentity.TileGauge;
+import com.elytradev.davincisvessels.common.tileentity.TileHelm;
+import com.elytradev.movingworld.client.render.RenderMovingWorld;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
@@ -18,19 +30,6 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.LoaderState;
 
 import java.util.ArrayList;
-
-import com.elytradev.davincisvessels.client.control.ShipKeyHandler;
-import com.elytradev.davincisvessels.client.handler.ClientHookContainer;
-import com.elytradev.davincisvessels.client.render.RenderParachute;
-import com.elytradev.davincisvessels.client.render.RenderSeat;
-import com.elytradev.davincisvessels.client.render.TileEntityGaugeRenderer;
-import com.elytradev.davincisvessels.client.render.TileEntityHelmRenderer;
-import com.elytradev.davincisvessels.common.DavincisVesselsConfig;
-import com.elytradev.davincisvessels.common.entity.EntityParachute;
-import com.elytradev.davincisvessels.common.entity.EntitySeat;
-import com.elytradev.davincisvessels.common.tileentity.TileGauge;
-import com.elytradev.davincisvessels.common.tileentity.TileHelm;
-import com.elytradev.movingworld.client.render.RenderMovingWorld;
 
 public class ClientProxy extends CommonProxy {
 
@@ -52,10 +51,10 @@ public class ClientProxy extends CommonProxy {
     public void registerRenderers(LoaderState.ModState state) {
         if (state == LoaderState.ModState.PREINITIALIZED) {
             registerEntityRenderers();
-            registerRendererVariants();
         }
 
         if (state == LoaderState.ModState.INITIALIZED) {
+            registerRendererVariants();
             registerTileEntitySpeacialRenderers();
             registerItemRenderers();
         }

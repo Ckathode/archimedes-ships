@@ -3,9 +3,9 @@ package com.elytradev.davincisvessels.client.gui;
 import com.elytradev.davincisvessels.common.LanguageEntries;
 import com.elytradev.davincisvessels.common.entity.EntityShip;
 import com.elytradev.davincisvessels.common.network.message.RequestSubmerseMessage;
-import com.google.common.collect.Lists;
-
+import com.elytradev.movingworld.common.network.MovingWorldClientAction;
 import com.elytradev.movingworld.common.network.message.MovingWorldClientActionMessage;
+import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -15,13 +15,10 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.opengl.GL11;
 
 import java.util.Iterator;
 import java.util.List;
-
-import com.elytradev.movingworld.common.network.MovingWorldClientAction;
 
 public class GuiShip extends GuiContainer {
     public static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("davincisvessels", "textures/gui/shipinv.png");
@@ -106,7 +103,7 @@ public class GuiShip extends GuiContainer {
             ship.alignToGrid(true);
         } else if (button == btnSubmersible && ((GuiButtonSubmersible) btnSubmersible).canDo) {
             GuiButtonSubmersible subButton = (GuiButtonSubmersible) button;
-            new RequestSubmerseMessage(ship,!subButton.submerse).sendToServer();
+            new RequestSubmerseMessage(ship, !subButton.submerse).sendToServer();
             subButton.submerse = !subButton.submerse;
         }
     }
@@ -122,7 +119,7 @@ public class GuiShip extends GuiContainer {
         }
 
         @Override
-        public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks){
+        public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
             if (this.visible) {
                 mc.getTextureManager().bindTexture(new ResourceLocation("davincisvessels", "textures/gui/submerse.png"));
                 GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);

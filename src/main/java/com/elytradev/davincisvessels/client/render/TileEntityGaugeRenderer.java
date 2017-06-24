@@ -1,5 +1,6 @@
 package com.elytradev.davincisvessels.client.render;
 
+import com.elytradev.davincisvessels.common.tileentity.TileGauge;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -11,10 +12,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-
 import org.lwjgl.opengl.GL11;
-
-import com.elytradev.davincisvessels.common.tileentity.TileGauge;
 
 public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
 
@@ -146,7 +144,7 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
 
 
     @Override
-    public void renderTileEntityAt(TileEntity tileEntity, double posX, double posY, double posZ, float partialTicks, int par6, float idk) {
+    public void render(TileEntity tileEntity, double posX, double posY, double posZ, float partialTicks, int par6, float idk) {
         renderGauge((TileGauge) tileEntity, posX, posY, posZ, partialTicks);
     }
 }

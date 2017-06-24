@@ -1,6 +1,9 @@
 package com.elytradev.davincisvessels.common.tileentity;
 
 import com.elytradev.davincisvessels.common.entity.EntityShip;
+import com.elytradev.movingworld.api.IMovingTile;
+import com.elytradev.movingworld.common.chunk.mobilechunk.MobileChunk;
+import com.elytradev.movingworld.common.entity.EntityMovingWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -8,10 +11,6 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
-
-import com.elytradev.movingworld.api.IMovingTile;
-import com.elytradev.movingworld.common.chunk.mobilechunk.MobileChunk;
-import com.elytradev.movingworld.common.entity.EntityMovingWorld;
 
 public class TileCrate extends TileEntity implements IMovingTile, ITickable {
     private EntityShip parentShip;

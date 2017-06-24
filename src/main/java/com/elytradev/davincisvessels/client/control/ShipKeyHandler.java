@@ -1,8 +1,10 @@
 package com.elytradev.davincisvessels.client.control;
 
+import com.elytradev.davincisvessels.common.DavincisVesselsConfig;
 import com.elytradev.davincisvessels.common.entity.EntityShip;
 import com.elytradev.davincisvessels.common.network.message.OpenGuiMessage;
 import com.elytradev.movingworld.common.entity.EntityMovingWorld;
+import com.elytradev.movingworld.common.network.MovingWorldClientAction;
 import com.elytradev.movingworld.common.network.message.MovingWorldClientActionMessage;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -10,10 +12,6 @@ import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import com.elytradev.davincisvessels.common.DavincisVesselsConfig;
-import com.elytradev.movingworld.common.network.MovingWorldClientAction;
-import org.lwjgl.Sys;
 
 @SideOnly(Side.CLIENT)
 public class ShipKeyHandler {

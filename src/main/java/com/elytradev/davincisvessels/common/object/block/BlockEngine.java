@@ -1,7 +1,6 @@
 package com.elytradev.davincisvessels.common.object.block;
 
 import com.elytradev.davincisvessels.DavincisVesselsMod;
-import com.elytradev.davincisvessels.common.object.DavincisVesselsObjects;
 import com.elytradev.davincisvessels.common.tileentity.TileEngine;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;

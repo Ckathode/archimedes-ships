@@ -1,15 +1,14 @@
 package com.elytradev.davincisvessels.client.gui;
 
+import com.elytradev.davincisvessels.common.entity.EntityShip;
+import com.elytradev.davincisvessels.common.tileentity.TileAnchorPoint;
+import com.elytradev.davincisvessels.common.tileentity.TileEngine;
+import com.elytradev.davincisvessels.common.tileentity.TileHelm;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
-
-import com.elytradev.davincisvessels.common.entity.EntityShip;
-import com.elytradev.davincisvessels.common.tileentity.TileAnchorPoint;
-import com.elytradev.davincisvessels.common.tileentity.TileEngine;
-import com.elytradev.davincisvessels.common.tileentity.TileHelm;
 
 public class DavincisVesselsGuiHandler implements IGuiHandler {
     @Override

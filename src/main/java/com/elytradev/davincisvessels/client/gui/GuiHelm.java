@@ -2,30 +2,26 @@ package com.elytradev.davincisvessels.client.gui;
 
 import com.elytradev.davincisvessels.DavincisVesselsMod;
 import com.elytradev.davincisvessels.common.LanguageEntries;
+import com.elytradev.davincisvessels.common.entity.ShipAssemblyInteractor;
 import com.elytradev.davincisvessels.common.network.HelmClientAction;
 import com.elytradev.davincisvessels.common.network.message.HelmActionMessage;
-import com.elytradev.davincisvessels.common.tileentity.TileHelm;
 import com.elytradev.davincisvessels.common.network.message.RenameShipMessage;
+import com.elytradev.davincisvessels.common.tileentity.TileHelm;
+import com.elytradev.movingworld.common.chunk.assembly.AssembleResult;
+import com.elytradev.movingworld.common.chunk.assembly.AssembleResult.ResultType;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
 import java.util.Locale;
 
-import com.elytradev.davincisvessels.common.entity.ShipAssemblyInteractor;
-import com.elytradev.movingworld.common.chunk.assembly.AssembleResult;
-import com.elytradev.movingworld.common.chunk.assembly.AssembleResult.ResultType;
-
-import static com.elytradev.movingworld.common.chunk.assembly.AssembleResult.ResultType.RESULT_BUSY_COMPILING;
-import static com.elytradev.movingworld.common.chunk.assembly.AssembleResult.ResultType.RESULT_NONE;
-import static com.elytradev.movingworld.common.chunk.assembly.AssembleResult.ResultType.RESULT_OK;
+import static com.elytradev.movingworld.common.chunk.assembly.AssembleResult.ResultType.*;
 
 public class GuiHelm extends GuiContainer {
     public static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("davincisvessels", "textures/gui/shipstatus.png");

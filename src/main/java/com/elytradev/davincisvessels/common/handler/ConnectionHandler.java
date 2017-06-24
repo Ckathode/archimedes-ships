@@ -6,6 +6,7 @@ import com.elytradev.davincisvessels.common.entity.EntitySeat;
 import com.elytradev.davincisvessels.common.entity.EntityShip;
 import com.elytradev.davincisvessels.common.network.message.ConfigMessage;
 import com.elytradev.davincisvessels.common.tileentity.TileEntitySecuredBed;
+import com.elytradev.movingworld.common.util.Vec3dMod;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -15,8 +16,6 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 import java.util.HashMap;
 import java.util.UUID;
-
-import com.elytradev.movingworld.common.util.Vec3dMod;
 
 public class ConnectionHandler {
 

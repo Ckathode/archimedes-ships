@@ -1,14 +1,12 @@
 package com.elytradev.davincisvessels.client.gui;
 
 import com.elytradev.davincisvessels.common.LanguageEntries;
+import com.elytradev.davincisvessels.common.tileentity.TileEngine;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.opengl.GL11;
-
-import com.elytradev.davincisvessels.common.tileentity.TileEngine;
 
 public class GuiEngine extends GuiContainer {
     public static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("davincisvessels", "textures/gui/engine.png");

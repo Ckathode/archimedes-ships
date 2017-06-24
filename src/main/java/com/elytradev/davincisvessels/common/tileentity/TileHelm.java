@@ -2,7 +2,6 @@ package com.elytradev.davincisvessels.common.tileentity;
 
 import com.elytradev.davincisvessels.DavincisVesselsMod;
 import com.elytradev.davincisvessels.common.entity.EntityShip;
-import com.elytradev.davincisvessels.common.object.DavincisVesselsObjects;
 import com.elytradev.davincisvessels.common.entity.ShipAssemblyInteractor;
 import com.elytradev.davincisvessels.common.network.message.AssembleResultMessage;
 import com.elytradev.movingworld.common.chunk.MovingWorldAssemblyInteractor;

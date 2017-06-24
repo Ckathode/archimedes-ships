@@ -1,7 +1,10 @@
 package com.elytradev.davincisvessels.common.object.block;
 
+import com.elytradev.davincisvessels.DavincisVesselsMod;
 import com.elytradev.davincisvessels.common.object.DavincisVesselsObjects;
+import com.elytradev.davincisvessels.common.tileentity.AnchorInstance;
 import com.elytradev.davincisvessels.common.tileentity.BlockLocation;
+import com.elytradev.davincisvessels.common.tileentity.TileAnchorPoint;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -26,10 +29,6 @@ import net.minecraftforge.common.DimensionManager;
 
 import java.util.Map;
 import java.util.UUID;
-
-import com.elytradev.davincisvessels.DavincisVesselsMod;
-import com.elytradev.davincisvessels.common.tileentity.AnchorInstance;
-import com.elytradev.davincisvessels.common.tileentity.TileAnchorPoint;
 
 public class BlockAnchorPoint extends BlockContainer {
 

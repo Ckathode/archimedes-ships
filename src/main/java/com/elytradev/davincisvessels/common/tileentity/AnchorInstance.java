@@ -1,6 +1,7 @@
 package com.elytradev.davincisvessels.common.tileentity;
 
 import com.elytradev.davincisvessels.common.LanguageEntries;
+import com.elytradev.davincisvessels.common.util.NBTTagUtils;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -12,8 +13,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
-
-import com.elytradev.davincisvessels.common.util.NBTTagUtils;
 
 public class AnchorInstance implements INBTSerializable<NBTTagCompound> {
     /**

@@ -67,8 +67,7 @@ public class BlockGauge extends BlockContainer {
     }
 
     @Override
-    public boolean isPassable(IBlockAccess worldIn, BlockPos pos)
-    {
+    public boolean isPassable(IBlockAccess worldIn, BlockPos pos) {
         return true;
     }
 

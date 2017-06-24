@@ -1,14 +1,17 @@
 package com.elytradev.davincisvessels;
 
-import com.elytradev.davincisvessels.common.command.CommandDisassembleNear;
+import com.elytradev.davincisvessels.client.ClientProxy;
+import com.elytradev.davincisvessels.common.CommonProxy;
+import com.elytradev.davincisvessels.common.DavincisVesselsConfig;
+import com.elytradev.davincisvessels.common.command.*;
+import com.elytradev.davincisvessels.common.entity.EntityParachute;
+import com.elytradev.davincisvessels.common.entity.EntitySeat;
+import com.elytradev.davincisvessels.common.entity.EntityShip;
+import com.elytradev.davincisvessels.common.handler.ConnectionHandler;
+import com.elytradev.davincisvessels.common.network.DavincisVesselsNetworking;
 import com.elytradev.davincisvessels.common.object.DavincisVesselsObjects;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ListMultimap;
-
-import net.minecraft.block.Block;
 import net.minecraft.command.CommandBase;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
@@ -17,32 +20,13 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
-
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Collections;
-import java.util.List;
-
-import com.elytradev.davincisvessels.client.ClientProxy;
-import com.elytradev.davincisvessels.common.CommonProxy;
-import com.elytradev.davincisvessels.common.DavincisVesselsConfig;
-import com.elytradev.davincisvessels.common.command.CommandDVHelp;
-import com.elytradev.davincisvessels.common.command.CommandDVTP;
-import com.elytradev.davincisvessels.common.command.CommandDisassembleShip;
-import com.elytradev.davincisvessels.common.command.CommandShipInfo;
-import com.elytradev.davincisvessels.common.entity.EntityParachute;
-import com.elytradev.davincisvessels.common.entity.EntitySeat;
-import com.elytradev.davincisvessels.common.entity.EntityShip;
-import com.elytradev.davincisvessels.common.handler.ConnectionHandler;
-import com.elytradev.davincisvessels.common.network.DavincisVesselsNetworking;
 
 @Mod(modid = DavincisVesselsMod.MOD_ID, name = DavincisVesselsMod.MOD_NAME, version = DavincisVesselsMod.MOD_VERSION, dependencies = "required-after:movingworld", guiFactory = DavincisVesselsMod.MOD_GUIFACTORY)
 public class DavincisVesselsMod {
@@ -91,8 +75,9 @@ public class DavincisVesselsMod {
 
         localConfig = new DavincisVesselsConfig(new Configuration(event.getSuggestedConfigurationFile()));
         localConfig.loadAndSave();
-
-        localConfig.postLoad();
+        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "ship"), EntityShip.class, "shipmod", 1, this, 64, localConfig.getShared().shipEntitySyncRate, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "seat"), EntitySeat.class, "attachment.seat", 2, this, 64, 20, false);
+        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "parachute"), EntityParachute.class, "parachute", 3, this, 32, localConfig.getShared().shipEntitySyncRate, true);
         PROXY.registerRenderers(event.getModState());
     }
 
@@ -102,54 +87,17 @@ public class DavincisVesselsMod {
         OBJECTS.init(event);
 
         MinecraftForge.EVENT_BUS.register(new ConnectionHandler());
-
-        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "ship"), EntityShip.class, "shipmod", 1, this, 64, localConfig.getShared().shipEntitySyncRate, true);
-        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "seat"), EntitySeat.class, "attachment.seat", 2, this, 64, 20, false);
-        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "parachute"), EntityParachute.class, "parachute", 3, this, 32, localConfig.getShared().shipEntitySyncRate, true);
-
         PROXY.registerKeyHandlers(localConfig);
         PROXY.registerEventHandlers();
         PROXY.registerRenderers(event.getModState());
 
+        localConfig.postLoad();
         localConfig.addBlacklistWhitelistEntries();
     }
 
     @Mod.EventHandler
     public void postInitMod(FMLPostInitializationEvent event) {
         PROXY.registerRenderers(event.getModState());
-    }
-
-    @Mod.EventHandler
-    public void missingMappingsFound(FMLMissingMappingsEvent event) {
-        if (event != null && event.getAll() != null && !event.getAll().isEmpty()) {
-            ListMultimap<String, FMLMissingMappingsEvent.MissingMapping> missing = ReflectionHelper.getPrivateValue(FMLMissingMappingsEvent.class, event, "missing");
-            if (missing != null) {
-                List<FMLMissingMappingsEvent.MissingMapping> missingMappingList = ImmutableList.copyOf(missing.get("archimedesshipsplus"));
-
-                if (missingMappingList != null && !missingMappingList.isEmpty()) {
-                    Logger log = LogManager.getLogger(MOD_ID);
-
-                    log.info("ARCHIMEDES LEGACY MAPPINGS FOUND");
-
-                    for (FMLMissingMappingsEvent.MissingMapping mapping : missingMappingList) {
-                        if (mapping != null && mapping.type != null && mapping.name != null && !mapping.name.isEmpty()) {
-
-                            String name = mapping.name.substring("archimedesshipsplus:".length());
-
-                            if (mapping.type == GameRegistry.Type.BLOCK) {
-                                mapping.remap(Block.REGISTRY.getObject(new ResourceLocation(DavincisVesselsMod.MOD_ID, name)));
-                            } else {
-                                mapping.remap(Item.getItemFromBlock(Block.REGISTRY.getObject(new ResourceLocation(DavincisVesselsObjects.REGISTRY_PREFIX, name))));
-                            }
-
-                            log.debug("archimedesshipsplus:" + name + " ~~~> " + DavincisVesselsMod.MOD_ID + name);
-                        }
-                    }
-
-                    log.info("REMAPPED TO DAVINCI'S VESSELS, ENJOY! ~Darkevilmac");
-                }
-            }
-        }
     }
 
     @Mod.EventHandler

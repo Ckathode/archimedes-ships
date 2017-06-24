@@ -18,7 +18,7 @@ public class TileEntityMarshaller implements Marshaller<TileEntity> {
     public TileEntity unmarshal(ByteBuf in) {
         TileEntity tileEntity = null;
 
-        if(in.readBoolean()){
+        if (in.readBoolean()) {
             tileEntity = DimensionManager.getWorld(in.readInt()).getTileEntity(BlockPos.fromLong(in.readLong()));
         }
 
