@@ -10,8 +10,10 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -109,6 +111,17 @@ public class BlockEngine extends BlockContainer {
         return this.getDefaultState().withProperty(FACING, enumfacing);
     }
 
+
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        TileEngine engine = (TileEngine) worldIn.getTileEntity(pos);
+
+        if (engine != null) {
+            InventoryHelper.dropInventoryItems(worldIn, pos, engine);
+        }
+
+        super.breakBlock(worldIn, pos, state);
+    }
 
     @Override
     public int getMetaFromState(IBlockState state) {
