@@ -67,6 +67,7 @@ shadowJar {
 
     // Shaded under movingworld because of some references to MovingWorld networking.
 	relocate 'com.elytradev.concrete', "com.elytradev.movingworld.repackage.com.elytradev.concrete"
+    configurations = [project.configurations.shadow]
 }
 
 reobf {

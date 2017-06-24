@@ -446,7 +446,7 @@ public class EntityShip extends EntityMovingWorld {
 
     private void handlePlayerControl() {
         if (getControllingPassenger() instanceof EntityLivingBase && ((ShipCapabilities) getCapabilities()).canMove()) {
-            double throttle = ((EntityLivingBase) getControllingPassenger()).field_191988_bg;
+            double throttle = ((EntityLivingBase) getControllingPassenger()).moveForward;
             if (isFlying()) {
                 throttle *= 0.5D;
             }
