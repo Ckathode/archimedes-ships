@@ -69,6 +69,7 @@ public class DavincisVesselsMod {
         LOG = event.getModLog();
 
         MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(PROXY);
         MinecraftForge.EVENT_BUS.register(OBJECTS);
 
         OBJECTS.preInit(event);

@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "normal": {
-      "model": "davincisvessels:buffer"
+    "variants": {
+        "normal": {
+            "model": "davincisvessels:buffer"
+        }
     }
-  }
 }

@@ -1,52 +1,52 @@
 {
-  "variants": {
-    "color=white": {
-      "model": "davincisvessels:balloon_white"
-    },
-    "color=orange": {
-      "model": "davincisvessels:balloon_orange"
-    },
-    "color=magenta": {
-      "model": "davincisvessels:balloon_magenta"
-    },
-    "color=light_blue": {
-      "model": "davincisvessels:balloon_light_blue"
-    },
-    "color=yellow": {
-      "model": "davincisvessels:balloon_yellow"
-    },
-    "color=lime": {
-      "model": "davincisvessels:balloon_lime"
-    },
-    "color=pink": {
-      "model": "davincisvessels:balloon_pink"
-    },
-    "color=gray": {
-      "model": "davincisvessels:balloon_gray"
-    },
-    "color=silver": {
-      "model": "davincisvessels:balloon_silver"
-    },
-    "color=cyan": {
-      "model": "davincisvessels:balloon_cyan"
-    },
-    "color=purple": {
-      "model": "davincisvessels:balloon_purple"
-    },
-    "color=blue": {
-      "model": "davincisvessels:balloon_blue"
-    },
-    "color=brown": {
-      "model": "davincisvessels:balloon_brown"
-    },
-    "color=green": {
-      "model": "davincisvessels:balloon_green"
-    },
-    "color=red": {
-      "model": "davincisvessels:balloon_red"
-    },
-    "color=black": {
-      "model": "davincisvessels:balloon_black"
+    "variants": {
+        "color=white": {
+            "model": "davincisvessels:balloon_white"
+        },
+        "color=orange": {
+            "model": "davincisvessels:balloon_orange"
+        },
+        "color=magenta": {
+            "model": "davincisvessels:balloon_magenta"
+        },
+        "color=light_blue": {
+            "model": "davincisvessels:balloon_light_blue"
+        },
+        "color=yellow": {
+            "model": "davincisvessels:balloon_yellow"
+        },
+        "color=lime": {
+            "model": "davincisvessels:balloon_lime"
+        },
+        "color=pink": {
+            "model": "davincisvessels:balloon_pink"
+        },
+        "color=gray": {
+            "model": "davincisvessels:balloon_gray"
+        },
+        "color=silver": {
+            "model": "davincisvessels:balloon_silver"
+        },
+        "color=cyan": {
+            "model": "davincisvessels:balloon_cyan"
+        },
+        "color=purple": {
+            "model": "davincisvessels:balloon_purple"
+        },
+        "color=blue": {
+            "model": "davincisvessels:balloon_blue"
+        },
+        "color=brown": {
+            "model": "davincisvessels:balloon_brown"
+        },
+        "color=green": {
+            "model": "davincisvessels:balloon_green"
+        },
+        "color=red": {
+            "model": "davincisvessels:balloon_red"
+        },
+        "color=black": {
+            "model": "davincisvessels:balloon_black"
+        }
     }
-  }
 }

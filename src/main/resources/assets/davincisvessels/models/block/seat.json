@@ -1,72 +1,72 @@
 {
-  "ambientocclusion": false,
-  "parent": "block/block",
-  "textures": {
-    "seatpadding": "davincisvessels:blocks/seat",
-    "wood": "blocks/planks_oak",
-    "particle": "davincisvessels:blocks/seat"
-  },
-  "elements": [
-    {
-      "from": [
-        0,
-        0,
-        0
-      ],
-      "to": [
-        16,
-        6,
-        16
-      ],
-      "faces": {
-        "up": {
-          "texture": "#seatpadding"
-        },
-        "down": {
-          "texture": "#wood"
-        },
-        "west": {
-          "texture": "#wood"
-        },
-        "east": {
-          "texture": "#wood"
-        },
-        "north": {
-          "texture": "#seatpadding"
-        },
-        "south": {
-          "texture": "#wood"
-        }
-      }
+    "ambientocclusion": false,
+    "parent": "block/block",
+    "textures": {
+        "seatpadding": "davincisvessels:blocks/seat",
+        "wood": "blocks/planks_oak",
+        "particle": "davincisvessels:blocks/seat"
     },
-    {
-      "from": [
-        0,
-        6,
-        13
-      ],
-      "to": [
-        16,
-        16,
-        16
-      ],
-      "faces": {
-        "up": {
-          "texture": "#seatpadding"
+    "elements": [
+        {
+            "from": [
+                0,
+                0,
+                0
+            ],
+            "to": [
+                16,
+                6,
+                16
+            ],
+            "faces": {
+                "up": {
+                    "texture": "#seatpadding"
+                },
+                "down": {
+                    "texture": "#wood"
+                },
+                "west": {
+                    "texture": "#wood"
+                },
+                "east": {
+                    "texture": "#wood"
+                },
+                "north": {
+                    "texture": "#seatpadding"
+                },
+                "south": {
+                    "texture": "#wood"
+                }
+            }
         },
-        "west": {
-          "texture": "#wood"
-        },
-        "east": {
-          "texture": "#wood"
-        },
-        "north": {
-          "texture": "#seatpadding"
-        },
-        "south": {
-          "texture": "#wood"
+        {
+            "from": [
+                0,
+                6,
+                13
+            ],
+            "to": [
+                16,
+                16,
+                16
+            ],
+            "faces": {
+                "up": {
+                    "texture": "#seatpadding"
+                },
+                "west": {
+                    "texture": "#wood"
+                },
+                "east": {
+                    "texture": "#wood"
+                },
+                "north": {
+                    "texture": "#seatpadding"
+                },
+                "south": {
+                    "texture": "#wood"
+                }
+            }
         }
-      }
-    }
-  ]
+    ]
 }

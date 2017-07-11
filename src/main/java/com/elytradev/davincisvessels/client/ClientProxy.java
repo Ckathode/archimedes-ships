@@ -19,17 +19,18 @@ import com.elytradev.movingworld.client.render.RenderMovingWorld;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
-import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.LoaderState;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import java.util.ArrayList;
+import java.util.Map;
 
 public class ClientProxy extends CommonProxy {
 
@@ -54,13 +55,8 @@ public class ClientProxy extends CommonProxy {
         }
 
         if (state == LoaderState.ModState.INITIALIZED) {
-            registerRendererVariants();
-            registerTileEntitySpeacialRenderers();
-            registerItemRenderers();
-        }
-
-        if (state == LoaderState.ModState.POSTINITIALIZED) {
-
+            registerTileRenderers();
+            registerStandardItemRenders();
         }
     }
 
@@ -70,71 +66,62 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntitySeat.class, RenderSeat::new);
     }
 
-    public void registerTileEntitySpeacialRenderers() {
+    public void registerTileRenderers() {
         ClientRegistry.bindTileEntitySpecialRenderer(TileGauge.class, new TileEntityGaugeRenderer());
         ClientRegistry.bindTileEntitySpecialRenderer(TileHelm.class, new TileEntityHelmRenderer());
     }
 
-    public void registerRendererVariants() {
-        Item itemToRegister = null;
-        ArrayList<ResourceLocation> variants = null;
-
-        itemToRegister = Item.getItemFromBlock(DavincisVesselsObjects.blockBalloon);
-        variants = new ArrayList<ResourceLocation>();
-
-        for (EnumDyeColor color : EnumDyeColor.values()) {
-            variants.add(new ResourceLocation(DavincisVesselsMod.RESOURCE_DOMAIN + "balloon_" + color.getName()));
-        }
-
-        ResourceLocation[] variantsArray = new ResourceLocation[variants.size()];
-        int index = 0;
-
-        for (ResourceLocation str : variants) {
-            variantsArray[index] = str;
-            index++;
-        }
-
-        ModelBakery.registerItemVariants(itemToRegister, variantsArray);
-        ModelBakery.registerItemVariants(Item.getItemFromBlock(DavincisVesselsObjects.blockGauge),
-                new ResourceLocation(DavincisVesselsMod.RESOURCE_DOMAIN + "gauge"),
-                new ResourceLocation(DavincisVesselsMod.RESOURCE_DOMAIN + "gauge_ext"));
-    }
-
-    public void registerItemRenderers() {
-        Item itemToRegister = null;
-        ModelResourceLocation modelResourceLocation = null;
-
-        ItemModelMesher modelMesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
-
-        // Do some general render registrations for OBJECTS, not considering meta.
-        for (int i = 0; i < DavincisVesselsObjects.registeredBlocks.size(); i++) {
-            modelResourceLocation = new ModelResourceLocation(DavincisVesselsMod.RESOURCE_DOMAIN + DavincisVesselsObjects.registeredBlocks.keySet().toArray()[i], "inventory");
-            itemToRegister = Item.getItemFromBlock((Block) DavincisVesselsObjects.registeredBlocks.values().toArray()[i]);
-
-            modelMesher.register(itemToRegister, 0, modelResourceLocation);
-        }
-
-        for (int i = 0; i < DavincisVesselsObjects.registeredItems.size(); i++) {
-            modelResourceLocation = new ModelResourceLocation(DavincisVesselsMod.RESOURCE_DOMAIN + DavincisVesselsObjects.registeredItems.keySet().toArray()[i], "inventory");
-            itemToRegister = (Item) DavincisVesselsObjects.registeredItems.values().toArray()[i];
-            modelMesher.register(itemToRegister, 0, modelResourceLocation);
-        }
+    public void registerVariantItemRenders() {
+        Item itemToRegister;
+        ModelResourceLocation modelResourceLocation;
 
         // Some specific meta registrations for OBJECTS, like for extended gauges.
         itemToRegister = Item.getItemFromBlock(DavincisVesselsObjects.blockGauge);
+        modelResourceLocation = new ModelResourceLocation(DavincisVesselsMod.RESOURCE_DOMAIN + "gauge", "inventory");
+        ModelLoader.setCustomModelResourceLocation(itemToRegister, 0, modelResourceLocation);
         modelResourceLocation = new ModelResourceLocation(DavincisVesselsMod.RESOURCE_DOMAIN + "gauge_ext", "inventory");
-
-        modelMesher.register(itemToRegister, 1, modelResourceLocation);
+        ModelLoader.setCustomModelResourceLocation(itemToRegister, 1, modelResourceLocation);
 
         itemToRegister = Item.getItemFromBlock(DavincisVesselsObjects.blockBalloon);
-        modelResourceLocation = null;
 
         for (EnumDyeColor color : EnumDyeColor.values()) {
+            int i = color.getMetadata();
             modelResourceLocation = new ModelResourceLocation(DavincisVesselsMod.RESOURCE_DOMAIN + "balloon_" + color.getName(), "inventory");
-            modelMesher.register(itemToRegister, color.getMetadata(), modelResourceLocation);
+            ModelLoader.setCustomModelResourceLocation(itemToRegister, i, modelResourceLocation);
+            DavincisVesselsMod.LOG.info("Registering balloon model variant: " + i + " " + modelResourceLocation);
+        }
+    }
+
+    public void registerStandardItemRenders() {
+        Item itemToRegister = null;
+        ModelResourceLocation modelResourceLocation = null;
+
+        // Do some general render registrations for OBJECTS, not considering meta.
+        ItemModelMesher modelMesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
+        for (Map.Entry<String, Block> entry : DavincisVesselsObjects.registeredBlocks.entrySet()) {
+            if (DavincisVesselsObjects.skipMesh.contains(entry.getKey()))
+                continue;
+
+            modelResourceLocation = new ModelResourceLocation(DavincisVesselsMod.RESOURCE_DOMAIN + entry.getKey(), "inventory");
+            itemToRegister = Item.getItemFromBlock(entry.getValue());
+
+            modelMesher.register(itemToRegister, 0, modelResourceLocation);
         }
 
+        for (Map.Entry<String, Item> entry : DavincisVesselsObjects.registeredItems.entrySet()) {
+            if (DavincisVesselsObjects.skipMesh.contains(entry.getKey()))
+                continue;
 
+            modelResourceLocation = new ModelResourceLocation(DavincisVesselsMod.RESOURCE_DOMAIN + entry.getKey(), "inventory");
+            itemToRegister = entry.getValue();
+
+            modelMesher.register(itemToRegister, 0, modelResourceLocation);
+        }
+    }
+
+    @SubscribeEvent
+    public void onModelRegistryEvent(ModelRegistryEvent e) {
+        registerVariantItemRenders();
     }
 
 }

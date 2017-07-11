@@ -66,6 +66,7 @@ public class DavincisVesselsObjects {
     public static Material materialFloater;
     public static HashMap<String, Block> registeredBlocks;
     public static HashMap<String, Item> registeredItems;
+    public static List<String> skipMesh = Lists.newArrayList();
     public static String REGISTRY_PREFIX = DavincisVesselsMod.MOD_ID.toLowerCase();
     private static List<Item> itemBlocksToRegister;
     private int recipeID = 0;
@@ -117,10 +118,12 @@ public class DavincisVesselsObjects {
         blockBalloon = new BlockRecolourable(Material.CLOTH, SoundType.CLOTH).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
         blockBalloon.setHardness(0.35F).setResistance(1F);
         registerBlock(registry, "balloon", blockBalloon, ItemCloth.class);
+        skipMesh.add("balloon");
 
         blockGauge = (BlockGauge) new BlockGauge().setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
         blockGauge.setHardness(1F).setResistance(1F);
         registerBlock(registry, "gauge", blockGauge, ItemGaugeBlock.class);
+        skipMesh.add("gauge");
 
         blockSeat = (BlockSeat) new BlockSeat().setHardness(1F).setResistance(1F).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
         registerBlock(registry, "seat", blockSeat);
@@ -128,7 +131,7 @@ public class DavincisVesselsObjects {
         blockBuffer = new BlockAS(Material.CLOTH, SoundType.WOOD).setHardness(1F).setResistance(1F).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
         registerBlock(registry, "buffer", blockBuffer);
 
-        blockStickyBuffer = new BlockAS(Material.CLOTH, SoundType.CLOTH).setHardness(1F).setResistance(1F).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
+        blockStickyBuffer = new BlockAS(Material.CLOTH, SoundType.WOOD).setHardness(1F).setResistance(1F).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
         registerBlock(registry, "stickyBuffer", blockStickyBuffer);
 
         blockEngine = new BlockEngine(Material.IRON, 1F, 10).setHardness(2F).setResistance(3F).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);

@@ -12,7 +12,6 @@ public class DavincisVesselsGUIFactory implements IModGuiFactory {
     public void initialize(Minecraft minecraftInstance) {
     }
 
-
     @Override
     public boolean hasConfigGui() {
         return true;
@@ -23,18 +22,10 @@ public class DavincisVesselsGUIFactory implements IModGuiFactory {
         return new DavincisVesselsConfigGUI(parentScreen);
     }
 
-    @Override
-    public Class<? extends GuiScreen> mainConfigGuiClass() {
-        return DavincisVesselsConfigGUI.class;
-    }
 
     @Override
     public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() {
         return null;
     }
 
-    @Override
-    public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement element) {
-        return null;
-    }
 }

@@ -1,9 +1,9 @@
 {
-  "parent": "davincisvessels:block/orientableback",
-  "textures": {
-    "front": "davincisvessels:blocks/engine_front",
-    "top": "davincisvessels:blocks/engine",
-    "side": "davincisvessels:blocks/engine_side",
-    "back": "davincisvessels:blocks/engine"
-  }
+    "parent": "davincisvessels:block/orientableback",
+    "textures": {
+        "front": "davincisvessels:blocks/engine_front",
+        "top": "davincisvessels:blocks/engine",
+        "side": "davincisvessels:blocks/engine_side",
+        "back": "davincisvessels:blocks/engine"
+    }
 }
