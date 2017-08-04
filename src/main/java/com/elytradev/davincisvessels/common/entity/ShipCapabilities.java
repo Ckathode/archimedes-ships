@@ -211,7 +211,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     private void tryMountSeat(EntityPlayer player) {
         EntitySeat seat = getAvailableSeat();
         if (seat != null) {
-            player.interactOn(seat, player.getActiveHand());
+            player.startRiding(seat);
         }
     }
 
