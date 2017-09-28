@@ -53,9 +53,9 @@ targetCompatibility = 1.8
 minecraft {
     version = project.forgeVersion
     mappings = project.mcpVersion
-    
+
     runDir = 'run'
-    
+
     def replacementVersion = 'MOD_VERSION = \"' + project.version + '\"'
     replace("MOD_VERSION = \"@AS+VER@\"",
             replacementVersion)
@@ -63,8 +63,8 @@ minecraft {
 
 dependencies {
     compileOnly project(':MovingWorld')
-    
-    compile 'com.elytradev:concrete:0.2.2:all'
+
+    compile 'com.elytradev:concrete:' + project.concreteVersion + ':all'
 }
 
 shadowJar {
@@ -72,7 +72,7 @@ shadowJar {
     classifier = 'full'
 
     // Shaded under movingworld because of some references to MovingWorld networking.
-	relocate 'com.elytradev.concrete', "com.elytradev.movingworld.repackage.com.elytradev.concrete"
+    relocate 'com.elytradev.concrete', "com.elytradev.movingworld.repackage.com.elytradev.concrete"
 }
 
 reobf {

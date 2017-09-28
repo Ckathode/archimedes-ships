@@ -41,7 +41,7 @@ public class CommandDisassembleNear extends CommandBase {
                 double d;
                 for (Entity entity : player.world.getEntities(EntityShip.class, input -> true)) {
                     if (entity instanceof EntityShip) {
-                        d = player.getDistanceSqToEntity(entity);
+                        d = player.getDistanceSq(entity);
                         if (d < rangesqrd && (ne == null || d < nd)) {
                             ne = (EntityShip) entity;
                             nd = d;
