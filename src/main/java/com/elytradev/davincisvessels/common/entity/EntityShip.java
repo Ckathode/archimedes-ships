@@ -47,7 +47,7 @@ import java.util.Set;
 public class EntityShip extends EntityMovingWorld {
 
     public static final DataParameter<Float> ENGINE_POWER = EntityDataManager.createKey(EntityShip.class, DataSerializers.FLOAT);
-    public static final DataParameter<Byte> HAS_ENGINES = EntityDataManager.createKey(EntityShip.class, DataSerializers.BYTE);
+    public static final DataParameter<Boolean> CAN_MOVE = EntityDataManager.createKey(EntityShip.class, DataSerializers.BOOLEAN);
     public static final DataParameter<Boolean> CAN_SUBMERGE = EntityDataManager.createKey(EntityShip.class, DataSerializers.BOOLEAN);
     public static final DataParameter<Byte> IS_SUBMERGED = EntityDataManager.createKey(EntityShip.class, DataSerializers.BYTE);
 
@@ -85,9 +85,9 @@ public class EntityShip extends EntityMovingWorld {
                     }
                 }
                 if (DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().enginesMandatory)
-                    getDataManager().set(HAS_ENGINES, new Byte(hasEngines ? (byte) 1 : (byte) 0));
+                    getDataManager().set(CAN_MOVE, hasEngines);
                 else
-                    getDataManager().set(HAS_ENGINES, new Byte((byte) 1));
+                    getDataManager().set(CAN_MOVE, true);
             }
             if (world.isRemote) {
                 if (dataManager != null && !dataManager.isEmpty() && dataManager.isDirty()) {
@@ -148,7 +148,7 @@ public class EntityShip extends EntityMovingWorld {
     @Override
     public void initMovingWorld() {
         dataManager.register(ENGINE_POWER, 0F);
-        dataManager.register(HAS_ENGINES, (byte) 0);
+        dataManager.register(CAN_MOVE, false);
         dataManager.register(CAN_SUBMERGE, false);
         dataManager.register(IS_SUBMERGED, (byte) 0);
     }

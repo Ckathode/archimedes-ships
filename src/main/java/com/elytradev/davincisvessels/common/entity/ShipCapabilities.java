@@ -170,7 +170,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     }
 
     public boolean canMove() {
-        return ship.getDataManager().get(EntityShip.HAS_ENGINES) == 1;
+        return ship.getDataManager().get(EntityShip.CAN_MOVE);
     }
 
     public List<ITileEngineModifier> getEngines() {
