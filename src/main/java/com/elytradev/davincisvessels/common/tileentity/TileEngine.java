@@ -1,5 +1,6 @@
 package com.elytradev.davincisvessels.common.tileentity;
 
+import com.elytradev.davincisvessels.DavincisVesselsMod;
 import com.elytradev.davincisvessels.common.LanguageEntries;
 import com.elytradev.davincisvessels.common.api.tileentity.ITileEngineModifier;
 import com.elytradev.davincisvessels.common.entity.ShipCapabilities;
@@ -46,8 +47,12 @@ public class TileEngine extends TileEntity implements IInventory, ITileEngineMod
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
+        if (!tag.hasKey("fuelConsumption"))
+            tag.setInteger("fuelConsumption",
+                    DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().engineConsumptionRate);
+
         burnTime = tag.getInteger("burn");
-        engineFuelConsumption = tag.getShort("fuelCons");
+        engineFuelConsumption = tag.getInteger("fuelConsumption");
         enginePower = tag.getFloat("power");
         NBTTagList list = tag.getTagList("inv", 10);
         for (int i = 0; i < list.tagCount(); i++) {
@@ -61,7 +66,7 @@ public class TileEngine extends TileEntity implements IInventory, ITileEngineMod
     public NBTTagCompound writeToNBT(NBTTagCompound tag) {
         tag = super.writeToNBT(tag);
         tag.setInteger("burn", burnTime);
-        tag.setShort("fuelCons", (short) engineFuelConsumption);
+        tag.setInteger("fuelConsumption", (short) engineFuelConsumption);
         tag.setFloat("power", enginePower);
         NBTTagList list = new NBTTagList();
         for (int i = 0; i < getSizeInventory(); i++) {

@@ -53,6 +53,7 @@ public class DavincisVesselsConfig {
         shared.bankingMultiplier = (float) config.get("settings", "banking_multiplier", 3d, "A multiplier for how much ships bank while making turns. Set a positive value for passive banking or a negative value for active banking. 0 disables banking.").getDouble(3d);
         shared.enginesMandatory = config.get("settings", "mandatory_engines", false, "Are engines required for a ship to move?").getBoolean();
         shared.enableShipDownfall = config.get("settings", "ship_fall", true, "Do ships slowly fall?").getBoolean();
+        shared.engineConsumptionRate = config.get("settings", "engine_consumption_rate", 10, "The amount of fuel to consume per tick on steam engines").getInt();
         anchorRadius = config.get("settings", "anchor_radius", 12, "The radius around the ship that an anchor can snap to.").getInt();
 
         shared.shipControlType = config.get("control", "control_type", CONTROL_TYPE_DAVINCI, "Set to 0 to use vanilla boat controls, set to 1 to use Davinci controls.").getInt();
@@ -64,6 +65,7 @@ public class DavincisVesselsConfig {
         shared.maxShipChunkBlocks = config.get("mobile_chunk", "max_chunk_blocks", 2048, "The maximum amount of OBJECTS that a mobile ship chunk may contain.").getInt();
         shared.flyBalloonRatio = (float) config.get("mobile_chunk", "airship_balloon_ratio", 0.4D, "The part of the total amount of OBJECTS that should be balloon OBJECTS in order to make an airship.").getDouble(0.4D);
         shared.submersibleFillRatio = (float) config.get("mobile_chunk", "submersible_fill_ratio", 0.3D, "The part of the ship that needs to not be water fillable for it to be considered submersible.").getDouble(0.9D);
+
 
         if (FMLCommonHandler.instance().getSide().isClient()) {
             loadKeybindings();
@@ -190,6 +192,8 @@ public class DavincisVesselsConfig {
         public Set<String> seats;
         public Set<String> stickyObjects;
 
+        public int engineConsumptionRate = 10;
+
         public boolean enableShipDownfall;
 
         public NBTTagCompound serialize() {
@@ -207,6 +211,7 @@ public class DavincisVesselsConfig {
             tag.setBoolean("disassembleOnDismount", disassembleOnDismount);
             tag.setBoolean("enginesMandatory", enginesMandatory);
             tag.setBoolean("enableShipDownfall", enableShipDownfall);
+            tag.setInteger("engineConsumptionRate", engineConsumptionRate);
 
             tag.setString("balloonAlternatives", new Gson().toJson(balloonAlternatives));
             tag.setString("seats", new Gson().toJson(seats));
@@ -230,6 +235,7 @@ public class DavincisVesselsConfig {
             sharedConfig.disassembleOnDismount = tag.getBoolean("disassembleOnDismount");
             sharedConfig.enginesMandatory = tag.getBoolean("enginesMandatory");
             sharedConfig.enableShipDownfall = tag.getBoolean("enableShipDownfall");
+            sharedConfig.engineConsumptionRate = tag.getInteger("engineConsumptionRate");
 
             sharedConfig.balloonAlternatives = new Gson().fromJson(tag.getString("balloonAlternatives"), balloonAlternatives.getClass());
             sharedConfig.seats = new Gson().fromJson(tag.getString("seats"), seats.getClass());
