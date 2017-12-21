@@ -78,6 +78,7 @@ public class DavincisVesselsConfig {
         MovingWorldMod.INSTANCE.getNetworkConfig().addBlacklistedBlock(DavincisVesselsObjects.blockBuffer);
 
         MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsObjects.blockMarkShip);
+        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsObjects.blockCrateWood);
         MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsObjects.blockFloater);
         MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsObjects.blockBalloon);
         MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsObjects.blockGauge);
