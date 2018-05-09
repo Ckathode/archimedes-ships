@@ -55,6 +55,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
         return mass;
     }
 
+    @Override
     public void setMass(float mass) {
         this.mass = mass;
     }
@@ -92,7 +93,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
                     Map.Entry<UUID, BlockLocation> relation = relationIterator.next();
                     if (relation.getValue().dimID == ship.world.provider.getDimension()) {
                         TileEntity relatedTile = ship.world.getTileEntity(relation.getValue().pos);
-                        if (relatedTile != null && relatedTile instanceof TileAnchorPoint) {
+                        if (relatedTile instanceof TileAnchorPoint) {
                             TileAnchorPoint relatedAnchor = (TileAnchorPoint) relatedTile;
                             if (relatedAnchor.getInstance().getRelatedAnchors().containsKey(anchor.getIdentifier())
                                     && relatedAnchor.getInstance().getType().equals(AnchorInstance.InstanceType.FORLAND)) {
@@ -166,7 +167,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     }
 
     public void addSeat(EntitySeat entity) {
-        if (entity != null && entity instanceof EntitySeat) seats.add(entity);
+        if (entity instanceof EntitySeat) seats.add(entity);
     }
 
     public boolean canMove() {
@@ -254,8 +255,8 @@ public class ShipCapabilities extends MovingWorldCapabilities {
             floaters++;
         } else if (block == DavincisVesselsObjects.blockAnchorPoint) {
             TileEntity te = ship.getMobileChunk().getTileEntity(pos);
-            if (te != null && te instanceof TileAnchorPoint && ((TileAnchorPoint) te).getInstance() != null
-                    && ((TileAnchorPoint) te).getInstance().getType().equals(AnchorInstance.InstanceType.FORSHIP)) {
+            if (te instanceof TileAnchorPoint && ((TileAnchorPoint) te).getInstance() != null
+                && ((TileAnchorPoint) te).getInstance().getType().equals(AnchorInstance.InstanceType.FORSHIP)) {
                 if (anchorPoints == null) {
                     anchorPoints = new ArrayList<>();
                 }
@@ -293,7 +294,8 @@ public class ShipCapabilities extends MovingWorldCapabilities {
 
     @Override
     public void postBlockAdding() {
-        if (ship.getMobileChunk() != null && ship.getMobileChunk().marker != null && ship.getMobileChunk().marker.tileEntity != null && ship.getMobileChunk().marker.tileEntity instanceof TileHelm) {
+        if (ship.getMobileChunk() != null && ship.getMobileChunk().marker != null
+            && ship.getMobileChunk().marker.tileEntity instanceof TileHelm) {
             if (((TileHelm) ship.getMobileChunk().marker.tileEntity).submerge && canSubmerge()) {
                 ship.setSubmerge(true);
             }

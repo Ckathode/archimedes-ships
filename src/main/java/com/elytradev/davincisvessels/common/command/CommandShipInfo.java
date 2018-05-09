@@ -51,8 +51,9 @@ public class CommandShipInfo extends CommandBase {
         return 0;
     }
 
+    @Override
     public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-        return sender != null && sender instanceof Entity;
+        return sender instanceof Entity;
     }
 
     @Override

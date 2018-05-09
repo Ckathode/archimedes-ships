@@ -107,7 +107,7 @@ public class BlockCrate extends BlockContainer {
 
         if (entity != null && !(entity instanceof EntityPlayer || entity instanceof EntityMovingWorld)) {
             TileEntity te = world.getTileEntity(pos);
-            if (te != null && te instanceof TileCrate) {
+            if (te instanceof TileCrate) {
                 if (((TileCrate) te).canCatchEntity() && ((TileCrate) te).getContainedEntity() == null) {
                     ((TileCrate) te).setContainedEntity(entity);
                 }
@@ -123,7 +123,7 @@ public class BlockCrate extends BlockContainer {
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         TileEntity te = world.getTileEntity(pos);
-        if (te != null && te instanceof TileCrate) {
+        if (te instanceof TileCrate) {
             ((TileCrate) te).releaseEntity();
             return true;
         }
@@ -154,7 +154,7 @@ public class BlockCrate extends BlockContainer {
 
         if (powered) {
             TileEntity te = worldIn.getTileEntity(pos);
-            if (te != null && te instanceof TileCrate) {
+            if (te instanceof TileCrate) {
                 ((TileCrate) te).releaseEntity();
                 worldIn.setBlockState(pos, worldIn.getBlockState(pos).withProperty(POWERED, Boolean.TRUE));
             }

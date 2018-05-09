@@ -53,6 +53,7 @@ public class BlockHelm extends BlockDirectional implements ITileEntityProvider {
         return EnumBlockRenderType.MODEL;
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
         AxisAlignedBB selectedBoundingBox = super.getSelectedBoundingBox(state, worldIn, pos);
@@ -151,7 +152,7 @@ public class BlockHelm extends BlockDirectional implements ITileEntityProvider {
 
     @Override
     public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
-        if (placer != null && placer instanceof EntityPlayer) {
+        if (placer instanceof EntityPlayer) {
             // TODO: Achievements are gone.
             //((EntityPlayer) placer).addStat(DavincisVesselsObjects.achievementCreateHelm);
         }

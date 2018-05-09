@@ -74,6 +74,6 @@ public class CommandDisassembleNear extends CommandBase {
 
     @Override
     public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-        return sender != null && sender instanceof Entity && super.checkPermission(server, sender);
+        return sender instanceof Entity && super.checkPermission(server, sender);
     }
 }

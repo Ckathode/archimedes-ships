@@ -52,7 +52,7 @@ public class CommandDisassembleShip extends CommandBase {
 
     @Override
     public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-        return sender != null && sender instanceof Entity;
+        return sender instanceof Entity;
     }
 
     @Override

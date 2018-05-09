@@ -37,7 +37,7 @@ public class ConfigMessage extends Message {
                     .deserialize(data);
         }
 
-        if (DavincisVesselsMod.PROXY != null && DavincisVesselsMod.PROXY instanceof ClientProxy) {
+        if (DavincisVesselsMod.PROXY instanceof ClientProxy) {
             if (config != null) {
                 ((ClientProxy) DavincisVesselsMod.PROXY).syncedConfig = DavincisVesselsMod.INSTANCE.getLocalConfig();
                 ((ClientProxy) DavincisVesselsMod.PROXY).syncedConfig.setShared(config);

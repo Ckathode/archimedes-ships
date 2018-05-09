@@ -61,7 +61,7 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
         world.markBlockRangeForRenderUpdate(pos, pos);
 
         if (FMLLaunchHandler.side().isClient()) {
-            if (Minecraft.getMinecraft().currentScreen != null && Minecraft.getMinecraft().currentScreen instanceof GuiAnchorPoint) {
+            if (Minecraft.getMinecraft().currentScreen instanceof GuiAnchorPoint) {
                 GuiAnchorPoint activeGUI = (GuiAnchorPoint) Minecraft.getMinecraft().currentScreen;
                 if (Objects.equals(activeGUI.anchorPoint.pos, this.pos)) {
                     activeGUI.initGui();
@@ -76,7 +76,7 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
         if (world != null && tag.hasKey("vehicle") && world != null) {
             int id = tag.getInteger("vehicle");
             Entity entity = world.getEntityByID(id);
-            if (entity != null && entity instanceof EntityMovingWorld) {
+            if (entity instanceof EntityMovingWorld) {
                 activeShip = (EntityMovingWorld) entity;
             }
         }

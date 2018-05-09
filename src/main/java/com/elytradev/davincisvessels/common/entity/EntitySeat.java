@@ -38,7 +38,9 @@ public class EntitySeat extends Entity {
         super.onUpdate();
     }
 
-    public boolean processInitialInteract(EntityPlayer player, @Nullable ItemStack stack, EnumHand hand) {
+
+    @Override
+    public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
         if (player.isSneaking()) {
             return false;
         } else if (this.isBeingRidden()) {
@@ -82,7 +84,7 @@ public class EntitySeat extends Entity {
         Entity foundEntity = world.getEntityByID(dataManager.get(SHIP_ID));
         EntityShip ship = null;
 
-        if (foundEntity != null && foundEntity instanceof EntityShip)
+        if (foundEntity instanceof EntityShip)
             ship = (EntityShip) foundEntity;
 
         return ship;

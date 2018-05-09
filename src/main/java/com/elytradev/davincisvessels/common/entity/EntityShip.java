@@ -17,6 +17,7 @@ import com.elytradev.movingworld.common.entity.MovingWorldHandlerCommon;
 import com.elytradev.movingworld.common.util.MathHelperMod;
 import com.elytradev.movingworld.common.util.Vec3dMod;
 import io.netty.buffer.ByteBuf;
+import java.util.Set;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -41,8 +42,6 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.tuple.ImmutablePair;
-
-import java.util.Set;
 
 public class EntityShip extends EntityMovingWorld {
 
@@ -110,7 +109,7 @@ public class EntityShip extends EntityMovingWorld {
         this.submerge = submerge;
         if (world != null && !world.isRemote) {
             getDataManager().set(IS_SUBMERGED, submerge ? new Byte((byte) 1) : new Byte((byte) 0));
-            if (getMobileChunk().marker != null && getMobileChunk().marker.tileEntity != null && getMobileChunk().marker.tileEntity instanceof TileHelm) {
+            if (getMobileChunk().marker != null && getMobileChunk().marker.tileEntity instanceof TileHelm) {
                 TileHelm helm = (TileHelm) getMobileChunk().marker.tileEntity;
 
                 helm.submerge = submerge;
@@ -125,7 +124,8 @@ public class EntityShip extends EntityMovingWorld {
                 EntityMovingWorld entityMovingWorld = (EntityMovingWorld) entity;
                 return entityMovingWorld.getEntityBoundingBox();
             }
-            if (entity instanceof EntitySeat || entity.getRidingEntity() instanceof EntitySeat || entity instanceof EntityLiving)
+            if (entity instanceof EntitySeat || entity.getRidingEntity() instanceof EntitySeat
+                || entity instanceof EntityLiving)
                 return new AxisAlignedBB(0, 0, 0, 0, 0, 0);
         }
         return new AxisAlignedBB(0, 0, 0, 0, 0, 0);
@@ -173,7 +173,7 @@ public class EntityShip extends EntityMovingWorld {
 
     @Override
     public void setCapabilities(MovingWorldCapabilities capabilities) {
-        if (capabilities != null && capabilities instanceof ShipCapabilities) {
+        if (capabilities instanceof ShipCapabilities) {
             this.capabilities = (ShipCapabilities) capabilities;
         }
     }
@@ -183,7 +183,8 @@ public class EntityShip extends EntityMovingWorld {
      */
     public boolean alignToAnchor() {
         ImmutablePair<LocatedBlock, LocatedBlock> closestRelation = capabilities.findClosestValidAnchor(DavincisVesselsMod.INSTANCE.getNetworkConfig().anchorRadius);
-        if (!closestRelation.getLeft().equals(LocatedBlock.AIR) && !closestRelation.getRight().equals(LocatedBlock.AIR)) {
+        if (!closestRelation.getLeft().equals(LocatedBlock.AIR)
+            && !closestRelation.getRight().equals(LocatedBlock.AIR)) {
             BlockPos chunkAnchor = closestRelation.getLeft().blockPos;
             BlockPos worldAnchor = closestRelation.getRight().blockPos;
             super.alignToGrid(true);
@@ -197,7 +198,8 @@ public class EntityShip extends EntityMovingWorld {
             vec = vec.rotateAroundY(yaw);
 
             BlockPos pos = new BlockPos(MathHelperMod.round_double(vec.x), 0, MathHelperMod.round_double(vec.z));
-            setPositionAndUpdate(worldAnchor.getX() + -pos.getX(), worldAnchor.getY() + 2, worldAnchor.getZ() + -pos.getZ());
+            setPositionAndUpdate(
+                worldAnchor.getX() + -pos.getX(), worldAnchor.getY() + 2, worldAnchor.getZ() + -pos.getZ());
 
             super.alignToGrid(false);
             updatePassenger(getControllingPassenger());
@@ -209,7 +211,8 @@ public class EntityShip extends EntityMovingWorld {
 
     @Override
     public void alignToGrid(boolean doPosAdjustment) {
-        if (!alignToAnchor()) super.alignToGrid(true);
+        if (!alignToAnchor())
+            super.alignToGrid(true);
     }
 
     @Override
@@ -274,17 +277,16 @@ public class EntityShip extends EntityMovingWorld {
     public void updatePassengerPosition(Entity passenger, BlockPos riderDestination, int flags) {
         super.updatePassengerPosition(passenger, riderDestination, flags);
 
-        if (submerge && passenger != null && passenger instanceof EntityLivingBase && world != null && !world.isRemote) {
+        if (submerge && passenger instanceof EntityLivingBase && world != null && !world.isRemote) {
             //Apply water breathing so we don't die and apply night vision so we're not blind.
 
             Potion waterBreathing = Potion.REGISTRY.getObject(new ResourceLocation("water_breathing"));
             if (((EntityLivingBase) passenger).getActivePotionEffect(waterBreathing) == null ||
-                    ((EntityLivingBase) passenger).getActivePotionEffect(waterBreathing).getDuration() <= 20 * 11)
+                ((EntityLivingBase) passenger).getActivePotionEffect(waterBreathing).getDuration() <= 20 * 11)
                 ((EntityLivingBase) passenger).addPotionEffect(new PotionEffect(waterBreathing, 20 * 12, 1));
-
             Potion nightVision = Potion.REGISTRY.getObject(new ResourceLocation("night_vision"));
             if (((EntityLivingBase) passenger).getActivePotionEffect(nightVision) == null ||
-                    ((EntityLivingBase) passenger).getActivePotionEffect(nightVision).getDuration() <= 20 * 11)
+                ((EntityLivingBase) passenger).getActivePotionEffect(nightVision).getDuration() <= 20 * 11)
                 ((EntityLivingBase) passenger).addPotionEffect(new PotionEffect(nightVision, 20 * 12, 1));
         }
     }
@@ -315,7 +317,8 @@ public class EntityShip extends EntityMovingWorld {
                     vec = vec.setY(((TileEntity) engine).getPos().getY());
                     vec = vec.setZ(((TileEntity) engine).getPos().getZ() - getMobileChunk().getCenterZ() + 0.5f);
                     vec = vec.rotateAroundY(yaw);
-                    world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX + vec.x, posY + vec.y + 1d, posZ + vec.z, 0d, 0d, 0d);
+                    world.spawnParticle(EnumParticleTypes.SMOKE_LARGE,
+                        posX + vec.x, posY + vec.y + 1d, posZ + vec.z, 0d, 0d, 0d);
                 }
             }
         }
@@ -327,8 +330,10 @@ public class EntityShip extends EntityMovingWorld {
         AxisAlignedBB axisalignedbb = new AxisAlignedBB(0D, 0D, 0D, 0D, 0D, 0D);
         int belowWater = 0;
         for (; belowWater < blocksPerMeter; belowWater++) {
-            double d1 = getEntityBoundingBox().minY + (getEntityBoundingBox().maxY - getEntityBoundingBox().minY) * belowWater / blocksPerMeter;
-            double d2 = getEntityBoundingBox().minY + (getEntityBoundingBox().maxY - getEntityBoundingBox().minY) * (belowWater + 1) / blocksPerMeter;
+            double d1 = getEntityBoundingBox().minY
+                + (getEntityBoundingBox().maxY - getEntityBoundingBox().minY) * belowWater / blocksPerMeter;
+            double d2 = getEntityBoundingBox().minY
+                + (getEntityBoundingBox().maxY - getEntityBoundingBox().minY) * (belowWater + 1) / blocksPerMeter;
             axisalignedbb = new AxisAlignedBB(getEntityBoundingBox().minX, d1, getEntityBoundingBox().minZ, getEntityBoundingBox().maxX, d2, getEntityBoundingBox().maxZ);
 
             if (!isAABBInLiquidNotFall(world, axisalignedbb)) {
@@ -349,8 +354,10 @@ public class EntityShip extends EntityMovingWorld {
         AxisAlignedBB axisalignedbb = new AxisAlignedBB(0D, 0D, 0D, 0D, 0D, 0D);
         int belowWater = 0;
         for (; belowWater < blocksPerMeter; belowWater++) {
-            double d1 = getEntityBoundingBox().minY + (getEntityBoundingBox().maxY - getEntityBoundingBox().minY) * belowWater / blocksPerMeter;
-            double d2 = getEntityBoundingBox().minY + (getEntityBoundingBox().maxY - getEntityBoundingBox().minY) * (belowWater + 1) / blocksPerMeter;
+            double d1 = getEntityBoundingBox().minY
+                + (getEntityBoundingBox().maxY - getEntityBoundingBox().minY) * belowWater / blocksPerMeter;
+            double d2 = getEntityBoundingBox().minY
+                + (getEntityBoundingBox().maxY - getEntityBoundingBox().minY) * (belowWater + 1) / blocksPerMeter;
             axisalignedbb = new AxisAlignedBB(getEntityBoundingBox().minX, d1, getEntityBoundingBox().minZ, getEntityBoundingBox().maxX, d2, getEntityBoundingBox().maxZ);
 
             if (!isAABBInLiquidNotFall(world, axisalignedbb)) {
@@ -393,7 +400,8 @@ public class EntityShip extends EntityMovingWorld {
 
     @Override
     public void handleServerUpdatePreRotation() {
-        if (DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().shipControlType == DavincisVesselsConfig.CONTROL_TYPE_VANILLA) {
+        if (DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().shipControlType
+            == DavincisVesselsConfig.CONTROL_TYPE_VANILLA) {
             double newYaw = rotationYaw;
             double dx = prevPosX - posX;
             double dz = prevPosZ - posZ;
@@ -417,7 +425,8 @@ public class EntityShip extends EntityMovingWorld {
 
     @Override
     public boolean disassemble(boolean overwrite) {
-        if (world.isRemote) return true;
+        if (world.isRemote)
+            return true;
 
         updatePassenger(getControllingPassenger());
 
@@ -451,13 +460,15 @@ public class EntityShip extends EntityMovingWorld {
                 throttle *= 0.5D;
             }
 
-            if (DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().shipControlType == DavincisVesselsConfig.CONTROL_TYPE_DAVINCI) {
+            if (DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().shipControlType
+                == DavincisVesselsConfig.CONTROL_TYPE_DAVINCI) {
                 Vec3dMod vec = new Vec3dMod(getControllingPassenger().motionX, 0D, getControllingPassenger().motionZ);
                 vec.rotateAroundY((float) Math.toRadians(getControllingPassenger().rotationYaw));
 
                 double steer = ((EntityLivingBase) getControllingPassenger()).moveStrafing;
 
-                motionYaw += steer * BASE_TURN_SPEED * capabilities.getRotationMult() * DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().turnSpeed;
+                motionYaw += steer * BASE_TURN_SPEED * capabilities.getRotationMult()
+                    * DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().turnSpeed;
 
                 float yaw = (float) Math.toRadians(180F - rotationYaw + frontDirection.getHorizontalIndex() * 90F);
                 vec = vec.setX(motionX);
@@ -469,7 +480,8 @@ public class EntityShip extends EntityMovingWorld {
 
                 motionX = vec.x;
                 motionZ = vec.z;
-            } else if (DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().shipControlType == DavincisVesselsConfig.CONTROL_TYPE_VANILLA) {
+            } else if (DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().shipControlType
+                == DavincisVesselsConfig.CONTROL_TYPE_VANILLA) {
                 if (throttle > 0.0D) {
                     double dsin = -Math.sin(Math.toRadians(getControllingPassenger().rotationYaw));
                     double dcos = Math.cos(Math.toRadians(getControllingPassenger().rotationYaw));
@@ -554,6 +566,7 @@ public class EntityShip extends EntityMovingWorld {
         //interactor.transferToCapabilities(getCapabilities());
     }
 
+    @Override
     public void fillAirBlocks(Set<BlockPos> set, BlockPos pos) {
         super.fillAirBlocks(set, pos);
     }

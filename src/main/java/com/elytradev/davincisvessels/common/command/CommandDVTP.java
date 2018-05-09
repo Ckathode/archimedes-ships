@@ -40,8 +40,9 @@ public class CommandDVTP extends CommandBase {
         sender.sendMessage(new TextComponentString("Not steering a ship"));
     }
 
+    @Override
     public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-        return sender != null && sender instanceof Entity;
+        return sender instanceof Entity;
     }
 
     @Override

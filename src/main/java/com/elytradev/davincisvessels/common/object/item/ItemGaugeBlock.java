@@ -14,10 +14,12 @@ public class ItemGaugeBlock extends ItemBlock {
      * Converts the given ItemStack damage value into a metadata value to be placed in the world
      * when this Item is placed as a Block (mostly used with ItemBlocks).
      */
+    @Override
     public int getMetadata(int damage) {
         return damage;
     }
 
+    @Override
     public String getUnlocalizedName(ItemStack stack) {
         return super.getUnlocalizedName() + (stack.getMetadata() != 0 ? "_ext" : "");
     }

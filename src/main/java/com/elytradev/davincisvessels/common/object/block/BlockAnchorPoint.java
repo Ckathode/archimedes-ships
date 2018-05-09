@@ -111,7 +111,7 @@ public class BlockAnchorPoint extends BlockContainer {
                     IBlockState relationState = relationWorld.getBlockState(relation.getValue().pos);
                     if (relationState.getBlock().equals(DavincisVesselsObjects.blockAnchorPoint)) {
                         TileEntity relationTile = relationWorld.getTileEntity(relation.getValue().pos);
-                        if (relationTile != null && relationTile instanceof TileAnchorPoint) {
+                        if (relationTile instanceof TileAnchorPoint) {
                             TileAnchorPoint relationAnchor = (TileAnchorPoint) relationTile;
                             if (!relationAnchor.getInstance().getType().equals(anchorPoint.getInstance().getType())) {
                                 if (relationAnchor.getInstance().getIdentifier().equals(relation.getKey())) {

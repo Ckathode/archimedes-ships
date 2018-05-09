@@ -76,7 +76,7 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
         super.blockDisassembled(locatedBlock); // Currently unimplemented but leaving there just in case.
 
         if (locatedBlock.blockState.getBlock() == DavincisVesselsObjects.blockSecuredBed) {
-            if (locatedBlock.tileEntity != null && locatedBlock.tileEntity instanceof TileEntitySecuredBed) {
+            if (locatedBlock.tileEntity instanceof TileEntitySecuredBed) {
                 TileEntitySecuredBed securedBed = (TileEntitySecuredBed) locatedBlock.tileEntity;
 
                 securedBed.doMove = true;
@@ -111,8 +111,8 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
         if (state.getBlock() == DavincisVesselsObjects.blockStickyBuffer || DavincisVesselsMod.INSTANCE.getNetworkConfig().isSticky(state.getBlock()))
             canAssemble.assembleThenCancel = true;
 
-        if (lb.tileEntity != null && lb.tileEntity instanceof TileAnchorPoint
-                && ((TileAnchorPoint) lb.tileEntity).getInstance().getType() == AnchorInstance.InstanceType.FORLAND)
+        if (lb.tileEntity instanceof TileAnchorPoint
+            && ((TileAnchorPoint) lb.tileEntity).getInstance().getType() == AnchorInstance.InstanceType.FORLAND)
             canAssemble.justCancel = true;
 
         return canAssemble;

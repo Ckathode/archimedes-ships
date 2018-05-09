@@ -37,7 +37,7 @@ public class RequestSubmerseMessage extends Message {
     protected void handle(EntityPlayer sender) {
         if (ship != null) {
             if (doSumberse && !ship.canSubmerge()) {
-                if (sender != null && sender instanceof EntityPlayerMP) {
+                if (sender instanceof EntityPlayerMP) {
                     ((EntityPlayerMP) sender).connection.disconnect(new TextComponentString("Invalid submerse request!" +
                             "\nCheating to go underwater... reconsider your life choices."));
                     if (sender != null && sender.getGameProfile() != null)
