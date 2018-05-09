@@ -5,7 +5,6 @@ I'm making this because the issue reports have gotten a bit ridiculous at this p
 3. DO post information about the crash you were able to discover in the actual issue text.
 4. DO see if the issue occurs with just AS+ and MovingWorld installed, so I know if it's an incompatibility issue.
 5. For any report at all you must list the AS+ version, the MovingWorld version, the Forge version, and the Minecraft version. If this is not done the issue will be closed.
-6. As a sidenote, MovingWorld is a seperate mod that handles all things related to changing blocks into entities. If it's related to GUIs, floating, controls, or blocks it's good to report in this repo. If it's related to rendering, assembling, disassembling, and things of that nature please report the issue to the MovingWorld repo. Thanks.
 
 Here's a basic do and don't.
 
