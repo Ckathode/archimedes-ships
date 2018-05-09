@@ -40,11 +40,6 @@ public class CommandDVTP extends CommandBase {
         sender.sendMessage(new TextComponentString("Not steering a ship"));
     }
 
-    @Override
-    public int getRequiredPermissionLevel() {
-        return 0;
-    }
-
     public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
         return sender != null && sender instanceof Entity;
     }
