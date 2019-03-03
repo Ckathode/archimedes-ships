@@ -1,36 +1,21 @@
 buildscript {
     repositories {
-        mavenCentral()
+        maven { url = "https://files.minecraftforge.net/maven" }
         jcenter()
-        maven {
-            name = 'forge'
-            url = 'http://files.minecraftforge.net/maven'
-        }
-        maven {
-            name = 'sonatype-snapshots'
-            url = 'https://oss.sonatype.org/content/repositories/snapshots'
-        }
-        dependencies {
-            classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-        }
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: "net.minecraftforge.gradle", name: "ForgeGradle", version: "3.+", changing: true
     }
 }
 
-plugins {
-    id 'com.github.johnrengelman.shadow' version '1.2.3'
-}
+apply from: "properties.gradle"
 
-repositories {
-    mavenCentral()
-    maven {
-        url 'http://repo.spongepowered.org/maven'
-    }
-    maven {
-        url = 'http://repo.elytradev.com/'
-    }
-}
+evaluationDependsOn(":MovingWorld")
 
-apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: "net.minecraftforge.gradle"
+//Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+apply plugin: "eclipse"
 
 def branch
 if (System.env.BRANCH_NAME) {
@@ -47,88 +32,81 @@ version = branch + '-' + modVersion + '.' + commits + (dirty ? '-dirty' : '')
 group = modGroup
 archivesBaseName = modBaseName
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = "1.8" // Need this here so eclipse task generates correctly.
 
 minecraft {
-    version = project.forgeVersion
-    mappings = project.mcpVersion
+    mappings channel: "snapshot", version: mappingsVersion
 
-    runDir = 'run'
+    runs {
+        client {
+            workingDirectory project.file("run")
 
-    def replacementVersion = 'MOD_VERSION = \"' + project.version + '\"'
-    replace("MOD_VERSION = \"@AS+VER@\"",
-            replacementVersion)
-}
+            // Recommended logging data for a userdev environment
+            property "forge.logging.markers", "REGISTRIES"
 
-dependencies {
-    compileOnly project(':MovingWorld')
+            // Recommended logging level for the console
+            property "forge.logging.console.level", "debug"
 
-    compile 'com.elytradev:concrete:' + project.concreteVersion + ':all'
-}
+            mods {
+                davincisvessels {
+                    sources sourceSets.main
+                }
+                movingworld {
+                    sources project(":MovingWorld").sourceSets.main
+                }
+            }
+        }
 
-shadowJar {
-    exclude 'dummyThing'
-    classifier = 'full'
+        server {
+            workingDirectory project.file("run")
 
-    // Shaded under movingworld because of some references to MovingWorld networking.
-    relocate 'com.elytradev.concrete', "com.elytradev.movingworld.repackage.com.elytradev.concrete"
-}
+            // Recommended logging data for a userdev environment
+            property "forge.logging.markers", "REGISTRIES"
 
-reobf {
-    shadowJar { mappingType = 'SEARGE' }
-}
+            // Recommended logging level for the console
+            property "forge.logging.console.level", "debug"
 
-artifacts {
-    archives shadowJar
+            mods {
+                davincisvessels {
+                    sources sourceSets.main
+                }
+                movingworld {
+                    sources project(":MovingWorld").sourceSets.main
+                }
+            }
+        }
+    }
 }
 
 configurations {
-    runtime.exclude group: 'com.elytradev.movingworld'
+    runtime.exclude group: "com.tridevmc.MovingWorld"
 }
 
-processResources {
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
+dependencies {
+    compileOnly project(":MovingWorld")
 
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include "mcmod.info"
+    minecraft "net.minecraftforge:forge:${forgeVersion}"
 
-        // replace version and mcversion
-        expand "version": project.version, "mcversion": project.minecraft.version
-    }
+    compile "com.tridevmc.compound:compound-all:${compoundVersion}"
+}
 
-    // copy everything else, thats not the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude "mcmod.info"
+repositories {
+    jcenter()
+    mavenCentral()
+    maven {
+        url 'https://repo.tridevmc.com/'
     }
 }
 
-idea {
-    workspace {
-        iws.withXml { xmlFile ->
-            //Please don't kill me for my shitty groovy usage ;-;
-            def runManager = xmlFile.asNode().component.find { it.@name == 'RunManager' }
-
-            def minecraftClientDefaults = runManager.configuration.find {
-                it.@name == 'Minecraft Client' && it.@type == 'Application'
-            }
-
-            def minecraftServerDefaults = runManager.configuration.find {
-                it.@name == 'Minecraft Server' && it.@type == 'Application'
-            }
-
-            def minecraftClientVMArgs = '-Xincgc -Xmx1024M -Xms1024M -Dfml.coreMods.load=com.elytradev.movingworld.common.asm.coremod.MovingWorldCoreMod -Dmixin.debug=true'
-            minecraftClientDefaults.option.find { it.@name == 'VM_PARAMETERS' }.replaceNode {
-                option(name: 'VM_PARAMETERS', value: minecraftClientVMArgs)
-            }
-
-            def minecraftServerVMArgs = '-Xincgc -Dfml.ignoreInvalidMinecraftCertificates=true -Dfml.coreMods.load=com.elytradev.movingworld.common.asm.coremod.MovingWorldCoreMod -Dmixin.debug=true'
-            minecraftServerDefaults.option.find { it.@name == 'VM_PARAMETERS' }.replaceNode {
-                option(name: 'VM_PARAMETERS', value: minecraftServerVMArgs)
-            }
-        }
+// Example for how to get properties into the manifest for reading by the runtime..
+jar {
+    manifest {
+        attributes(["Specification-Title"     : "Davincis Vessels",
+                    "Specification-Vendor"    : "Trident",
+                    "Specification-Version"   : "24.0", // We are version 1 of the modlauncher specification
+                    "Implementation-Title"    : project.name,
+                    "Implementation-Version"  : "${version}",
+                    "Implementation-Vendor"   : "Trident",
+                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")],)
     }
 }

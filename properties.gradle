@@ -1,0 +1,12 @@
+ext {
+    modGroup = "com.tridevmc"
+    modVersion = "6"
+    modBaseName = "davincisvessels"
+
+    //Forge Stuff
+    forgeVersion = "1.13.2-25.0.36"
+    mappingsVersion = "20180921-1.13"
+
+    //Trident Stuff
+    compoundVersion = "1.0.0-SNAPSHOT"
+}
