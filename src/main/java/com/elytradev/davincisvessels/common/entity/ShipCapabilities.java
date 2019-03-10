@@ -91,7 +91,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
                 Iterator<Map.Entry<UUID, BlockLocation>> relationIterator = anchor.getRelatedAnchors().entrySet().iterator();
                 while (relationIterator.hasNext()) {
                     Map.Entry<UUID, BlockLocation> relation = relationIterator.next();
-                    if (relation.getValue().dimID == ship.world.provider.getDimension()) {
+                    if (relation.getValue().dimID == ship.world.getDimension().getType().getId()) {
                         TileEntity relatedTile = ship.world.getTileEntity(relation.getValue().pos);
                         if (relatedTile instanceof TileAnchorPoint) {
                             TileAnchorPoint relatedAnchor = (TileAnchorPoint) relatedTile;
@@ -256,7 +256,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
         } else if (block == DavincisVesselsObjects.blockAnchorPoint) {
             TileEntity te = ship.getMobileChunk().getTileEntity(pos);
             if (te instanceof TileAnchorPoint && ((TileAnchorPoint) te).getInstance() != null
-                && ((TileAnchorPoint) te).getInstance().getType().equals(AnchorInstance.InstanceType.FORSHIP)) {
+                    && ((TileAnchorPoint) te).getInstance().getType().equals(AnchorInstance.InstanceType.FORSHIP)) {
                 if (anchorPoints == null) {
                     anchorPoints = new ArrayList<>();
                 }
@@ -295,7 +295,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     @Override
     public void postBlockAdding() {
         if (ship.getMobileChunk() != null && ship.getMobileChunk().marker != null
-            && ship.getMobileChunk().marker.tileEntity instanceof TileHelm) {
+                && ship.getMobileChunk().marker.tileEntity instanceof TileHelm) {
             if (((TileHelm) ship.getMobileChunk().marker.tileEntity).submerge && canSubmerge()) {
                 ship.setSubmerge(true);
             }
@@ -318,7 +318,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     @Override
     public void clear() {
         if (seats != null) {
-            seats.forEach(seat -> seat.setDead());
+            seats.forEach(seat -> seat.remove());
             seats.clear();
         }
         if (engines != null) {

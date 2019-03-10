@@ -33,12 +33,12 @@ public class CommandShipInfo extends CommandBase {
         }
         if (ship != null) {
             sender.sendMessage(new TextComponentString(ChatFormatting.GREEN.toString() + ChatFormatting.BOLD.toString() + "Ship information"));
-            sender.sendMessage(new TextComponentString(String.format(Locale.ENGLISH, "Airship: %b", ship.getCapabilities().canFly())));
+            sender.sendMessage(new TextComponentString(String.format(Locale.ENGLISH, "Airship: %b", ship.getMovingWorldCapabilities().canFly())));
             sender.sendMessage(new TextComponentString(String.format(Locale.ENGLISH, "Position: %.2f, %.2f, %.2f", ship.posX, ship.posY, ship.posZ)));
             sender.sendMessage(new TextComponentString(String.format(Locale.ENGLISH, "Speed: %.2f km/h", ship.getHorizontalVelocity() * 20 * 3.6F)));
-            float f = 100F * ((ShipCapabilities) ship.getCapabilities()).getBalloonCount() / ship.getCapabilities().getBlockCount();
-            sender.sendMessage(new TextComponentString(String.format(Locale.ENGLISH, "Block count: %d", ship.getCapabilities().getBlockCount())));
-            sender.sendMessage(new TextComponentString(String.format(Locale.ENGLISH, "Balloon count: %d", ((ShipCapabilities) ship.getCapabilities()).getBalloonCount())));
+            float f = 100F * ((ShipCapabilities) ship.getMovingWorldCapabilities()).getBalloonCount() / ship.getMovingWorldCapabilities().getBlockCount();
+            sender.sendMessage(new TextComponentString(String.format(Locale.ENGLISH, "Block count: %d", ship.getMovingWorldCapabilities().getBlockCount())));
+            sender.sendMessage(new TextComponentString(String.format(Locale.ENGLISH, "Balloon count: %d", ((ShipCapabilities) ship.getMovingWorldCapabilities()).getBalloonCount())));
             sender.sendMessage(new TextComponentString(String.format(Locale.ENGLISH, "Balloon percentage: %.0f%%", f)));
             sender.sendMessage(new TextComponentString(""));
             return;

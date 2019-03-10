@@ -27,15 +27,15 @@ public class ShipHandlerServer extends MovingWorldHandlerServer {
 
     @Override
     public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
-        return movingWorld.getCapabilities().mountEntity(player);
+        return movingWorld.getMovingWorldCapabilities().mountEntity(player);
     }
 
     @Override
     public void onChunkUpdate() {
         super.onChunkUpdate();
         if (firstChunkUpdate) {
-            ((ShipCapabilities) movingWorld.getCapabilities()).spawnSeatEntities();
-            movingWorld.getDataManager().set(EntityShip.CAN_SUBMERGE, ((ShipCapabilities) movingWorld.getCapabilities()).canSubmerge());
+            ((ShipCapabilities) movingWorld.getMovingWorldCapabilities()).spawnSeatEntities();
+            movingWorld.getDataManager().set(EntityShip.CAN_SUBMERGE, ((ShipCapabilities) movingWorld.getMovingWorldCapabilities()).canSubmerge());
         }
     }
 }

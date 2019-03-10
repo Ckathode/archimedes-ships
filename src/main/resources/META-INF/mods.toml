@@ -1,0 +1,10 @@
+modLoader="javafml"
+loaderVersion="[25,)"
+[[mods]]
+modId="davincisvessels"
+version="${file.jarVersion}"
+displayName="Davincis Vessels"
+description='''
+Craft and create your own ship...
+And sail it across the seven seas!
+'''

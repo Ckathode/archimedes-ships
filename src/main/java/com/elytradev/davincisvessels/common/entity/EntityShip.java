@@ -167,7 +167,7 @@ public class EntityShip extends EntityMovingWorld {
     }
 
     @Override
-    public MovingWorldCapabilities getCapabilities() {
+    public MovingWorldCapabilities getMovingWorldCapabilities() {
         return this.capabilities == null ? new ShipCapabilities(this, true) : this.capabilities;
     }
 
@@ -383,7 +383,7 @@ public class EntityShip extends EntityMovingWorld {
         if (waterVolume > 0F && !submergeMode) {
             setFlying(false);
             float buoyancyforce = 1F * waterVolume * gravity; //F = rho * V * g (Archimedes' principle)
-            float mass = getCapabilities().getMass();
+            float mass = getMovingWorldCapabilities().getMass();
             motionY += buoyancyforce / mass;
         }
 
@@ -454,7 +454,7 @@ public class EntityShip extends EntityMovingWorld {
     }
 
     private void handlePlayerControl() {
-        if (getControllingPassenger() instanceof EntityLivingBase && ((ShipCapabilities) getCapabilities()).canMove()) {
+        if (getControllingPassenger() instanceof EntityLivingBase && ((ShipCapabilities) getMovingWorldCapabilities()).canMove()) {
             double throttle = ((EntityLivingBase) getControllingPassenger()).moveForward;
             if (isFlying()) {
                 throttle *= 0.5D;
@@ -563,7 +563,7 @@ public class EntityShip extends EntityMovingWorld {
     @Override
     public void setAssemblyInteractor(MovingWorldAssemblyInteractor interactor) {
         //shipAssemblyInteractor = (ShipAssemblyInteractor) interactor;
-        //interactor.transferToCapabilities(getCapabilities());
+        //interactor.transferToCapabilities(getMovingWorldCapabilities());
     }
 
     @Override
