@@ -83,7 +83,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
 
         if (anchorPoints != null) {
             for (LocatedBlock anchorLB : anchorPoints) {
-                TileAnchorPoint anchorTile = (TileAnchorPoint) anchorLB.tileEntity;
+                TileAnchorPoint anchorTile = (TileAnchorPoint) anchorLB.tile;
                 AnchorInstance anchor = anchorTile.getInstance();
                 if (anchor.getRelatedAnchors().isEmpty())
                     continue;
@@ -295,8 +295,8 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     @Override
     public void postBlockAdding() {
         if (ship.getMobileChunk() != null && ship.getMobileChunk().marker != null
-                && ship.getMobileChunk().marker.tileEntity instanceof TileHelm) {
-            if (((TileHelm) ship.getMobileChunk().marker.tileEntity).submerge && canSubmerge()) {
+                && ship.getMobileChunk().marker.tile instanceof TileHelm) {
+            if (((TileHelm) ship.getMobileChunk().marker.tile).submerge && canSubmerge()) {
                 ship.setSubmerge(true);
             }
         }

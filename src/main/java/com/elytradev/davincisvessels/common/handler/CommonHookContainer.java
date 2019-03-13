@@ -60,23 +60,23 @@ public class CommonHookContainer {
         if (event.movingWorld instanceof EntityShip) {
             EntityShip ship = (EntityShip) event.movingWorld;
             LocatedBlock lb = event.block;
-            if (lb.blockState.getBlock() == DavincisVesselsObjects.blockMarkShip) {
+            if (lb.state.getBlock() == DavincisVesselsObjects.blockMarkShip) {
                 Entity passenger = ship.controllingPassenger != null ? ship.controllingPassenger : ship.prevRiddenByEntity;
 
                 if (passenger != null) {
-                    BlockPos position = lb.blockPos.offset(lb.blockState.getValue(BlockHelm.FACING));
+                    BlockPos position = lb.pos.offset(lb.state.getValue(BlockHelm.FACING));
                     passenger.dismountRidingEntity();
                     passenger.setPositionAndUpdate(position.getX() + 0.5D, position.getY() + 0.5D, position.getZ() + 0.5D);
                     System.out.println(passenger.getPositionVector().toString());
                 }
-            } else if (lb.blockState.getBlock() == DavincisVesselsObjects.blockSeat) {
-                Optional<EntitySeat> matchingSeatEntity = ship.capabilities.getSeats().stream().filter(s -> s.getChunkPos().equals(lb.bPosNoOffset)).findFirst();
+            } else if (lb.state.getBlock() == DavincisVesselsObjects.blockSeat) {
+                Optional<EntitySeat> matchingSeatEntity = ship.capabilities.getSeats().stream().filter(s -> s.getChunkPos().equals(lb.posNoOffset)).findFirst();
 
                 if (matchingSeatEntity.isPresent()) {
                     EntitySeat matchingSeat = matchingSeatEntity.get();
                     if (matchingSeat.getControllingPassenger() != null) {
                         matchingSeat.getControllingPassenger().dismountRidingEntity();
-                        matchingSeat.getControllingPassenger().setPosition(lb.blockPos.getX() + 0.5D, lb.blockPos.getY() + 0.5D, lb.blockPos.getZ() + 0.5D);
+                        matchingSeat.getControllingPassenger().setPosition(lb.pos.getX() + 0.5D, lb.pos.getY() + 0.5D, lb.pos.getZ() + 0.5D);
                     }
                 }
             }

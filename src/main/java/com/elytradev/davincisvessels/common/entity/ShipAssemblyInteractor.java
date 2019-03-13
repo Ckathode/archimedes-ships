@@ -57,10 +57,10 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
 
     @Override
     public void blockAssembled(LocatedBlock locatedBlock) {
-        Block block = locatedBlock.blockState.getBlock();
+        Block block = locatedBlock.state.getBlock();
         if (block instanceof IBlockBalloon) {
             try {
-                balloonCount += ((IBlockBalloon) block).getBalloonWorth(locatedBlock.tileEntity);
+                balloonCount += ((IBlockBalloon) block).getBalloonWorth(locatedBlock.tile);
             } catch (NullPointerException e) {
                 MovingWorldMod.LOG.error("IBlockBalloon didn't check if something was null or not, report to mod author of the following block, " + block.toString());
             }
@@ -75,14 +75,14 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
     public void blockDisassembled(LocatedBlock locatedBlock) {
         super.blockDisassembled(locatedBlock); // Currently unimplemented but leaving there just in case.
 
-        if (locatedBlock.blockState.getBlock() == DavincisVesselsObjects.blockSecuredBed) {
-            if (locatedBlock.tileEntity instanceof TileEntitySecuredBed) {
-                TileEntitySecuredBed securedBed = (TileEntitySecuredBed) locatedBlock.tileEntity;
+        if (locatedBlock.state.getBlock() == DavincisVesselsObjects.blockSecuredBed) {
+            if (locatedBlock.tile instanceof TileEntitySecuredBed) {
+                TileEntitySecuredBed securedBed = (TileEntitySecuredBed) locatedBlock.tile;
 
                 securedBed.doMove = true;
                 ConnectionHandler.playerBedMap.remove(securedBed.getPlayerID());
                 securedBed.addToConnectionMap(securedBed.getPlayerID());
-                securedBed.moveBed(locatedBlock.blockPos);
+                securedBed.moveBed(locatedBlock.pos);
             }
         }
     }
@@ -105,14 +105,14 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
 
     @Override
     public CanAssemble isBlockAllowed(World world, LocatedBlock lb) {
-        IBlockState state = lb.blockState;
+        IBlockState state = lb.state;
         CanAssemble canAssemble = super.isBlockAllowed(world, lb);
 
         if (state.getBlock() == DavincisVesselsObjects.blockStickyBuffer || DavincisVesselsMod.INSTANCE.getNetworkConfig().isSticky(state.getBlock()))
             canAssemble.assembleThenCancel = true;
 
-        if (lb.tileEntity instanceof TileAnchorPoint
-            && ((TileAnchorPoint) lb.tileEntity).getInstance().getType() == AnchorInstance.InstanceType.FORLAND)
+        if (lb.tile instanceof TileAnchorPoint
+            && ((TileAnchorPoint) lb.tile).getInstance().getType() == AnchorInstance.InstanceType.FORLAND)
             canAssemble.justCancel = true;
 
         return canAssemble;
@@ -120,7 +120,7 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
 
     @Override
     public EnumFacing getFrontDirection(LocatedBlock marker) {
-        return marker.blockState.getValue(BlockHelm.FACING).getOpposite();
+        return marker.state.getValue(BlockHelm.FACING).getOpposite();
     }
 
     public int getBalloonCount() {

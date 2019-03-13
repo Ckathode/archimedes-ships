@@ -109,8 +109,8 @@ public class EntityShip extends EntityMovingWorld {
         this.submerge = submerge;
         if (world != null && !world.isRemote) {
             getDataManager().set(IS_SUBMERGED, submerge ? new Byte((byte) 1) : new Byte((byte) 0));
-            if (getMobileChunk().marker != null && getMobileChunk().marker.tileEntity instanceof TileHelm) {
-                TileHelm helm = (TileHelm) getMobileChunk().marker.tileEntity;
+            if (getMobileChunk().marker != null && getMobileChunk().marker.tile instanceof TileHelm) {
+                TileHelm helm = (TileHelm) getMobileChunk().marker.tile;
 
                 helm.submerge = submerge;
             }
@@ -185,8 +185,8 @@ public class EntityShip extends EntityMovingWorld {
         ImmutablePair<LocatedBlock, LocatedBlock> closestRelation = capabilities.findClosestValidAnchor(DavincisVesselsMod.INSTANCE.getNetworkConfig().anchorRadius);
         if (!closestRelation.getLeft().equals(LocatedBlock.AIR)
             && !closestRelation.getRight().equals(LocatedBlock.AIR)) {
-            BlockPos chunkAnchor = closestRelation.getLeft().blockPos;
-            BlockPos worldAnchor = closestRelation.getRight().blockPos;
+            BlockPos chunkAnchor = closestRelation.getLeft().pos;
+            BlockPos worldAnchor = closestRelation.getRight().pos;
             super.alignToGrid(true);
 
             float yaw = Math.round(rotationYaw / 90F) * 90F;
@@ -443,7 +443,7 @@ public class EntityShip extends EntityMovingWorld {
 
         AssembleResult result = disassembler.doDisassemble(getNewAssemblyInteractor());
         if (result.getShipMarker() != null) {
-            TileEntity te = result.getShipMarker().tileEntity;
+            TileEntity te = result.getShipMarker().tile;
             if (te instanceof TileHelm) {
                 ((TileHelm) te).setAssembleResult(result);
                 ((TileHelm) te).setInfo(getInfo());

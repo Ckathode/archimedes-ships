@@ -50,13 +50,13 @@ public class ContainerHelm extends Container {
             ItemStack stackInSlot = slotObject.getStack();
             stack = stackInSlot.copy();
 
-            //merges the item into player inventory since its in the tileEntity
+            //merges the item into player inventory since its in the tile
             if (slot < 9) {
                 if (!this.mergeItemStack(stackInSlot, 0, 35, true)) {
                     return ItemStack.EMPTY;
                 }
             }
-            //places it into the tileEntity is possible since its in the player inventory
+            //places it into the tile is possible since its in the player inventory
             else if (!this.mergeItemStack(stackInSlot, 0, 9, false)) {
                 return ItemStack.EMPTY;
             }
