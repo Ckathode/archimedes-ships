@@ -1,6 +1,6 @@
-package com.elytradev.davincisvessels.common.object.block;
+package com.elytradev.davincisvessels.common.content.block;
 
-import com.elytradev.davincisvessels.common.object.DavincisVesselsObjects;
+import com.elytradev.davincisvessels.common.content.DavincisVesselsContent;
 import com.elytradev.davincisvessels.common.tileentity.TileGauge;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -58,8 +58,8 @@ public class BlockGauge extends BlockContainer {
 
     @Override
     public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
-        list.add(new ItemStack(DavincisVesselsObjects.blockGauge, 1, 0));
-        list.add(new ItemStack(DavincisVesselsObjects.blockGauge, 1, 1));
+        list.add(new ItemStack(DavincisVesselsContent.blockGauge, 1, 0));
+        list.add(new ItemStack(DavincisVesselsContent.blockGauge, 1, 1));
     }
 
     public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {

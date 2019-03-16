@@ -1,4 +1,4 @@
-package com.elytradev.davincisvessels.common.object.block;
+package com.elytradev.davincisvessels.common.content.block;
 
 import net.minecraft.block.BlockColored;
 import net.minecraft.block.SoundType;

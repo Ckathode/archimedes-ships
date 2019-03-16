@@ -1,17 +1,16 @@
-package com.elytradev.davincisvessels.common.object;
+package com.elytradev.davincisvessels.common.content;
 
 import com.elytradev.davincisvessels.DavincisVesselsMod;
-import com.elytradev.davincisvessels.common.object.block.*;
-import com.elytradev.davincisvessels.common.object.item.ItemBlockAnchorPoint;
-import com.elytradev.davincisvessels.common.object.item.ItemGaugeBlock;
-import com.elytradev.davincisvessels.common.object.item.ItemSecuredBed;
+import com.elytradev.davincisvessels.common.content.block.*;
+import com.elytradev.davincisvessels.common.content.item.ItemBlockAnchorPoint;
+import com.elytradev.davincisvessels.common.content.item.ItemGaugeBlock;
+import com.elytradev.davincisvessels.common.content.item.ItemSecuredBed;
 import com.elytradev.davincisvessels.common.tileentity.*;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import net.minecraft.advancements.Advancement;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFire;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -19,13 +18,8 @@ import net.minecraft.item.*;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.HashMap;
@@ -37,31 +31,21 @@ import static com.elytradev.davincisvessels.DavincisVesselsMod.MOD_ID;
  * Block registration is here, to keep the mod class nice and small.
  */
 
-public class DavincisVesselsObjects {
+public class DavincisVesselsContent {
 
-    public static BlockHelm blockMarkShip;
-    public static Block blockFloater;
-    public static Block blockBalloon;
-    public static BlockGauge blockGauge;
-    public static BlockSeat blockSeat;
-    public static Block blockStickyBuffer;
-    public static Block blockBuffer;
-    public static Block blockEngine;
-    public static Block blockCrateWood;
-    public static Block blockAnchorPoint;
-    public static Block blockSecuredBed;
+    public BlockHelm blockMarkShip;
+    public Block blockFloater;
+    public Block blockBalloon;
+    public BlockGauge blockGauge;
+    public BlockSeat blockSeat;
+    public Block blockStickyBuffer;
+    public Block blockBuffer;
+    public Block blockEngine;
+    public Block blockCrateWood;
+    public Block blockAnchorPoint;
+    public Block blockSecuredBed;
 
     public static Item itemSecuredBed;
-
-    // TODO: Achievements are gone.
-    //public static SmartAchievementPage achievementPage;
-    public static Advancement achievementAssembleFailure;
-    public static Advancement achievementAssembleSuccess;
-    public static Advancement achievementAssembleMount;
-    public static Advancement achievementCreateHelm;
-    public static Advancement achievementCreateEngine;
-    public static Advancement achievementSubmerseShip;
-    public static Advancement achievementFlyShip;
 
     public static Material materialFloater;
     public static HashMap<String, Block> registeredBlocks;
@@ -71,13 +55,10 @@ public class DavincisVesselsObjects {
     private static List<Item> itemBlocksToRegister;
     private int recipeID = 0;
 
-    public void preInit(FMLPreInitializationEvent e) {
-    }
-
     public void init(FMLInitializationEvent e) {
-        Blocks.FIRE.setFireInfo(blockMarkShip, 5, 5);
-        Blocks.FIRE.setFireInfo(blockBalloon, 30, 60);
-        Blocks.FIRE.setFireInfo(blockSeat, 30, 30);
+        this.setFireInfo(blockMarkShip, 5, 5);
+        this.setFireInfo(blockBalloon, 30, 60);
+        this.setFireInfo(blockSeat, 30, 30);
 
         GameRegistry.registerTileEntity(TileHelm.class, "archiHelm");
         GameRegistry.registerTileEntity(TileGauge.class, "archiGauge");
@@ -85,6 +66,11 @@ public class DavincisVesselsObjects {
         GameRegistry.registerTileEntity(TileEngine.class, "archiEngine");
         GameRegistry.registerTileEntity(TileAnchorPoint.class, "archiAnchor");
         GameRegistry.registerTileEntity(TileEntitySecuredBed.class, "archiSecuredBed");
+    }
+
+    private void setFireInfo(Block block, int encouragement, int flammability) {
+        BlockFire fire = (BlockFire) Blocks.FIRE;
+        fire.setFireInfo(block, encouragement, flammability);
     }
 
     @SubscribeEvent
@@ -198,7 +184,7 @@ public class DavincisVesselsObjects {
         registry.register(block);
         if (withItemBlock)
             itemBlocksToRegister.add(new ItemBlock(block).setRegistryName(block.getRegistryName()));
-        DavincisVesselsObjects.registeredBlocks.put(id, block);
+        DavincisVesselsContent.registeredBlocks.put(id, block);
     }
 
     private void registerBlock(IForgeRegistry<Block> registry, String id, Block block, Class<? extends ItemBlock> itemBlockClass) {
@@ -210,7 +196,7 @@ public class DavincisVesselsObjects {
             ItemBlock itemBlock = itemBlockClass.getDeclaredConstructor(Block.class).newInstance(block);
             itemBlock.setRegistryName(REGISTRY_PREFIX, id);
             itemBlocksToRegister.add(itemBlock);
-            DavincisVesselsObjects.registeredBlocks.put(id, block);
+            DavincisVesselsContent.registeredBlocks.put(id, block);
         } catch (Exception e) {
             DavincisVesselsMod.LOG.error("Caught exception while registering " + block, e);
         }
@@ -220,6 +206,6 @@ public class DavincisVesselsObjects {
         item.setUnlocalizedName("davincis." + id);
         item.setRegistryName(REGISTRY_PREFIX, id);
         registry.register(item);
-        DavincisVesselsObjects.registeredItems.put(id, item);
+        DavincisVesselsContent.registeredItems.put(id, item);
     }
 }

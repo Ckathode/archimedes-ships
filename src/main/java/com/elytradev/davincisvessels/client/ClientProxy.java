@@ -9,10 +9,10 @@ import com.elytradev.davincisvessels.client.render.TileEntityGaugeRenderer;
 import com.elytradev.davincisvessels.client.render.TileEntityHelmRenderer;
 import com.elytradev.davincisvessels.common.CommonProxy;
 import com.elytradev.davincisvessels.common.DavincisVesselsConfig;
+import com.elytradev.davincisvessels.common.content.DavincisVesselsContent;
 import com.elytradev.davincisvessels.common.entity.EntityParachute;
 import com.elytradev.davincisvessels.common.entity.EntitySeat;
 import com.elytradev.davincisvessels.common.entity.EntityShip;
-import com.elytradev.davincisvessels.common.object.DavincisVesselsObjects;
 import com.elytradev.davincisvessels.common.tileentity.TileGauge;
 import com.elytradev.davincisvessels.common.tileentity.TileHelm;
 import com.elytradev.movingworld.client.render.RenderMovingWorld;
@@ -76,13 +76,13 @@ public class ClientProxy extends CommonProxy {
         ModelResourceLocation modelResourceLocation;
 
         // Some specific meta registrations for OBJECTS, like for extended gauges.
-        itemToRegister = Item.getItemFromBlock(DavincisVesselsObjects.blockGauge);
+        itemToRegister = Item.getItemFromBlock(DavincisVesselsContent.blockGauge);
         modelResourceLocation = new ModelResourceLocation(DavincisVesselsMod.RESOURCE_DOMAIN + "gauge", "inventory");
         ModelLoader.setCustomModelResourceLocation(itemToRegister, 0, modelResourceLocation);
         modelResourceLocation = new ModelResourceLocation(DavincisVesselsMod.RESOURCE_DOMAIN + "gauge_ext", "inventory");
         ModelLoader.setCustomModelResourceLocation(itemToRegister, 1, modelResourceLocation);
 
-        itemToRegister = Item.getItemFromBlock(DavincisVesselsObjects.blockBalloon);
+        itemToRegister = Item.getItemFromBlock(DavincisVesselsContent.blockBalloon);
 
         for (EnumDyeColor color : EnumDyeColor.values()) {
             int i = color.getMetadata();
@@ -98,8 +98,8 @@ public class ClientProxy extends CommonProxy {
 
         // Do some general render registrations for OBJECTS, not considering meta.
         ItemModelMesher modelMesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
-        for (Map.Entry<String, Block> entry : DavincisVesselsObjects.registeredBlocks.entrySet()) {
-            if (DavincisVesselsObjects.skipMesh.contains(entry.getKey()))
+        for (Map.Entry<String, Block> entry : DavincisVesselsContent.registeredBlocks.entrySet()) {
+            if (DavincisVesselsContent.skipMesh.contains(entry.getKey()))
                 continue;
 
             modelResourceLocation = new ModelResourceLocation(DavincisVesselsMod.RESOURCE_DOMAIN + entry.getKey(), "inventory");
@@ -108,8 +108,8 @@ public class ClientProxy extends CommonProxy {
             modelMesher.register(itemToRegister, 0, modelResourceLocation);
         }
 
-        for (Map.Entry<String, Item> entry : DavincisVesselsObjects.registeredItems.entrySet()) {
-            if (DavincisVesselsObjects.skipMesh.contains(entry.getKey()))
+        for (Map.Entry<String, Item> entry : DavincisVesselsContent.registeredItems.entrySet()) {
+            if (DavincisVesselsContent.skipMesh.contains(entry.getKey()))
                 continue;
 
             modelResourceLocation = new ModelResourceLocation(DavincisVesselsMod.RESOURCE_DOMAIN + entry.getKey(), "inventory");

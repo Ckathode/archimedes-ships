@@ -1,4 +1,4 @@
-package com.elytradev.davincisvessels.common.object.item;
+package com.elytradev.davincisvessels.common.content.item;
 
 import com.elytradev.davincisvessels.DavincisVesselsMod;
 import com.elytradev.davincisvessels.common.LanguageEntries;
@@ -31,7 +31,7 @@ public class ItemBlockAnchorPoint extends ItemBlock {
         if (GuiScreen.isShiftKeyDown()) {
             AnchorInstance instance = new AnchorInstance();
             instance.deserializeNBT(stack.getTagCompound().getCompoundTag("INSTANCE"));
-            String readablePosition = ((BlockLocation) instance.getRelatedAnchors().values().toArray()[0]).pos
+            String readablePosition = ((BlockLocation) instance.getRelatedAnchors().values().toArray()[0]).getPos()
                     .toString().substring(9).replace("}", "").replaceAll("=", ":");
             String pos = I18n.format(LanguageEntries.GUI_ANCHOR_POS, (ChatFormatting.YELLOW + readablePosition).toString());
             String type = I18n.format(LanguageEntries.GUI_ANCHOR_TYPE, (ChatFormatting.YELLOW + instance.getType().toString()).toString());

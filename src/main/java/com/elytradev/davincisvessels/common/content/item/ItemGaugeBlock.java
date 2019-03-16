@@ -1,4 +1,4 @@
-package com.elytradev.davincisvessels.common.object.item;
+package com.elytradev.davincisvessels.common.content.item;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;

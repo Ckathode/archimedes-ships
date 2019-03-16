@@ -1,40 +1,35 @@
 package com.elytradev.davincisvessels.common.network.message;
 
-import com.elytradev.concrete.network.Message;
-import com.elytradev.concrete.network.NetworkContext;
-import com.elytradev.concrete.network.annotation.field.MarshalledAs;
-import com.elytradev.concrete.network.annotation.type.ReceivedOn;
 import com.elytradev.davincisvessels.DavincisVesselsMod;
 import com.elytradev.davincisvessels.common.entity.EntityShip;
-import com.elytradev.davincisvessels.common.network.DavincisVesselsNetworking;
-import com.elytradev.movingworld.common.network.marshallers.EntityMarshaller;
+import com.tridevmc.compound.network.message.Message;
+import com.tridevmc.compound.network.message.RegisteredMessage;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.LogicalSide;
 
 /**
  * Created by darkevilmac on 1/29/2017.
  */
-@ReceivedOn(Side.SERVER)
+@RegisteredMessage(channel = "davincisvessels", destination = LogicalSide.SERVER)
 public class RequestSubmerseMessage extends Message {
 
-    @MarshalledAs(EntityMarshaller.MARSHALLER_NAME)
     public EntityShip ship;
     public boolean doSumberse;
 
     public RequestSubmerseMessage(EntityShip ship, boolean doSumberse) {
-        super(DavincisVesselsNetworking.NETWORK);
+        super();
         this.ship = ship;
         this.doSumberse = doSumberse;
     }
 
-    public RequestSubmerseMessage(NetworkContext ctx) {
-        super(ctx);
+    public RequestSubmerseMessage() {
+        super();
     }
 
     @Override
-    protected void handle(EntityPlayer sender) {
+    public void handle(EntityPlayer sender) {
         if (ship != null) {
             if (doSumberse && !ship.canSubmerge()) {
                 if (sender instanceof EntityPlayerMP) {
@@ -48,7 +43,7 @@ public class RequestSubmerseMessage extends Message {
 
             ship.setSubmerge(doSumberse);
             // TODO: Achievements are gone.
-            //sender.addStat(DavincisVesselsObjects.achievementSubmerseShip);
+            //sender.addStat(DavincisVesselsContent.achievementSubmerseShip);
         }
     }
 }

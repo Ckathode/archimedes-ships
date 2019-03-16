@@ -2,7 +2,7 @@ package com.elytradev.davincisvessels.common.tileentity;
 
 import com.elytradev.davincisvessels.client.gui.GuiAnchorPoint;
 import com.elytradev.davincisvessels.common.LanguageEntries;
-import com.elytradev.davincisvessels.common.object.DavincisVesselsObjects;
+import com.elytradev.davincisvessels.common.content.DavincisVesselsContent;
 import com.elytradev.movingworld.api.IMovingTile;
 import com.elytradev.movingworld.common.chunk.mobilechunk.MobileChunk;
 import com.elytradev.movingworld.common.entity.EntityMovingWorld;
@@ -41,7 +41,7 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
     }
 
     public static boolean isItemAnchor(ItemStack itemstack) {
-        return itemstack != ItemStack.EMPTY && Objects.equals(itemstack.getItem(), Item.getItemFromBlock(DavincisVesselsObjects.blockAnchorPoint));
+        return itemstack != ItemStack.EMPTY && Objects.equals(itemstack.getItem(), Item.getItemFromBlock(DavincisVesselsContent.blockAnchorPoint));
     }
 
     @Nullable
@@ -240,7 +240,7 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
         boolean accepted = index == 0 &&
-                (stack == ItemStack.EMPTY || Objects.equals(stack.getItem(), Item.getItemFromBlock(DavincisVesselsObjects.blockAnchorPoint)));
+                (stack == ItemStack.EMPTY || Objects.equals(stack.getItem(), Item.getItemFromBlock(DavincisVesselsContent.blockAnchorPoint)));
         return accepted;
     }
 

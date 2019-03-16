@@ -1,38 +1,40 @@
 package com.elytradev.davincisvessels.common.network.marshallers;
 
-import com.elytradev.concrete.network.Marshaller;
+import com.tridevmc.compound.network.marshallers.Marshaller;
+import com.tridevmc.compound.network.marshallers.RegisteredMarshaller;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.LogicalSidedProvider;
 
-/**
- * Created by darkevilmac on 2/2/2017.
- */
-public class TileEntityMarshaller implements Marshaller<TileEntity> {
-
-    public static final String MARSHALLER_NAME = "com.elytradev.davincisvessels.common.network.marshallers.TileEntityMarshaller";
-    public static final TileEntityMarshaller INSTANCE = new TileEntityMarshaller();
+@RegisteredMarshaller(channel = "davincisvessels", acceptedTypes = {TileEntity.class}, ids = {"tile", "tileentity"})
+public class TileEntityMarshaller extends Marshaller<TileEntity> {
 
     @Override
-    public TileEntity unmarshal(ByteBuf in) {
+    public TileEntity readFrom(ByteBuf in) {
         TileEntity tileEntity = null;
 
         if (in.readBoolean()) {
-            tileEntity = DimensionManager.getWorld(in.readInt()).getTileEntity(BlockPos.fromLong(in.readLong()));
+            DimensionType dimension = DimensionType.getById(in.readInt());
+            World world = DimensionManager.getWorld(LogicalSidedProvider.INSTANCE.get(LogicalSide.SERVER), dimension, true, true);
+            tileEntity = world.getTileEntity(BlockPos.fromLong(in.readLong()));
         }
 
         return tileEntity;
     }
 
     @Override
-    public void marshal(ByteBuf out, TileEntity tileEntity) {
+    public void writeTo(ByteBuf out, TileEntity tileEntity) {
         if (tileEntity == null || tileEntity.getWorld() == null) {
             out.writeBoolean(false);
         } else {
             out.writeBoolean(true);
 
-            out.writeInt(tileEntity.getWorld().provider.getDimension());
+            out.writeInt(tileEntity.getWorld().getDimension().getType().getId());
             out.writeLong(tileEntity.getPos().toLong());
         }
     }

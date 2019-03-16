@@ -1,6 +1,6 @@
-package com.elytradev.davincisvessels.common.object.block;
+package com.elytradev.davincisvessels.common.content.block;
 
-import com.elytradev.davincisvessels.common.object.DavincisVesselsObjects;
+import com.elytradev.davincisvessels.common.content.DavincisVesselsContent;
 import com.elytradev.davincisvessels.common.tileentity.TileCrate;
 import com.elytradev.movingworld.common.entity.EntityMovingWorld;
 import net.minecraft.block.Block;
@@ -142,7 +142,7 @@ public class BlockCrate extends BlockContainer {
 
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
-        if (worldIn.isRemote || worldIn.getBlockState(pos).getBlock() != DavincisVesselsObjects.blockCrateWood)
+        if (worldIn.isRemote || worldIn.getBlockState(pos).getBlock() != DavincisVesselsContent.blockCrateWood)
             return;
 
         if (!canBePlacedOn(worldIn, pos.down())) {

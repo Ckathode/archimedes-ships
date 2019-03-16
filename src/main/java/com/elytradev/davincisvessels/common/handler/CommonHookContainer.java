@@ -1,10 +1,10 @@
 package com.elytradev.davincisvessels.common.handler;
 
 
+import com.elytradev.davincisvessels.common.content.DavincisVesselsContent;
 import com.elytradev.davincisvessels.common.entity.EntitySeat;
 import com.elytradev.davincisvessels.common.entity.EntityShip;
-import com.elytradev.davincisvessels.common.object.DavincisVesselsObjects;
-import com.elytradev.davincisvessels.common.object.block.BlockHelm;
+import com.elytradev.davincisvessels.common.content.block.BlockHelm;
 import com.elytradev.davincisvessels.common.tileentity.TileCrate;
 import com.elytradev.davincisvessels.common.tileentity.TileEntitySecuredBed;
 import com.elytradev.movingworld.common.chunk.LocatedBlock;
@@ -15,8 +15,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerSetSpawnEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.Optional;
 
@@ -60,16 +60,16 @@ public class CommonHookContainer {
         if (event.movingWorld instanceof EntityShip) {
             EntityShip ship = (EntityShip) event.movingWorld;
             LocatedBlock lb = event.block;
-            if (lb.state.getBlock() == DavincisVesselsObjects.blockMarkShip) {
+            if (lb.state.getBlock() == DavincisVesselsContent.blockMarkShip) {
                 Entity passenger = ship.controllingPassenger != null ? ship.controllingPassenger : ship.prevRiddenByEntity;
 
                 if (passenger != null) {
                     BlockPos position = lb.pos.offset(lb.state.getValue(BlockHelm.FACING));
-                    passenger.dismountRidingEntity();
+                    passenger.stopRiding();
                     passenger.setPositionAndUpdate(position.getX() + 0.5D, position.getY() + 0.5D, position.getZ() + 0.5D);
                     System.out.println(passenger.getPositionVector().toString());
                 }
-            } else if (lb.state.getBlock() == DavincisVesselsObjects.blockSeat) {
+            } else if (lb.state.getBlock() == DavincisVesselsContent.blockSeat) {
                 Optional<EntitySeat> matchingSeatEntity = ship.capabilities.getSeats().stream().filter(s -> s.getChunkPos().equals(lb.posNoOffset)).findFirst();
 
                 if (matchingSeatEntity.isPresent()) {

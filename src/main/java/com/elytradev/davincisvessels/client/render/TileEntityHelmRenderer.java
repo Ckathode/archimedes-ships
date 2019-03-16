@@ -2,7 +2,7 @@ package com.elytradev.davincisvessels.client.render;
 
 import com.elytradev.davincisvessels.DavincisVesselsMod;
 import com.elytradev.davincisvessels.common.entity.EntityShip;
-import com.elytradev.davincisvessels.common.object.block.BlockHelm;
+import com.elytradev.davincisvessels.common.content.block.BlockHelm;
 import com.elytradev.davincisvessels.common.tileentity.TileHelm;
 import com.elytradev.movingworld.api.IMovingTile;
 import net.minecraft.block.state.IBlockState;

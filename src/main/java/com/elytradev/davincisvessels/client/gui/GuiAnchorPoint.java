@@ -2,7 +2,7 @@ package com.elytradev.davincisvessels.client.gui;
 
 import com.elytradev.davincisvessels.common.LanguageEntries;
 import com.elytradev.davincisvessels.common.network.message.AnchorPointMessage;
-import com.elytradev.davincisvessels.common.object.DavincisVesselsObjects;
+import com.elytradev.davincisvessels.common.content.DavincisVesselsContent;
 import com.elytradev.davincisvessels.common.tileentity.BlockLocation;
 import com.elytradev.davincisvessels.common.tileentity.TileAnchorPoint;
 import net.minecraft.client.Minecraft;
@@ -73,7 +73,7 @@ public class GuiAnchorPoint extends GuiContainer {
 
         int index = 0;
         for (Map.Entry<UUID, BlockLocation> e : anchorPoint.getInstance().getRelatedAnchors().entrySet()) {
-            relations[index] = I18n.format(LanguageEntries.GUI_ANCHOR_RELATED, e.getValue().pos.toString().substring(9)
+            relations[index] = I18n.format(LanguageEntries.GUI_ANCHOR_RELATED, e.getValue().getPos().toString().substring(9)
                     .replace("}", "").replaceAll("=", ":"));
             index++;
         }
@@ -91,7 +91,7 @@ public class GuiAnchorPoint extends GuiContainer {
         GlStateManager.translate(-0.5, 9, 0);
         GlStateManager.enableRescaleNormal();
         RenderHelper.enableGUIStandardItemLighting();
-        itemRender.renderItemIntoGUI(new ItemStack(DavincisVesselsObjects.blockAnchorPoint, 1), 0, 0);
+        itemRender.renderItemIntoGUI(new ItemStack(DavincisVesselsContent.blockAnchorPoint, 1), 0, 0);
         RenderHelper.disableStandardItemLighting();
         GlStateManager.disableRescaleNormal();
         GlStateManager.popMatrix();

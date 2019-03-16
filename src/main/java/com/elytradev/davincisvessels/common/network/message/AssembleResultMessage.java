@@ -1,38 +1,33 @@
 package com.elytradev.davincisvessels.common.network.message;
 
-import com.elytradev.concrete.network.Message;
-import com.elytradev.concrete.network.NetworkContext;
-import com.elytradev.concrete.network.annotation.field.MarshalledAs;
-import com.elytradev.concrete.network.annotation.type.ReceivedOn;
 import com.elytradev.davincisvessels.client.gui.ContainerHelm;
-import com.elytradev.davincisvessels.common.network.DavincisVesselsNetworking;
-import com.elytradev.davincisvessels.common.network.marshallers.AssembleResultMarshaller;
 import com.elytradev.movingworld.common.chunk.assembly.AssembleResult;
+import com.tridevmc.compound.network.message.Message;
+import com.tridevmc.compound.network.message.RegisteredMessage;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.LogicalSide;
 
 /**
  * Created by darkevilmac on 1/29/2017.
  */
-@ReceivedOn(Side.CLIENT)
+@RegisteredMessage(channel = "davincisvessels", destination = LogicalSide.CLIENT)
 public class AssembleResultMessage extends Message {
 
-    @MarshalledAs(AssembleResultMarshaller.MARSHALLER_NAME)
     public AssembleResult result;
     public boolean setPrevious;
 
     public AssembleResultMessage(AssembleResult result, boolean setPrevious) {
-        super(DavincisVesselsNetworking.NETWORK);
+        super();
         this.result = result;
         this.setPrevious = setPrevious;
     }
 
-    public AssembleResultMessage(NetworkContext ctx) {
-        super(ctx);
+    public AssembleResultMessage() {
+        super();
     }
 
     @Override
-    protected void handle(EntityPlayer sender) {
+    public void handle(EntityPlayer sender) {
         if (sender != null && sender.openContainer instanceof ContainerHelm) {
             if (setPrevious) {
                 ((ContainerHelm) sender.openContainer).tileEntity.setPrevAssembleResult(result);

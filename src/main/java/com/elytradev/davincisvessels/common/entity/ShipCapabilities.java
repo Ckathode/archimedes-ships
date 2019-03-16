@@ -4,7 +4,7 @@ import com.elytradev.davincisvessels.DavincisVesselsMod;
 import com.elytradev.davincisvessels.common.api.block.IBlockBalloon;
 import com.elytradev.davincisvessels.common.api.block.IBlockCustomMass;
 import com.elytradev.davincisvessels.common.api.tileentity.ITileEngineModifier;
-import com.elytradev.davincisvessels.common.object.DavincisVesselsObjects;
+import com.elytradev.davincisvessels.common.content.DavincisVesselsContent;
 import com.elytradev.davincisvessels.common.tileentity.AnchorInstance;
 import com.elytradev.davincisvessels.common.tileentity.BlockLocation;
 import com.elytradev.davincisvessels.common.tileentity.TileAnchorPoint;
@@ -91,12 +91,12 @@ public class ShipCapabilities extends MovingWorldCapabilities {
                 Iterator<Map.Entry<UUID, BlockLocation>> relationIterator = anchor.getRelatedAnchors().entrySet().iterator();
                 while (relationIterator.hasNext()) {
                     Map.Entry<UUID, BlockLocation> relation = relationIterator.next();
-                    if (relation.getValue().dimID == ship.world.getDimension().getType().getId()) {
-                        TileEntity relatedTile = ship.world.getTileEntity(relation.getValue().pos);
+                    if (relation.getValue().getDim() == ship.world.getDimension().getType().getId()) {
+                        TileEntity relatedTile = ship.world.getTileEntity(relation.getValue().getPos());
                         if (relatedTile instanceof TileAnchorPoint) {
                             TileAnchorPoint relatedAnchor = (TileAnchorPoint) relatedTile;
                             if (relatedAnchor.getInstance().getRelatedAnchors().containsKey(anchor.getIdentifier())
-                                    && relatedAnchor.getInstance().getType().equals(AnchorInstance.InstanceType.FORLAND)) {
+                                    && relatedAnchor.getInstance().getType().equals(AnchorInstance.InstanceType.LAND)) {
                                 int xDist = (int) Math.abs(Math.round(ship.posX) - relatedAnchor.getPos().getX());
                                 int yDist = (int) Math.abs(Math.round(ship.posY) - relatedAnchor.getPos().getY());
                                 int zDist = (int) Math.abs(Math.round(ship.posZ) - relatedAnchor.getPos().getZ());
@@ -247,22 +247,22 @@ public class ShipCapabilities extends MovingWorldCapabilities {
 
         if (block instanceof IBlockBalloon) {
             balloonCount += ((IBlockBalloon) block).getBalloonWorth(tile);
-        } else if (block == DavincisVesselsObjects.blockBalloon) {
+        } else if (block == DavincisVesselsContent.blockBalloon) {
             balloonCount++;
         } else if (DavincisVesselsMod.INSTANCE.getNetworkConfig().isBalloon(block)) {
             balloonCount++;
-        } else if (block == DavincisVesselsObjects.blockFloater) {
+        } else if (block == DavincisVesselsContent.blockFloater) {
             floaters++;
-        } else if (block == DavincisVesselsObjects.blockAnchorPoint) {
+        } else if (block == DavincisVesselsContent.blockAnchorPoint) {
             TileEntity te = ship.getMobileChunk().getTileEntity(pos);
             if (te instanceof TileAnchorPoint && ((TileAnchorPoint) te).getInstance() != null
-                    && ((TileAnchorPoint) te).getInstance().getType().equals(AnchorInstance.InstanceType.FORSHIP)) {
+                    && ((TileAnchorPoint) te).getInstance().getType().equals(AnchorInstance.InstanceType.SHIP)) {
                 if (anchorPoints == null) {
                     anchorPoints = new ArrayList<>();
                 }
                 anchorPoints.add(new LocatedBlock(state, te, pos));
             }
-        } else if (block == DavincisVesselsObjects.blockEngine) {
+        } else if (block == DavincisVesselsContent.blockEngine) {
             TileEntity te = ship.getMobileChunk().getTileEntity(pos);
             if (te instanceof ITileEngineModifier) {
                 if (engines == null) {
@@ -270,7 +270,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
                 }
                 engines.add((ITileEngineModifier) te);
             }
-        } else if (block == DavincisVesselsObjects.blockSeat || DavincisVesselsMod.INSTANCE.getNetworkConfig().isSeat(block)) {
+        } else if (block == DavincisVesselsContent.blockSeat || DavincisVesselsMod.INSTANCE.getNetworkConfig().isSeat(block)) {
             int x1 = ship.riderDestination.getX(), y1 = ship.riderDestination.getY(), z1 = ship.riderDestination.getZ();
             int frontDir = ship.frontDirection.getHorizontalIndex();
 

@@ -7,7 +7,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
+import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.common.thread.EffectiveSide;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +31,7 @@ public class AnchorInstance implements INBTSerializable<NBTTagCompound> {
 
     public AnchorInstance() {
         this.identifier = UUID.randomUUID();
-        this.type = InstanceType.FORLAND;
+        this.type = InstanceType.LAND;
         this.relatedAnchors = new HashMap<>();
         changed = false;
     }
@@ -112,22 +113,22 @@ public class AnchorInstance implements INBTSerializable<NBTTagCompound> {
     public NBTTagCompound serializeNBT() {
         NBTTagCompound tag = new NBTTagCompound();
 
-        tag.setBoolean("INSTANCE", true);
-        tag.setBoolean("type", type == InstanceType.FORSHIP);
-        tag.setUniqueId("identifier", identifier);
+        tag.putBoolean("INSTANCE", true);
+        tag.putBoolean("type", type == InstanceType.SHIP);
+        tag.putUniqueId("identifier", identifier);
 
         if (!relatedAnchors.isEmpty()) {
-            NBTTagList relatedAnchorsTagList = tag.getTagList("relatedAnchorsTagList", 10);
+            NBTTagList relatedAnchorsTagList = tag.getList("relatedAnchorsTagList", 10);
 
             for (HashMap.Entry<UUID, BlockLocation> e : relatedAnchors.entrySet()) {
                 NBTTagCompound entry = new NBTTagCompound();
-                entry.setUniqueId("identifier", e.getKey());
-                entry.setInteger("dimID", e.getValue().dimID);
-                NBTTagUtils.writeVec3iToNBT(entry, "related", e.getValue().pos);
-                relatedAnchorsTagList.appendTag(entry);
+                entry.putUniqueId("identifier", e.getKey());
+                entry.putInt("dim", e.getValue().getDim());
+                NBTTagUtils.writeVec3iToNBT(entry, "related", e.getValue().getPos());
+                relatedAnchorsTagList.add(entry);
             }
 
-            tag.setTag("relatedAnchorsTagList", relatedAnchorsTagList);
+            tag.put("relatedAnchorsTagList", relatedAnchorsTagList);
         }
 
         return tag;
@@ -135,19 +136,19 @@ public class AnchorInstance implements INBTSerializable<NBTTagCompound> {
 
     @Override
     public void deserializeNBT(NBTTagCompound tag) {
-        if (!tag.hasKey("INSTANCE"))
+        if (!tag.contains("INSTANCE"))
             throw new IllegalArgumentException("NBT provided for deserialization is not valid for an anchor point! " + tag.toString());
 
-        this.type = tag.getBoolean("type") ? InstanceType.FORSHIP : InstanceType.FORLAND;
+        this.type = tag.getBoolean("type") ? InstanceType.SHIP : InstanceType.LAND;
         this.identifier = tag.getUniqueId("identifier");
 
-        if (tag.hasKey("relatedAnchorsTagList")) {
-            NBTTagList relatedAnchorsTagList = tag.getTagList("relatedAnchorsTagList", 10);
-            int size = relatedAnchorsTagList.tagCount();
+        if (tag.contains("relatedAnchorsTagList")) {
+            NBTTagList relatedAnchorsTagList = tag.getList("relatedAnchorsTagList", 10);
+            int size = relatedAnchorsTagList.size();
 
             for (int entry = 0; entry < size; entry++) {
-                NBTTagCompound entryCompound = relatedAnchorsTagList.getCompoundTagAt(entry);
-                int entryDimID = entryCompound.getInteger("dimID");
+                NBTTagCompound entryCompound = relatedAnchorsTagList.getCompound(entry);
+                int entryDimID = entryCompound.getInt("dim");
                 BlockPos entryPos = new BlockPos(NBTTagUtils.readVec3iFromNBT(entryCompound, "related"));
                 UUID entryIdentifier = entryCompound.getUniqueId("identifier");
 
@@ -158,22 +159,22 @@ public class AnchorInstance implements INBTSerializable<NBTTagCompound> {
 
 
     public enum InstanceType {
-        FORSHIP, FORLAND;
+        SHIP, LAND;
 
         @Override
         public String toString() {
-            if (FMLLaunchHandler.side().isClient())
-                return this == FORSHIP ? I18n.format(LanguageEntries.GUI_ANCHOR_MODE_SHIP) : I18n.format(LanguageEntries.GUI_ANCHOR_MODE_WORLD);
+            if (EffectiveSide.get() == LogicalSide.CLIENT)
+                return this == SHIP ? I18n.format(LanguageEntries.GUI_ANCHOR_MODE_SHIP) : I18n.format(LanguageEntries.GUI_ANCHOR_MODE_WORLD);
             else return super.toString();
         }
 
         public InstanceType opposite() {
             switch (this) {
-                case FORLAND: {
-                    return FORSHIP;
+                case LAND: {
+                    return SHIP;
                 }
-                case FORSHIP: {
-                    return FORLAND;
+                case SHIP: {
+                    return LAND;
                 }
             }
 

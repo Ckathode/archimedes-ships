@@ -4,12 +4,12 @@ import com.elytradev.davincisvessels.client.ClientProxy;
 import com.elytradev.davincisvessels.common.CommonProxy;
 import com.elytradev.davincisvessels.common.DavincisVesselsConfig;
 import com.elytradev.davincisvessels.common.command.*;
+import com.elytradev.davincisvessels.common.content.DavincisVesselsContent;
 import com.elytradev.davincisvessels.common.entity.EntityParachute;
 import com.elytradev.davincisvessels.common.entity.EntitySeat;
 import com.elytradev.davincisvessels.common.entity.EntityShip;
 import com.elytradev.davincisvessels.common.handler.ConnectionHandler;
 import com.elytradev.davincisvessels.common.network.DavincisVesselsNetworking;
-import com.elytradev.davincisvessels.common.object.DavincisVesselsObjects;
 import net.minecraft.command.CommandBase;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
@@ -36,7 +36,7 @@ public class DavincisVesselsMod {
     public static final String MOD_NAME = "Davinci's Vessels";
     public static final String RESOURCE_DOMAIN = "davincisvessels:";
     public static final String MOD_GUIFACTORY = "com.elytradev.davincisvessels.client.gui.DavincisVesselsGUIFactory";
-    public static final DavincisVesselsObjects OBJECTS = new DavincisVesselsObjects();
+    public static final DavincisVesselsContent OBJECTS = new DavincisVesselsContent();
     @Mod.Instance(MOD_ID)
     public static DavincisVesselsMod INSTANCE;
     @SidedProxy(clientSide = "com.elytradev.davincisvessels.client.ClientProxy", serverSide = "com.elytradev.davincisvessels.common.CommonProxy")
@@ -46,7 +46,7 @@ public class DavincisVesselsMod {
     public static CreativeTabs CREATIVE_TAB = new CreativeTabs("davincisTab") {
         @Override
         public ItemStack getTabIconItem() {
-            return new ItemStack(DavincisVesselsObjects.blockMarkShip);
+            return new ItemStack(DavincisVesselsContent.blockMarkShip);
         }
     };
 

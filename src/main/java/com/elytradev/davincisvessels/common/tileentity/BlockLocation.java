@@ -1,13 +1,22 @@
 package com.elytradev.davincisvessels.common.tileentity;
 
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.dimension.Dimension;
 
 public class BlockLocation {
-    public BlockPos pos;
-    public int dimID;
+    private final BlockPos pos;
+    private final Dimension dim;
 
-    public BlockLocation(BlockPos pos, int dimID) {
+    public BlockLocation(BlockPos pos, Dimension dim) {
         this.pos = pos;
-        this.dimID = dimID;
+        this.dim = dim;
+    }
+
+    public BlockPos getPos() {
+        return pos;
+    }
+
+    public Dimension getDim() {
+        return dim;
     }
 }

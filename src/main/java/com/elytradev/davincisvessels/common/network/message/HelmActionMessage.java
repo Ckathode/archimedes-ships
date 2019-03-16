@@ -1,38 +1,33 @@
 package com.elytradev.davincisvessels.common.network.message;
 
-import com.elytradev.concrete.network.Message;
-import com.elytradev.concrete.network.NetworkContext;
-import com.elytradev.concrete.network.annotation.field.MarshalledAs;
-import com.elytradev.concrete.network.annotation.type.ReceivedOn;
-import com.elytradev.davincisvessels.common.network.DavincisVesselsNetworking;
 import com.elytradev.davincisvessels.common.network.HelmClientAction;
-import com.elytradev.davincisvessels.common.network.marshallers.TileEntityMarshaller;
 import com.elytradev.davincisvessels.common.tileentity.TileHelm;
+import com.tridevmc.compound.network.message.Message;
+import com.tridevmc.compound.network.message.RegisteredMessage;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.LogicalSide;
 
 /**
  * Created by darkevilmac on 2/2/2017.
  */
-@ReceivedOn(Side.SERVER)
+@RegisteredMessage(channel = "davincisvessels", destination = LogicalSide.SERVER)
 public class HelmActionMessage extends Message {
 
-    @MarshalledAs(TileEntityMarshaller.MARSHALLER_NAME)
     public TileHelm helm;
     public HelmClientAction action;
 
-    public HelmActionMessage(NetworkContext ctx) {
-        super(ctx);
+    public HelmActionMessage() {
+        super();
     }
 
     public HelmActionMessage(TileHelm helm, HelmClientAction action) {
-        super(DavincisVesselsNetworking.NETWORK);
+        super();
         this.helm = helm;
         this.action = action;
     }
 
     @Override
-    protected void handle(EntityPlayer sender) {
+    public void handle(EntityPlayer sender) {
         if (helm == null)
             return;
 

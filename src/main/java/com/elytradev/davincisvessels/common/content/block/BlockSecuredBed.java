@@ -1,6 +1,6 @@
-package com.elytradev.davincisvessels.common.object.block;
+package com.elytradev.davincisvessels.common.content.block;
 
-import com.elytradev.davincisvessels.common.object.DavincisVesselsObjects;
+import com.elytradev.davincisvessels.common.content.DavincisVesselsContent;
 import com.elytradev.davincisvessels.common.tileentity.TileEntitySecuredBed;
 import net.minecraft.block.BlockBed;
 import net.minecraft.block.ITileEntityProvider;
@@ -19,7 +19,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Iterator;
@@ -119,12 +119,12 @@ public class BlockSecuredBed extends BlockBed implements ITileEntityProvider {
 
     @SideOnly(Side.CLIENT)
     public Item getItem(World worldIn, BlockPos pos) {
-        return DavincisVesselsObjects.itemSecuredBed;
+        return DavincisVesselsContent.itemSecuredBed;
     }
 
     @Override
     public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return state.getValue(PART) == BlockBed.EnumPartType.HEAD ? null : DavincisVesselsObjects.itemSecuredBed;
+        return state.getValue(PART) == BlockBed.EnumPartType.HEAD ? null : DavincisVesselsContent.itemSecuredBed;
     }
 
     @Override
@@ -138,7 +138,7 @@ public class BlockSecuredBed extends BlockBed implements ITileEntityProvider {
 
     @Override
     public boolean isBed(IBlockState state, IBlockAccess world, BlockPos pos, Entity player) {
-        return Objects.equals(state.getBlock(), DavincisVesselsObjects.blockSecuredBed);
+        return Objects.equals(state.getBlock(), DavincisVesselsContent.blockSecuredBed);
     }
 
     @Override

@@ -1,47 +1,39 @@
 package com.elytradev.davincisvessels.common.network.message;
 
-import com.elytradev.concrete.network.Message;
-import com.elytradev.concrete.network.NetworkContext;
-import com.elytradev.concrete.network.annotation.field.MarshalledAs;
-import com.elytradev.concrete.network.annotation.type.ReceivedOn;
 import com.elytradev.davincisvessels.DavincisVesselsMod;
-import com.elytradev.davincisvessels.common.network.DavincisVesselsNetworking;
-import com.elytradev.davincisvessels.common.network.marshallers.TileEntityMarshaller;
 import com.elytradev.davincisvessels.common.tileentity.AnchorInstance;
 import com.elytradev.davincisvessels.common.tileentity.BlockLocation;
 import com.elytradev.davincisvessels.common.tileentity.TileAnchorPoint;
+import com.tridevmc.compound.network.message.Message;
+import com.tridevmc.compound.network.message.RegisteredMessage;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.LogicalSide;
 
 import java.util.HashMap;
 import java.util.UUID;
 
-/**
- * Created by darkevilmac on 2/2/2017.
- */
-@ReceivedOn(Side.SERVER)
+@RegisteredMessage(channel = "davincisvessels", destination = LogicalSide.SERVER)
 public class AnchorPointMessage extends Message {
 
-    @MarshalledAs(TileEntityMarshaller.MARSHALLER_NAME)
     public TileAnchorPoint anchorPoint;
     public TileAnchorPoint.AnchorPointAction action;
 
     public AnchorPointMessage(TileAnchorPoint anchorPoint, TileAnchorPoint.AnchorPointAction action) {
-        super(DavincisVesselsNetworking.NETWORK);
+        super();
         this.anchorPoint = anchorPoint;
         this.action = action;
     }
 
-    public AnchorPointMessage(NetworkContext ctx) {
-        super(ctx);
+    public AnchorPointMessage() {
+        super();
     }
 
     @Override
-    protected void handle(EntityPlayer sender) {
+    public void handle(EntityPlayer sender) {
         if (anchorPoint == null)
             return;
 
@@ -49,14 +41,13 @@ public class AnchorPointMessage extends Message {
 
 
         if (action == TileAnchorPoint.AnchorPointAction.SWITCH) {
-            // Switch
-            /**
-             * Clear the entries as well as notify the entries to clear us from them.
-             * Then switch mode.
+            /*
+              Clear the entries as well as notify the entries to clear us from them.
+              Then switch mode.
              */
             for (HashMap.Entry<UUID, BlockLocation> e : anchorPoint.getInstance().getRelatedAnchors().entrySet()) {
-                if (world.getTileEntity(e.getValue().pos) != null && world.getTileEntity(e.getValue().pos) instanceof TileAnchorPoint) {
-                    TileAnchorPoint entryAnchorPoint = (TileAnchorPoint) world.getTileEntity(e.getValue().pos);
+                if (world.getTileEntity(e.getValue().getPos()) != null && world.getTileEntity(e.getValue().getPos()) instanceof TileAnchorPoint) {
+                    TileAnchorPoint entryAnchorPoint = (TileAnchorPoint) world.getTileEntity(e.getValue().getPos());
                     ((EntityPlayerMP) sender).connection.sendPacket(entryAnchorPoint.getUpdatePacket());
                 } else {
                     DavincisVesselsMod.LOG.error("Invalid entries in anchor tile: " + anchorPoint.toString() + ", cleaning.");
@@ -68,38 +59,37 @@ public class AnchorPointMessage extends Message {
             anchorPoint.getInstance().setIdentifier(UUID.randomUUID());
             anchorPoint.markDirty();
         } else if (anchorPoint.content != null) {
-            // Link
-            /**
-             * As a note, we don't set the relation of our own anchor because the anchor we
-             * would relate it to has yet to be placed, we set this info when the anchor is placed.
+            /*
+              As a note, we don't set the relation of our own anchor because the anchor we
+              would relate it to has yet to be placed, we set this info when the anchor is placed.
              */
-            if (anchorPoint.getInstance().getType() == AnchorInstance.InstanceType.FORLAND) {
-                if (anchorPoint.content.getTagCompound() == null) {
-                    anchorPoint.content.setTagCompound(new NBTTagCompound());
+            if (anchorPoint.getInstance().getType() == AnchorInstance.InstanceType.LAND) {
+                if (anchorPoint.content.getTag() == null) {
+                    anchorPoint.content.setTag(new NBTTagCompound());
                 }
-                if (anchorPoint.content.getTagCompound().hasKey("INSTANCE"))
-                    anchorPoint.content.getTagCompound().removeTag("INSTANCE");
+                if (anchorPoint.content.getTag().contains("INSTANCE"))
+                    anchorPoint.content.getTag().remove("INSTANCE");
                 AnchorInstance itemAnchorInstanceTag = new AnchorInstance();
 
-                itemAnchorInstanceTag.setType(AnchorInstance.InstanceType.FORSHIP);
+                itemAnchorInstanceTag.setType(AnchorInstance.InstanceType.SHIP);
                 itemAnchorInstanceTag.setIdentifier(UUID.randomUUID());
                 itemAnchorInstanceTag.addRelation(anchorPoint.getInstance().getIdentifier(),
-                        new BlockLocation(anchorPoint.getPos(), sender.world.provider.getDimension()));
-                anchorPoint.content.getTagCompound().setTag("INSTANCE", itemAnchorInstanceTag.serializeNBT());
+                        new BlockLocation(anchorPoint.getPos(), sender.world.getDimension()));
+                anchorPoint.content.getTag().put("INSTANCE", itemAnchorInstanceTag.serializeNBT());
             } else {
-                if (anchorPoint.content.getTagCompound() == null) {
-                    anchorPoint.content.setTagCompound(new NBTTagCompound());
+                if (anchorPoint.content.getTag() == null) {
+                    anchorPoint.content.setTag(new NBTTagCompound());
                 }
-                if (anchorPoint.content.getTagCompound().hasKey("INSTANCE"))
-                    anchorPoint.content.getTagCompound().removeTag("INSTANCE");
+                if (anchorPoint.content.getTag().contains("INSTANCE"))
+                    anchorPoint.content.getTag().remove("INSTANCE");
 
                 AnchorInstance itemAnchorInstanceTag = new AnchorInstance();
 
-                itemAnchorInstanceTag.setType(AnchorInstance.InstanceType.FORLAND);
+                itemAnchorInstanceTag.setType(AnchorInstance.InstanceType.LAND);
                 itemAnchorInstanceTag.setIdentifier(UUID.randomUUID());
                 itemAnchorInstanceTag.addRelation(anchorPoint.getInstance().getIdentifier(),
-                        new BlockLocation(anchorPoint.getPos(), sender.world.provider.getDimension()));
-                anchorPoint.content.getTagCompound().setTag("INSTANCE", itemAnchorInstanceTag.serializeNBT());
+                        new BlockLocation(anchorPoint.getPos(), sender.world.getDimension()));
+                anchorPoint.content.getTag().put("INSTANCE", itemAnchorInstanceTag.serializeNBT());
             }
         }
         anchorPoint.markDirty();

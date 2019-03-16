@@ -96,10 +96,10 @@ public class GuiShip extends GuiContainer {
     @Override
     protected void actionPerformed(GuiButton button) {
         if (button == btnDisassemble) {
-            new MovingWorldClientActionMessage(ship, MovingWorldClientAction.DISASSEMBLE).sendToServer();
+            MovingWorldClientAction.DISASSEMBLE.sendToServer(ship);
             mc.displayGuiScreen(null);
         } else if (button == btnAlign) {
-            new MovingWorldClientActionMessage(ship, MovingWorldClientAction.ALIGN).sendToServer();
+            MovingWorldClientAction.ALIGN.sendToServer(ship);
             ship.alignToGrid(true);
         } else if (button == btnSubmersible && ((GuiButtonSubmersible) btnSubmersible).canDo) {
             GuiButtonSubmersible subButton = (GuiButtonSubmersible) button;

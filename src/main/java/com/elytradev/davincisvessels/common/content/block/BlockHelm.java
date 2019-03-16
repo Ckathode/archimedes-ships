@@ -1,4 +1,4 @@
-package com.elytradev.davincisvessels.common.object.block;
+package com.elytradev.davincisvessels.common.content.block;
 
 import com.elytradev.davincisvessels.DavincisVesselsMod;
 import com.elytradev.davincisvessels.common.tileentity.TileHelm;
@@ -20,7 +20,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockHelm extends BlockDirectional implements ITileEntityProvider {
@@ -154,7 +154,7 @@ public class BlockHelm extends BlockDirectional implements ITileEntityProvider {
     public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
         if (placer instanceof EntityPlayer) {
             // TODO: Achievements are gone.
-            //((EntityPlayer) placer).addStat(DavincisVesselsObjects.achievementCreateHelm);
+            //((EntityPlayer) placer).addStat(DavincisVesselsContent.achievementCreateHelm);
         }
 
         return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());

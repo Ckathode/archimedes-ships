@@ -1,35 +1,29 @@
 package com.elytradev.davincisvessels.common.network.message;
 
-import com.elytradev.concrete.network.Message;
-import com.elytradev.concrete.network.NetworkContext;
-import com.elytradev.concrete.network.annotation.field.MarshalledAs;
-import com.elytradev.concrete.network.annotation.type.ReceivedOn;
 import com.elytradev.davincisvessels.common.entity.EntityShip;
-import com.elytradev.davincisvessels.common.network.DavincisVesselsNetworking;
-import com.elytradev.movingworld.common.network.marshallers.EntityMarshaller;
+import com.tridevmc.compound.network.message.Message;
+import com.tridevmc.compound.network.message.RegisteredMessage;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.LogicalSide;
 
-@ReceivedOn(Side.SERVER)
+@RegisteredMessage(channel = "davincisvessels", destination = LogicalSide.SERVER)
 public class ControlInputMessage extends Message {
 
-    @MarshalledAs(EntityMarshaller.MARSHALLER_NAME)
     public EntityShip ship;
-    @MarshalledAs("i8")
     public int control;
 
     public ControlInputMessage(EntityShip ship, int control) {
-        super(DavincisVesselsNetworking.NETWORK);
+        super();
         this.ship = ship;
         this.control = control;
     }
 
-    public ControlInputMessage(NetworkContext ctx) {
-        super(ctx);
+    public ControlInputMessage() {
+        super();
     }
 
     @Override
-    protected void handle(EntityPlayer sender) {
+    public void handle(EntityPlayer sender) {
         if (ship == null)
             return;
 

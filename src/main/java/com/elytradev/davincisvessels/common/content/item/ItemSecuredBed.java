@@ -1,8 +1,8 @@
-package com.elytradev.davincisvessels.common.object.item;
+package com.elytradev.davincisvessels.common.content.item;
 
 
-import com.elytradev.davincisvessels.common.object.DavincisVesselsObjects;
-import com.elytradev.davincisvessels.common.object.block.BlockSecuredBed;
+import com.elytradev.davincisvessels.common.content.DavincisVesselsContent;
+import com.elytradev.davincisvessels.common.content.block.BlockSecuredBed;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -49,7 +49,7 @@ public class ItemSecuredBed extends Item {
                 boolean flag3 = flag1 || worldIn.isAirBlock(blockpos);
 
                 if (flag2 && flag3 && worldIn.getBlockState(pos.down()).isSideSolid(worldIn, pos.down(), EnumFacing.UP) && worldIn.getBlockState(blockpos.down()).isSideSolid(worldIn, blockpos.down(), EnumFacing.UP)) {
-                    IBlockState iblockstate1 = DavincisVesselsObjects.blockSecuredBed.getDefaultState().withProperty(BlockSecuredBed.OCCUPIED, Boolean.valueOf(false)).withProperty(BlockSecuredBed.FACING, enumfacing).withProperty(BlockSecuredBed.PART, BlockSecuredBed.EnumPartType.FOOT);
+                    IBlockState iblockstate1 = DavincisVesselsContent.blockSecuredBed.getDefaultState().withProperty(BlockSecuredBed.OCCUPIED, Boolean.valueOf(false)).withProperty(BlockSecuredBed.FACING, enumfacing).withProperty(BlockSecuredBed.PART, BlockSecuredBed.EnumPartType.FOOT);
 
                     if (worldIn.setBlockState(pos, iblockstate1, 11)) {
                         IBlockState iblockstate2 = iblockstate1.withProperty(BlockSecuredBed.PART, BlockSecuredBed.EnumPartType.HEAD);

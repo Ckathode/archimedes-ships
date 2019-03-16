@@ -34,7 +34,7 @@ public class TileHelm extends TileMovingMarkingBlock {
         sendAssembleResult(player, true);
 
         // TODO: Achievements are gone.
-        //player.addStat(getAssembleResult().isOK() ? DavincisVesselsObjects.achievementAssembleSuccess : DavincisVesselsObjects.achievementAssembleFailure);
+        //player.addStat(getAssembleResult().isOK() ? DavincisVesselsContent.achievementAssembleSuccess : DavincisVesselsContent.achievementAssembleFailure);
     }
 
     @Override
@@ -117,7 +117,7 @@ public class TileHelm extends TileMovingMarkingBlock {
             }
             case POSTRIDE: {
                 // TODO: Achievements are gone
-                // player.addStat(DavincisVesselsObjects.achievementAssembleMount);
+                // player.addStat(DavincisVesselsContent.achievementAssembleMount);
             }
         }
     }

@@ -3,14 +3,13 @@ package com.elytradev.davincisvessels.client.control;
 import com.elytradev.davincisvessels.common.DavincisVesselsConfig;
 import com.elytradev.davincisvessels.common.entity.EntityShip;
 import com.elytradev.davincisvessels.common.network.message.OpenGuiMessage;
-import com.elytradev.movingworld.common.entity.EntityMovingWorld;
 import com.elytradev.movingworld.common.network.MovingWorldClientAction;
-import com.elytradev.movingworld.common.network.message.MovingWorldClientActionMessage;
-import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
@@ -30,28 +29,26 @@ public class ShipKeyHandler {
 
     @SubscribeEvent
     public void updateControl(TickEvent.PlayerTickEvent e) {
-        if (e.phase == TickEvent.Phase.START && e.side == Side.CLIENT
-                && e.player == FMLClientHandler.instance().getClientPlayerEntity()
+        if (e.phase == TickEvent.Phase.START && e.side == LogicalSide.CLIENT
+                && e.player == Minecraft.getInstance().player
                 && e.player.getRidingEntity() instanceof EntityShip) {
+            EntityShip ship = (EntityShip) e.player.getRidingEntity();
             if (config.kbShipInv.isKeyDown() && !kbShipGuiPrevState) {
                 new OpenGuiMessage(2).sendToServer();
             }
             kbShipGuiPrevState = config.kbShipInv.isKeyDown();
 
             if (config.kbDisassemble.isKeyDown() && !kbDisassemblePrevState) {
-                new MovingWorldClientActionMessage((EntityMovingWorld) e.player.getRidingEntity(),
-                        MovingWorldClientAction.DISASSEMBLE).sendToServer();
+                MovingWorldClientAction.DISASSEMBLE.sendToServer(ship);
             }
             kbDisassemblePrevState = config.kbDisassemble.isKeyDown();
 
             if (config.kbAlign.isKeyDown() && !kbAlignPrevState) {
-                new MovingWorldClientActionMessage((EntityMovingWorld) e.player.getRidingEntity(),
-                        MovingWorldClientAction.ALIGN).sendToServer();
+                MovingWorldClientAction.ALIGN.sendToServer(ship);
             }
             kbAlignPrevState = config.kbAlign.isKeyDown();
 
             int c = getControlCode();
-            EntityShip ship = (EntityShip) e.player.getRidingEntity();
             if (c != ship.getController().getShipControl()) {
                 ship.getController().updateControl(ship, e.player, c);
             }

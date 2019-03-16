@@ -1,7 +1,7 @@
-package com.elytradev.davincisvessels.common.object.block;
+package com.elytradev.davincisvessels.common.content.block;
 
 import com.elytradev.davincisvessels.DavincisVesselsMod;
-import com.elytradev.davincisvessels.common.object.DavincisVesselsObjects;
+import com.elytradev.davincisvessels.common.content.DavincisVesselsContent;
 import com.elytradev.davincisvessels.common.tileentity.AnchorInstance;
 import com.elytradev.davincisvessels.common.tileentity.BlockLocation;
 import com.elytradev.davincisvessels.common.tileentity.TileAnchorPoint;
@@ -107,10 +107,10 @@ public class BlockAnchorPoint extends BlockContainer {
                 anchorPoint.setInstance(instance);
 
                 for (Map.Entry<UUID, BlockLocation> relation : anchorPoint.getInstance().getRelatedAnchors().entrySet()) {
-                    World relationWorld = DimensionManager.getWorld(relation.getValue().dimID);
-                    IBlockState relationState = relationWorld.getBlockState(relation.getValue().pos);
-                    if (relationState.getBlock().equals(DavincisVesselsObjects.blockAnchorPoint)) {
-                        TileEntity relationTile = relationWorld.getTileEntity(relation.getValue().pos);
+                    World relationWorld = DimensionManager.getWorld(relation.getValue().getDim());
+                    IBlockState relationState = relationWorld.getBlockState(relation.getValue().getPos());
+                    if (relationState.getBlock().equals(DavincisVesselsContent.blockAnchorPoint)) {
+                        TileEntity relationTile = relationWorld.getTileEntity(relation.getValue().getPos());
                         if (relationTile instanceof TileAnchorPoint) {
                             TileAnchorPoint relationAnchor = (TileAnchorPoint) relationTile;
                             if (!relationAnchor.getInstance().getType().equals(anchorPoint.getInstance().getType())) {

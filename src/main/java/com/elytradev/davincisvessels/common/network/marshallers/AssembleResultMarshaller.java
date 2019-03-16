@@ -1,17 +1,16 @@
 package com.elytradev.davincisvessels.common.network.marshallers;
 
-import com.elytradev.concrete.network.Marshaller;
 import com.elytradev.davincisvessels.common.entity.ShipAssemblyInteractor;
 import com.elytradev.movingworld.common.chunk.assembly.AssembleResult;
+import com.tridevmc.compound.network.marshallers.Marshaller;
+import com.tridevmc.compound.network.marshallers.RegisteredMarshaller;
 import io.netty.buffer.ByteBuf;
 
-public class AssembleResultMarshaller implements Marshaller<AssembleResult> {
-
-    public static final String MARSHALLER_NAME = "com.elytradev.davincisvessels.common.network.marshallers.AssembleResultMarshaller";
-    public static final AssembleResultMarshaller INSTANCE = new AssembleResultMarshaller();
+@RegisteredMarshaller(channel = "davincisvessels", acceptedTypes = {AssembleResult.class}, ids = {"ar", "assembleresult"})
+public class AssembleResultMarshaller extends Marshaller<AssembleResult> {
 
     @Override
-    public AssembleResult unmarshal(ByteBuf in) {
+    public AssembleResult readFrom(ByteBuf in) {
         byte resultCode = in.readByte();
         AssembleResult result = new AssembleResult(AssembleResult.ResultType.fromByte(resultCode), in);
         result.assemblyInteractor = new ShipAssemblyInteractor().fromByteBuf(resultCode, in);
@@ -20,7 +19,7 @@ public class AssembleResultMarshaller implements Marshaller<AssembleResult> {
     }
 
     @Override
-    public void marshal(ByteBuf out, AssembleResult assembleResult) {
-        out = (assembleResult.toByteBuf(out));
+    public void writeTo(ByteBuf out, AssembleResult assembleResult) {
+        assembleResult.toByteBuf(out);
     }
 }

@@ -1,7 +1,7 @@
 package com.elytradev.davincisvessels.common;
 
 import com.elytradev.davincisvessels.DavincisVesselsMod;
-import com.elytradev.davincisvessels.common.object.DavincisVesselsObjects;
+import com.elytradev.davincisvessels.common.content.DavincisVesselsContent;
 import com.elytradev.movingworld.MovingWorldMod;
 import com.google.gson.Gson;
 import net.minecraft.block.Block;
@@ -14,7 +14,7 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.input.Keyboard;
@@ -75,34 +75,34 @@ public class DavincisVesselsConfig {
     }
 
     public void addBlacklistWhitelistEntries() {
-        MovingWorldMod.INSTANCE.getNetworkConfig().addBlacklistedBlock(DavincisVesselsObjects.blockBuffer);
+        MovingWorldMod.INSTANCE.getNetworkConfig().addBlacklistedBlock(DavincisVesselsContent.blockBuffer);
 
-        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsObjects.blockMarkShip);
-        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsObjects.blockCrateWood);
-        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsObjects.blockFloater);
-        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsObjects.blockBalloon);
-        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsObjects.blockGauge);
-        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsObjects.blockSeat);
-        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsObjects.blockEngine);
-        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsObjects.blockStickyBuffer);
-        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsObjects.blockAnchorPoint);
+        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsContent.blockMarkShip);
+        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsContent.blockCrateWood);
+        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsContent.blockFloater);
+        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsContent.blockBalloon);
+        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsContent.blockGauge);
+        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsContent.blockSeat);
+        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsContent.blockEngine);
+        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsContent.blockStickyBuffer);
+        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsContent.blockAnchorPoint);
     }
 
     public void postLoad() {
-        Block[] defaultStickyBlocks = {DavincisVesselsObjects.blockStickyBuffer, Blocks.STONE_BUTTON, Blocks.WOODEN_BUTTON, Blocks.LEVER};
+        Block[] defaultStickyBlocks = {DavincisVesselsContent.blockStickyBuffer, Blocks.STONE_BUTTON, Blocks.WOODEN_BUTTON, Blocks.LEVER};
         String[] stickyBlockNames = new String[defaultStickyBlocks.length];
         for (int i = 0; i < defaultStickyBlocks.length; i++) {
             stickyBlockNames[i] = Block.REGISTRY.getNameForObject(defaultStickyBlocks[i]).toString();
         }
 
-        Block[] defaultSeatBlocks = {DavincisVesselsObjects.blockSeat, Blocks.END_PORTAL_FRAME};
+        Block[] defaultSeatBlocks = {DavincisVesselsContent.blockSeat, Blocks.END_PORTAL_FRAME};
         String[] seatBlockNames = new String[defaultSeatBlocks.length];
         for (int i = 0; i < defaultSeatBlocks.length; i++) {
             seatBlockNames[i] = Block.REGISTRY.getNameForObject(defaultSeatBlocks[i]).toString();
         }
 
 
-        Block[] defaultBalloonBlocks = {DavincisVesselsObjects.blockBalloon};
+        Block[] defaultBalloonBlocks = {DavincisVesselsContent.blockBalloon};
         String[] balloonBlockNames = new String[defaultBalloonBlocks.length];
         for (int i = 0; i < defaultBalloonBlocks.length; i++) {
             balloonBlockNames[i] = Block.REGISTRY.getNameForObject(defaultBalloonBlocks[i]).toString();

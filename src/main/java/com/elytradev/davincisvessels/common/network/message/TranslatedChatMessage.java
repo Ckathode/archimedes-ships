@@ -1,33 +1,31 @@
 package com.elytradev.davincisvessels.common.network.message;
 
-import com.elytradev.concrete.network.Message;
-import com.elytradev.concrete.network.NetworkContext;
-import com.elytradev.concrete.network.annotation.type.ReceivedOn;
-import com.elytradev.davincisvessels.common.network.DavincisVesselsNetworking;
+import com.tridevmc.compound.network.message.Message;
+import com.tridevmc.compound.network.message.RegisteredMessage;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.LogicalSide;
 
 /**
  * Created by darkevilmac on 2/3/2017.
  */
-@ReceivedOn(Side.CLIENT)
+@RegisteredMessage(channel = "davincisvessels", destination = LogicalSide.CLIENT)
 public class TranslatedChatMessage extends Message {
 
     public String message;
 
     public TranslatedChatMessage(String message) {
-        super(DavincisVesselsNetworking.NETWORK);
+        super();
         this.message = message;
     }
 
-    public TranslatedChatMessage(NetworkContext ctx) {
-        super(ctx);
+    public TranslatedChatMessage() {
+        super();
     }
 
     @Override
-    protected void handle(EntityPlayer sender) {
+    public void handle(EntityPlayer sender) {
         if (sender == null)
             return;
 
