@@ -1,6 +1,16 @@
-node {
-	checkout scm
-	sh 'git submodule update --init --force' 
-	sh './gradlew setupDecompWorkspace clean build -x test'
-	archive 'build/libs/*jar'
+pipeline {
+	agent any
+	stages {
+		stage('Build') {
+			steps {
+				sh 'rm -f private.gradle'
+				sh './gradlew clean build'
+			}
+		}
+		stage('Deploy') {
+			steps {
+				archive 'build/libs/*jar'
+			}
+		}
+	}
 }
