@@ -1,5 +1,5 @@
-#<p style='text-align: center;'>Davinci's Vessels</p>
-####<p style='text-align: center;'>A continuation of Archimedes Ships by CKathode</p>
+<p style='text-align: center;'>Davinci's Vessels</p>
+<p style='text-align: center;'>A continuation of Archimedes Ships by CKathode</p>
 ---
 
 If you have feature suggestions feel free to add them as an issue.
