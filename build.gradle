@@ -9,6 +9,10 @@ buildscript {
     }
 }
 
+plugins {
+    id 'com.github.johnrengelman.shadow' version '4.0.4'
+}
+
 apply from: "properties.gradle"
 
 evaluationDependsOn(":MovingWorld")
@@ -34,11 +38,26 @@ archivesBaseName = modBaseName
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = "1.8" // Need this here so eclipse task generates correctly.
 
+ext {
+    compoundClassesDir = file('build/compound')
+}
+
+configurations {
+    nonModDep
+    runtime.exclude group: "com.tridevmc.MovingWorld"
+}
+
 minecraft {
     mappings channel: "snapshot", version: mappingsVersion
 
     runs {
         client {
+            environment "MOD_CLASSES", [
+                    sourceSets.main.output.resourcesDir.absolutePath,
+                    sourceSets.main.output.classesDirs.asPath,
+                    project.compoundClassesDir.absolutePath
+            ].join(File.pathSeparator)
+
             workingDirectory project.file("run")
 
             // Recommended logging data for a userdev environment
@@ -58,6 +77,12 @@ minecraft {
         }
 
         server {
+            environment "MOD_CLASSES", [
+                    sourceSets.main.output.resourcesDir.absolutePath,
+                    sourceSets.main.output.classesDirs.asPath,
+                    project.compoundClassesDir.absolutePath
+            ].join(File.pathSeparator)
+
             workingDirectory project.file("run")
 
             // Recommended logging data for a userdev environment
@@ -78,8 +103,12 @@ minecraft {
     }
 }
 
-configurations {
-    runtime.exclude group: "com.tridevmc.MovingWorld"
+repositories {
+    jcenter()
+    mavenCentral()
+    maven {
+        url 'https://repo.tridevmc.com/'
+    }
 }
 
 dependencies {
@@ -88,14 +117,32 @@ dependencies {
     minecraft "net.minecraftforge:forge:${forgeVersion}"
 
     compile "com.tridevmc.compound:compound-all:${compoundVersion}"
+    nonModDep "com.tridevmc.compound:compound-all:${compoundVersion}"
 }
 
-repositories {
-    jcenter()
-    mavenCentral()
-    maven {
-        url 'https://repo.tridevmc.com/'
+task extractNonMod(type: Copy) {
+    project.compoundClassesDir.delete()
+    project.compoundClassesDir.mkdirs()
+    from zipTree(project.configurations.nonModDep.find { it.name.startsWith("compound") })
+    into project.compoundClassesDir
+}
+
+compileJava.dependsOn(extractNonMod)
+
+shadowJar {
+    classifier = ""
+
+    dependencies {
+        include(dependency("com.tridevmc.compound:compound-all:${compoundVersion}"))
     }
+
+    relocate "com.tridevmc.compound", "${group}.compound"
+}
+
+tasks.build.dependsOn shadowJar
+
+artifacts {
+    archives shadowJar
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
