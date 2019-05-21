@@ -1,9 +1,7 @@
 package com.tridevmc.davincisvessels.common.command;
 
 import com.tridevmc.davincisvessels.common.entity.EntityShip;
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.Vec3d;

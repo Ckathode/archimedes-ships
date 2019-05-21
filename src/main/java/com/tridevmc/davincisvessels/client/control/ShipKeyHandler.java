@@ -1,6 +1,5 @@
 package com.tridevmc.davincisvessels.client.control;
 
-import com.tridevmc.davincisvessels.common.DavincisVesselsConfig;
 import com.tridevmc.davincisvessels.common.entity.EntityShip;
 import com.tridevmc.davincisvessels.common.network.message.OpenGuiMessage;
 import com.tridevmc.movingworld.common.network.MovingWorldClientAction;
@@ -14,11 +13,11 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 @OnlyIn(Dist.CLIENT)
 public class ShipKeyHandler {
-    private DavincisVesselsConfig config;
+    private DavincisKeybinds keybinds;
     private boolean kbShipGuiPrevState, kbDisassemblePrevState, kbAlignPrevState;
 
-    public ShipKeyHandler(DavincisVesselsConfig cfg) {
-        config = cfg;
+    public ShipKeyHandler(DavincisKeybinds cfg) {
+        keybinds = cfg;
         kbShipGuiPrevState = kbDisassemblePrevState = false;
 
     }
@@ -33,20 +32,20 @@ public class ShipKeyHandler {
                 && e.player == Minecraft.getInstance().player
                 && e.player.getRidingEntity() instanceof EntityShip) {
             EntityShip ship = (EntityShip) e.player.getRidingEntity();
-            if (config.kbShipInv.isKeyDown() && !kbShipGuiPrevState) {
-                new OpenGuiMessage(2).sendToServer();
+            if (keybinds.kbShipInv.isKeyDown() && !kbShipGuiPrevState) {
+                new OpenGuiMessage(ship.getEntityId()).sendToServer();
             }
-            kbShipGuiPrevState = config.kbShipInv.isKeyDown();
+            kbShipGuiPrevState = keybinds.kbShipInv.isKeyDown();
 
-            if (config.kbDisassemble.isKeyDown() && !kbDisassemblePrevState) {
+            if (keybinds.kbDisassemble.isKeyDown() && !kbDisassemblePrevState) {
                 MovingWorldClientAction.DISASSEMBLE.sendToServer(ship);
             }
-            kbDisassemblePrevState = config.kbDisassemble.isKeyDown();
+            kbDisassemblePrevState = keybinds.kbDisassemble.isKeyDown();
 
-            if (config.kbAlign.isKeyDown() && !kbAlignPrevState) {
+            if (keybinds.kbAlign.isKeyDown() && !kbAlignPrevState) {
                 MovingWorldClientAction.ALIGN.sendToServer(ship);
             }
-            kbAlignPrevState = config.kbAlign.isKeyDown();
+            kbAlignPrevState = keybinds.kbAlign.isKeyDown();
 
             int c = getControlCode();
             if (c != ship.getController().getShipControl()) {
@@ -57,11 +56,11 @@ public class ShipKeyHandler {
 
 
     public int getControlCode() {
-        if (config.kbAlign.isKeyDown()) return 4;
-        if (config.kbBrake.isKeyDown()) return 3;
+        if (keybinds.kbAlign.isKeyDown()) return 4;
+        if (keybinds.kbBrake.isKeyDown()) return 3;
         int vert = 0;
-        if (config.kbUp.isKeyDown()) vert++;
-        if (config.kbDown.isKeyDown()) vert--;
+        if (keybinds.kbUp.isKeyDown()) vert++;
+        if (keybinds.kbDown.isKeyDown()) vert--;
         return vert == 0 ? 0 : vert < 0 ? 1 : vert > 0 ? 2 : 0;
     }
 }

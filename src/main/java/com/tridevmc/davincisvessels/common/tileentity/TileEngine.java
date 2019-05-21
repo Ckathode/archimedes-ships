@@ -1,12 +1,19 @@
 package com.tridevmc.davincisvessels.common.tileentity;
 
 import com.tridevmc.davincisvessels.DavincisVesselsMod;
+import com.tridevmc.davincisvessels.client.gui.ContainerEngine;
+import com.tridevmc.davincisvessels.client.gui.GuiEngine;
+import com.tridevmc.davincisvessels.common.IElementProvider;
 import com.tridevmc.davincisvessels.common.LanguageEntries;
 import com.tridevmc.davincisvessels.common.api.tileentity.ITileEngineModifier;
 import com.tridevmc.davincisvessels.common.entity.ShipCapabilities;
 import com.tridevmc.movingworld.common.chunk.mobilechunk.MobileChunk;
 import com.tridevmc.movingworld.common.entity.EntityMovingWorld;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,9 +25,13 @@ import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.network.FMLPlayMessages;
 
 
-public class TileEngine extends TileEntity implements IInventory, ITileEngineModifier {
+public class TileEngine extends TileEntity implements IInventory, ITileEngineModifier, IElementProvider {
     public float enginePower;
     public int engineFuelConsumption;
     ItemStack[] itemStacks;
@@ -29,6 +40,7 @@ public class TileEngine extends TileEntity implements IInventory, ITileEngineMod
     private BlockPos chunkPos;
 
     public TileEngine() {
+        super(DavincisVesselsMod.CONTENT.tileTypes.get(TileEngine.class));
         itemStacks = new ItemStack[getSizeInventory()];
         for (int i = 0; i < itemStacks.length; i++) {
             itemStacks[i] = ItemStack.EMPTY;
@@ -45,39 +57,38 @@ public class TileEngine extends TileEntity implements IInventory, ITileEngineMod
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tag) {
-        super.readFromNBT(tag);
-        if (!tag.hasKey("fuelConsumption"))
-            tag.setInteger("fuelConsumption",
-                    DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().engineConsumptionRate);
+    public void read(NBTTagCompound tag) {
+        super.read(tag);
+        if (!tag.contains("fuelConsumption"))
+            tag.putInt("fuelConsumption", DavincisVesselsMod.CONFIG.engineConsumptionRate);
 
-        burnTime = tag.getInteger("burn");
-        engineFuelConsumption = tag.getInteger("fuelConsumption");
+        burnTime = tag.getInt("burn");
+        engineFuelConsumption = tag.getInt("fuelConsumption");
         enginePower = tag.getFloat("power");
-        NBTTagList list = tag.getTagList("inv", 10);
-        for (int i = 0; i < list.tagCount(); i++) {
-            NBTTagCompound comp = list.getCompoundTagAt(i);
+        NBTTagList list = tag.getList("inv", 10);
+        for (int i = 0; i < list.size(); i++) {
+            NBTTagCompound comp = list.getCompound(i);
             int j = comp.getByte("i");
-            itemStacks[j] = new ItemStack(comp);
+            itemStacks[j] = ItemStack.read(comp);
         }
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
-        tag = super.writeToNBT(tag);
-        tag.setInteger("burn", burnTime);
-        tag.setInteger("fuelConsumption", (short) engineFuelConsumption);
-        tag.setFloat("power", enginePower);
+    public NBTTagCompound write(NBTTagCompound tag) {
+        tag = super.write(tag);
+        tag.putInt("burn", burnTime);
+        tag.putInt("fuelConsumption", (short) engineFuelConsumption);
+        tag.putFloat("power", enginePower);
         NBTTagList list = new NBTTagList();
         for (int i = 0; i < getSizeInventory(); i++) {
             if (itemStacks[i] != ItemStack.EMPTY) {
                 NBTTagCompound comp = new NBTTagCompound();
-                comp.setByte("i", (byte) i);
-                itemStacks[i].writeToNBT(comp);
-                list.appendTag(comp);
+                comp.putByte("i", (byte) i);
+                itemStacks[i].write(comp);
+                list.add(comp);
             }
         }
-        tag.setTag("inv", list);
+        tag.put("inv", list);
         return tag;
     }
 
@@ -88,7 +99,7 @@ public class TileEngine extends TileEntity implements IInventory, ITileEngineMod
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
         NBTTagCompound compound = new NBTTagCompound();
-        writeToNBT(compound);
+        write(compound);
         return new SPacketUpdateTileEntity(pos, 1, compound);
     }
 
@@ -99,7 +110,7 @@ public class TileEngine extends TileEntity implements IInventory, ITileEngineMod
 
     @Override
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
-        readFromNBT(packet.getNbtCompound());
+        read(packet.getNbtCompound());
     }
 
     public boolean isRunning() {
@@ -119,7 +130,7 @@ public class TileEngine extends TileEntity implements IInventory, ITileEngineMod
         for (int i = 0; i < getSizeInventory(); i++) {
             ItemStack is = decrStackSize(i, 1);
             if (is != ItemStack.EMPTY && is.getCount() > 0) {
-                burnTime += TileEntityFurnace.getItemBurnTime(is);
+                burnTime += TileEntityFurnace.getBurnTimes().get(is);
                 return consumeFuel(f);
             }
         }
@@ -159,7 +170,7 @@ public class TileEngine extends TileEntity implements IInventory, ITileEngineMod
                 return itemstack;
             }
 
-            itemstack = itemStacks[i].splitStack(n);
+            itemstack = itemStacks[i].split(n);
             if (itemStacks[i].getCount() <= 0) {
                 itemStacks[i] = ItemStack.EMPTY;
             }
@@ -229,9 +240,10 @@ public class TileEngine extends TileEntity implements IInventory, ITileEngineMod
         itemStacks = new ItemStack[getSizeInventory()];
     }
 
+
     @Override
-    public String getName() {
-        return LanguageEntries.CONTAINER_ENGINE;
+    public ITextComponent getName() {
+        return new TextComponentTranslation(LanguageEntries.CONTAINER_ENGINE);
     }
 
     @Override
@@ -274,5 +286,16 @@ public class TileEngine extends TileEntity implements IInventory, ITileEngineMod
     @Override
     public void tick(MobileChunk mobileChunk) {
         running = consumeFuel(engineFuelConsumption);
+    }
+
+    @Override
+    public Container createContainer(InventoryPlayer playerInventory, EntityPlayer player) {
+        return new ContainerEngine(this, player);
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public GuiScreen createGui(FMLPlayMessages.OpenContainer openContainer) {
+        return new GuiEngine(this, Minecraft.getInstance().player);
     }
 }

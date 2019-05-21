@@ -41,7 +41,7 @@ import java.util.function.Supplier;
 
 public class DavincisVesselsContent {
 
-    public BlockHelm blockMarkShip;
+    public BlockHelm blockHelm;
     public Block blockFloater;
     public Block blockBalloon;
     public BlockGauge blockGauge;
@@ -55,14 +55,14 @@ public class DavincisVesselsContent {
 
     public Map<Class<? extends TileEntity>, TileEntityType> tileTypes = Maps.newHashMap();
 
-    public static Item itemSecuredBed;
+    public Item itemSecuredBed;
 
-    public static Material materialFloater;
-    public static HashMap<String, Block> registeredBlocks;
-    public static HashMap<String, Item> registeredItems;
-    public static List<String> skipMesh = Lists.newArrayList();
-    public static String REGISTRY_PREFIX = DavincisVesselsMod.MOD_ID.toLowerCase();
-    private static List<Item> itemBlocksToRegister;
+    public Material materialFloater;
+    public HashMap<String, Block> registeredBlocks;
+    public HashMap<String, Item> registeredItems;
+    public List<String> skipMesh = Lists.newArrayList();
+    public String REGISTRY_PREFIX = DavincisVesselsMod.MOD_ID.toLowerCase();
+    private List<Item> itemBlocksToRegister;
     private int recipeID = 0;
 
     private void setFireInfo(Block block, int encouragement, int flammability) {
@@ -99,10 +99,10 @@ public class DavincisVesselsContent {
         IForgeRegistry<Block> registry = e.getRegistry();
         registeredBlocks = Maps.newHashMap();
         itemBlocksToRegister = Lists.newArrayList();
-        materialFloater = new Material(MaterialColor.WOOL,false, true, true, true, true, true, false, EnumPushReaction.NORMAL);
+        materialFloater = new Material(MaterialColor.WOOL, false, true, true, true, true, true, false, EnumPushReaction.NORMAL);
 
-        blockMarkShip = new BlockHelm(Block.Properties.create(Material.WOOD).hardnessAndResistance(1F));
-        registerBlock(registry, "marker", blockMarkShip);
+        blockHelm = new BlockHelm(Block.Properties.create(Material.WOOD).hardnessAndResistance(1F));
+        registerBlock(registry, "marker", blockHelm);
 
         blockFloater = new BlockAS(materialFloater, SoundType.WOOD).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);
         blockFloater.setHardness(1F).setResistance(1F);
@@ -139,7 +139,7 @@ public class DavincisVesselsContent {
         blockSecuredBed = new BlockSecuredBed().setHardness(0.2F);
         registerBlock(registry, "securedBed", blockSecuredBed, false);
 
-        this.setFireInfo(blockMarkShip, 5, 5);
+        this.setFireInfo(blockHelm, 5, 5);
         this.setFireInfo(blockBalloon, 30, 60);
         this.setFireInfo(blockSeat, 30, 30);
     }
@@ -147,7 +147,7 @@ public class DavincisVesselsContent {
     @SubscribeEvent
     public void onRecipeRegister(RegistryEvent.Register<IRecipe> recipeRegister) {
         DavincisVesselsMod.LOG.info("Registering recipes for Davincis Vessels...");
-        registerShapedRecipe(recipeRegister.getRegistry(), new ItemStack(blockMarkShip, 1), "X#X", "#O#", "X#X", Character.valueOf('X'), "plankWood", Character.valueOf('#'), "stickWood", Character.valueOf('O'), "ingotIron");
+        registerShapedRecipe(recipeRegister.getRegistry(), new ItemStack(blockHelm, 1), "X#X", "#O#", "X#X", Character.valueOf('X'), "plankWood", Character.valueOf('#'), "stickWood", Character.valueOf('O'), "ingotIron");
         registerShapedRecipe(recipeRegister.getRegistry(), new ItemStack(blockGauge, 1, 0), "VXV", "XO#", " # ", Character.valueOf('X'), "ingotIron", Character.valueOf('#'), "ingotGold", Character.valueOf('O'), "dustRedstone", Character.valueOf('V'), Blocks.GLASS_PANE);
         registerShapedRecipe(recipeRegister.getRegistry(), new ItemStack(blockGauge, 1, 0), "VXV", "XO#", " # ", Character.valueOf('X'), "ingotGold", Character.valueOf('#'), "ingotIron", Character.valueOf('O'), "dustRedstone", Character.valueOf('V'), Blocks.GLASS_PANE);
         registerShapedRecipe(recipeRegister.getRegistry(), new ItemStack(blockGauge, 1, 1), "VXV", "XO#", "V#V", Character.valueOf('X'), "ingotIron", Character.valueOf('#'), "ingotGold", Character.valueOf('O'), Item.getItemFromBlock(blockGauge), Character.valueOf('V'), Blocks.GLASS_PANE);

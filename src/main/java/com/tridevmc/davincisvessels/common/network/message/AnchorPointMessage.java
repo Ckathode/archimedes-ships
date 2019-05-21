@@ -74,7 +74,7 @@ public class AnchorPointMessage extends Message {
                 itemAnchorInstanceTag.setType(AnchorInstance.InstanceType.SHIP);
                 itemAnchorInstanceTag.setIdentifier(UUID.randomUUID());
                 itemAnchorInstanceTag.addRelation(anchorPoint.getInstance().getIdentifier(),
-                        new BlockLocation(anchorPoint.getPos(), sender.world.getDimension()));
+                        new BlockLocation(anchorPoint.getPos(), sender.world.getDimension().getType()));
                 anchorPoint.content.getTag().put("INSTANCE", itemAnchorInstanceTag.serializeNBT());
             } else {
                 if (anchorPoint.content.getTag() == null) {
@@ -88,7 +88,7 @@ public class AnchorPointMessage extends Message {
                 itemAnchorInstanceTag.setType(AnchorInstance.InstanceType.LAND);
                 itemAnchorInstanceTag.setIdentifier(UUID.randomUUID());
                 itemAnchorInstanceTag.addRelation(anchorPoint.getInstance().getIdentifier(),
-                        new BlockLocation(anchorPoint.getPos(), sender.world.getDimension()));
+                        new BlockLocation(anchorPoint.getPos(), sender.world.getDimension().getType()));
                 anchorPoint.content.getTag().put("INSTANCE", itemAnchorInstanceTag.serializeNBT());
             }
         }

@@ -90,7 +90,7 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
     @Override
     public boolean isBlockMovingWorldMarker(Block block) {
         if (block != null)
-            return block.getTranslationKey() == DavincisVesselsContent.blockMarkShip.getUnlocalizedName();
+            return block.getTranslationKey() == DavincisVesselsContent.blockHelm.getUnlocalizedName();
         else
             return false;
     }

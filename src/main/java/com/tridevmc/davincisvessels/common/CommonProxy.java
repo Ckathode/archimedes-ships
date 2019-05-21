@@ -12,7 +12,7 @@ public class CommonProxy {
         return new CommonHookContainer();
     }
 
-    public void registerKeyHandlers(DavincisVesselsConfig cfg) {
+    public void registerKeyHandlers() {
     }
 
     public void registerEventHandlers() {

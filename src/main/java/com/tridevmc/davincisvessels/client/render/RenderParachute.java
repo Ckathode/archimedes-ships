@@ -24,21 +24,21 @@ public class RenderParachute extends Render {
 
     public void renderParachute(EntityParachute parachute, double x, double y, double z, float yaw, float partialTicks) {
         GlStateManager.pushMatrix();
-        GlStateManager.translate((float) x, (float) y + (parachute != null && parachute.getControllingPassenger() != null ? parachute.getControllingPassenger().height * 2.5F : 4F), (float) z);
+        GlStateManager.translatef((float) x, (float) y + (parachute != null && parachute.getControllingPassenger() != null ? parachute.getControllingPassenger().height * 2.5F : 4F), (float) z);
 
         GlStateManager.pushMatrix();
         GlStateManager.enableRescaleNormal();
-        GlStateManager.scale(0.0625F, -0.0625F, -0.0625F);
+        GlStateManager.scalef(0.0625F, -0.0625F, -0.0625F);
         bindEntityTexture(parachute);
         model.render(parachute, 0F, 0F, 0F, 0F, 0F, 1F);
         GlStateManager.disableRescaleNormal();
         GlStateManager.popMatrix();
 
-        GlStateManager.color(0F, 0F, 0F, 1F);
+        GlStateManager.color4f(0F, 0F, 0F, 1F);
         GL11.glLineWidth(4F);
         Tessellator tess = Tessellator.getInstance();
         BufferBuilder buffer = tess.getBuffer();
-        GlStateManager.color(0, 0, 0);
+        GlStateManager.color3f(0, 0, 0);
         buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
         buffer.pos(0D, -3D, 0D).endVertex();
         buffer.pos(-1D, 0D, 1D).endVertex();

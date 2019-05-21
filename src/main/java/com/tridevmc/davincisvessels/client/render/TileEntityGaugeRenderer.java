@@ -1,5 +1,6 @@
 package com.tridevmc.davincisvessels.client.render;
 
+import com.tridevmc.davincisvessels.common.content.block.BlockGauge;
 import com.tridevmc.davincisvessels.common.tileentity.TileGauge;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -7,36 +8,35 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.dimension.DimensionType;
 import org.lwjgl.opengl.GL11;
 
-public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
-
-    public void renderGauge(TileGauge tileEntity, double x, double y, double z, float partialTicks) {
+public class TileEntityGaugeRenderer extends TileEntityRenderer<TileGauge> {
+    @Override
+    public void render(TileGauge gauge, double x, double y, double z, float partialTicks, int destroyStage) {
         RenderHelper.disableStandardItemLighting();
 
-        boolean extended = tileEntity.getBlockMetadata() > 3;
-
-        int meta = tileEntity.getBlockMetadata() & 3;
+        boolean extended = gauge.getBlockState().get(BlockGauge.EXTENDED);
+        int meta = gauge.getBlockState().get(BlockGauge.FACING).getHorizontalIndex();
 
         Tessellator tess = Tessellator.getInstance();
         BufferBuilder buffer = tess.getBuffer();
 
         Vec3d dVec = new Vec3d(0, 0, 0);
-        if (tileEntity.parentShip == null) {
-            dVec.addVector(0.5F, 0, 0.5F);
-        } else if (tileEntity.parentShip.getControllingPassenger() instanceof EntityPlayerSP) {
-            dVec = new Vec3d(tileEntity.parentShip.riderDestination.getX() - tileEntity.getPos().getX(),
-                    tileEntity.parentShip.riderDestination.getY() - tileEntity.getPos().getY(),
-                    tileEntity.parentShip.riderDestination.getZ() - tileEntity.getPos().getZ());
+        if (gauge.parentShip == null) {
+            dVec.add(0.5F, 0, 0.5F);
+        } else if (gauge.parentShip.getControllingPassenger() instanceof EntityPlayerSP) {
+            dVec = new Vec3d(gauge.parentShip.riderDestination.getX() - gauge.getPos().getX(),
+                    gauge.parentShip.riderDestination.getY() - gauge.getPos().getY(),
+                    gauge.parentShip.riderDestination.getZ() - gauge.getPos().getZ());
         } else {
-            dVec = new Vec3d(tileEntity.parentShip.posX - Minecraft.getMinecraft().getRenderManager().viewerPosX,
-                    tileEntity.parentShip.posY - Minecraft.getMinecraft().getRenderManager().viewerPosY,
-                    tileEntity.parentShip.posZ - Minecraft.getMinecraft().getRenderManager().viewerPosZ);
+            dVec = new Vec3d(gauge.parentShip.posX - Minecraft.getInstance().getRenderManager().viewerPosX,
+                    gauge.parentShip.posY - Minecraft.getInstance().getRenderManager().viewerPosY,
+                    gauge.parentShip.posZ - Minecraft.getInstance().getRenderManager().viewerPosZ);
         }
         double d = dVec.x * dVec.x + dVec.y * dVec.y + dVec.z * dVec.z;
         if (d > 256D) return;
@@ -47,31 +47,31 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
 
         float northGaugeAngle;
         float velGaugeAngle;
-        if (tileEntity.parentShip == null) {
+        if (gauge.parentShip == null) {
             northGaugeAngle = meta * 90F;
             velGaugeAngle = 0F;
         } else {
-            velGaugeAngle = -(tileEntity.parentShip.getHorizontalVelocity() * 3.6F * 20) / 60F * 270F; //vel in m/s * Tick rate (20 Hz) * 3.6 (conversion to km/h) with 60 km/h being 270 degrees.
-            if (tileEntity.parentShip.dimension == 0) {
-                northGaugeAngle = -tileEntity.parentShip.rotationYaw + meta * 90F;
+            velGaugeAngle = -(gauge.parentShip.getHorizontalVelocity() * 3.6F * 20) / 60F * 270F; //vel in m/s * Tick rate (20 Hz) * 3.6 (conversion to km/h) with 60 km/h being 270 degrees.
+            if (gauge.parentShip.dimension == DimensionType.OVERWORLD) {
+                northGaugeAngle = -gauge.parentShip.rotationYaw + meta * 90F;
             } else {
-                northGaugeAngle = (tileEntity.parentShip.ticksExisted + partialTicks) * 42F + tileEntity.parentShip.rotationYaw / 3F;
+                northGaugeAngle = (gauge.parentShip.ticksExisted + partialTicks) * 42F + gauge.parentShip.rotationYaw / 3F;
             }
         }
         GlStateManager.pushMatrix();
-        GlStateManager.translate((float) x + 0.5F, (float) y + 0.05F, (float) z + 0.5F);
-        GlStateManager.rotate(180F - meta * 90F, 0F, 1F, 0F);
+        GlStateManager.translatef((float) x + 0.5F, (float) y + 0.05F, (float) z + 0.5F);
+        GlStateManager.rotatef(180F - meta * 90F, 0F, 1F, 0F);
 
         //Direction gauge
         GlStateManager.pushMatrix();
-        GlStateManager.translate(-0.28125F, 0.02F, -0.28125F);
-        GlStateManager.rotate(northGaugeAngle, 0F, 1F, 0F);
+        GlStateManager.translatef(-0.28125F, 0.02F, -0.28125F);
+        GlStateManager.rotatef(northGaugeAngle, 0F, 1F, 0F);
 
         buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
-        GlStateManager.color(1F, 0F, 0F, 1F);
+        GlStateManager.color4f(1F, 0F, 0F, 1F);
         buffer.pos(0D, 0D, 0D).endVertex();
         buffer.pos(0D, 0D, 0.15D).endVertex();
-        GlStateManager.color(1F, 1F, 1F, 1F);
+        GlStateManager.color4f(1F, 1F, 1F, 1F);
         buffer.pos(0D, 0D, 0D).endVertex();
         buffer.pos(0D, 0D, -0.15D).endVertex();
         tess.draw();
@@ -79,11 +79,11 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
 
         //Velocity gauge
         GlStateManager.pushMatrix();
-        GlStateManager.translate(0.25F, 0.02F, -0.25F);
-        GlStateManager.rotate(velGaugeAngle, 0F, 1F, 0F);
+        GlStateManager.translatef(0.25F, 0.02F, -0.25F);
+        GlStateManager.rotatef(velGaugeAngle, 0F, 1F, 0F);
 
         buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
-        GlStateManager.color(0F, 0F, 0.5F, 1F);
+        GlStateManager.color4f(0F, 0F, 0.5F, 1F);
         buffer.pos(0D, 0D, 0D).endVertex();
         buffer.pos(0D, 0D, 0.2D).endVertex();
         tess.draw();
@@ -91,23 +91,23 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
 
         if (extended) {
             float vertGaugeAng;
-            float height = tileEntity.getPos().getY();
-            if (tileEntity.parentShip == null) {
+            float height = gauge.getPos().getY();
+            if (gauge.parentShip == null) {
                 vertGaugeAng = 0F;
             } else {
-                vertGaugeAng = MathHelper.clamp(((float) tileEntity.parentShip.motionY * 3.6F * 20) / 40F * 360F, -90F, 90F);
-                height += (float) tileEntity.parentShip.posY;
+                vertGaugeAng = MathHelper.clamp(((float) gauge.parentShip.motionY * 3.6F * 20) / 40F * 360F, -90F, 90F);
+                height += (float) gauge.parentShip.posY;
             }
             float heightGaugeLongAng = -height / 10F * 360F;
             float heightGaugeShortAng = heightGaugeLongAng / 10F;
 
             //Vertical velocity gauge
             GlStateManager.pushMatrix();
-            GlStateManager.translate(0.25F, 0.02F, 0.25F);
-            GlStateManager.rotate(vertGaugeAng, 0F, 1F, 0F);
+            GlStateManager.translatef(0.25F, 0.02F, 0.25F);
+            GlStateManager.rotatef(vertGaugeAng, 0F, 1F, 0F);
 
             buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
-            GlStateManager.color(0F, 0F, 0.5F, 1F);
+            GlStateManager.color4f(0F, 0F, 0.5F, 1F);
             buffer.pos(0D, 0D, 0D).endVertex();
             buffer.pos(0.2D, 0D, 0D).endVertex();
             tess.draw();
@@ -115,21 +115,21 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
 
             //Height gauge
             GlStateManager.pushMatrix();
-            GlStateManager.translate(-0.25F, 0.02F, 0.25F);
+            GlStateManager.translatef(-0.25F, 0.02F, 0.25F);
             GlStateManager.pushMatrix();
-            GlStateManager.rotate(heightGaugeLongAng, 0F, 1F, 0F);
+            GlStateManager.rotatef(heightGaugeLongAng, 0F, 1F, 0F);
 
             buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
-            GlStateManager.color(0.9F, 0.9F, 0F, 1F);
+            GlStateManager.color4f(0.9F, 0.9F, 0F, 1F);
             buffer.pos(0D, 0D, 0D).endVertex();
             buffer.pos(0D, 0D, -0.2D).endVertex();
             tess.draw();
             GlStateManager.popMatrix();
 
-            GlStateManager.rotate(heightGaugeShortAng, 0F, 1F, 0F);
+            GlStateManager.rotatef(heightGaugeShortAng, 0F, 1F, 0F);
 
             buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
-            GlStateManager.color(0.7F, 0.7F, 0F, 1F);
+            GlStateManager.color4f(0.7F, 0.7F, 0F, 1F);
             buffer.pos(0D, -0.01D, 0D).endVertex();
             buffer.pos(0D, -0.01, -0.15D).endVertex();
             tess.draw();
@@ -140,11 +140,5 @@ public class TileEntityGaugeRenderer extends TileEntitySpecialRenderer {
         GlStateManager.enableTexture2D();
         GlStateManager.popMatrix();
         RenderHelper.enableStandardItemLighting();
-    }
-
-
-    @Override
-    public void render(TileEntity tileEntity, double posX, double posY, double posZ, float partialTicks, int par6, float idk) {
-        renderGauge((TileGauge) tileEntity, posX, posY, posZ, partialTicks);
     }
 }

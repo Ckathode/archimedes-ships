@@ -1,22 +1,21 @@
 package com.tridevmc.davincisvessels.common.network.message;
 
-import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.compound.network.message.Message;
 import com.tridevmc.compound.network.message.RegisteredMessage;
+import com.tridevmc.davincisvessels.common.IElementProvider;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.network.NetworkHooks;
 
-/**
- * Created by darkevilmac on 2/2/2017.
- */
 @RegisteredMessage(channel = "davincisvessels", destination = LogicalSide.SERVER)
 public class OpenGuiMessage extends Message {
 
-    public int guiID;
+    public int entityId;
 
-    public OpenGuiMessage(int guiID) {
+    public OpenGuiMessage(int entityId) {
         super();
-        this.guiID = guiID;
+        this.entityId = entityId;
     }
 
     public OpenGuiMessage() {
@@ -25,6 +24,10 @@ public class OpenGuiMessage extends Message {
 
     @Override
     public void handle(EntityPlayer sender) {
-        sender.openGui(DavincisVesselsMod.INSTANCE, guiID, sender.world, 0, 0, 0);
+        if (!(sender instanceof EntityPlayerMP))
+            return;
+        NetworkHooks.openGui((EntityPlayerMP) sender,
+                (IElementProvider) sender.getEntityWorld().getEntityByID(entityId),
+                (p) -> p.writeVarInt(entityId));
     }
 }

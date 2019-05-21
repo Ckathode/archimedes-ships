@@ -1,6 +1,8 @@
 package com.tridevmc.davincisvessels.client;
 
+import com.tridevmc.compound.config.CompoundConfig;
 import com.tridevmc.davincisvessels.DavincisVesselsMod;
+import com.tridevmc.davincisvessels.client.control.DavincisKeybinds;
 import com.tridevmc.davincisvessels.client.control.ShipKeyHandler;
 import com.tridevmc.davincisvessels.client.handler.ClientHookContainer;
 import com.tridevmc.davincisvessels.client.render.RenderParachute;
@@ -8,7 +10,6 @@ import com.tridevmc.davincisvessels.client.render.RenderSeat;
 import com.tridevmc.davincisvessels.client.render.TileEntityGaugeRenderer;
 import com.tridevmc.davincisvessels.client.render.TileEntityHelmRenderer;
 import com.tridevmc.davincisvessels.common.CommonProxy;
-import com.tridevmc.davincisvessels.common.DavincisVesselsConfig;
 import com.tridevmc.davincisvessels.common.content.DavincisVesselsContent;
 import com.tridevmc.davincisvessels.common.entity.EntityParachute;
 import com.tridevmc.davincisvessels.common.entity.EntitySeat;
@@ -20,11 +21,13 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.LoaderState;
@@ -35,7 +38,7 @@ import java.util.Map;
 public class ClientProxy extends CommonProxy {
 
     public ShipKeyHandler shipKeyHandler;
-    public DavincisVesselsConfig syncedConfig;
+    public DavincisKeybinds keybinds;
 
     @Override
     public ClientHookContainer getHookContainer() {
@@ -43,8 +46,10 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public void registerKeyHandlers(DavincisVesselsConfig cfg) {
-        shipKeyHandler = new ShipKeyHandler(cfg);
+    public void registerKeyHandlers() {
+        keybinds = CompoundConfig.of(DavincisKeybinds.class, ModLoadingContext.get().getActiveContainer());
+        keybinds.addToControlsMenu();
+        shipKeyHandler = new ShipKeyHandler(keybinds);
         MinecraftForge.EVENT_BUS.register(shipKeyHandler);
     }
 

@@ -1,5 +1,6 @@
 package com.tridevmc.davincisvessels.common.tileentity;
 
+import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.movingworld.api.IMovingTile;
 import com.tridevmc.movingworld.common.chunk.mobilechunk.MobileChunk;
 import com.tridevmc.movingworld.common.entity.EntityMovingWorld;
@@ -15,6 +16,7 @@ public class TileGauge extends TileEntity implements IMovingTile {
     private BlockPos chunkPos;
 
     public TileGauge() {
+        super(DavincisVesselsMod.CONTENT.tileTypes.get(TileHelm.class));
         parentShip = null;
     }
 
@@ -52,20 +54,20 @@ public class TileGauge extends TileEntity implements IMovingTile {
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
         NBTTagCompound compound = new NBTTagCompound();
-        writeToNBT(compound);
+        write(compound);
         return new SPacketUpdateTileEntity(pos, 1, compound);
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
-        readFromNBT(packet.getNbtCompound());
+        read(packet.getNbtCompound());
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tag) {
-        super.readFromNBT(tag);
-        if (tag.hasKey("vehicle") && world != null) {
-            int id = tag.getInteger("vehicle");
+    public void read(NBTTagCompound tag) {
+        super.read(tag);
+        if (tag.contains("vehicle") && world != null) {
+            int id = tag.getInt("vehicle");
             Entity entity = world.getEntityByID(id);
             if (entity instanceof EntityMovingWorld) {
                 parentShip = (EntityMovingWorld) entity;
@@ -74,8 +76,8 @@ public class TileGauge extends TileEntity implements IMovingTile {
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
-        return super.writeToNBT(tag);
+    public NBTTagCompound write(NBTTagCompound tag) {
+        return super.write(tag);
     }
 
 }

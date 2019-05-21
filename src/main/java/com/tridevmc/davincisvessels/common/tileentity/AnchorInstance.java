@@ -6,6 +6,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.thread.EffectiveSide;
@@ -123,7 +124,7 @@ public class AnchorInstance implements INBTSerializable<NBTTagCompound> {
             for (HashMap.Entry<UUID, BlockLocation> e : relatedAnchors.entrySet()) {
                 NBTTagCompound entry = new NBTTagCompound();
                 entry.putUniqueId("identifier", e.getKey());
-                entry.putInt("dim", e.getValue().getDim());
+                entry.putInt("dim", e.getValue().getDim().getId());
                 NBTTagUtils.writeVec3iToNBT(entry, "related", e.getValue().getPos());
                 relatedAnchorsTagList.add(entry);
             }
@@ -152,7 +153,7 @@ public class AnchorInstance implements INBTSerializable<NBTTagCompound> {
                 BlockPos entryPos = new BlockPos(NBTTagUtils.readVec3iFromNBT(entryCompound, "related"));
                 UUID entryIdentifier = entryCompound.getUniqueId("identifier");
 
-                relatedAnchors.put(entryIdentifier, new BlockLocation(entryPos, entryDimID));
+                relatedAnchors.put(entryIdentifier, new BlockLocation(entryPos, DimensionType.getById(entryDimID)));
             }
         }
     }

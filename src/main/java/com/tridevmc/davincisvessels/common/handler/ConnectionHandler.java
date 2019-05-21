@@ -1,17 +1,14 @@
 package com.tridevmc.davincisvessels.common.handler;
 
-import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.davincisvessels.common.entity.EntityParachute;
 import com.tridevmc.davincisvessels.common.entity.EntitySeat;
 import com.tridevmc.davincisvessels.common.entity.EntityShip;
-import com.elytradev.davincisvessels.common.network.message.ConfigMessage;
 import com.tridevmc.davincisvessels.common.tileentity.TileEntitySecuredBed;
 import com.tridevmc.movingworld.common.util.Vec3dMod;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 import java.util.HashMap;
@@ -25,13 +22,12 @@ public class ConnectionHandler {
     public void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
         if (event.isCanceled())
             return;
-        if (event.player != null && event.player.world != null && !event.player.world.isRemote) {
+        if (event.getPlayer() != null && event.getPlayer().world != null && !event.getPlayer().world.isRemote) {
             handleParachuteLogout(event);
-            handleConfigDesync(event);
 
-            if (event.player.getRidingEntity() != null && event.player.getRidingEntity() instanceof EntityShip
-                    && !event.player.world.getMinecraftServer().isSinglePlayer()) {
-                ((EntityShip) event.player.getRidingEntity()).disassemble(true);
+            if (event.getPlayer().getRidingEntity() != null && event.getPlayer().getRidingEntity() instanceof EntityShip
+                    && !event.getPlayer().world.getServer().isSinglePlayer()) {
+                ((EntityShip) event.getPlayer().getRidingEntity()).disassemble(true);
             }
         }
     }
@@ -40,40 +36,25 @@ public class ConnectionHandler {
     public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.isCanceled())
             return;
-        if (event.player != null && event.player.world != null && !event.player.world.isRemote) {
+        if (event.getPlayer() != null && event.getPlayer().world != null && !event.getPlayer().world.isRemote) {
             handleParachuteLogin(event);
             handleBedLogin(event);
-            handlerConfigSync(event);
-        }
-    }
-
-    private void handlerConfigSync(PlayerEvent.PlayerLoggedInEvent event) {
-        if (FMLCommonHandler.instance().getEffectiveSide().isServer()) {
-            NBTTagCompound tagCompound = DavincisVesselsMod.INSTANCE.getLocalConfig().getShared().serialize();
-            tagCompound.setBoolean("restore", false);
-
-            new ConfigMessage(tagCompound).sendTo(event.player);
-        }
-    }
-
-    private void handleConfigDesync(PlayerEvent.PlayerLoggedOutEvent event) {
-        if (FMLCommonHandler.instance().getEffectiveSide().isServer()) {
         }
     }
 
     private void handleBedLogin(PlayerEvent.PlayerLoggedInEvent event) {
-        if (playerBedMap.containsKey(event.player.getGameProfile().getId())) {
-            TileEntitySecuredBed bed = playerBedMap.get(event.player.getGameProfile().getId());
-            bed.setPlayer(event.player);
+        if (playerBedMap.containsKey(event.getPlayer().getGameProfile().getId())) {
+            TileEntitySecuredBed bed = playerBedMap.get(event.getPlayer().getGameProfile().getId());
+            bed.setPlayer(event.getPlayer());
             bed.moveBed(bed.getPos());
         }
     }
 
     private void handleParachuteLogin(PlayerEvent.PlayerLoggedInEvent event) {
-        EntityPlayer player = event.player;
+        EntityPlayer player = event.getPlayer();
         World worldObj = player.world;
         if (player.getEntityData().getBoolean("reqParachute") == true) {
-            NBTTagCompound nbt = player.getEntityData().getCompoundTag("parachuteInfo");
+            NBTTagCompound nbt = player.getEntityData().getCompound("parachuteInfo");
 
             double vecX = nbt.getDouble("vecX");
             double vecY = nbt.getDouble("vecY");
@@ -91,18 +72,18 @@ public class ConnectionHandler {
             EntityParachute parachute = new EntityParachute(worldObj, player, vec, shipVec, motionVec);
             worldObj.spawnEntity(parachute);
 
-            player.getEntityData().removeTag("parachuteInfo");
-            player.getEntityData().setBoolean("reqParachute", false);
+            player.getEntityData().remove("parachuteInfo");
+            player.getEntityData().putBoolean("reqParachute", false);
         }
     }
 
     private void handleParachuteLogout(PlayerEvent.PlayerLoggedOutEvent event) {
-        if (event.player.getRidingEntity() != null && event.player.getRidingEntity() instanceof EntitySeat) {
-            EntityPlayer player = event.player;
+        if (event.getPlayer().getRidingEntity() != null && event.getPlayer().getRidingEntity() instanceof EntitySeat) {
+            EntityPlayer player = event.getPlayer();
             EntitySeat seat = (EntitySeat) player.getRidingEntity();
             EntityShip ship = seat.getShip();
 
-            player.dismountRidingEntity();
+            player.stopRiding();
             if (ship != null && seat.getChunkPos() != null) {
                 NBTTagCompound nbt = new NBTTagCompound();
 
@@ -111,17 +92,17 @@ public class ConnectionHandler {
                         seat.getChunkPos().getZ() - ship.getMobileChunk().getCenterZ());
                 vec = vec.rotateAroundY((float) Math.toRadians(ship.rotationYaw));
 
-                nbt.setDouble("vecX", vec.x);
-                nbt.setDouble("vecY", vec.y);
-                nbt.setDouble("vecZ", vec.z);
-                nbt.setDouble("shipX", ship.posX);
-                nbt.setDouble("shipY", ship.posY);
-                nbt.setDouble("shipZ", ship.posZ);
-                nbt.setDouble("motionX", ship.motionX);
-                nbt.setDouble("motionY", ship.motionY);
-                nbt.setDouble("motionZ", ship.motionZ);
-                player.getEntityData().setTag("parachuteInfo", nbt);
-                player.getEntityData().setBoolean("reqParachute", true);
+                nbt.putDouble("vecX", vec.x);
+                nbt.putDouble("vecY", vec.y);
+                nbt.putDouble("vecZ", vec.z);
+                nbt.putDouble("shipX", ship.posX);
+                nbt.putDouble("shipY", ship.posY);
+                nbt.putDouble("shipZ", ship.posZ);
+                nbt.putDouble("motionX", ship.motionX);
+                nbt.putDouble("motionY", ship.motionY);
+                nbt.putDouble("motionZ", ship.motionZ);
+                player.getEntityData().put("parachuteInfo", nbt);
+                player.getEntityData().putBoolean("reqParachute", true);
             }
         }
     }

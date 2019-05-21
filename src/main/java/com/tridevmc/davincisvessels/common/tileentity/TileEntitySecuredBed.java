@@ -1,5 +1,6 @@
 package com.tridevmc.davincisvessels.common.tileentity;
 
+import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.davincisvessels.common.handler.ConnectionHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,6 +16,7 @@ public class TileEntitySecuredBed extends TileEntity {
     private UUID playerID;
 
     public TileEntitySecuredBed() {
+        super(DavincisVesselsMod.CONTENT.tileTypes.get(TileEntitySecuredBed.class));
     }
 
     public void setPlayer(EntityPlayer player) {
@@ -37,7 +39,7 @@ public class TileEntitySecuredBed extends TileEntity {
         if (!world.isRemote && idForMap != null) {
             if (ConnectionHandler.playerBedMap.containsKey(idForMap)) {
                 TileEntitySecuredBed prevBed = ConnectionHandler.playerBedMap.get(idForMap);
-                if (!prevBed.getPos().equals(getPos()) && !(prevBed.getWorld().provider.getDimension() == getWorld().provider.getDimension())) {
+                if (!prevBed.getPos().equals(getPos()) && !(prevBed.getWorld().getDimension().getType() == getWorld().getDimension().getType())) {
                     prevBed.setPlayer(null);
                     ConnectionHandler.playerBedMap.remove(idForMap);
                 }
@@ -60,7 +62,7 @@ public class TileEntitySecuredBed extends TileEntity {
             EntityPlayer player = world.getPlayerEntityByUUID(playerID);
             if (player != null) {
                 player.bedLocation = pos;
-                player.setSpawnChunk(newPos, true, world.provider.getDimension());
+                player.setSpawnPoint(newPos, true, world.getDimension().getType());
                 player.setSpawnPoint(newPos, true);
                 doMove = false;
             }
@@ -68,21 +70,21 @@ public class TileEntitySecuredBed extends TileEntity {
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
-        tag = super.writeToNBT(tag);
+    public NBTTagCompound write(NBTTagCompound tag) {
+        tag = super.write(tag);
         if (playerID != null)
-            tag.setUniqueId("uuid", playerID);
+            tag.putUniqueId("uuid", playerID);
 
-        tag.setBoolean("doMove", doMove);
+        tag.putBoolean("doMove", doMove);
 
         return tag;
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tag) {
-        super.readFromNBT(tag);
+    public void read(NBTTagCompound tag) {
+        super.read(tag);
 
-        if (tag.hasKey("uuidMost") && tag.hasKey("uuidLeast"))
+        if (tag.contains("uuidMost") && tag.contains("uuidLeast"))
             playerID = tag.getUniqueId("uuid");
 
         doMove = tag.getBoolean("doMove");
@@ -95,7 +97,7 @@ public class TileEntitySecuredBed extends TileEntity {
     @Override
     public NBTTagCompound getUpdateTag() {
         NBTTagCompound writtenTag = new NBTTagCompound();
-        writtenTag = this.writeToNBT(writtenTag);
+        writtenTag = this.write(writtenTag);
         return writtenTag;
     }
 

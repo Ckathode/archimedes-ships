@@ -1,6 +1,7 @@
 package com.tridevmc.davincisvessels.common.handler;
 
 
+import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.davincisvessels.common.content.DavincisVesselsContent;
 import com.tridevmc.davincisvessels.common.entity.EntitySeat;
 import com.tridevmc.davincisvessels.common.entity.EntityShip;
@@ -60,22 +61,22 @@ public class CommonHookContainer {
         if (event.movingWorld instanceof EntityShip) {
             EntityShip ship = (EntityShip) event.movingWorld;
             LocatedBlock lb = event.block;
-            if (lb.state.getBlock() == DavincisVesselsContent.blockMarkShip) {
+            if (lb.state.getBlock() == DavincisVesselsMod.CONTENT.blockHelm) {
                 Entity passenger = ship.controllingPassenger != null ? ship.controllingPassenger : ship.prevRiddenByEntity;
 
                 if (passenger != null) {
-                    BlockPos position = lb.pos.offset(lb.state.getValue(BlockHelm.FACING));
+                    BlockPos position = lb.pos.offset(lb.state.get(BlockHelm.FACING));
                     passenger.stopRiding();
                     passenger.setPositionAndUpdate(position.getX() + 0.5D, position.getY() + 0.5D, position.getZ() + 0.5D);
                     System.out.println(passenger.getPositionVector().toString());
                 }
-            } else if (lb.state.getBlock() == DavincisVesselsContent.blockSeat) {
+            } else if (DavincisVesselsMod.CONFIG.isSeat(lb.state.getBlock())) {
                 Optional<EntitySeat> matchingSeatEntity = ship.capabilities.getSeats().stream().filter(s -> s.getChunkPos().equals(lb.posNoOffset)).findFirst();
 
                 if (matchingSeatEntity.isPresent()) {
                     EntitySeat matchingSeat = matchingSeatEntity.get();
                     if (matchingSeat.getControllingPassenger() != null) {
-                        matchingSeat.getControllingPassenger().dismountRidingEntity();
+                        matchingSeat.getControllingPassenger().stopRiding();
                         matchingSeat.getControllingPassenger().setPosition(lb.pos.getX() + 0.5D, lb.pos.getY() + 0.5D, lb.pos.getZ() + 0.5D);
                     }
                 }

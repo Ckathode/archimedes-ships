@@ -102,7 +102,7 @@ public class EntityShip extends EntityMovingWorld {
 
     @Override
     public ItemStack getPickedResult(RayTraceResult target) {
-        return new ItemStack(DavincisVesselsContent.blockMarkShip);
+        return new ItemStack(DavincisVesselsContent.blockHelm);
     }
 
     public boolean getSubmerge() {
