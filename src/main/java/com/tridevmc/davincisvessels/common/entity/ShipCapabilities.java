@@ -246,7 +246,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
 
         if (block instanceof IBlockBalloon) {
             balloonCount += ((IBlockBalloon) block).getBalloonWorth(tile);
-        }else if (DavincisVesselsMod.CONFIG.isBalloon(block)) {
+        }else if (DavincisVesselsMod.BLOCK_CONFIG.isBalloon(block)) {
             balloonCount++;
         } else if (block == DavincisVesselsMod.CONTENT.blockFloater) {
             floaters++;
@@ -267,7 +267,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
                 }
                 engines.add((ITileEngineModifier) te);
             }
-        } else if (block == DavincisVesselsMod.CONTENT.blockSeat || DavincisVesselsMod.CONFIG.isSeat(block)) {
+        } else if (block == DavincisVesselsMod.CONTENT.blockSeat || DavincisVesselsMod.BLOCK_CONFIG.isSeat(block)) {
             int x1 = ship.riderDestination.getX(), y1 = ship.riderDestination.getY(), z1 = ship.riderDestination.getZ();
             switch (ship.frontDirection) {
                 case SOUTH: {
@@ -336,12 +336,12 @@ public class ShipCapabilities extends MovingWorldCapabilities {
 
     @Override
     public float getSpeedLimit() {
-        return DavincisVesselsMod.CONFIG.speedLimit;
+        return (float) DavincisVesselsMod.CONFIG.speedLimit;
     }
 
     @Override
     public float getBankingMultiplier() {
-        return DavincisVesselsMod.CONFIG.bankingMultiplier;
+        return (float) DavincisVesselsMod.CONFIG.bankingMultiplier;
     }
 
 }

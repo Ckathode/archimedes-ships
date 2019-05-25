@@ -15,6 +15,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.EnumProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
@@ -41,10 +42,6 @@ public class BlockAnchorPoint extends BlockContainer {
 
     public BlockAnchorPoint() {
         super(Block.Properties.create(Material.WOOD).sound(SoundType.METAL).hardnessAndResistance(1F));
-    }
-
-    public static int getMetaForAxis(EnumFacing.Axis axis) {
-        return axis == EnumFacing.Axis.X ? 1 : (axis == EnumFacing.Axis.Z ? 2 : 0);
     }
 
     @Override
@@ -132,5 +129,10 @@ public class BlockAnchorPoint extends BlockContainer {
     @Override
     public TileEntity createNewTileEntity(IBlockReader worldIn) {
         return new TileAnchorPoint();
+    }
+
+    @Override
+    protected void fillStateContainer(StateContainer.Builder<Block, IBlockState> builder) {
+        builder.add(AXIS);
     }
 }

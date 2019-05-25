@@ -3,7 +3,7 @@
     "parent": "block/block",
     "textures": {
         "seatpadding": "davincisvessels:blocks/seat",
-        "wood": "blocks/planks_oak",
+        "wood": "block/oak_planks",
         "particle": "davincisvessels:blocks/seat"
     },
     "elements": [

@@ -78,10 +78,10 @@ public class GuiAnchorPoint extends GuiContainer {
             }
         });
 
-        buttons.add(btnLink);
-        buttons.add(btnSwitch);
-        buttons.add(btnPrevRelation);
-        buttons.add(btnNextRelation);
+        addButton(btnLink);
+        addButton(btnSwitch);
+        addButton(btnPrevRelation);
+        addButton(btnNextRelation);
 
         relations = new String[anchorPoint.getInstance().getRelatedAnchors().size()];
 

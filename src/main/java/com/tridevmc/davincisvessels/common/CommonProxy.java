@@ -1,5 +1,6 @@
 package com.tridevmc.davincisvessels.common;
 
+import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.davincisvessels.common.command.DavincisCommands;
 import com.tridevmc.davincisvessels.common.handler.CommonHookContainer;
 import com.tridevmc.davincisvessels.common.handler.CommonPlayerTicker;

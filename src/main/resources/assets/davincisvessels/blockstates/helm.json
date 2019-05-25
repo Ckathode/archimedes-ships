@@ -1,0 +1,46 @@
+{
+    "variants": {
+        "facing=north,wheel=false": {
+            "model": "davincisvessels:block/helm"
+        },
+        "facing=south,wheel=false": {
+            "model": "davincisvessels:block/helm",
+            "y": 180
+        },
+        "facing=west,wheel=false": {
+            "model": "davincisvessels:block/helm",
+            "y": 270
+        },
+        "facing=east,wheel=false": {
+            "model": "davincisvessels:block/helm",
+            "y": 90
+        },
+        "facing=up,wheel=false": {
+            "model": "davincisvessels:block/helm"
+        },
+        "facing=down,wheel=false": {
+            "model": "davincisvessels:block/helm"
+        },
+        "facing=north,wheel=true": {
+            "model": "davincisvessels:block/helmwheel",
+            "y": 90
+        },
+        "facing=south,wheel=true": {
+            "model": "davincisvessels:block/helmwheel",
+            "y": 270
+        },
+        "facing=west,wheel=true": {
+            "model": "davincisvessels:block/helmwheel"
+        },
+        "facing=east,wheel=true": {
+            "model": "davincisvessels:block/helmwheel",
+            "y": 180
+        },
+        "facing=up,wheel=true": {
+            "model": "davincisvessels:block/helmwheel"
+        },
+        "facing=down,wheel=true": {
+            "model": "davincisvessels:block/helmwheel"
+        }
+    }
+}

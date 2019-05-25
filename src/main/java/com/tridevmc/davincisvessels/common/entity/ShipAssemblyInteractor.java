@@ -2,9 +2,8 @@ package com.tridevmc.davincisvessels.common.entity;
 
 import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.davincisvessels.common.api.block.IBlockBalloon;
-import com.tridevmc.davincisvessels.common.content.DavincisVesselsContent;
-import com.tridevmc.davincisvessels.common.handler.ConnectionHandler;
 import com.tridevmc.davincisvessels.common.content.block.BlockHelm;
+import com.tridevmc.davincisvessels.common.handler.ConnectionHandler;
 import com.tridevmc.davincisvessels.common.tileentity.AnchorInstance;
 import com.tridevmc.davincisvessels.common.tileentity.TileAnchorPoint;
 import com.tridevmc.davincisvessels.common.tileentity.TileEntitySecuredBed;
@@ -20,10 +19,18 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.tridevmc.movingworld.common.chunk.assembly.AssembleResult.ResultType.RESULT_NONE;
 
 public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
+
+    private static List allowedBlocks = ForgeRegistries.BLOCKS.getEntries().stream()
+            .filter(e -> e.getKey().getNamespace().equals(DavincisVesselsMod.MOD_ID) && !e.getKey().getPath().equals("buffer"))
+            .collect(Collectors.toList());
 
     private int balloonCount;
 
@@ -64,7 +71,7 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
             } catch (NullPointerException e) {
                 MovingWorldMod.LOG.error("IBlockBalloon didn't check if something was null or not, report to mod author of the following block, " + block.toString());
             }
-        }else if (DavincisVesselsMod.CONFIG.isBalloon(block)) {
+        } else if (DavincisVesselsMod.BLOCK_CONFIG.isBalloon(block)) {
             balloonCount++;
         }
     }
@@ -106,12 +113,18 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
         IBlockState state = lb.state;
         CanAssemble canAssemble = super.isBlockAllowed(world, lb);
 
-        if (DavincisVesselsMod.CONFIG.isSticky(state.getBlock()))
+        if (DavincisVesselsMod.BLOCK_CONFIG.isSticky(state.getBlock()))
             canAssemble.assembleThenCancel = true;
 
         if (lb.tile instanceof TileAnchorPoint
-            && ((TileAnchorPoint) lb.tile).getInstance().getType() == AnchorInstance.InstanceType.LAND)
+                && ((TileAnchorPoint) lb.tile).getInstance().getType() == AnchorInstance.InstanceType.LAND)
             canAssemble.justCancel = true;
+
+        if (canAssemble.justCancel) {
+            canAssemble.justCancel = !allowedBlocks.contains(lb.getBlock());
+        } else {
+            canAssemble.justCancel = lb.getBlock() == DavincisVesselsMod.CONTENT.blockBuffer;
+        }
 
         return canAssemble;
     }

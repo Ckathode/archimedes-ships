@@ -65,7 +65,7 @@ public class DavincisVesselsContent {
     };
 
     public Map<Class<? extends TileEntity>, TileEntityType> tileTypes = Maps.newHashMap();
-    public Map<Class<? extends Entity>, EntityType<?>> entityTypes;
+    public Map<Class<? extends Entity>, EntityType<?>> entityTypes = Maps.newHashMap();
 
     public Material materialFloater;
     public HashMap<String, Block> registeredBlocks;
@@ -81,29 +81,29 @@ public class DavincisVesselsContent {
     @SubscribeEvent
     public void onTileRegister(final RegistryEvent.Register<TileEntityType<?>> e) {
         IForgeRegistry<TileEntityType<?>> registry = e.getRegistry();
-        registerTileEntity(registry, new ResourceLocation(REGISTRY_PREFIX, "tileHelm"), TileHelm::new);
-        registerTileEntity(registry, new ResourceLocation(REGISTRY_PREFIX, "tileGauge"), TileGauge::new);
-        registerTileEntity(registry, new ResourceLocation(REGISTRY_PREFIX, "tileCrate"), TileCrate::new);
-        registerTileEntity(registry, new ResourceLocation(REGISTRY_PREFIX, "tileEngine"), TileEngine::new);
-        registerTileEntity(registry, new ResourceLocation(REGISTRY_PREFIX, "tileAnchorPoint"), TileAnchorPoint::new);
-        registerTileEntity(registry, new ResourceLocation(REGISTRY_PREFIX, "tileSecuredBed"), TileEntitySecuredBed::new);
+        registerTileEntity(registry, new ResourceLocation(REGISTRY_PREFIX, "helm"), TileHelm::new);
+        registerTileEntity(registry, new ResourceLocation(REGISTRY_PREFIX, "gauge"), TileGauge::new);
+        registerTileEntity(registry, new ResourceLocation(REGISTRY_PREFIX, "crate"), TileCrate::new);
+        registerTileEntity(registry, new ResourceLocation(REGISTRY_PREFIX, "engine"), TileEngine::new);
+        registerTileEntity(registry, new ResourceLocation(REGISTRY_PREFIX, "anchor_point"), TileAnchorPoint::new);
+        registerTileEntity(registry, new ResourceLocation(REGISTRY_PREFIX, "secured_bed"), TileEntitySecuredBed::new);
     }
 
     @SubscribeEvent
     public void onEntityRegister(final RegistryEvent.Register<EntityType<?>> e) {
         IForgeRegistry<EntityType<?>> registry = e.getRegistry();
         registerEntity(registry, new ResourceLocation(REGISTRY_PREFIX, "shipmod"), 64, DavincisVesselsMod.CONFIG.shipEntitySyncRate, true, EntityShip.class, EntityShip::new);
-        registerEntity(registry, new ResourceLocation(REGISTRY_PREFIX, "attachment.seat"), 64, 20, false, EntitySeat.class, EntitySeat::new);
+        registerEntity(registry, new ResourceLocation(REGISTRY_PREFIX, "attachment_seat"), 64, 20, false, EntitySeat.class, EntitySeat::new);
         registerEntity(registry, new ResourceLocation(REGISTRY_PREFIX, "parachute"), 32, DavincisVesselsMod.CONFIG.shipEntitySyncRate, true, EntityParachute.class, EntityParachute::new);
     }
 
     @SubscribeEvent
     public void onItemRegister(final RegistryEvent.Register<Item> e) {
         IForgeRegistry<Item> registry = e.getRegistry();
-        registeredItems = new HashMap<String, Item>();
+        registeredItems = new HashMap<>();
 
         itemSecuredBed = new ItemSecuredBed();
-        registerItem(registry, "securedBed", itemSecuredBed);
+        registerItem(registry, "secured_bed", itemSecuredBed);
 
         for (Item item : itemBlocksToRegister) {
             registry.register(item);
@@ -120,13 +120,13 @@ public class DavincisVesselsContent {
         this.balloonBlocks = new ArrayList<>();
         for (EnumDyeColor colour : EnumDyeColor.values()) {
             BlockBalloon balloon = new BlockBalloon(colour);
-            registerBlock(registry, "balloon_" + colour.getTranslationKey(), balloon);
+            registerBlock(registry, colour.getTranslationKey() + "_balloon", balloon);
             balloonBlocks.add(balloon);
             this.setFireInfo(balloon, 30, 60);
         }
 
         blockHelm = new BlockHelm(Block.Properties.create(Material.WOOD).hardnessAndResistance(1F));
-        registerBlock(registry, "marker", blockHelm);
+        registerBlock(registry, "helm", blockHelm);
 
         blockFloater = new BlockAS(materialFloater, SoundType.WOOD);
         registerBlock(registry, "floater", blockFloater);
@@ -135,7 +135,7 @@ public class DavincisVesselsContent {
         registerBlock(registry, "gauge", blockGauge);
 
         blockGaugeExtended = new BlockGauge();
-        registerBlock(registry, "gauge_ext", blockGauge);
+        registerBlock(registry, "gauge_ext", blockGaugeExtended);
 
         blockSeat = new BlockSeat();
         registerBlock(registry, "seat", blockSeat);
@@ -144,7 +144,7 @@ public class DavincisVesselsContent {
         registerBlock(registry, "buffer", blockBuffer);
 
         blockStickyBuffer = new BlockAS(Material.CLOTH, SoundType.WOOD);
-        registerBlock(registry, "stickyBuffer", blockStickyBuffer);
+        registerBlock(registry, "sticky_buffer", blockStickyBuffer);
 
         blockEngine = new BlockEngine(1F, DavincisVesselsMod.CONFIG.engineConsumptionRate);
         registerBlock(registry, "engine", blockEngine);
@@ -218,6 +218,7 @@ public class DavincisVesselsContent {
                 .tracker(range, updateFrequency, sendVelocityUpdates)
                 .disableSummoning()
                 .build(id.toString());
+        entityType.setRegistryName(id);
         registry.register(entityType);
         this.entityTypes.put(clazz, entityType);
     }

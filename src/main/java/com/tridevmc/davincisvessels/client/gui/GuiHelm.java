@@ -62,7 +62,7 @@ public class GuiHelm extends GuiContainer {
                 txtShipName.setFocused(true);
             }
         });
-        buttons.add(btnRename);
+        addButton(btnRename);
 
         btnAssemble = new GuiButtonHooked(1, btnx, btny += 20, 100, 20, I18n.format(LanguageEntries.GUI_STATUS_COMPILE));
         btnAssemble.addHook(((mX, mY) -> {
@@ -70,17 +70,17 @@ public class GuiHelm extends GuiContainer {
             tileEntity.setAssembleResult(null);
             busyCompiling = true;
         }));
-        buttons.add(btnAssemble);
+        addButton(btnAssemble);
 
         btnUndo = new GuiButtonHooked(2, btnx, btny += 20, 100, 20, I18n.format(LanguageEntries.GUI_STATUS_UNDO));
         btnUndo.enabled = tileEntity.getPrevAssembleResult() != null && tileEntity.getPrevAssembleResult().getType() != RESULT_NONE;
         btnUndo.addHook((mX, mY) -> new HelmActionMessage(tileEntity, HelmClientAction.UNDOCOMPILE).sendToServer());
-        buttons.add(btnUndo);
+        addButton(btnUndo);
 
         btnMount = new GuiButtonHooked(3, btnx, btny += 20, 100, 20, I18n.format(LanguageEntries.GUI_STATUS_MOUNT));
         btnMount.enabled = tileEntity.getAssembleResult() != null && tileEntity.getAssembleResult().getType() == RESULT_OK;
         btnMount.addHook((mX, mY) -> new HelmActionMessage(tileEntity, HelmClientAction.MOUNT).sendToServer());
-        buttons.add(btnMount);
+        addButton(btnMount);
 
         txtShipName = new GuiTextField(0, fontRenderer, guiLeft + 8 + xSize / 2, guiTop + 21, 120, 10); // TODO: Might be incorrect not sure about 0 in GuiTextField()
         txtShipName.setMaxStringLength(127);

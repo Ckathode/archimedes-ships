@@ -2,7 +2,7 @@
     "ambientocclusion": false,
     "parent": "block/block",
     "textures": {
-        "wood": "blocks/planks_oak",
+        "wood": "block/oak_planks",
         "crate": "davincisvessels:blocks/crate_wood",
         "particle": "davincisvessels:blocks/crate_wood"
     },

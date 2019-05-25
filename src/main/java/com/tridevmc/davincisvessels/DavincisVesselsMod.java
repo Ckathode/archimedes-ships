@@ -5,6 +5,7 @@ import com.tridevmc.compound.network.core.CompoundNetwork;
 import com.tridevmc.davincisvessels.client.ClientProxy;
 import com.tridevmc.davincisvessels.client.gui.DavincisUIHandler;
 import com.tridevmc.davincisvessels.common.CommonProxy;
+import com.tridevmc.davincisvessels.common.DavincisVesselsBlockConfig;
 import com.tridevmc.davincisvessels.common.DavincisVesselsConfig;
 import com.tridevmc.davincisvessels.common.content.DavincisVesselsContent;
 import net.minecraftforge.common.MinecraftForge;
@@ -29,11 +30,13 @@ public class DavincisVesselsMod {
 
     public static final DavincisVesselsContent CONTENT = new DavincisVesselsContent();
     public static DavincisVesselsConfig CONFIG;
+    public static DavincisVesselsBlockConfig BLOCK_CONFIG;
 
     public DavincisVesselsMod() {
         DavincisVesselsMod.INSTANCE = this;
         PROXY = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
-        MinecraftForge.EVENT_BUS.register(PROXY);
+        ModContainer container = ModLoadingContext.get().getActiveContainer();
+        CONFIG = CompoundConfig.of(DavincisVesselsConfig.class, container, "davincis-main.toml");
 
         FMLJavaModLoadingContext loadingContext = FMLJavaModLoadingContext.get();
         loadingContext.getModEventBus().addListener(this::onSetup);
@@ -44,10 +47,10 @@ public class DavincisVesselsMod {
 
     private void onSetup(FMLCommonSetupEvent e) {
         ModContainer container = ModLoadingContext.get().getActiveContainer();
-        CompoundNetwork.createNetwork(container, "davincisvessels");
+        BLOCK_CONFIG = CompoundConfig.of(DavincisVesselsBlockConfig.class, container, "davincis-blocks.toml");
         PROXY.onSetup(e);
 
-        CONFIG = CompoundConfig.of(DavincisVesselsConfig.class, container, "davincis-main.toml");
+        CompoundNetwork.createNetwork(container, "davincisvessels");
     }
 
 }

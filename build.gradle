@@ -39,7 +39,7 @@ archivesBaseName = modBaseName
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = "1.8" // Need this here so eclipse task generates correctly.
 
 ext {
-    compoundClassesDir = file('build/compound')
+    compoundClassesDir = file('build/classes/java/main')
 }
 
 configurations {
@@ -52,12 +52,6 @@ minecraft {
 
     runs {
         client {
-            environment "MOD_CLASSES", [
-                    sourceSets.main.output.resourcesDir.absolutePath,
-                    sourceSets.main.output.classesDirs.asPath,
-                    project.compoundClassesDir.absolutePath
-            ].join(File.pathSeparator)
-
             workingDirectory project.file("run")
 
             // Recommended logging data for a userdev environment
@@ -77,12 +71,6 @@ minecraft {
         }
 
         server {
-            environment "MOD_CLASSES", [
-                    sourceSets.main.output.resourcesDir.absolutePath,
-                    sourceSets.main.output.classesDirs.asPath,
-                    project.compoundClassesDir.absolutePath
-            ].join(File.pathSeparator)
-
             workingDirectory project.file("run")
 
             // Recommended logging data for a userdev environment

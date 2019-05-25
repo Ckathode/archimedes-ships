@@ -8,3 +8,9 @@ description='''
 Craft and create your own ship...
 And sail it across the seven seas!
 '''
+
+[[dependencies.davincisvessels]]
+    modId="movingworld"
+    mandatory=true
+    ordering="BEFORE"
+    versionRange="*"

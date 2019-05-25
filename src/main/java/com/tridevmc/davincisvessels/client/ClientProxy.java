@@ -29,7 +29,6 @@ public class ClientProxy extends CommonProxy {
     public void onSetup(FMLCommonSetupEvent e) {
         super.onSetup(e);
         MinecraftForge.EVENT_BUS.register(new ClientHookContainer());
-
         registerKeyHandlers();
         registerRenderers();
     }

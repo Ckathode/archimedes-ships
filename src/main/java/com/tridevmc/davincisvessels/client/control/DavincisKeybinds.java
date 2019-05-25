@@ -9,6 +9,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.config.ModConfig;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,6 +19,10 @@ public class DavincisKeybinds {
 
     @ConfigValue(comment = "Keybindings should be managed in game.")
     public KeyBinding kbUp, kbDown, kbBrake, kbAlign, kbDisassemble, kbShipInv;
+
+    public DavincisKeybinds() {
+        loadKeybindings();
+    }
 
     private void loadKeybindings() {
         kbUp = new KeyBinding("key.davincis.up", 0x2D, "Davincis Vessels");
@@ -30,7 +35,7 @@ public class DavincisKeybinds {
 
     public void addToControlsMenu() {
         Minecraft mc = Minecraft.getInstance();
-        List<KeyBinding> keyBindings = Arrays.asList(mc.gameSettings.keyBindings);
+        List<KeyBinding> keyBindings = new ArrayList<>(Arrays.asList(mc.gameSettings.keyBindings));
         keyBindings.removeAll(Lists.newArrayList(kbUp, kbDown, kbBrake, kbAlign, kbDisassemble, kbShipInv));
         keyBindings.addAll(Lists.newArrayList(kbUp, kbDown, kbBrake, kbAlign, kbDisassemble, kbShipInv));
         KeyBinding[] binds = new KeyBinding[keyBindings.size()];

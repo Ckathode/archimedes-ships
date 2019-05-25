@@ -1,8 +1,8 @@
 {
     "ambientocclusion": false,
     "textures": {
-        "texture": "blocks/planks_oak",
-        "particle": "blocks/planks_oak"
+        "texture": "block/oak_planks",
+        "particle": "block/oak_planks"
     },
     "elements": [
         {

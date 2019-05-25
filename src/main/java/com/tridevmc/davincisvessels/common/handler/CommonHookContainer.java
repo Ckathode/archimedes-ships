@@ -70,7 +70,7 @@ public class CommonHookContainer {
                     passenger.setPositionAndUpdate(position.getX() + 0.5D, position.getY() + 0.5D, position.getZ() + 0.5D);
                     System.out.println(passenger.getPositionVector().toString());
                 }
-            } else if (DavincisVesselsMod.CONFIG.isSeat(lb.state.getBlock())) {
+            } else if (DavincisVesselsMod.BLOCK_CONFIG.isSeat(lb.state.getBlock())) {
                 Optional<EntitySeat> matchingSeatEntity = ship.capabilities.getSeats().stream().filter(s -> s.getChunkPos().equals(lb.posNoOffset)).findFirst();
 
                 if (matchingSeatEntity.isPresent()) {

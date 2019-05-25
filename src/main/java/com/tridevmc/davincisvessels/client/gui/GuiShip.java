@@ -7,7 +7,6 @@ import com.tridevmc.davincisvessels.common.network.message.RequestSubmerseMessag
 import com.tridevmc.movingworld.common.network.MovingWorldClientAction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
@@ -44,14 +43,14 @@ public class GuiShip extends GuiContainer {
             mc.displayGuiScreen(null);
         }));
         btnDisassemble.enabled = ship.getDisassembler().canDisassemble(ship.getAssemblyInteractor());
-        buttons.add(btnDisassemble);
+        addButton(btnDisassemble);
 
         btnAlign = new GuiButtonHooked(2, guiLeft + 4, guiTop + 40, 100, 20, I18n.format(LanguageEntries.GUI_SHIPINV_ALIGN));
         btnAlign.addHook(((mX, mY) -> {
             MovingWorldClientAction.ALIGN.sendToServer(ship);
             ship.alignToGrid(true);
         }));
-        buttons.add(btnAlign);
+        addButton(btnAlign);
 
         btnSubmersible = new GuiButtonSubmersible(3, guiLeft + xSize + 2, guiTop);
         btnSubmersible.addHook(((mX, mY) -> {
@@ -66,7 +65,7 @@ public class GuiShip extends GuiContainer {
             ((GuiButtonSubmersible) btnSubmersible).submerse = ship.getSubmerge();
         else
             ((GuiButtonSubmersible) btnSubmersible).submerse = false;
-        buttons.add(btnSubmersible);
+        addButton(btnSubmersible);
 
     }
 

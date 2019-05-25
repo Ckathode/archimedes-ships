@@ -2,6 +2,9 @@ package com.tridevmc.davincisvessels.common.entity;
 
 import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.davincisvessels.client.control.ShipControllerClient;
+import com.tridevmc.davincisvessels.client.gui.ContainerShip;
+import com.tridevmc.davincisvessels.client.gui.GuiShip;
+import com.tridevmc.davincisvessels.common.IElementProvider;
 import com.tridevmc.davincisvessels.common.api.tileentity.ITileEngineModifier;
 import com.tridevmc.davincisvessels.common.control.EnumShipControlType;
 import com.tridevmc.davincisvessels.common.control.ShipControllerCommon;
@@ -16,12 +19,16 @@ import com.tridevmc.movingworld.common.entity.MovingWorldHandlerCommon;
 import com.tridevmc.movingworld.common.util.MathHelperMod;
 import com.tridevmc.movingworld.common.util.Vec3dMod;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Particles;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -41,13 +48,14 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.thread.EffectiveSide;
+import net.minecraftforge.fml.network.FMLPlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.util.Set;
 
-public class EntityShip extends EntityMovingWorld {
+public class EntityShip extends EntityMovingWorld implements IElementProvider {
 
     public static final DataParameter<Float> ENGINE_POWER = EntityDataManager.createKey(EntityShip.class, DataSerializers.FLOAT);
     public static final DataParameter<Boolean> CAN_MOVE = EntityDataManager.createKey(EntityShip.class, DataSerializers.BOOLEAN);
@@ -470,7 +478,7 @@ public class EntityShip extends EntityMovingWorld {
                 throttle *= 0.5D;
             }
 
-            if (DavincisVesselsMod.CONFIG.shipControlType == EnumShipControlType.VANILLA) {
+            if (DavincisVesselsMod.CONFIG.shipControlType == EnumShipControlType.DAVINCIS) {
                 Vec3dMod vec = new Vec3dMod(getControllingPassenger().motionX, 0D, getControllingPassenger().motionZ);
                 vec.rotateAroundY((float) Math.toRadians(getControllingPassenger().rotationYaw));
 
@@ -585,5 +593,16 @@ public class EntityShip extends EntityMovingWorld {
 
     public boolean canSubmerge() {
         return !dataManager.isEmpty() ? dataManager.get(CAN_SUBMERGE) : false;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public GuiScreen createGui(FMLPlayMessages.OpenContainer openContainer) {
+        return new GuiShip(this, Minecraft.getInstance().player);
+    }
+
+    @Override
+    public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
+        return new ContainerShip(this, playerIn);
     }
 }

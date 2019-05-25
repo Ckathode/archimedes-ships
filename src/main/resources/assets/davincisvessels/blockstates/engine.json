@@ -1,18 +1,18 @@
 {
     "variants": {
         "facing=north": {
-            "model": "davincisvessels:ship_engine"
+            "model": "davincisvessels:block/engine"
         },
         "facing=south": {
-            "model": "davincisvessels:ship_engine",
+            "model": "davincisvessels:block/engine",
             "y": 180
         },
         "facing=west": {
-            "model": "davincisvessels:ship_engine",
+            "model": "davincisvessels:block/engine",
             "y": 270
         },
         "facing=east": {
-            "model": "davincisvessels:ship_engine",
+            "model": "davincisvessels:block/engine",
             "y": 90
         }
     }

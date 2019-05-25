@@ -93,7 +93,7 @@ public class BlockHelm extends BlockDirectional implements ITileEntityProvider {
     public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!player.isSneaking()) {
             TileHelm helm = world.getTileEntity(pos) instanceof TileHelm ? (TileHelm) world.getTileEntity(pos) : null;
-            if (helm != null) {
+            if (helm != null && player instanceof EntityPlayerMP) {
                 NetworkHooks.openGui((EntityPlayerMP) player, helm, pos);
                 return true;
             }
