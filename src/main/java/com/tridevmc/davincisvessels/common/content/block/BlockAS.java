@@ -6,6 +6,10 @@ import net.minecraft.block.material.Material;
 
 public class BlockAS extends Block {
     public BlockAS(Material material, SoundType soundType) {
-        super(Block.Properties.create(material).sound(soundType));
+        this(material, soundType, 1F, 1F);
+    }
+
+    public BlockAS(Material material, SoundType soundType, float hardness, float resistance) {
+        super(Block.Properties.create(material).sound(soundType).hardnessAndResistance(hardness, resistance));
     }
 }

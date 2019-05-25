@@ -40,7 +40,7 @@ public class BlockAnchorPoint extends BlockContainer {
     private VoxelShape xShape, zShape;
 
     public BlockAnchorPoint() {
-        super(Block.Properties.create(Material.WOOD).sound(SoundType.METAL));
+        super(Block.Properties.create(Material.WOOD).sound(SoundType.METAL).hardnessAndResistance(1F));
     }
 
     public static int getMetaForAxis(EnumFacing.Axis axis) {

@@ -27,7 +27,7 @@ import javax.annotation.Nullable;
 public class BlockSecuredBed extends BlockBed implements ITileEntityProvider {
 
     public BlockSecuredBed() {
-        super(EnumDyeColor.RED, Block.Properties.create(Material.CLOTH).sound(SoundType.WOOD));
+        super(EnumDyeColor.RED, Block.Properties.create(Material.CLOTH).sound(SoundType.WOOD).hardnessAndResistance(0.2F));
     }
 
     @Override

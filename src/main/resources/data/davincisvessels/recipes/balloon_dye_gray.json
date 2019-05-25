@@ -1,0 +1,14 @@
+{
+  "type": "crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:dyes/gray"
+    },
+    {
+      "tag": "davincisvessels:blocks/balloon"
+    }
+  ],
+  "result": {
+    "item": "davincisvessels:gray_balloon"
+  }
+}

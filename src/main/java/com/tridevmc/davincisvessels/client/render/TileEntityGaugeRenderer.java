@@ -1,5 +1,6 @@
 package com.tridevmc.davincisvessels.client.render;
 
+import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.davincisvessels.common.content.block.BlockGauge;
 import com.tridevmc.davincisvessels.common.tileentity.TileGauge;
 import net.minecraft.client.Minecraft;
@@ -20,7 +21,7 @@ public class TileEntityGaugeRenderer extends TileEntityRenderer<TileGauge> {
     public void render(TileGauge gauge, double x, double y, double z, float partialTicks, int destroyStage) {
         RenderHelper.disableStandardItemLighting();
 
-        boolean extended = gauge.getBlockState().get(BlockGauge.EXTENDED);
+        boolean extended = gauge.getBlockState().getBlock() == DavincisVesselsMod.CONTENT.blockGaugeExtended;
         int meta = gauge.getBlockState().get(BlockGauge.FACING).getHorizontalIndex();
 
         Tessellator tess = Tessellator.getInstance();

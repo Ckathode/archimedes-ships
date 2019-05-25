@@ -31,7 +31,7 @@ public class BlockCrate extends BlockContainer {
     public static final BooleanProperty POWERED = BooleanProperty.create("powered");
 
     public BlockCrate() {
-        super(Block.Properties.create(Material.WOOD));
+        super(Block.Properties.create(Material.WOOD).hardnessAndResistance(1F));
     }
 
     public static int getMetaForAxis(EnumFacing.Axis axis) {

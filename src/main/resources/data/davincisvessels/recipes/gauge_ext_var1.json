@@ -1,0 +1,25 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "VXV",
+    "XO#",
+    " # "
+  ],
+  "key": {
+    "#": {
+      "tag": "forge:ingots/iron"
+    },
+    "X": {
+      "tag": "forge:ingots/gold"
+    },
+    "V": {
+      "item": "minecraft:glass_pane"
+    },
+    "O": {
+      "tag": "davincisvessels:gauge"
+    }
+  },
+  "result": {
+    "item": "davincisvessels:gauge_ext"
+  }
+}

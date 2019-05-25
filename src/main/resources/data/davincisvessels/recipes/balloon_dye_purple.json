@@ -1,0 +1,14 @@
+{
+  "type": "crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:dyes/purple"
+    },
+    {
+      "tag": "davincisvessels:blocks/balloon"
+    }
+  ],
+  "result": {
+    "item": "davincisvessels:purple_balloon"
+  }
+}

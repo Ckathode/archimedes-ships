@@ -16,7 +16,7 @@ import net.minecraft.world.IBlockReader;
 public class BlockSeat extends BlockDirectional {
 
     public BlockSeat() {
-        super(Block.Properties.create(Material.WOOD).sound(SoundType.CLOTH));
+        super(Block.Properties.create(Material.WOOD).sound(SoundType.CLOTH).hardnessAndResistance(1F));
     }
 
     @Override

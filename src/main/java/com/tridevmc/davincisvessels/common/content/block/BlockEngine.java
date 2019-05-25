@@ -28,7 +28,7 @@ public class BlockEngine extends BlockContainer {
     public int engineFuelConsumption;
 
     public BlockEngine(float power, int fuelConsumption) {
-        super(Block.Properties.create(Material.IRON).sound(SoundType.METAL));
+        super(Block.Properties.create(Material.IRON).sound(SoundType.METAL).hardnessAndResistance(2F, 3F));
         enginePower = power;
         engineFuelConsumption = fuelConsumption;
     }

@@ -26,7 +26,7 @@ public class BlockGauge extends BlockContainer {
     public static final DirectionProperty FACING = DirectionProperty.create("facing", EnumFacing.Plane.HORIZONTAL);
 
     public BlockGauge() {
-        super(Block.Properties.create(Material.CIRCUITS).sound(SoundType.METAL));
+        super(Block.Properties.create(Material.CIRCUITS).sound(SoundType.METAL).hardnessAndResistance(1F));
     }
 
     @Override

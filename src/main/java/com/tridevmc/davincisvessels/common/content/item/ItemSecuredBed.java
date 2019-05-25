@@ -1,16 +1,17 @@
 package com.tridevmc.davincisvessels.common.content.item;
 
 
-import net.minecraft.block.Block;
+import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemGroup;
 
 public class ItemSecuredBed extends ItemBlock {
 
-    public ItemSecuredBed(Block block, Item.Properties properties) {
-        super(block, properties);
+    public ItemSecuredBed() {
+        super(DavincisVesselsMod.CONTENT.blockSecuredBed, new Item.Properties().maxStackSize(1).group(ItemGroup.DECORATIONS));
     }
 
     @Override

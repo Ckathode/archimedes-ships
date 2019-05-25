@@ -1,0 +1,22 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "X#X",
+    "#O#",
+    "X#X"
+  ],
+  "key": {
+    "#": {
+      "tag": "forge:rods/wooden"
+    },
+    "X": {
+      "tag": "minecraft:planks"
+    },
+    "O": {
+      "tag": "forge:ingots/iron"
+    }
+  },
+  "result": {
+    "item": "davincisvessels:helm"
+  }
+}
