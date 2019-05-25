@@ -1,11 +1,10 @@
 package com.tridevmc.davincisvessels.common.content.block;
 
-import com.tridevmc.davincisvessels.common.content.DavincisVesselsContent;
+import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.davincisvessels.common.tileentity.TileCrate;
 import com.tridevmc.movingworld.common.entity.EntityMovingWorld;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
-import net.minecraft.block.BlockFence;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -22,6 +21,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorldReaderBase;
 import net.minecraft.world.World;
 
 public class BlockCrate extends BlockContainer {
@@ -64,8 +64,8 @@ public class BlockCrate extends BlockContainer {
     }
 
     @Override
-    public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
-        if (world.isRemote || state.getValue(POWERED))
+    public void onEntityCollision(IBlockState state, World world, BlockPos pos, Entity entity) {
+        if (world.isRemote || state.get(POWERED))
             return;
 
         if (entity != null && !(entity instanceof EntityPlayer || entity instanceof EntityMovingWorld)) {
@@ -94,23 +94,18 @@ public class BlockCrate extends BlockContainer {
     }
 
     @Override
-    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-        return this.canBePlacedOn(worldIn, pos.down());
+    public boolean isValidPosition(IBlockState state, IWorldReaderBase worldIn, BlockPos pos) {
+        return worldIn.getBlockState(pos).isTopSolid();
     }
-
-    private boolean canBePlacedOn(World worldIn, BlockPos pos) {
-        return worldIn.getBlockState(pos).isSideSolid(worldIn, pos, EnumFacing.UP) || worldIn.getBlockState(pos).getBlock() instanceof BlockFence;
-    }
-
 
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
-        if (worldIn.isRemote || worldIn.getBlockState(pos).getBlock() != DavincisVesselsContent.blockCrateWood)
+        if (worldIn.isRemote || worldIn.getBlockState(pos).getBlock() != DavincisVesselsMod.CONTENT.blockCrate)
             return;
 
-        if (!canBePlacedOn(worldIn, pos.down())) {
-            dropBlockAsItem(worldIn, pos, state, 0);
-            worldIn.setBlockToAir(pos);
+        if (!isValidPosition(state, worldIn, pos)) {
+            dropBlockAsItemWithChance(state, worldIn, pos, 1, 0);
+            worldIn.removeBlock(pos);
         }
 
         boolean powered = worldIn.isBlockPowered(pos) || worldIn.isBlockPowered(pos.up());
@@ -119,10 +114,10 @@ public class BlockCrate extends BlockContainer {
             TileEntity te = worldIn.getTileEntity(pos);
             if (te instanceof TileCrate) {
                 ((TileCrate) te).releaseEntity();
-                worldIn.setBlockState(pos, worldIn.getBlockState(pos).withProperty(POWERED, Boolean.TRUE));
+                worldIn.setBlockState(pos, worldIn.getBlockState(pos).with(POWERED, Boolean.TRUE));
             }
         } else {
-            worldIn.setBlockState(pos, worldIn.getBlockState(pos).withProperty(POWERED, Boolean.FALSE));
+            worldIn.setBlockState(pos, worldIn.getBlockState(pos).with(POWERED, Boolean.FALSE));
         }
     }
 }

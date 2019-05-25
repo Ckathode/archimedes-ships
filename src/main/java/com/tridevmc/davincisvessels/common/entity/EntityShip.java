@@ -2,9 +2,8 @@ package com.tridevmc.davincisvessels.common.entity;
 
 import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.davincisvessels.client.control.ShipControllerClient;
-import com.tridevmc.davincisvessels.common.DavincisVesselsConfig;
 import com.tridevmc.davincisvessels.common.api.tileentity.ITileEngineModifier;
-import com.tridevmc.davincisvessels.common.content.DavincisVesselsContent;
+import com.tridevmc.davincisvessels.common.control.EnumShipControlType;
 import com.tridevmc.davincisvessels.common.control.ShipControllerCommon;
 import com.tridevmc.davincisvessels.common.tileentity.TileHelm;
 import com.tridevmc.movingworld.common.chunk.LocatedBlock;
@@ -20,6 +19,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Particles;
 import net.minecraft.item.ItemStack;
@@ -65,6 +65,11 @@ public class EntityShip extends EntityMovingWorld {
     public EntityShip(World world) {
         super(world);
         capabilities = new ShipCapabilities(this, true);
+    }
+
+    @Override
+    public EntityType<?> getType() {
+        return DavincisVesselsMod.CONTENT.entityTypes.get(EntityShip.class);
     }
 
     @Override
@@ -406,8 +411,7 @@ public class EntityShip extends EntityMovingWorld {
 
     @Override
     public void handleServerUpdatePreRotation() {
-        if (DavincisVesselsMod.CONFIG.shipControlType
-                == DavincisVesselsConfig.CONTROL_TYPE_VANILLA) {
+        if (DavincisVesselsMod.CONFIG.shipControlType == EnumShipControlType.VANILLA) {
             double newYaw = rotationYaw;
             double dx = prevPosX - posX;
             double dz = prevPosZ - posZ;
@@ -466,8 +470,7 @@ public class EntityShip extends EntityMovingWorld {
                 throttle *= 0.5D;
             }
 
-            if (DavincisVesselsMod.CONFIG.shipControlType
-                    == DavincisVesselsConfig.CONTROL_TYPE_DAVINCI) {
+            if (DavincisVesselsMod.CONFIG.shipControlType == EnumShipControlType.VANILLA) {
                 Vec3dMod vec = new Vec3dMod(getControllingPassenger().motionX, 0D, getControllingPassenger().motionZ);
                 vec.rotateAroundY((float) Math.toRadians(getControllingPassenger().rotationYaw));
 
@@ -486,8 +489,7 @@ public class EntityShip extends EntityMovingWorld {
 
                 motionX = vec.x;
                 motionZ = vec.z;
-            } else if (DavincisVesselsMod.CONFIG.shipControlType
-                    == DavincisVesselsConfig.CONTROL_TYPE_VANILLA) {
+            } else if (DavincisVesselsMod.CONFIG.shipControlType == EnumShipControlType.VANILLA) {
                 if (throttle > 0.0D) {
                     double dsin = -Math.sin(Math.toRadians(getControllingPassenger().rotationYaw));
                     double dcos = Math.cos(Math.toRadians(getControllingPassenger().rotationYaw));

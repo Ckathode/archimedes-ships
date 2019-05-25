@@ -1,50 +1,38 @@
 package com.tridevmc.davincisvessels.common.command;
 
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.tridevmc.davincisvessels.common.entity.EntityShip;
-import net.minecraft.command.CommandException;
-import net.minecraft.entity.Entity;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.command.CommandSource;
+import net.minecraft.command.Commands;
+import net.minecraft.command.arguments.Vec3Argument;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 
 
-public class CommandDVTP extends CommandBase {
+public class CommandDVTP {
 
-    @Override
-    public String getName() {
-        return "dvtp";
+    public static void register(CommandDispatcher<CommandSource> dispatcher) {
+        dispatcher.register(Commands.literal("dvtp")
+                .requires(p -> p.hasPermissionLevel(2))
+                .then(Commands.argument("location", Vec3Argument.vec3())
+                        .executes(CommandDVTP::execute)));
     }
 
-    @Override
-    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        EntityShip ship = null;
-        if (sender instanceof Entity) {
-            Entity player = (Entity) sender;
-            if (player.getRidingEntity() instanceof EntityShip) {
-                ship = (EntityShip) player.getRidingEntity();
-            }
-        }
-        if (ship != null) {
-            Vec3d vec3d = sender.getPositionVector();
-
-            CommandBase.CoordinateArg coordArgX = parseCoordinate(vec3d.x, args[0], true);
-            CommandBase.CoordinateArg coordArgY = parseCoordinate(vec3d.y, args[1], -4096, 4096, false);
-            CommandBase.CoordinateArg coordArgZ = parseCoordinate(vec3d.z, args[2], true);
-
-            ship.setPosition(coordArgX.getResult(), coordArgY.getResult(), coordArgZ.getResult());
+    private static int execute(CommandContext<CommandSource> d) throws CommandSyntaxException {
+        EntityPlayerMP player = d.getSource().asPlayer();
+        if (player.getRidingEntity() instanceof EntityShip) {
+            EntityShip ship = (EntityShip) player.getRidingEntity();
+            Vec3d location = Vec3Argument.getVec3(d, "location");
+            ship.setPosition(location.x, location.y, location.z);
             ship.alignToGrid(false);
-            return;
+            return 1;
+        } else {
+            d.getSource().sendErrorMessage(new TextComponentString("Not steering a ship, unable to teleport."));
+            return -1;
         }
-        sender.sendMessage(new TextComponentString("Not steering a ship"));
     }
 
-    @Override
-    public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-        return sender instanceof Entity;
-    }
-
-    @Override
-    public String getUsage(ICommandSender icommandsender) {
-        return "/".concat(getName());
-    }
 }

@@ -8,6 +8,9 @@ import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.davincisvessels.common.content.block.*;
 import com.tridevmc.davincisvessels.common.content.item.ItemBlockAnchorPoint;
 import com.tridevmc.davincisvessels.common.content.item.ItemSecuredBed;
+import com.tridevmc.davincisvessels.common.entity.EntityParachute;
+import com.tridevmc.davincisvessels.common.entity.EntitySeat;
+import com.tridevmc.davincisvessels.common.entity.EntityShip;
 import com.tridevmc.davincisvessels.common.tileentity.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFire;
@@ -15,23 +18,26 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.item.*;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SharedConstants;
 import net.minecraft.util.datafix.DataFixesManager;
 import net.minecraft.util.datafix.TypeReferences;
+import net.minecraft.world.World;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class DavincisVesselsContent {
@@ -44,18 +50,27 @@ public class DavincisVesselsContent {
     public Block blockStickyBuffer;
     public Block blockBuffer;
     public Block blockEngine;
-    public Block blockCrateWood;
+    public Block blockCrate;
     public Block blockAnchorPoint;
     public Block blockSecuredBed;
-
-    public Map<Class<? extends TileEntity>, TileEntityType> tileTypes = Maps.newHashMap();
+    public List<Block> balloonBlocks;
 
     public Item itemSecuredBed;
+
+    public ItemGroup itemGroup = new ItemGroup("davincisTab") {
+        @Override
+        public ItemStack createIcon() {
+            return new ItemStack(blockHelm);
+        }
+    };
+
+    public Map<Class<? extends TileEntity>, TileEntityType> tileTypes = Maps.newHashMap();
+    public Map<Class<? extends Entity>, EntityType<?>> entityTypes;
 
     public Material materialFloater;
     public HashMap<String, Block> registeredBlocks;
     public HashMap<String, Item> registeredItems;
-    public String REGISTRY_PREFIX = DavincisVesselsMod.MOD_ID.toLowerCase();
+    private String REGISTRY_PREFIX = DavincisVesselsMod.MOD_ID.toLowerCase();
     private List<Item> itemBlocksToRegister;
 
     private void setFireInfo(Block block, int encouragement, int flammability) {
@@ -72,6 +87,14 @@ public class DavincisVesselsContent {
         registerTileEntity(registry, new ResourceLocation(REGISTRY_PREFIX, "tileEngine"), TileEngine::new);
         registerTileEntity(registry, new ResourceLocation(REGISTRY_PREFIX, "tileAnchorPoint"), TileAnchorPoint::new);
         registerTileEntity(registry, new ResourceLocation(REGISTRY_PREFIX, "tileSecuredBed"), TileEntitySecuredBed::new);
+    }
+
+    @SubscribeEvent
+    public void onEntityRegister(final RegistryEvent.Register<EntityType<?>> e) {
+        IForgeRegistry<EntityType<?>> registry = e.getRegistry();
+        registerEntity(registry, new ResourceLocation(REGISTRY_PREFIX, "shipmod"), 64, DavincisVesselsMod.CONFIG.shipEntitySyncRate, true, EntityShip.class, EntityShip::new);
+        registerEntity(registry, new ResourceLocation(REGISTRY_PREFIX, "attachment.seat"), 64, 20, false, EntitySeat.class, EntitySeat::new);
+        registerEntity(registry, new ResourceLocation(REGISTRY_PREFIX, "parachute"), 32, DavincisVesselsMod.CONFIG.shipEntitySyncRate, true, EntityParachute.class, EntityParachute::new);
     }
 
     @SubscribeEvent
@@ -94,9 +117,11 @@ public class DavincisVesselsContent {
         itemBlocksToRegister = Lists.newArrayList();
         materialFloater = new Material(MaterialColor.WOOL, false, true, true, true, true, true, false, EnumPushReaction.NORMAL);
 
+        this.balloonBlocks = new ArrayList<>();
         for (EnumDyeColor colour : EnumDyeColor.values()) {
             BlockBalloon balloon = new BlockBalloon(colour);
             registerBlock(registry, "balloon_" + colour.getTranslationKey(), balloon);
+            balloonBlocks.add(balloon);
             this.setFireInfo(balloon, 30, 60);
         }
 
@@ -124,8 +149,8 @@ public class DavincisVesselsContent {
         blockEngine = new BlockEngine(1F, DavincisVesselsMod.CONFIG.engineConsumptionRate);
         registerBlock(registry, "engine", blockEngine);
 
-        blockCrateWood = new BlockCrate();
-        registerBlock(registry, "crate_wood", blockCrateWood);
+        blockCrate = new BlockCrate();
+        registerBlock(registry, "crate_wood", blockCrate);
 
         blockAnchorPoint = new BlockAnchorPoint();
         registerBlock(registry, "anchor_point", blockAnchorPoint, ItemBlockAnchorPoint.class);
@@ -145,7 +170,7 @@ public class DavincisVesselsContent {
         block.setRegistryName(REGISTRY_PREFIX, id);
         registry.register(block);
         if (withItemBlock)
-            itemBlocksToRegister.add(new ItemBlock(block, new Item.Properties()).setRegistryName(block.getRegistryName()));
+            itemBlocksToRegister.add(new ItemBlock(block, new Item.Properties().group(itemGroup)).setRegistryName(block.getRegistryName()));
         registeredBlocks.put(id, block);
     }
 
@@ -184,5 +209,16 @@ public class DavincisVesselsContent {
         tileType.setRegistryName(id);
         this.tileTypes.put(tileSupplier.get().getClass(), tileType);
         registry.register(tileType);
+    }
+
+    private void registerEntity(IForgeRegistry<EntityType<?>> registry, ResourceLocation id,
+                                int range, int updateFrequency, boolean sendVelocityUpdates,
+                                Class<? extends Entity> clazz, Function<? super World, ? extends Entity> entityCreator) {
+        EntityType<Entity> entityType = EntityType.Builder.create(clazz, entityCreator)
+                .tracker(range, updateFrequency, sendVelocityUpdates)
+                .disableSummoning()
+                .build(id.toString());
+        registry.register(entityType);
+        this.entityTypes.put(clazz, entityType);
     }
 }

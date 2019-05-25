@@ -7,6 +7,8 @@ import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 
+import javax.annotation.Nullable;
+
 public class FuelInventory implements IInventory {
 
     private EntityShip ship;
@@ -50,7 +52,7 @@ public class FuelInventory implements IInventory {
                 return itemstack;
             }
 
-            itemstack = contents[i].splitStack(n);
+            itemstack = contents[i].split(n);
             if (contents[i].getCount() <= 0) {
                 contents[i] = null;
             }
@@ -76,10 +78,9 @@ public class FuelInventory implements IInventory {
         }
     }
 
-
     @Override
-    public String getName() {
-        return "Engine Inventory";
+    public ITextComponent getName() {
+        return new TextComponentString("Engine Inventory");
     }
 
     @Override
@@ -90,6 +91,12 @@ public class FuelInventory implements IInventory {
     @Override
     public ITextComponent getDisplayName() {
         return new TextComponentString("Engine Inventory");
+    }
+
+    @Nullable
+    @Override
+    public ITextComponent getCustomName() {
+        return new TextComponentString("");
     }
 
     @Override

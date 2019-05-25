@@ -1,5 +1,6 @@
 package com.tridevmc.davincisvessels.common.entity;
 
+import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,7 +19,7 @@ public class EntitySeat extends Entity {
     private static final DataParameter<Integer> SHIP_ID = EntityDataManager.createKey(EntitySeat.class, DataSerializers.VARINT);
 
     public EntitySeat(World worldIn) {
-        super(worldIn);
+        super(DavincisVesselsMod.CONTENT.entityTypes.get(EntitySeat.class), worldIn);
     }
 
     public void setupShip(EntityShip ship, BlockPos chunkPos) {

@@ -1,62 +1,46 @@
 package com.tridevmc.davincisvessels.common.command;
 
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.BoolArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.tridevmc.davincisvessels.common.entity.EntityShip;
-import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.Entity;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.command.CommandSource;
+import net.minecraft.command.Commands;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.TextComponentString;
 
-public class CommandDisassembleShip extends CommandBase {
-    @Override
-    public String getName() {
-        return "dvdisassemble";
+public class CommandDisassembleShip {
+
+    public static void register(CommandDispatcher<CommandSource> dispatcher) {
+        dispatcher.register(Commands.literal("dvdisassemble")
+                .requires(p -> p.hasPermissionLevel(3))
+                .executes(c -> execute(c, false, false))
+                .then(Commands.argument("force", BoolArgumentType.bool())).executes(c -> execute(c, BoolArgumentType.getBool(c, "force"), false))
+                .then(Commands.argument("force", BoolArgumentType.bool()).then(Commands.argument("drop", BoolArgumentType.bool()))
+                        .executes(c -> execute(c, BoolArgumentType.getBool(c, "force"), BoolArgumentType.getBool(c, "drop")))));
     }
 
-    @Override
-    public int getRequiredPermissionLevel() {
-        return 0;
-    }
+    private static int execute(CommandContext<CommandSource> d, boolean force, boolean drop) throws CommandSyntaxException {
+        EntityPlayerMP player = d.getSource().asPlayer();
 
-    @Override
-    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        if (sender instanceof Entity) {
-            Entity player = (Entity) sender;
-            if (player.getRidingEntity() instanceof EntityShip) {
-                EntityShip ship = (EntityShip) player.getRidingEntity();
-                int mode = 0;
-                if (args != null && args.length > 2) {
-                    if (args[0].equals("overwrite") || args[0].equals("override")) {
-                        sender.sendMessage(new TextComponentString("Overwriting existing CONTENT with ship CONTENT"));
-                        mode = 1;
-                    } else if (args[1].equals("drop")) {
-                        sender.sendMessage(new TextComponentString("Dropping to items if rejoining ship with the world fails"));
-                        mode = 2;
-                    }
+        if (player.getRidingEntity() instanceof EntityShip) {
+            EntityShip ship = (EntityShip) player.getRidingEntity();
+
+            if (!ship.disassemble(force)) {
+                if (drop) {
+                    ship.dropAsItems();
+                    d.getSource().sendFeedback(new TextComponentString("Unable to disassemble ship, dropped as items."), true);
                 } else {
-                    sender.sendMessage(new TextComponentString("Trying to add ship CONTENT to world"));
+                    d.getSource().sendErrorMessage(new TextComponentString("Failed to disassemble ship, have you tried using force?"));
                 }
-
-                if (!ship.disassemble(mode == 1)) {
-                    if (mode == 2) {
-                        ship.dropAsItems();
-                    }
-                }
-                player.dismountRidingEntity();
-                return;
+            } else {
+                d.getSource().sendFeedback(new TextComponentString("Disassembled ship."), true);
             }
+            return 1;
+        } else {
+            d.getSource().sendErrorMessage(new TextComponentString("Not steering a ship, no disassembly possible."));
+            return -1;
         }
-        sender.sendMessage(new TextComponentString("Not steering a ship"));
-    }
-
-    @Override
-    public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-        return sender instanceof Entity;
-    }
-
-    @Override
-    public String getUsage(ICommandSender icommandsender) {
-        return "/" + getName() + " [overwrite OR drop]";
     }
 }

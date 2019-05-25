@@ -64,9 +64,7 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
             } catch (NullPointerException e) {
                 MovingWorldMod.LOG.error("IBlockBalloon didn't check if something was null or not, report to mod author of the following block, " + block.toString());
             }
-        } else if (block == DavincisVesselsMod.CONTENT.blockBalloon) {
-            balloonCount++;
-        } else if (DavincisVesselsMod.CONFIG.isBalloon(block)) {
+        }else if (DavincisVesselsMod.CONFIG.isBalloon(block)) {
             balloonCount++;
         }
     }
@@ -108,7 +106,7 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
         IBlockState state = lb.state;
         CanAssemble canAssemble = super.isBlockAllowed(world, lb);
 
-        if (state.getBlock() == DavincisVesselsMod.CONTENT.blockStickyBuffer || DavincisVesselsMod.CONFIG.isSticky(state.getBlock()))
+        if (DavincisVesselsMod.CONFIG.isSticky(state.getBlock()))
             canAssemble.assembleThenCancel = true;
 
         if (lb.tile instanceof TileAnchorPoint

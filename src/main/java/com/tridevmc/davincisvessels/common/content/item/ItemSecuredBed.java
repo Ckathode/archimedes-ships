@@ -6,12 +6,11 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemGroup;
 
 public class ItemSecuredBed extends ItemBlock {
 
     public ItemSecuredBed() {
-        super(DavincisVesselsMod.CONTENT.blockSecuredBed, new Item.Properties().maxStackSize(1).group(ItemGroup.DECORATIONS));
+        super(DavincisVesselsMod.CONTENT.blockSecuredBed, new Item.Properties().group(DavincisVesselsMod.CONTENT.itemGroup).maxStackSize(1));
     }
 
     @Override

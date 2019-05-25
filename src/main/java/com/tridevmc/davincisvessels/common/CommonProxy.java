@@ -1,25 +1,17 @@
 package com.tridevmc.davincisvessels.common;
 
+import com.tridevmc.davincisvessels.common.command.DavincisCommands;
 import com.tridevmc.davincisvessels.common.handler.CommonHookContainer;
 import com.tridevmc.davincisvessels.common.handler.CommonPlayerTicker;
+import com.tridevmc.davincisvessels.common.handler.ConnectionHandler;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 public class CommonProxy {
-    public CommonPlayerTicker playerTicker;
-    public CommonHookContainer hookContainer;
-
-    public CommonHookContainer getHookContainer() {
-        return new CommonHookContainer();
+    public void onSetup(FMLCommonSetupEvent e) {
+        MinecraftForge.EVENT_BUS.register(new CommonPlayerTicker());
+        MinecraftForge.EVENT_BUS.register(new CommonHookContainer());
+        MinecraftForge.EVENT_BUS.register(new DavincisCommands());
+        MinecraftForge.EVENT_BUS.register(new ConnectionHandler());
     }
-
-    public void registerKeyHandlers() {
-    }
-
-    public void registerEventHandlers() {
-        playerTicker = new CommonPlayerTicker();
-        MinecraftForge.EVENT_BUS.register(playerTicker);
-        MinecraftForge.EVENT_BUS.register(hookContainer = getHookContainer());
-    }
-
-
 }

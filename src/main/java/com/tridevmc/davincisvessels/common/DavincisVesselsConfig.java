@@ -1,148 +1,80 @@
 package com.tridevmc.davincisvessels.common;
 
-import com.tridevmc.davincisvessels.common.content.DavincisVesselsContent;
+import com.google.common.collect.Lists;
+import com.tridevmc.compound.config.ConfigValue;
+import com.tridevmc.davincisvessels.DavincisVesselsMod;
+import com.tridevmc.davincisvessels.common.content.block.BlockBalloon;
+import com.tridevmc.davincisvessels.common.content.block.BlockSeat;
+import com.tridevmc.davincisvessels.common.control.EnumShipControlType;
 import com.tridevmc.movingworld.MovingWorldMod;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.init.Blocks;
-import org.apache.commons.lang3.ArrayUtils;
+import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.Collections;
 import java.util.List;
 
 public class DavincisVesselsConfig {
-    public static final int CONTROL_TYPE_VANILLA = 0, CONTROL_TYPE_DAVINCI = 1;
 
     //Settings
+    @ConfigValue(comment = "Enable or disable airships.")
     public boolean enableAirShips = true;
+    @ConfigValue(comment = "Enable or disable submersibles.")
     public boolean enableSubmersibles = true;
+    @ConfigValue(comment = "The amount of ticks between a server->client sync on the ship entity. Higher numbers reduce network traffic, lower numbers reduce rubber-banding.")
     public int shipEntitySyncRate = 5;
     //Mobile Chunk
+    @ConfigValue(comment = "The maximum amount of blocks that can make up a ship.")
     public int maxShipChunkBlocks = 2048;
+    @ConfigValue(comment = "The percentage of blocks required for a ship to take flight. 0.4 means 40% for example.")
     public float flyBalloonRatio = 0.4F;
-    public float submersibleFillRatio = 0.3F;
+    @ConfigValue(comment = "The percentage of blocks that will not be filled with water required to submerse. 0.3 means 30% for example.")
+    public float submersibleFillRatio = 0.25F;
     //Control
-    public int shipControlType = CONTROL_TYPE_DAVINCI;
+    @ConfigValue(comment = "The control type to use for ships, defaults to custom controls that fit airships better.")
+    public EnumShipControlType shipControlType = EnumShipControlType.DAVINCIS;
+    @ConfigValue(comment = "The turn speed when controlling a ship.")
     public float turnSpeed = 1F;
+    @ConfigValue(comment = "The maximum speed for a vessel to travel, measured in blocks per second.")
     public float speedLimit = 1.5f;
+    @ConfigValue(comment = "A multiplier for how much ships bank while making turns. Set a positive value for passive banking or a negative value for active banking. 0 disables banking.")
     public float bankingMultiplier = 3F;
+    @ConfigValue(comment = "Determines if air ships will slowly fall down when they're not being piloted.")
     public boolean enableShipDownfall = true;
+    @ConfigValue(comment = "Determines if a ship will automatically be disassembled when a ship is disassembled.")
     public boolean disassembleOnDismount = false;
+    @ConfigValue(comment = "Determines if engines are required for a ship to move.")
     public boolean enginesMandatory = false;
+    @ConfigValue(comment = "The amount of fuel an engine will consume each tick it is in use.")
     public int engineConsumptionRate = 10;
+    @ConfigValue(comment = "The radius that an anchor can grab ships within.")
     public int anchorRadius = 12;
 
-    public List<Block> balloonAlternatives;
-    public List<Block> seats;
-    public List<Block> stickyObjects;
-
-
-    public void loadAndSave() {
-        config.load();
-
-        shared.shipEntitySyncRate = config.get("settings", "sync_rate", 5, "The amount of ticks between a server-client synchronization. Higher numbers reduce network traffic. Lower numbers increase multiplayer experience. 20 ticks = 1 second").getInt();
-        shared.enableAirShips = config.get("settings", "enable_air_ships", true, "Enable or disable air ships.").getBoolean(true);
-        shared.enableSubmersibles = config.get("settings", "enable_submersibles", true, "Enable or disable the ability to submerse ships.").getBoolean(true);
-        shared.bankingMultiplier = (float) config.get("settings", "banking_multiplier", 3d, "A multiplier for how much ships bank while making turns. Set a positive value for passive banking or a negative value for active banking. 0 disables banking.").getDouble(3d);
-        shared.enginesMandatory = config.get("settings", "mandatory_engines", false, "Are engines required for a ship to move?").getBoolean();
-        shared.enableShipDownfall = config.get("settings", "ship_fall", true, "Do ships slowly fall?").getBoolean();
-        shared.engineConsumptionRate = config.get("settings", "engine_consumption_rate", 10, "The amount of fuel to consume per tick on steam engines").getInt();
-        anchorRadius = config.get("settings", "anchor_radius", 12, "The radius around the ship that an anchor can snap to.").getInt();
-
-        shared.shipControlType = config.get("control", "control_type", CONTROL_TYPE_DAVINCI, "Set to 0 to use vanilla boat controls, set to 1 to use Davinci controls.").getInt();
-        shared.turnSpeed = (float) config.get("control", "turn_speed", 1D, "A multiplier of the ship's turn speed.").getDouble(1D);
-        shared.speedLimit = (float) config.get("control", "speed_limit", 30D, "The maximum velocity a ship can have, in CONTENT per second. This does not affect acceleration.").getDouble(30D);
-        shared.speedLimit /= 20F;
-        shared.disassembleOnDismount = config.get("control", "decompile_on_dismount", false).getBoolean(false);
-
-        shared.maxShipChunkBlocks = config.get("mobile_chunk", "max_chunk_blocks", 2048, "The maximum amount of CONTENT that a mobile ship chunk may contain.").getInt();
-        shared.flyBalloonRatio = (float) config.get("mobile_chunk", "airship_balloon_ratio", 0.4D, "The part of the total amount of CONTENT that should be balloon CONTENT in order to make an airship.").getDouble(0.4D);
-        shared.submersibleFillRatio = (float) config.get("mobile_chunk", "submersible_fill_ratio", 0.3D, "The part of the ship that needs to not be water fillable for it to be considered submersible.").getDouble(0.9D);
-
-
-        if (FMLCommonHandler.instance().getSide().isClient()) {
-            loadKeybindings();
-        }
-
-        config.save();
-    }
+    @ConfigValue(comment = "A list of blocks that will function as balloons.")
+    public List<Block> balloonAlternatives = DavincisVesselsMod.CONTENT.balloonBlocks;
+    @ConfigValue(comment = "A list of blocks that will behave as seats.")
+    public List<Block> seats = Lists.newArrayList(DavincisVesselsMod.CONTENT.blockSeat);
+    @ConfigValue(comment = "Blocks that behave like a sticky buffer, they stop assembly when reached.")
+    public List<Block> stickyObjects = Lists.newArrayList(DavincisVesselsMod.CONTENT.blockStickyBuffer, Blocks.LEVER, Blocks.STONE_BUTTON, Blocks.SPRUCE_BUTTON, Blocks.OAK_BUTTON, Blocks.JUNGLE_BUTTON, Blocks.DARK_OAK_BUTTON, Blocks.BIRCH_BUTTON, Blocks.ACACIA_BUTTON);
 
     public void addBlacklistWhitelistEntries() {
-        MovingWorldMod.INSTANCE.getNetworkConfig().addBlacklistedBlock(DavincisVesselsContent.blockBuffer);
+        MovingWorldMod.CONFIG.addBlacklistedBlock(DavincisVesselsMod.CONTENT.blockBuffer);
 
-        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsContent.blockHelm);
-        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsContent.blockCrateWood);
-        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsContent.blockFloater);
-        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsContent.blockBalloon);
-        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsContent.blockGauge);
-        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsContent.blockSeat);
-        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsContent.blockEngine);
-        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsContent.blockStickyBuffer);
-        MovingWorldMod.INSTANCE.getNetworkConfig().addWhitelistedBlock(DavincisVesselsContent.blockAnchorPoint);
-    }
-
-    public void postLoad() {
-        Block[] defaultStickyBlocks = {DavincisVesselsContent.blockStickyBuffer, Blocks.STONE_BUTTON, Blocks.WOODEN_BUTTON, Blocks.LEVER};
-        String[] stickyBlockNames = new String[defaultStickyBlocks.length];
-        for (int i = 0; i < defaultStickyBlocks.length; i++) {
-            stickyBlockNames[i] = Block.REGISTRY.getNameForObject(defaultStickyBlocks[i]).toString();
-        }
-
-        Block[] defaultSeatBlocks = {DavincisVesselsContent.blockSeat, Blocks.END_PORTAL_FRAME};
-        String[] seatBlockNames = new String[defaultSeatBlocks.length];
-        for (int i = 0; i < defaultSeatBlocks.length; i++) {
-            seatBlockNames[i] = Block.REGISTRY.getNameForObject(defaultSeatBlocks[i]).toString();
-        }
-
-
-        Block[] defaultBalloonBlocks = {DavincisVesselsContent.blockBalloon};
-        String[] balloonBlockNames = new String[defaultBalloonBlocks.length];
-        for (int i = 0; i < defaultBalloonBlocks.length; i++) {
-            balloonBlockNames[i] = Block.REGISTRY.getNameForObject(defaultBalloonBlocks[i]).toString();
-        }
-
-        config.load();
-
-        String[] balloonBlocks = config.get("mobile_chunk", "balloon_blocks", balloonBlockNames, "A list of blocks that are taken into account for ship flight capability").getStringList();
-        Collections.addAll(shared.balloonAlternatives, balloonBlocks);
-
-        String[] seatBlocks = (config.get("settings", "seats", seatBlockNames, "Blocks that are considered seats, BlockSeat is hard coded, you can't disable it.").getStringList());
-        Collections.addAll(shared.seats, seatBlocks);
-
-        String[] stickyBlocks = config.get("settings", "stickyblocks", stickyBlockNames, "Blocks that behave like a Sticky buffer, they stop assembly when they're reached").getStringList();
-        Collections.addAll(shared.stickyObjects, stickyBlocks);
-
-        config.save();
-    }
-
-    @SideOnly(Side.CLIENT)
-    private void loadKeybindings() {
-        kbUp = new KeyBinding("key.davincis.up", getKeyIndex(config, "key_ascent", Keyboard.KEY_X), "Davincis Vessels");
-        kbDown = new KeyBinding("key.davincis.down", getKeyIndex(config, "key_descent", Keyboard.KEY_Z), "Davincis Vessels");
-        kbBrake = new KeyBinding("key.davincis.brake", getKeyIndex(config, "key_brake", Keyboard.KEY_C), "Davincis Vessels");
-        kbAlign = new KeyBinding("key.davincis.align", getKeyIndex(config, "key_align", Keyboard.KEY_EQUALS), "Davincis Vessels");
-        kbDisassemble = new KeyBinding("key.davincis.decompile", getKeyIndex(config, "key_decompile", Keyboard.KEY_BACKSLASH), "Davincis Vessels");
-        kbShipInv = new KeyBinding("key.davincis.shipinv", getKeyIndex(config, "key_shipinv", Keyboard.KEY_K), "Davincis Vessels");
-        Minecraft mc = Minecraft.getMinecraft();
-        mc.gameSettings.keyBindings = ArrayUtils.addAll(mc.gameSettings.keyBindings, kbUp, kbDown, kbBrake, kbAlign, kbDisassemble, kbShipInv);
-    }
-
-    @SideOnly(Side.CLIENT)
-    private int getKeyIndex(Configuration config, String name, int defaultkey) {
-        return Keyboard.getKeyIndex(config.get("control", name, Keyboard.getKeyName(defaultkey)).getString());
+        ForgeRegistries.BLOCKS.getEntries().stream()
+                .filter(e -> e.getKey().getNamespace().equals(DavincisVesselsMod.MOD_ID)
+                        && !e.getKey().getPath().equals("buffer"))
+                .forEach(e -> MovingWorldMod.CONFIG.addWhitelistedBlock(e.getValue()));
     }
 
     public boolean isBalloon(Block block) {
-        return shared.balloonAlternatives.contains(Block.REGISTRY.getNameForObject(block).toString());
+        return block instanceof BlockBalloon || balloonAlternatives.contains(block);
     }
 
     public boolean isSeat(Block block) {
-        return shared.seats.contains(Block.REGISTRY.getNameForObject(block).toString());
+        return block instanceof BlockSeat || seats.contains(block);
     }
 
     public boolean isSticky(Block block) {
-        return shared.stickyObjects.contains(Block.REGISTRY.getNameForObject(block).toString());
+        return block == DavincisVesselsMod.CONTENT.blockStickyBuffer || stickyObjects.contains(block);
     }
 
 

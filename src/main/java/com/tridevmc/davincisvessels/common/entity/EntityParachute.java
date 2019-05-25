@@ -1,22 +1,22 @@
 package com.tridevmc.davincisvessels.common.entity;
 
+import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.movingworld.common.util.Vec3dMod;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 public class EntityParachute extends Entity implements IEntityAdditionalSpawnData {
 
     public EntityParachute(World world) {
-        super(world);
+        super(DavincisVesselsMod.CONTENT.entityTypes.get(EntityParachute.class), world);
     }
 
     public EntityParachute(World world, EntityShip ship, BlockPos pos) {
@@ -28,6 +28,8 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
         motionX = ship.motionX;
         motionY = ship.motionY;
         motionZ = ship.motionZ;
+
+        setSize(1F, 1F);
     }
 
     public EntityParachute(World world, Entity mounter, Vec3dMod vec, Vec3dMod shipPos, Vec3dMod motion) {
@@ -38,19 +40,18 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
         this.motionY = motion.y;
         this.motionZ = motion.z;
 
-        mounter.dismountRidingEntity();
+        mounter.stopRiding();
         mounter.startRiding(this, true);
     }
 
-
     @Override
-    protected void entityInit() {
-        setSize(1F, 1F);
+    protected void registerData() {
+        // NO-OP
     }
 
     @Override
-    public void onUpdate() {
-        super.onUpdate();
+    public void tick() {
+        super.tick();
 
         prevPosX = posX;
         prevPosY = posY;
@@ -61,7 +62,7 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
                 (getControllingPassenger() == null
                         || onGround
                         || isInWater())) {
-            setDead();
+            remove();
             return;
         }
 
@@ -78,8 +79,7 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
     @Override
     @Nullable
     public Entity getControllingPassenger() {
-        List<Entity> list = this.getPassengers();
-        return list.isEmpty() ? null : (Entity) list.get(0);
+        return this.getPassengers().stream().findAny().orElse(null);
     }
 
     @Override
@@ -93,25 +93,27 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
     }
 
     @Override
-    protected void readEntityFromNBT(NBTTagCompound tag) {
+    protected void readAdditional(NBTTagCompound compound) {
+        // NO-OP
     }
 
     @Override
-    protected void writeEntityToNBT(NBTTagCompound tag) {
+    protected void writeAdditional(NBTTagCompound compound) {
+        // NO-OP
     }
 
     @Override
     protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
+        // NO-OP
     }
-
 
     @Override
     public void fall(float fallDistance, float damageMult) {
-        // We don't fall.
+        // NO-OP
     }
 
     @Override
-    public void writeSpawnData(ByteBuf buffer) {
+    public void writeSpawnData(PacketBuffer buffer) {
         buffer.writeBoolean(getControllingPassenger() != null);
         if (getControllingPassenger() != null) {
             buffer.writeInt(getControllingPassenger().getEntityId());
@@ -119,7 +121,7 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
     }
 
     @Override
-    public void readSpawnData(ByteBuf additionalData) {
+    public void readSpawnData(PacketBuffer additionalData) {
         if (additionalData.readBoolean() && world != null) {
             int entityID = additionalData.readInt();
             if (world.getEntityByID(entityID) != null) {

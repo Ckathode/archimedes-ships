@@ -246,9 +246,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
 
         if (block instanceof IBlockBalloon) {
             balloonCount += ((IBlockBalloon) block).getBalloonWorth(tile);
-        } else if (block == DavincisVesselsMod.CONTENT.blockBalloon) {
-            balloonCount++;
-        } else if (DavincisVesselsMod.CONFIG.isBalloon(block)) {
+        }else if (DavincisVesselsMod.CONFIG.isBalloon(block)) {
             balloonCount++;
         } else if (block == DavincisVesselsMod.CONTENT.blockFloater) {
             floaters++;
@@ -324,7 +322,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     @Override
     public void clear() {
         if (seats != null) {
-            seats.forEach(seat -> seat.remove());
+            seats.forEach(Entity::remove);
             seats.clear();
         }
         if (engines != null) {

@@ -30,6 +30,10 @@ public class BlockSecuredBed extends BlockBed implements ITileEntityProvider {
         super(EnumDyeColor.RED, Block.Properties.create(Material.CLOTH).sound(SoundType.WOOD).hardnessAndResistance(0.2F));
     }
 
+    private EntityPlayer getPlayerInBed(World world, BlockPos pos) {
+        return world.playerEntities.stream().filter((p) -> p.isPlayerSleeping() && p.bedLocation.equals(pos)).findAny().orElse(null);
+    }
+
     @Override
     public boolean onBlockActivated(IBlockState state, World worldIn, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (worldIn.isRemote) {
@@ -53,12 +57,10 @@ public class BlockSecuredBed extends BlockBed implements ITileEntityProvider {
                     if (sleepResult == IForgeDimension.SleepResult.DENY)
                         return true;
                     if (tile.occupied) {
-                        EntityPlayer entityplayer1 = this.getPlayerInBed(worldIn, pos);
+                        bedUser = this.getPlayerInBed(worldIn, pos);
 
-                        if (entityplayer1 != null) {
+                        if (bedUser != null) {
                             player.sendStatusMessage(new TextComponentTranslation("block.minecraft.bed.occupied", new Object[0]), true);
-
-                            bedUser = entityplayer1;
                         }
                     }
 

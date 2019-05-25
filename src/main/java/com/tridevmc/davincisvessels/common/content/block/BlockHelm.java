@@ -30,7 +30,7 @@ public class BlockHelm extends BlockDirectional implements ITileEntityProvider {
 
     public static final BooleanProperty IS_WHEEL = BooleanProperty.create("wheel");
 
-    public BlockHelm(Properties properties) {
+    public  BlockHelm(Properties properties) {
         super(properties.sound(SoundType.WOOD));
         this.setDefaultState(this.getStateContainer().getBaseState().with(FACING, EnumFacing.NORTH).with(IS_WHEEL, false));
     }
