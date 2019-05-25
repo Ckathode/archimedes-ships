@@ -23,29 +23,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.extensions.IForgeDimension;
 
 import javax.annotation.Nullable;
-import java.util.Iterator;
 
 public class BlockSecuredBed extends BlockBed implements ITileEntityProvider {
 
     public BlockSecuredBed() {
         super(EnumDyeColor.RED, Block.Properties.create(Material.CLOTH).sound(SoundType.WOOD));
-    }
-
-    protected EntityPlayer getPlayerInBed(World worldIn, BlockPos pos) {
-        Iterator iterator = worldIn.playerEntities.iterator();
-        EntityPlayer entityplayer;
-
-        do {
-            if (!iterator.hasNext()) {
-                return null;
-            }
-
-            entityplayer = (EntityPlayer) iterator.next();
-        }
-
-        while (!entityplayer.isPlayerSleeping() || !entityplayer.bedLocation.equals(pos));
-
-        return entityplayer;
     }
 
     @Override
@@ -116,7 +98,6 @@ public class BlockSecuredBed extends BlockBed implements ITileEntityProvider {
 
         return true;
     }
-
 
     @Override
     public ItemStack getItem(IBlockReader worldIn, BlockPos pos, IBlockState state) {

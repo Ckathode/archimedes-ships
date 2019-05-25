@@ -9,16 +9,13 @@ import com.tridevmc.davincisvessels.common.network.message.RenameShipMessage;
 import com.tridevmc.davincisvessels.common.tileentity.TileHelm;
 import com.tridevmc.movingworld.common.chunk.assembly.AssembleResult;
 import com.tridevmc.movingworld.common.chunk.assembly.AssembleResult.ResultType;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
 import org.lwjgl.opengl.GL11;
 
-import java.io.IOException;
 import java.util.Locale;
 
 import static com.tridevmc.movingworld.common.chunk.assembly.AssembleResult.ResultType.*;
@@ -29,13 +26,13 @@ public class GuiHelm extends GuiContainer {
     public final TileHelm tileEntity;
     public final EntityPlayer player;
 
-    private GuiButton btnRename, btnAssemble, btnUndo, btnMount;
+    private GuiButtonHooked btnRename, btnAssemble, btnUndo, btnMount;
     private GuiTextField txtShipName;
     private boolean busyCompiling;
 
-    public GuiHelm(TileHelm tileentity, EntityPlayer entityplayer) {
-        super(new ContainerHelm(tileentity, entityplayer));
-        tileEntity = tileentity;
+    public GuiHelm(TileHelm tile, EntityPlayer entityplayer) {
+        super(new ContainerHelm(tile, entityplayer));
+        tileEntity = tile;
         player = entityplayer;
 
         xSize = 256;
@@ -53,18 +50,36 @@ public class GuiHelm extends GuiContainer {
         int btny = guiTop + 20;
         buttons.clear();
 
-        btnRename = new GuiButtonExt(4, btnx, btny, 100, 20, I18n.format(LanguageEntries.GUI_STATUS_RENAME));
+        btnRename = new GuiButtonHooked(4, btnx, btny, 100, 20, I18n.format(LanguageEntries.GUI_STATUS_RENAME));
+        btnRename.addHook((mX, mY) -> {
+            if (txtShipName.isFocused()) {
+                btnRename.displayString = I18n.format(LanguageEntries.GUI_STATUS_RENAME);
+                tileEntity.getInfo().setName(txtShipName.getText());
+                txtShipName.setFocused(false);
+                new RenameShipMessage(tileEntity, tileEntity.getInfo().getName()).sendToServer();
+            } else {
+                btnRename.displayString = I18n.format(LanguageEntries.GUI_STATUS_DONE);
+                txtShipName.setFocused(true);
+            }
+        });
         buttons.add(btnRename);
 
-        btnAssemble = new GuiButtonExt(1, btnx, btny += 20, 100, 20, I18n.format(LanguageEntries.GUI_STATUS_COMPILE));
+        btnAssemble = new GuiButtonHooked(1, btnx, btny += 20, 100, 20, I18n.format(LanguageEntries.GUI_STATUS_COMPILE));
+        btnAssemble.addHook(((mX, mY) -> {
+            new HelmActionMessage(tileEntity, HelmClientAction.ASSEMBLE).sendToServer();
+            tileEntity.setAssembleResult(null);
+            busyCompiling = true;
+        }));
         buttons.add(btnAssemble);
 
-        btnUndo = new GuiButtonExt(2, btnx, btny += 20, 100, 20, I18n.format(LanguageEntries.GUI_STATUS_UNDO));
+        btnUndo = new GuiButtonHooked(2, btnx, btny += 20, 100, 20, I18n.format(LanguageEntries.GUI_STATUS_UNDO));
         btnUndo.enabled = tileEntity.getPrevAssembleResult() != null && tileEntity.getPrevAssembleResult().getType() != RESULT_NONE;
+        btnUndo.addHook((mX, mY) -> new HelmActionMessage(tileEntity, HelmClientAction.UNDOCOMPILE).sendToServer());
         buttons.add(btnUndo);
 
-        btnMount = new GuiButtonExt(3, btnx, btny += 20, 100, 20, I18n.format(LanguageEntries.GUI_STATUS_MOUNT));
+        btnMount = new GuiButtonHooked(3, btnx, btny += 20, 100, 20, I18n.format(LanguageEntries.GUI_STATUS_MOUNT));
         btnMount.enabled = tileEntity.getAssembleResult() != null && tileEntity.getAssembleResult().getType() == RESULT_OK;
+        btnMount.addHook((mX, mY) -> new HelmActionMessage(tileEntity, HelmClientAction.MOUNT).sendToServer());
         buttons.add(btnMount);
 
         txtShipName = new GuiTextField(0, fontRenderer, guiLeft + 8 + xSize / 2, guiTop + 21, 120, 10); // TODO: Might be incorrect not sure about 0 in GuiTextField()
@@ -83,8 +98,8 @@ public class GuiHelm extends GuiContainer {
     }
 
     @Override
-    public void updateScreen() {
-        super.updateScreen();
+    public void tick() {
+        super.tick();
         btnUndo.enabled = tileEntity.getPrevAssembleResult() != null && tileEntity.getPrevAssembleResult().getType() != RESULT_NONE;
         btnMount.enabled = tileEntity.getAssembleResult() != null && tileEntity.getAssembleResult().getType() == RESULT_OK;
 
@@ -180,7 +195,7 @@ public class GuiHelm extends GuiContainer {
         if (rblocks == 0) {
             fontRenderer.drawString(I18n.format(LanguageEntries.GUI_STATUS_TYPEUNKNOWN), col1, row, colorTitle);
         } else {
-            fontRenderer.drawString(I18n.format(balloonratio > DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().flyBalloonRatio ? LanguageEntries.GUI_STATUS_TYPEAIRSHIP : LanguageEntries.GUI_STATUS_TYPEBOAT), col1, row, colorTitle);
+            fontRenderer.drawString(I18n.format(balloonratio > DavincisVesselsMod.CONFIG.flyBalloonRatio ? LanguageEntries.GUI_STATUS_TYPEAIRSHIP : LanguageEntries.GUI_STATUS_TYPEBOAT), col1, row, colorTitle);
         }
 
         fontRenderer.drawString(I18n.format(LanguageEntries.GUI_STATUS_COUNTBLOCK), col0, row += 10, colorTitle);
@@ -197,53 +212,24 @@ public class GuiHelm extends GuiContainer {
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
+    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mX, int mY) {
         GL11.glColor4f(1F, 1F, 1F, 1F);
         mc.textureManager.bindTexture(BACKGROUND_TEXTURE);
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
         drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
 
-        txtShipName.drawTextBox();
+        txtShipName.drawTextField(mX, mY, partialTicks);
     }
-
-    @Override
-    public void actionPerformed(GuiButton button) {
-        if (button == btnRename) {
-            if (txtShipName.isFocused()) {
-                btnRename.displayString = I18n.format(LanguageEntries.GUI_STATUS_RENAME);
-                tileEntity.getInfo().setName(txtShipName.getText());
-                txtShipName.setFocused(false);
-                new RenameShipMessage(tileEntity, tileEntity.getInfo().getName()).sendToServer();
-            } else {
-                btnRename.displayString = I18n.format(LanguageEntries.GUI_STATUS_DONE);
-                txtShipName.setFocused(true);
-            }
-        } else if (button == btnAssemble) {
-            new HelmActionMessage(tileEntity, HelmClientAction.ASSEMBLE).sendToServer();
-            tileEntity.setAssembleResult(null);
-            busyCompiling = true;
-        } else if (button == btnMount) {
-            new HelmActionMessage(tileEntity, HelmClientAction.MOUNT).sendToServer();
-        } else if (button == btnUndo) {
-            new HelmActionMessage(tileEntity, HelmClientAction.UNDOCOMPILE).sendToServer();
-        }
-    }
-
 
     @Override
     public boolean charTyped(char c, int k) {
-        if (!checkHotbarKeys(k)) {
-            if (k == Keyboard.KEY_RETURN && txtShipName.isFocused()) {
-                actionPerformed(btnRename);
-            } else if (txtShipName.textboxKeyTyped(c, k)) {
-            } else {
-                try {
-                    super.keyTyped(c, k);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        if (!super.charTyped(c, k)) {
+            if (k == 28 && txtShipName.isFocused()) {
+                btnRename.onClick(0, 0);
+                return true;
             }
         }
+        return false;
     }
 }

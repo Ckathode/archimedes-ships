@@ -1,13 +1,12 @@
 package com.tridevmc.davincisvessels.client.gui;
 
+import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.davincisvessels.common.LanguageEntries;
-import com.tridevmc.davincisvessels.common.content.DavincisVesselsContent;
 import com.tridevmc.davincisvessels.common.network.message.AnchorPointMessage;
 import com.tridevmc.davincisvessels.common.tileentity.BlockLocation;
 import com.tridevmc.davincisvessels.common.tileentity.TileAnchorPoint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
@@ -15,7 +14,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Map;
@@ -28,7 +26,7 @@ public class GuiAnchorPoint extends GuiContainer {
     public TileAnchorPoint anchorPoint;
     private int selectedRelation;
     private String[] relations;
-    private GuiButton btnLink, btnSwitch, btnNextRelation, btnPrevRelation;
+    private GuiButtonHooked btnLink, btnSwitch, btnNextRelation, btnPrevRelation;
 
     public GuiAnchorPoint(TileAnchorPoint te, EntityPlayer entityplayer) {
         super(new ContainerAnchorPoint(te, entityplayer));
@@ -51,19 +49,34 @@ public class GuiAnchorPoint extends GuiContainer {
         int linkX = guiLeft + 83;
         int linkY = guiTop + 98;
 
-        btnLink = new GuiButtonExt(1, linkX, linkY,
+        btnLink = new GuiButtonHooked(1, linkX, linkY,
                 width, 20, I18n.format(LanguageEntries.GUI_ANCHOR_LINK));
+        btnLink.addHook(((mX, mY) -> new AnchorPointMessage(anchorPoint, TileAnchorPoint.AnchorPointAction.LINK).sendToServer()));
         btnLink.enabled = anchorPoint.content != null;
 
         int switchX = guiLeft + 86 + width;
         int switchY = guiTop + 98;
 
-        btnSwitch = new GuiButtonExt(2, switchX, switchY,
+        btnSwitch = new GuiButtonHooked(2, switchX, switchY,
                 width, 20, I18n.format(LanguageEntries.GUI_ANCHOR_SWITCH));
-
+        btnSwitch.addHook(((mX, mY) -> new AnchorPointMessage(anchorPoint, TileAnchorPoint.AnchorPointAction.LINK).sendToServer()));
 
         btnPrevRelation = new LongNarrowButton(3, guiLeft + 70, guiTop + 73, true);
+        btnPrevRelation.addHook((mX, mY) -> {
+            if (selectedRelation > relations.length - 1) {
+                selectedRelation--;
+            } else if (selectedRelation == 0) {
+                selectedRelation = relations.length - 1;
+            }
+        });
         btnNextRelation = new LongNarrowButton(4, guiLeft + 70, guiTop + 50, false);
+        btnNextRelation.addHook((mX, mY) -> {
+            if (selectedRelation < relations.length - 1) {
+                selectedRelation++;
+            } else if (selectedRelation == relations.length - 1) {
+                selectedRelation = 0;
+            }
+        });
 
         buttons.add(btnLink);
         buttons.add(btnSwitch);
@@ -92,7 +105,7 @@ public class GuiAnchorPoint extends GuiContainer {
         GlStateManager.translated(-0.5, 9, 0);
         GlStateManager.enableRescaleNormal();
         RenderHelper.enableGUIStandardItemLighting();
-        itemRender.renderItemIntoGUI(new ItemStack(DavincisVesselsContent.blockAnchorPoint, 1), 0, 0);
+        itemRender.renderItemIntoGUI(new ItemStack(DavincisVesselsMod.CONTENT.blockAnchorPoint, 1), 0, 0);
         RenderHelper.disableStandardItemLighting();
         GlStateManager.disableRescaleNormal();
         GlStateManager.popMatrix();
@@ -115,33 +128,12 @@ public class GuiAnchorPoint extends GuiContainer {
     }
 
     @Override
-    public void actionPerformed(GuiButton button) {
-        if (button == btnLink) {
-            new AnchorPointMessage(anchorPoint, TileAnchorPoint.AnchorPointAction.LINK).sendToServer();
-        } else if (button == btnSwitch) {
-            new AnchorPointMessage(anchorPoint, TileAnchorPoint.AnchorPointAction.SWITCH).sendToServer();
-        } else if (button == btnNextRelation) {
-            if (selectedRelation < relations.length - 1) {
-                selectedRelation++;
-            } else if (selectedRelation == relations.length - 1) {
-                selectedRelation = 0;
-            }
-        } else if (button == btnPrevRelation) {
-            if (selectedRelation > relations.length - 1) {
-                selectedRelation--;
-            } else if (selectedRelation == 0) {
-                selectedRelation = relations.length - 1;
-            }
-        }
-    }
-
-    @Override
     public boolean mouseReleased(double mouseX, double mouseY, int state) {
         btnLink.enabled = anchorPoint.content != null;
         return super.mouseReleased(mouseX, mouseY, state);
     }
 
-    public class LongNarrowButton extends GuiButton {
+    public class LongNarrowButton extends GuiButtonHooked {
 
         private final boolean down;
 
@@ -154,10 +146,10 @@ public class GuiAnchorPoint extends GuiContainer {
         }
 
         @Override
-        public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+        public void render(int mouseX, int mouseY, float partialTicks) {
             if (this.visible) {
                 mc.getTextureManager().bindTexture(GUI_TEXTURES);
-                GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+                GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
                 boolean mouseOver = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
                 int yOffset = 220 + (enabled ? 12 : 0);
                 int xOffset = 0;

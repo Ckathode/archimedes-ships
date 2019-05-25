@@ -64,9 +64,9 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
             } catch (NullPointerException e) {
                 MovingWorldMod.LOG.error("IBlockBalloon didn't check if something was null or not, report to mod author of the following block, " + block.toString());
             }
-        } else if (block == DavincisVesselsContent.blockBalloon) {
+        } else if (block == DavincisVesselsMod.CONTENT.blockBalloon) {
             balloonCount++;
-        } else if (DavincisVesselsMod.INSTANCE.getNetworkConfig().isBalloon(block)) {
+        } else if (DavincisVesselsMod.CONFIG.isBalloon(block)) {
             balloonCount++;
         }
     }
@@ -75,7 +75,7 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
     public void blockDisassembled(LocatedBlock locatedBlock) {
         super.blockDisassembled(locatedBlock); // Currently unimplemented but leaving there just in case.
 
-        if (locatedBlock.state.getBlock() == DavincisVesselsContent.blockSecuredBed) {
+        if (locatedBlock.state.getBlock() == DavincisVesselsMod.CONTENT.blockSecuredBed) {
             if (locatedBlock.tile instanceof TileEntitySecuredBed) {
                 TileEntitySecuredBed securedBed = (TileEntitySecuredBed) locatedBlock.tile;
 
@@ -90,7 +90,7 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
     @Override
     public boolean isBlockMovingWorldMarker(Block block) {
         if (block != null)
-            return block.getTranslationKey() == DavincisVesselsContent.blockHelm.getUnlocalizedName();
+            return block == DavincisVesselsMod.CONTENT.blockHelm;
         else
             return false;
     }
@@ -108,7 +108,7 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
         IBlockState state = lb.state;
         CanAssemble canAssemble = super.isBlockAllowed(world, lb);
 
-        if (state.getBlock() == DavincisVesselsContent.blockStickyBuffer || DavincisVesselsMod.INSTANCE.getNetworkConfig().isSticky(state.getBlock()))
+        if (state.getBlock() == DavincisVesselsMod.CONTENT.blockStickyBuffer || DavincisVesselsMod.CONFIG.isSticky(state.getBlock()))
             canAssemble.assembleThenCancel = true;
 
         if (lb.tile instanceof TileAnchorPoint

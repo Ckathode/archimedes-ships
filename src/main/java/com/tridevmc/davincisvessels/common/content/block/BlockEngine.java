@@ -2,36 +2,35 @@ package com.tridevmc.davincisvessels.common.content.block;
 
 import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.davincisvessels.common.tileentity.TileEngine;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.DirectionProperty;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 public class BlockEngine extends BlockContainer {
 
-    public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+    public static final DirectionProperty FACING = DirectionProperty.create("facing", EnumFacing.Plane.HORIZONTAL);
 
     public float enginePower;
     public int engineFuelConsumption;
 
-    public BlockEngine(Material material, float power, int fuelconsumption) {
-        super(material);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
-        this.setSoundType(SoundType.METAL);
+    public BlockEngine(float power, int fuelConsumption) {
+        super(Block.Properties.create(Material.IRON).sound(SoundType.METAL));
         enginePower = power;
-        engineFuelConsumption = fuelconsumption;
+        engineFuelConsumption = fuelConsumption;
     }
 
     @Override
@@ -40,13 +39,8 @@ public class BlockEngine extends BlockContainer {
     }
 
     @Override
-    public TileEntity createNewTileEntity(World var1, int var2) {
+    public TileEntity createNewTileEntity(IBlockReader world) {
         return new TileEngine(enginePower, engineFuelConsumption);
-    }
-
-    @Override
-    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
-        this.setDefaultFacing(worldIn, pos, state);
     }
 
     private void setDefaultFacing(World worldIn, BlockPos pos, IBlockState state) {
@@ -55,19 +49,19 @@ public class BlockEngine extends BlockContainer {
             IBlockState southState = worldIn.getBlockState(pos.south());
             IBlockState westState = worldIn.getBlockState(pos.west());
             IBlockState eastState = worldIn.getBlockState(pos.east());
-            EnumFacing enumfacing = state.getValue(FACING);
+            EnumFacing enumfacing = state.get(FACING);
 
-            if (enumfacing == EnumFacing.NORTH && northState.isFullBlock() && !southState.isFullBlock()) {
+            if (enumfacing == EnumFacing.NORTH && northState.isFullCube() && !southState.isFullCube()) {
                 enumfacing = EnumFacing.SOUTH;
-            } else if (enumfacing == EnumFacing.SOUTH && southState.isFullBlock() && !northState.isFullBlock()) {
+            } else if (enumfacing == EnumFacing.SOUTH && southState.isFullCube() && !northState.isFullCube()) {
                 enumfacing = EnumFacing.NORTH;
-            } else if (enumfacing == EnumFacing.WEST && westState.isFullBlock() && !eastState.isFullBlock()) {
+            } else if (enumfacing == EnumFacing.WEST && westState.isFullCube() && !eastState.isFullCube()) {
                 enumfacing = EnumFacing.EAST;
-            } else if (enumfacing == EnumFacing.EAST && eastState.isFullBlock() && !westState.isFullBlock()) {
+            } else if (enumfacing == EnumFacing.EAST && eastState.isFullCube() && !westState.isFullCube()) {
                 enumfacing = EnumFacing.WEST;
             }
 
-            worldIn.setBlockState(pos, state.withProperty(FACING, enumfacing), 2);
+            worldIn.setBlockState(pos, state.with(FACING, enumfacing), 2);
         }
     }
 

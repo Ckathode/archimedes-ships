@@ -83,7 +83,7 @@ public class DavincisVesselsContent {
 
     @SubscribeEvent
     public void onItemRegister(final RegistryEvent.Register<Item> e) {
-        IForgeRegistry<Item> registry = blockRegister.getRegistry();
+        IForgeRegistry<Item> registry = e.getRegistry();
         registeredItems = new HashMap<String, Item>();
 
         itemSecuredBed = new ItemSecuredBed().setMaxStackSize(1).setCreativeTab(DavincisVesselsMod.CREATIVE_TAB);

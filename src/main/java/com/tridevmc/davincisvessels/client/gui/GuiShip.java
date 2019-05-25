@@ -1,10 +1,10 @@
 package com.tridevmc.davincisvessels.client.gui;
 
+import com.google.common.collect.Lists;
 import com.tridevmc.davincisvessels.common.LanguageEntries;
 import com.tridevmc.davincisvessels.common.entity.EntityShip;
 import com.tridevmc.davincisvessels.common.network.message.RequestSubmerseMessage;
 import com.tridevmc.movingworld.common.network.MovingWorldClientAction;
-import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -14,7 +14,6 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Iterator;
@@ -26,7 +25,7 @@ public class GuiShip extends GuiContainer {
     public final EntityShip ship;
     public final EntityPlayer player;
 
-    private GuiButton btnDisassemble, btnAlign, btnSubmersible;
+    private GuiButtonHooked btnDisassemble, btnAlign, btnSubmersible;
 
     public GuiShip(EntityShip entityship, EntityPlayer entityplayer) {
         super(new ContainerShip(entityship, entityplayer));
@@ -39,14 +38,29 @@ public class GuiShip extends GuiContainer {
         super.initGui();
         buttons.clear();
 
-        btnDisassemble = new GuiButtonExt(1, guiLeft + 4, guiTop + 20, 100, 20, I18n.format(LanguageEntries.GUI_SHIPINV_DECOMPILE));
+        btnDisassemble = new GuiButtonHooked(1, guiLeft + 4, guiTop + 20, 100, 20, I18n.format(LanguageEntries.GUI_SHIPINV_DECOMPILE));
+        btnDisassemble.addHook(((mX, mY) -> {
+            MovingWorldClientAction.DISASSEMBLE.sendToServer(ship);
+            mc.displayGuiScreen(null);
+        }));
         btnDisassemble.enabled = ship.getDisassembler().canDisassemble(ship.getAssemblyInteractor());
         buttons.add(btnDisassemble);
 
-        btnAlign = new GuiButtonExt(2, guiLeft + 4, guiTop + 40, 100, 20, I18n.format(LanguageEntries.GUI_SHIPINV_ALIGN));
+        btnAlign = new GuiButtonHooked(2, guiLeft + 4, guiTop + 40, 100, 20, I18n.format(LanguageEntries.GUI_SHIPINV_ALIGN));
+        btnAlign.addHook(((mX, mY) -> {
+            MovingWorldClientAction.ALIGN.sendToServer(ship);
+            ship.alignToGrid(true);
+        }));
         buttons.add(btnAlign);
 
         btnSubmersible = new GuiButtonSubmersible(3, guiLeft + xSize + 2, guiTop);
+        btnSubmersible.addHook(((mX, mY) -> {
+            if (((GuiButtonSubmersible) btnSubmersible).canDo) {
+                GuiButtonSubmersible subButton = (GuiButtonSubmersible) btnSubmersible;
+                new RequestSubmerseMessage(ship, !subButton.submerse).sendToServer();
+                subButton.submerse = !subButton.submerse;
+            }
+        }));
         ((GuiButtonSubmersible) btnSubmersible).canDo = ship.canSubmerge();
         if (ship.canSubmerge())
             ((GuiButtonSubmersible) btnSubmersible).submerse = ship.getSubmerge();
@@ -57,8 +71,8 @@ public class GuiShip extends GuiContainer {
     }
 
     @Override
-    public void updateScreen() {
-        if (this.mc != null && this.mc.player != null) super.updateScreen();
+    public void tick() {
+        if (this.mc != null && this.mc.player != null) super.tick();
 
         if (btnDisassemble == null || btnAlign == null) {
             return;
@@ -93,22 +107,7 @@ public class GuiShip extends GuiContainer {
         GlStateManager.popMatrix();
     }
 
-    @Override
-    protected void actionPerformed(GuiButton button) {
-        if (button == btnDisassemble) {
-            MovingWorldClientAction.DISASSEMBLE.sendToServer(ship);
-            mc.displayGuiScreen(null);
-        } else if (button == btnAlign) {
-            MovingWorldClientAction.ALIGN.sendToServer(ship);
-            ship.alignToGrid(true);
-        } else if (button == btnSubmersible && ((GuiButtonSubmersible) btnSubmersible).canDo) {
-            GuiButtonSubmersible subButton = (GuiButtonSubmersible) button;
-            new RequestSubmerseMessage(ship, !subButton.submerse).sendToServer();
-            subButton.submerse = !subButton.submerse;
-        }
-    }
-
-    public static class GuiButtonSubmersible extends GuiButton {
+    public static class GuiButtonSubmersible extends GuiButtonHooked {
 
         public boolean submerse = false;
 
@@ -119,7 +118,8 @@ public class GuiShip extends GuiContainer {
         }
 
         @Override
-        public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+        public void render(int mouseX, int mouseY, float partialTicks) {
+            Minecraft mc = Minecraft.getInstance();
             if (this.visible) {
                 mc.getTextureManager().bindTexture(new ResourceLocation("davincisvessels", "textures/gui/submerse.png"));
                 GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);

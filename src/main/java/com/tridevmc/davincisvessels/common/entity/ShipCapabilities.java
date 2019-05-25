@@ -1,10 +1,10 @@
 package com.tridevmc.davincisvessels.common.entity;
 
+import com.google.common.collect.ImmutableList;
 import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.davincisvessels.common.api.block.IBlockBalloon;
 import com.tridevmc.davincisvessels.common.api.block.IBlockCustomMass;
 import com.tridevmc.davincisvessels.common.api.tileentity.ITileEngineModifier;
-import com.tridevmc.davincisvessels.common.content.DavincisVesselsContent;
 import com.tridevmc.davincisvessels.common.tileentity.AnchorInstance;
 import com.tridevmc.davincisvessels.common.tileentity.BlockLocation;
 import com.tridevmc.davincisvessels.common.tileentity.TileAnchorPoint;
@@ -15,7 +15,6 @@ import com.tridevmc.movingworld.common.entity.MovingWorldCapabilities;
 import com.tridevmc.movingworld.common.util.FloodFiller;
 import com.tridevmc.movingworld.common.util.LocatedBlockList;
 import com.tridevmc.movingworld.common.util.MaterialDensity;
-import com.google.common.collect.ImmutableList;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
 import net.minecraft.block.state.IBlockState;
@@ -91,7 +90,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
                 Iterator<Map.Entry<UUID, BlockLocation>> relationIterator = anchor.getRelatedAnchors().entrySet().iterator();
                 while (relationIterator.hasNext()) {
                     Map.Entry<UUID, BlockLocation> relation = relationIterator.next();
-                    if (relation.getValue().getDim() == ship.world.getDimension().getType().getId()) {
+                    if (relation.getValue().getDim() == ship.world.getDimension().getType()) {
                         TileEntity relatedTile = ship.world.getTileEntity(relation.getValue().getPos());
                         if (relatedTile instanceof TileAnchorPoint) {
                             TileAnchorPoint relatedAnchor = (TileAnchorPoint) relatedTile;
@@ -133,7 +132,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
 
     @Override
     public boolean canFly() {
-        return (DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().enableAirShips && getBalloonCount() >= blockCount * DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().flyBalloonRatio)
+        return (DavincisVesselsMod.CONFIG.enableAirShips && getBalloonCount() >= blockCount * DavincisVesselsMod.CONFIG.flyBalloonRatio)
                 || ship.areSubmerged();
     }
 
@@ -144,9 +143,9 @@ public class ShipCapabilities extends MovingWorldCapabilities {
             int filledBlockCount = filledBlocks.size();
 
             canSubmerge = false;
-            if (DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().enableSubmersibles)
+            if (DavincisVesselsMod.CONFIG.enableSubmersibles)
                 canSubmerge =
-                        filledBlockCount < (nonAirBlockCount * DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().submersibleFillRatio);
+                        filledBlockCount < (nonAirBlockCount * DavincisVesselsMod.CONFIG.submersibleFillRatio);
             submerseFound = true;
         }
 
@@ -247,13 +246,13 @@ public class ShipCapabilities extends MovingWorldCapabilities {
 
         if (block instanceof IBlockBalloon) {
             balloonCount += ((IBlockBalloon) block).getBalloonWorth(tile);
-        } else if (block == DavincisVesselsContent.blockBalloon) {
+        } else if (block == DavincisVesselsMod.CONTENT.blockBalloon) {
             balloonCount++;
-        } else if (DavincisVesselsMod.INSTANCE.getNetworkConfig().isBalloon(block)) {
+        } else if (DavincisVesselsMod.CONFIG.isBalloon(block)) {
             balloonCount++;
-        } else if (block == DavincisVesselsContent.blockFloater) {
+        } else if (block == DavincisVesselsMod.CONTENT.blockFloater) {
             floaters++;
-        } else if (block == DavincisVesselsContent.blockAnchorPoint) {
+        } else if (block == DavincisVesselsMod.CONTENT.blockAnchorPoint) {
             TileEntity te = ship.getMobileChunk().getTileEntity(pos);
             if (te instanceof TileAnchorPoint && ((TileAnchorPoint) te).getInstance() != null
                     && ((TileAnchorPoint) te).getInstance().getType().equals(AnchorInstance.InstanceType.SHIP)) {
@@ -262,7 +261,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
                 }
                 anchorPoints.add(new LocatedBlock(state, te, pos));
             }
-        } else if (block == DavincisVesselsContent.blockEngine) {
+        } else if (block == DavincisVesselsMod.CONTENT.blockEngine) {
             TileEntity te = ship.getMobileChunk().getTileEntity(pos);
             if (te instanceof ITileEngineModifier) {
                 if (engines == null) {
@@ -270,18 +269,25 @@ public class ShipCapabilities extends MovingWorldCapabilities {
                 }
                 engines.add((ITileEngineModifier) te);
             }
-        } else if (block == DavincisVesselsContent.blockSeat || DavincisVesselsMod.INSTANCE.getNetworkConfig().isSeat(block)) {
+        } else if (block == DavincisVesselsMod.CONTENT.blockSeat || DavincisVesselsMod.CONFIG.isSeat(block)) {
             int x1 = ship.riderDestination.getX(), y1 = ship.riderDestination.getY(), z1 = ship.riderDestination.getZ();
-            int frontDir = ship.frontDirection.getHorizontalIndex();
-
-            if (frontDir == 0) {
-                z1 -= 1;
-            } else if (frontDir == 1) {
-                x1 += 1;
-            } else if (frontDir == 2) {
-                z1 += 1;
-            } else if (frontDir == 3) {
-                x1 -= 1;
+            switch (ship.frontDirection) {
+                case SOUTH: {
+                    z1 -= 1;
+                    break;
+                }
+                case WEST: {
+                    x1 += 1;
+                    break;
+                }
+                case NORTH: {
+                    z1 += 1;
+                    break;
+                }
+                case EAST: {
+                    x1 -= 1;
+                    break;
+                }
             }
 
             if (pos.getX() != x1 || pos.getY() != y1 || pos.getZ() != z1) {
@@ -332,12 +338,12 @@ public class ShipCapabilities extends MovingWorldCapabilities {
 
     @Override
     public float getSpeedLimit() {
-        return DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().speedLimit;
+        return DavincisVesselsMod.CONFIG.speedLimit;
     }
 
     @Override
     public float getBankingMultiplier() {
-        return DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().bankingMultiplier;
+        return DavincisVesselsMod.CONFIG.bankingMultiplier;
     }
 
 }

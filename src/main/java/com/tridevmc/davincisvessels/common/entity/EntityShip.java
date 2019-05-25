@@ -87,7 +87,7 @@ public class EntityShip extends EntityMovingWorld {
                         hasEngines = capabilities.getEnginePower() > 0;
                     }
                 }
-                if (DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().enginesMandatory)
+                if (DavincisVesselsMod.CONFIG.enginesMandatory)
                     getDataManager().set(CAN_MOVE, hasEngines);
                 else
                     getDataManager().set(CAN_MOVE, true);
@@ -102,7 +102,7 @@ public class EntityShip extends EntityMovingWorld {
 
     @Override
     public ItemStack getPickedResult(RayTraceResult target) {
-        return new ItemStack(DavincisVesselsContent.blockHelm);
+        return new ItemStack(DavincisVesselsMod.CONTENT.blockHelm);
     }
 
     public boolean getSubmerge() {
@@ -186,7 +186,7 @@ public class EntityShip extends EntityMovingWorld {
      * Aligns to the closest anchor within the radius specified in the configuration.
      */
     public boolean alignToAnchor() {
-        ImmutablePair<LocatedBlock, LocatedBlock> closestRelation = capabilities.findClosestValidAnchor(DavincisVesselsMod.INSTANCE.getNetworkConfig().anchorRadius);
+        ImmutablePair<LocatedBlock, LocatedBlock> closestRelation = capabilities.findClosestValidAnchor(DavincisVesselsMod.CONFIG.anchorRadius);
         if (!closestRelation.getLeft().equals(LocatedBlock.AIR)
                 && !closestRelation.getRight().equals(LocatedBlock.AIR)) {
             BlockPos chunkAnchor = closestRelation.getLeft().pos;
@@ -249,7 +249,7 @@ public class EntityShip extends EntityMovingWorld {
 
         if (getControllingPassenger() == null) {
             if (prevRiddenByEntity != null) {
-                if (DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().disassembleOnDismount) {
+                if (DavincisVesselsMod.CONFIG.disassembleOnDismount) {
                     alignToGrid(true);
                     updatePassengerPosition(prevRiddenByEntity, riderDestination, 1);
                     disassemble(false);
@@ -393,7 +393,7 @@ public class EntityShip extends EntityMovingWorld {
             motionY += buoyancyforce / mass;
         }
 
-        if (DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().enableShipDownfall) {
+        if (DavincisVesselsMod.CONFIG.enableShipDownfall) {
             if (!isFlying() || (submergeMode && belowWater <= (getMobileChunk().maxY() * 5 / 3 * 2)))
                 motionY -= gravity;
         } else {
@@ -406,7 +406,7 @@ public class EntityShip extends EntityMovingWorld {
 
     @Override
     public void handleServerUpdatePreRotation() {
-        if (DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().shipControlType
+        if (DavincisVesselsMod.CONFIG.shipControlType
                 == DavincisVesselsConfig.CONTROL_TYPE_VANILLA) {
             double newYaw = rotationYaw;
             double dx = prevPosX - posX;
@@ -466,7 +466,7 @@ public class EntityShip extends EntityMovingWorld {
                 throttle *= 0.5D;
             }
 
-            if (DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().shipControlType
+            if (DavincisVesselsMod.CONFIG.shipControlType
                     == DavincisVesselsConfig.CONTROL_TYPE_DAVINCI) {
                 Vec3dMod vec = new Vec3dMod(getControllingPassenger().motionX, 0D, getControllingPassenger().motionZ);
                 vec.rotateAroundY((float) Math.toRadians(getControllingPassenger().rotationYaw));
@@ -474,7 +474,7 @@ public class EntityShip extends EntityMovingWorld {
                 double steer = ((EntityLivingBase) getControllingPassenger()).moveStrafing;
 
                 motionYaw += steer * BASE_TURN_SPEED * capabilities.getRotationMult()
-                        * DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().turnSpeed;
+                        * DavincisVesselsMod.CONFIG.turnSpeed;
 
                 float yaw = (float) Math.toRadians(180F - rotationYaw + frontDirection.getHorizontalIndex() * 90F);
                 vec = vec.setX(motionX);
@@ -486,7 +486,7 @@ public class EntityShip extends EntityMovingWorld {
 
                 motionX = vec.x;
                 motionZ = vec.z;
-            } else if (DavincisVesselsMod.INSTANCE.getNetworkConfig().getShared().shipControlType
+            } else if (DavincisVesselsMod.CONFIG.shipControlType
                     == DavincisVesselsConfig.CONTROL_TYPE_VANILLA) {
                 if (throttle > 0.0D) {
                     double dsin = -Math.sin(Math.toRadians(getControllingPassenger().rotationYaw));

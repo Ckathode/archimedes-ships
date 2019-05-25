@@ -1,72 +1,21 @@
 package com.tridevmc.davincisvessels.common.content.item;
 
 
-import com.tridevmc.davincisvessels.common.content.DavincisVesselsContent;
-import com.tridevmc.davincisvessels.common.content.block.BlockSecuredBed;
 import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.item.ItemBlock;
 
-public class ItemSecuredBed extends Item {
+public class ItemSecuredBed extends ItemBlock {
 
-    public ItemSecuredBed() {
-        super();
+    public ItemSecuredBed(Block block, Item.Properties properties) {
+        super(block, properties);
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (worldIn.isRemote) {
-            return EnumActionResult.SUCCESS;
-        } else if (facing != EnumFacing.UP) {
-            return EnumActionResult.FAIL;
-        } else {
-            IBlockState iblockstate = worldIn.getBlockState(pos);
-            Block block = iblockstate.getBlock();
-            boolean flag = block.isReplaceable(worldIn, pos);
-
-            if (!flag) {
-                pos = pos.up();
-            }
-
-            int i = MathHelper.floor((double) (playerIn.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-            EnumFacing enumfacing = EnumFacing.getHorizontal(i);
-            BlockPos blockpos = pos.offset(enumfacing);
-            ItemStack stack = playerIn.getHeldItem(hand);
-
-            if (playerIn.canPlayerEdit(pos, facing, stack) && playerIn.canPlayerEdit(blockpos, facing, stack)) {
-                boolean flag1 = worldIn.getBlockState(blockpos).getBlock().isReplaceable(worldIn, blockpos);
-                boolean flag2 = flag || worldIn.isAirBlock(pos);
-                boolean flag3 = flag1 || worldIn.isAirBlock(blockpos);
-
-                if (flag2 && flag3 && worldIn.getBlockState(pos.down()).isSideSolid(worldIn, pos.down(), EnumFacing.UP) && worldIn.getBlockState(blockpos.down()).isSideSolid(worldIn, blockpos.down(), EnumFacing.UP)) {
-                    IBlockState iblockstate1 = DavincisVesselsContent.blockSecuredBed.getDefaultState().withProperty(BlockSecuredBed.OCCUPIED, Boolean.valueOf(false)).withProperty(BlockSecuredBed.FACING, enumfacing).withProperty(BlockSecuredBed.PART, BlockSecuredBed.EnumPartType.FOOT);
-
-                    if (worldIn.setBlockState(pos, iblockstate1, 11)) {
-                        IBlockState iblockstate2 = iblockstate1.withProperty(BlockSecuredBed.PART, BlockSecuredBed.EnumPartType.HEAD);
-                        worldIn.setBlockState(blockpos, iblockstate2, 11);
-                    }
-
-                    SoundType soundtype = iblockstate1.getBlock().getSoundType();
-                    worldIn.playSound(null, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
-                    stack.setCount(stack.getCount() - 1);
-                    return EnumActionResult.SUCCESS;
-                } else {
-                    return EnumActionResult.FAIL;
-                }
-            } else {
-                return EnumActionResult.FAIL;
-            }
-        }
+    public boolean placeBlock(BlockItemUseContext context, IBlockState state) {
+        return context.getWorld().setBlockState(context.getPos(), state, 26);
     }
 
 }
