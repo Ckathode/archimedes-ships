@@ -10,7 +10,7 @@
       "tag": "forge:ingots/iron"
     },
     "X": {
-      "tag": "minecraft:furnace"
+      "item": "minecraft:furnace"
     },
     "O": {
       "item": "minecraft:water_bucket"

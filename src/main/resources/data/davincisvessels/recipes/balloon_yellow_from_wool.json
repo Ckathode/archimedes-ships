@@ -2,10 +2,10 @@
   "type": "crafting_shapeless",
   "ingredients": [
     {
-      "tag": "forge:dyes/yellow"
+      "item": "minecraft:yellow_wool"
     },
     {
-      "tag": "davincisvessels:balloon"
+      "item": "minecraft:string"
     }
   ],
   "result": {

@@ -16,7 +16,7 @@
       "item": "minecraft:glass_pane"
     },
     "O": {
-      "tag": "davincisvessels:gauge"
+      "item": "davincisvessels:gauge"
     }
   },
   "result": {

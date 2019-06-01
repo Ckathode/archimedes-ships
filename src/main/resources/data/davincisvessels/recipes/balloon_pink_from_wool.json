@@ -2,10 +2,10 @@
   "type": "crafting_shapeless",
   "ingredients": [
     {
-      "tag": "forge:dyes/pink"
+      "item": "minecraft:pink_wool"
     },
     {
-      "tag": "davincisvessels:balloon"
+      "item": "minecraft:string"
     }
   ],
   "result": {
