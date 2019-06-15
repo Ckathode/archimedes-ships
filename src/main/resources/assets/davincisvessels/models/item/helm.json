@@ -1,5 +1,5 @@
 {
-    "parent": "davincisvessels:block/helmFull",
+    "parent": "davincisvessels:block/helm_full",
     "display": {
         "thirdperson": {
             "rotation": [

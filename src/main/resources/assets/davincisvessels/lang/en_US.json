@@ -51,7 +51,7 @@
   "gui.davincisvessels.shipstatus.compile": "Assemble Ship",
   "gui.davincisvessels.shipstatus.undo": "Undo",
   "gui.davincisvessels.shipstatus.mount": "Mount Ship",
-  "gui.davincisvessels.shipstatus": "Name",
+  "gui.davincisvessels.shipstatus.name": "Name",
   "gui.davincisvessels.shipstatus.shiptype": "Type",
   "gui.davincisvessels.shipstatus.type.unknown": "Unknown Type",
   "gui.davincisvessels.shipstatus.type.airship": "Airship",

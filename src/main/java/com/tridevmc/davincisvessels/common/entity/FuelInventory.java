@@ -1,13 +1,9 @@
 package com.tridevmc.davincisvessels.common.entity;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntityFurnace;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-
-import javax.annotation.Nullable;
+import net.minecraft.tileentity.FurnaceTileEntity;
 
 public class FuelInventory implements IInventory {
 
@@ -79,27 +75,6 @@ public class FuelInventory implements IInventory {
     }
 
     @Override
-    public ITextComponent getName() {
-        return new TextComponentString("Engine Inventory");
-    }
-
-    @Override
-    public boolean hasCustomName() {
-        return false;
-    }
-
-    @Override
-    public ITextComponent getDisplayName() {
-        return new TextComponentString("Engine Inventory");
-    }
-
-    @Nullable
-    @Override
-    public ITextComponent getCustomName() {
-        return new TextComponentString("");
-    }
-
-    @Override
     public int getInventoryStackLimit() {
         return 64;
     }
@@ -109,41 +84,25 @@ public class FuelInventory implements IInventory {
     }
 
     @Override
-    public boolean isUsableByPlayer(EntityPlayer player) {
+    public boolean isUsableByPlayer(PlayerEntity player) {
         return player.getRidingEntity() == ship;
     }
 
     @Override
-    public void openInventory(EntityPlayer player) {
+    public void openInventory(PlayerEntity player) {
     }
 
     @Override
-    public void closeInventory(EntityPlayer playe) {
+    public void closeInventory(PlayerEntity playe) {
     }
 
     @Override
     public boolean isItemValidForSlot(int i, ItemStack is) {
-        return i >= 0 && i < 4 && TileEntityFurnace.isItemFuel(is);
-    }
-
-    @Override
-    public int getField(int id) {
-        return 0;
-    }
-
-    @Override
-    public void setField(int id, int value) {
-
-    }
-
-    @Override
-    public int getFieldCount() {
-        return 0;
+        return i >= 0 && i < 4 && FurnaceTileEntity.func_213991_b(is);
     }
 
     @Override
     public void clear() {
-
     }
 
 }

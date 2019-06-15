@@ -5,8 +5,8 @@ import com.tridevmc.davincisvessels.common.entity.EntitySeat;
 import com.tridevmc.davincisvessels.common.entity.EntityShip;
 import com.tridevmc.davincisvessels.common.tileentity.TileEntitySecuredBed;
 import com.tridevmc.movingworld.common.util.Vec3dMod;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
@@ -51,10 +51,10 @@ public class ConnectionHandler {
     }
 
     private void handleParachuteLogin(PlayerEvent.PlayerLoggedInEvent event) {
-        EntityPlayer player = event.getPlayer();
+        PlayerEntity player = event.getPlayer();
         World worldObj = player.world;
-        if (player.getEntityData().getBoolean("reqParachute") == true) {
-            NBTTagCompound nbt = player.getEntityData().getCompound("parachuteInfo");
+        if (player.getEntityData().getBoolean("reqParachute")) {
+            CompoundNBT nbt = player.getEntityData().getCompound("parachuteInfo");
 
             double vecX = nbt.getDouble("vecX");
             double vecY = nbt.getDouble("vecY");
@@ -70,7 +70,7 @@ public class ConnectionHandler {
             Vec3dMod motionVec = new Vec3dMod(motionX, motionY, motionZ);
 
             EntityParachute parachute = new EntityParachute(worldObj, player, vec, shipVec, motionVec);
-            worldObj.spawnEntity(parachute);
+            worldObj.addEntity(parachute);
 
             player.getEntityData().remove("parachuteInfo");
             player.getEntityData().putBoolean("reqParachute", false);
@@ -79,13 +79,13 @@ public class ConnectionHandler {
 
     private void handleParachuteLogout(PlayerEvent.PlayerLoggedOutEvent event) {
         if (event.getPlayer().getRidingEntity() != null && event.getPlayer().getRidingEntity() instanceof EntitySeat) {
-            EntityPlayer player = event.getPlayer();
+            PlayerEntity player = event.getPlayer();
             EntitySeat seat = (EntitySeat) player.getRidingEntity();
             EntityShip ship = seat.getShip();
 
             player.stopRiding();
             if (ship != null && seat.getChunkPos() != null) {
-                NBTTagCompound nbt = new NBTTagCompound();
+                CompoundNBT nbt = new CompoundNBT();
 
                 Vec3dMod vec = new Vec3dMod(seat.getChunkPos().getX() - ship.getMobileChunk().getCenterX(),
                         seat.getChunkPos().getY() - ship.getMobileChunk().minY(),
@@ -98,9 +98,9 @@ public class ConnectionHandler {
                 nbt.putDouble("shipX", ship.posX);
                 nbt.putDouble("shipY", ship.posY);
                 nbt.putDouble("shipZ", ship.posZ);
-                nbt.putDouble("motionX", ship.motionX);
-                nbt.putDouble("motionY", ship.motionY);
-                nbt.putDouble("motionZ", ship.motionZ);
+                nbt.putDouble("motionX", ship.getMotion().x);
+                nbt.putDouble("motionY", ship.getMotion().y);
+                nbt.putDouble("motionZ", ship.getMotion().z);
                 player.getEntityData().put("parachuteInfo", nbt);
                 player.getEntityData().putBoolean("reqParachute", true);
             }

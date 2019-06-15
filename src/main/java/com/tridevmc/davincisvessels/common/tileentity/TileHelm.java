@@ -13,19 +13,17 @@ import com.tridevmc.movingworld.common.chunk.mobilechunk.MobileChunk;
 import com.tridevmc.movingworld.common.entity.EntityMovingWorld;
 import com.tridevmc.movingworld.common.entity.MovingWorldInfo;
 import com.tridevmc.movingworld.common.tile.TileMovingMarkingBlock;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.FMLPlayMessages;
 
-public class TileHelm extends TileMovingMarkingBlock implements IElementProvider {
+public class TileHelm extends TileMovingMarkingBlock implements IElementProvider<ContainerHelm> {
 
     public boolean submerge;
     private ShipAssemblyInteractor interactor;
@@ -39,7 +37,7 @@ public class TileHelm extends TileMovingMarkingBlock implements IElementProvider
     }
 
     @Override
-    public void assembledMovingWorld(EntityPlayer player, boolean returnVal) {
+    public void assembledMovingWorld(PlayerEntity player, boolean returnVal) {
         sendAssembleResult(player, false);
         sendAssembleResult(player, true);
 
@@ -60,12 +58,11 @@ public class TileHelm extends TileMovingMarkingBlock implements IElementProvider
 
     @Override
     public void setParentMovingWorld(EntityMovingWorld entityMovingWorld) {
-        setParentMovingWorld(entityMovingWorld, new BlockPos(BlockPos.ORIGIN));
+        setParentMovingWorld(entityMovingWorld, new BlockPos(BlockPos.ZERO));
     }
 
     @Override
     public BlockPos getChunkPos() {
-
         return chunkPos;
     }
 
@@ -115,7 +112,7 @@ public class TileHelm extends TileMovingMarkingBlock implements IElementProvider
     }
 
     @Override
-    public void mountedMovingWorld(EntityPlayer player, EntityMovingWorld movingWorld, MountStage stage) {
+    public void mountedMovingWorld(PlayerEntity player, EntityMovingWorld movingWorld, MountStage stage) {
         switch (stage) {
             case PREMSG: {
                 sendAssembleResult(player, false);
@@ -130,7 +127,7 @@ public class TileHelm extends TileMovingMarkingBlock implements IElementProvider
     }
 
     @Override
-    public void undoCompilation(EntityPlayer player) {
+    public void undoCompilation(PlayerEntity player) {
         super.undoCompilation(player);
         sendAssembleResult(player, false);
         sendAssembleResult(player, true);
@@ -141,7 +138,7 @@ public class TileHelm extends TileMovingMarkingBlock implements IElementProvider
         return new ShipAssemblyInteractor();
     }
 
-    public void sendAssembleResult(EntityPlayer player, boolean sendPrev) {
+    public void sendAssembleResult(PlayerEntity player, boolean sendPrev) {
         if (!world.isRemote) {
             AssembleResult res;
             if (sendPrev) {
@@ -152,6 +149,7 @@ public class TileHelm extends TileMovingMarkingBlock implements IElementProvider
 
             if (res == null) {
                 res = new AssembleResult(AssembleResult.ResultType.RESULT_NONE, null);
+                res.assemblyInteractor = this.getNewAssemblyInteractor();
             }
 
             new AssembleResultMessage(res, sendPrev).sendToAllTracking(this);
@@ -159,26 +157,26 @@ public class TileHelm extends TileMovingMarkingBlock implements IElementProvider
     }
 
     @Override
-    public NBTTagCompound write(NBTTagCompound tag) {
+    public CompoundNBT write(CompoundNBT tag) {
         tag = super.write(tag);
         tag.putBoolean("submergeShipOnAssemble", submerge);
         return tag;
     }
 
     @Override
-    public void read(NBTTagCompound tag) {
+    public void read(CompoundNBT tag) {
         super.read(tag);
         submerge = tag.getBoolean("submergeShipOnAssemble");
     }
 
     @Override
-    public Container createContainer(InventoryPlayer playerInventory, EntityPlayer player) {
-        return new ContainerHelm(this, player);
+    public Container createMenu(int window, PlayerInventory playerInventory, PlayerEntity player) {
+        return new ContainerHelm(window, this, player);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public GuiScreen createGui(FMLPlayMessages.OpenContainer openContainer) {
-        return new GuiHelm(this, Minecraft.getInstance().player);
+    public Screen createScreen(ContainerHelm container, PlayerEntity player) {
+        return new GuiHelm(container);
     }
 }

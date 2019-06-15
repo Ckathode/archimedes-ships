@@ -43,7 +43,7 @@
   "gui.davincisvessels.shipstatus.compile": "Stel schip samen",
   "gui.davincisvessels.shipstatus.undo": "Ongedaan maken",
   "gui.davincisvessels.shipstatus.mount": "Boord het schip",
-  "gui.davincisvessels.shipstatus": "Naam",
+  "gui.davincisvessels.shipstatus.name": "Naam",
   "gui.davincisvessels.shipstatus.shiptype": "Type",
   "gui.davincisvessels.shipstatus.type.unknown": "Onbekend type",
   "gui.davincisvessels.shipstatus.type.airship": "Luchtschip",

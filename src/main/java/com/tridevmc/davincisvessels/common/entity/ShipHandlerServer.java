@@ -2,8 +2,8 @@ package com.tridevmc.davincisvessels.common.entity;
 
 import com.tridevmc.movingworld.common.entity.EntityMovingWorld;
 import com.tridevmc.movingworld.common.entity.MovingWorldHandlerServer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumHand;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Hand;
 
 public class ShipHandlerServer extends MovingWorldHandlerServer {
 
@@ -26,7 +26,7 @@ public class ShipHandlerServer extends MovingWorldHandlerServer {
     }
 
     @Override
-    public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
+    public boolean processInitialInteract(PlayerEntity player, Hand hand) {
         return movingWorld.getMovingWorldCapabilities().mountEntity(player);
     }
 

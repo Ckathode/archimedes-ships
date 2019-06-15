@@ -1,30 +1,30 @@
 package com.tridevmc.davincisvessels.client.render;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.tridevmc.davincisvessels.common.entity.EntityParachute;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 //TODO: possible rewrite?
-public class RenderParachute extends Render {
+public class RenderParachute extends EntityRenderer {
     public static final ResourceLocation PARACHUTE_TEXTURE = new ResourceLocation("davincisvessels", "textures/entity/parachute.png");
 
     public ModelParachute model;
 
-    public RenderParachute(RenderManager renderManager) {
+    public RenderParachute(EntityRendererManager renderManager) {
         super(renderManager);
         model = new ModelParachute();
     }
 
     public void renderParachute(EntityParachute parachute, double x, double y, double z, float yaw, float partialTicks) {
         GlStateManager.pushMatrix();
-        GlStateManager.translatef((float) x, (float) y + (parachute != null && parachute.getControllingPassenger() != null ? parachute.getControllingPassenger().height * 2.5F : 4F), (float) z);
+        GlStateManager.translatef((float) x, (float) y + (parachute != null && parachute.getControllingPassenger() != null ? parachute.getControllingPassenger().getHeight() * 2.5F : 4F), (float) z);
 
         GlStateManager.pushMatrix();
         GlStateManager.enableRescaleNormal();

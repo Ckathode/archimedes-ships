@@ -1,17 +1,17 @@
 package com.tridevmc.davincisvessels.client.render;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.davincisvessels.common.content.block.BlockHelm;
 import com.tridevmc.davincisvessels.common.entity.EntityShip;
 import com.tridevmc.davincisvessels.common.tileentity.TileHelm;
 import com.tridevmc.movingworld.api.IMovingTile;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
 import java.io.IOException;
 
@@ -31,8 +31,8 @@ public class TileEntityHelmRenderer extends TileEntityRenderer<TileHelm> {
 
     private void renderHelm(TileHelm helm, double x, double y, double z, float partialTicks) throws Exception {
         EntityShip ship = null;
-        IBlockState blockState = getWorld().getBlockState(helm.getPos());
-        EnumFacing blockStateFacing = EnumFacing.UP;
+        BlockState blockState = getWorld().getBlockState(helm.getPos());
+        Direction blockStateFacing = Direction.UP;
 
         if (blockState.getBlock() instanceof BlockHelm)
             blockStateFacing = blockState.get(BlockHelm.FACING);
@@ -44,10 +44,10 @@ public class TileEntityHelmRenderer extends TileEntityRenderer<TileHelm> {
         if (ship != null)
             shipPitch = ship.prevRotationPitch + (ship.rotationPitch - ship.prevRotationPitch) * partialTicks;
 
-        if (blockStateFacing == EnumFacing.NORTH || blockStateFacing == EnumFacing.WEST) {
+        if (blockStateFacing == Direction.NORTH || blockStateFacing == Direction.WEST) {
             shipPitch *= -1;
         }
-        boolean onZAxis = blockStateFacing.getAxis() == EnumFacing.Axis.Z;
+        boolean onZAxis = blockStateFacing.getAxis() == Direction.Axis.Z;
 
         float translateX, translateY, translateZ;
 
@@ -62,7 +62,7 @@ public class TileEntityHelmRenderer extends TileEntityRenderer<TileHelm> {
         }
 
         GlStateManager.pushMatrix();
-        Minecraft.getInstance().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        Minecraft.getInstance().getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         GlStateManager.enableBlend();
         GlStateManager.disableCull();
@@ -80,7 +80,7 @@ public class TileEntityHelmRenderer extends TileEntityRenderer<TileHelm> {
         GlStateManager.rotatef(shipPitch * 10, onZAxis ? 0 : 1, 0, onZAxis ? 1 : 0);
         GlStateManager.translatef(-translateX, -translateY, -translateZ);
 
-        IBlockState wheelState = blockState.with(BlockHelm.IS_WHEEL, true);
+        BlockState wheelState = blockState.with(BlockHelm.IS_WHEEL, true);
         IBakedModel stateModel = Minecraft.getInstance().getBlockRendererDispatcher()
                 .getModelForState(wheelState);
         Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer()

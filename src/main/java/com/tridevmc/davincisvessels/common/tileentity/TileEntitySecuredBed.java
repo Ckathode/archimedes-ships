@@ -2,8 +2,8 @@ package com.tridevmc.davincisvessels.common.tileentity;
 
 import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.davincisvessels.common.handler.ConnectionHandler;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
@@ -19,7 +19,7 @@ public class TileEntitySecuredBed extends TileEntity {
         super(DavincisVesselsMod.CONTENT.tileTypes.get(TileEntitySecuredBed.class));
     }
 
-    public void setPlayer(EntityPlayer player) {
+    public void setPlayer(PlayerEntity player) {
         if (!world.isRemote) {
             if (player != null) {
                 this.playerID = player.getGameProfile().getId();
@@ -59,18 +59,17 @@ public class TileEntitySecuredBed extends TileEntity {
             if (!doMove)
                 return;
 
-            EntityPlayer player = world.getPlayerEntityByUUID(playerID);
+            PlayerEntity player = world.getPlayerByUuid(playerID);
             if (player != null) {
-                player.bedLocation = pos;
+                player.setBedPosition(pos);
                 player.setSpawnPoint(newPos, true, world.getDimension().getType());
-                player.setSpawnPoint(newPos, true);
                 doMove = false;
             }
         }
     }
 
     @Override
-    public NBTTagCompound write(NBTTagCompound tag) {
+    public CompoundNBT write(CompoundNBT tag) {
         tag = super.write(tag);
         if (playerID != null)
             tag.putUniqueId("uuid", playerID);
@@ -81,7 +80,7 @@ public class TileEntitySecuredBed extends TileEntity {
     }
 
     @Override
-    public void read(NBTTagCompound tag) {
+    public void read(CompoundNBT tag) {
         super.read(tag);
 
         if (tag.contains("uuidMost") && tag.contains("uuidLeast"))
@@ -95,8 +94,8 @@ public class TileEntitySecuredBed extends TileEntity {
     }
 
     @Override
-    public NBTTagCompound getUpdateTag() {
-        NBTTagCompound writtenTag = new NBTTagCompound();
+    public CompoundNBT getUpdateTag() {
+        CompoundNBT writtenTag = new CompoundNBT();
         writtenTag = this.write(writtenTag);
         return writtenTag;
     }

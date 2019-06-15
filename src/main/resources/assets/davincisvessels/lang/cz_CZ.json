@@ -44,7 +44,7 @@
   "gui.davincisvessels.shipstatus.compile": "Sestavit loď",
   "gui.davincisvessels.shipstatus.undo": "Zrušit",
   "gui.davincisvessels.shipstatus.mount": "Nalodit se",
-  "gui.davincisvessels.shipstatus": "Jméno",
+  "gui.davincisvessels.shipstatus.name": "Jméno",
   "gui.davincisvessels.shipstatus.shiptype": "Typ",
   "gui.davincisvessels.shipstatus.type.unknown": "Neznámý typ",
   "gui.davincisvessels.shipstatus.type.airship": "Vzducholoď",

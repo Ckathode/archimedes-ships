@@ -51,7 +51,7 @@
   "gui.davincisvessels.shipstatus.compile": "Désarrimer",
   "gui.davincisvessels.shipstatus.undo": "Annuler",
   "gui.davincisvessels.shipstatus.mount": "Embarquer",
-  "gui.davincisvessels.shipstatus": "Nom",
+  "gui.davincisvessels.shipstatus.name": "Nom",
   "gui.davincisvessels.shipstatus.shiptype": "Type",
   "gui.davincisvessels.shipstatus.type.unknown": "Type inconnu",
   "gui.davincisvessels.shipstatus.type.airship": "Vaisseau aérien",

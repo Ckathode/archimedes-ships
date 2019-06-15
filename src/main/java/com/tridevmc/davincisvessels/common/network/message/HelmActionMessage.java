@@ -4,7 +4,7 @@ import com.tridevmc.davincisvessels.common.network.HelmClientAction;
 import com.tridevmc.davincisvessels.common.tileentity.TileHelm;
 import com.tridevmc.compound.network.message.Message;
 import com.tridevmc.compound.network.message.RegisteredMessage;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.fml.LogicalSide;
 
 /**
@@ -27,7 +27,7 @@ public class HelmActionMessage extends Message {
     }
 
     @Override
-    public void handle(EntityPlayer sender) {
+    public void handle(PlayerEntity sender) {
         if (helm == null)
             return;
 

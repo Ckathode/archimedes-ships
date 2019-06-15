@@ -8,13 +8,9 @@ import java.util.List;
 public class GuiButtonHooked extends GuiButtonExt {
     private List<IClickHook> hooks = Lists.newArrayList();
 
-    public GuiButtonHooked(int id, int xPos, int yPos, int width, int height, String displayString) {
-        super(id, xPos, yPos, width, height, displayString);
-        this.hooks = hooks;
-    }
-
-    public GuiButtonHooked(int id, int xPos, int yPos, String displayString) {
-        super(id, xPos, yPos, displayString);
+    public GuiButtonHooked(int xPos, int yPos, int width, int height, String displayString) {
+        super(xPos, yPos, width, height, displayString, p -> {
+        });
     }
 
     public void addHook(IClickHook hook) {

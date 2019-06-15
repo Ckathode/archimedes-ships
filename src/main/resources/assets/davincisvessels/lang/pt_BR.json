@@ -43,7 +43,7 @@
   "gui.davincisvessels.shipstatus.compile": "Montar o Barco",
   "gui.davincisvessels.shipstatus.undo": "Desfazer",
   "gui.davincisvessels.shipstatus.mount": "Subir no Barco",
-  "gui.davincisvessels.shipstatus": "Nome",
+  "gui.davincisvessels.shipstatus.name": "Nome",
   "gui.davincisvessels.shipstatus.shiptype": "Tipo",
   "gui.davincisvessels.shipstatus.type.unknown": "Tipo Desconhecido",
   "gui.davincisvessels.shipstatus.type.airship": "Dirigível",

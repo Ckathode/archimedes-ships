@@ -6,47 +6,47 @@
 package com.tridevmc.davincisvessels.client.render;
 
 
-import net.minecraft.client.renderer.entity.model.ModelBase;
-import net.minecraft.client.renderer.entity.model.ModelRenderer;
-import net.minecraft.entity.Entity;
+import com.tridevmc.davincisvessels.common.entity.EntityParachute;
+import net.minecraft.client.renderer.entity.model.EntityModel;
+import net.minecraft.client.renderer.entity.model.RendererModel;
 
-public class ModelParachute extends ModelBase {
+public class ModelParachute extends EntityModel<EntityParachute> {
     //fields
-    ModelRenderer side0;
-    ModelRenderer side1;
-    ModelRenderer roof;
-    ModelRenderer side2;
-    ModelRenderer side3;
+    RendererModel side0;
+    RendererModel side1;
+    RendererModel roof;
+    RendererModel side2;
+    RendererModel side3;
 
     public ModelParachute() {
         textureWidth = 128;
         textureHeight = 64;
 
-        side0 = new ModelRenderer(this, 0, 0);
+        side0 = new RendererModel(this, 0, 0);
         side0.addBox(-16F, -16F, 0F, 32, 32, 1);
         side0.setRotationPoint(0F, 0F, 16F);
         side0.setTextureSize(128, 64);
         side0.mirror = true;
         setRotation(side0, 0F, 0F, 0F);
-        side1 = new ModelRenderer(this, 0, 0);
+        side1 = new RendererModel(this, 0, 0);
         side1.addBox(-16F, -15F, 0F, 32, 31, 1);
         side1.setRotationPoint(0F, 0F, -16F);
         side1.setTextureSize(128, 64);
         side1.mirror = true;
         setRotation(side1, 0F, 0F, 0F);
-        roof = new ModelRenderer(this, 0, 0);
+        roof = new RendererModel(this, 0, 0);
         roof.addBox(-16F, 0F, -16F, 32, 1, 32);
         roof.setRotationPoint(0F, -16F, 0F);
         roof.setTextureSize(128, 64);
         roof.mirror = true;
         setRotation(roof, 0F, 0F, 0F);
-        side2 = new ModelRenderer(this, 0, 0);
+        side2 = new RendererModel(this, 0, 0);
         side2.addBox(0F, -16F, -16F, 1, 32, 33);
         side2.setRotationPoint(16F, 0F, 0F);
         side2.setTextureSize(128, 64);
         side2.mirror = true;
         setRotation(side2, 0F, 0F, 0F);
-        side3 = new ModelRenderer(this, 0, 0);
+        side3 = new RendererModel(this, 0, 0);
         side3.addBox(0F, -15F, -15F, 1, 31, 31);
         side3.setRotationPoint(-16F, 0F, 0F);
         side3.setTextureSize(128, 64);
@@ -55,9 +55,9 @@ public class ModelParachute extends ModelBase {
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
+    public void render(EntityParachute entity, float f, float f1, float f2, float f3, float f4, float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
-        setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+        super.setRotationAngles(entity, f, f1, f2, f3, f4, f5);
         roof.render(f5);
         side0.render(f5);
         side1.render(f5);
@@ -65,15 +65,11 @@ public class ModelParachute extends ModelBase {
         side3.render(f5);
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z) {
+    private void setRotation(RendererModel model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
     }
 
-    @Override
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
-        super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
-    }
 
 }

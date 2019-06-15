@@ -43,7 +43,7 @@
   "gui.davincisvessels.shipstatus.compile": "Создать корабль",
   "gui.davincisvessels.shipstatus.undo": "Отмена",
   "gui.davincisvessels.shipstatus.mount": "Управлять кораблём",
-  "gui.davincisvessels.shipstatus": "Имя",
+  "gui.davincisvessels.shipstatus.name": "Имя",
   "gui.davincisvessels.shipstatus.shiptype": "Тип",
   "gui.davincisvessels.shipstatus.type.unknown": "Неизвестный тип",
   "gui.davincisvessels.shipstatus.type.airship": "Воздушный корабль",

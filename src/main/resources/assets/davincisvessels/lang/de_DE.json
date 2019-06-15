@@ -50,7 +50,7 @@
   "gui.davincisvessels.shipstatus.compile": "Zusammensetzen",
   "gui.davincisvessels.shipstatus.undo": "Rückgängig",
   "gui.davincisvessels.shipstatus.mount": "Einsteigen",
-  "gui.davincisvessels.shipstatus": "Name",
+  "gui.davincisvessels.shipstatus.name": "Name",
   "gui.davincisvessels.shipstatus.shiptype": "Typ",
   "gui.davincisvessels.shipstatus.type.unknown": "Unbekannt",
   "gui.davincisvessels.shipstatus.type.airship": "Luftschiff",

@@ -6,8 +6,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 
 public class DavincisCommands {
-
-    @SubscribeEvent
     public static void register(FMLServerStartingEvent e) {
         CommandDispatcher<CommandSource> dispatcher = e.getCommandDispatcher();
         CommandDisassembleNear.register(dispatcher);

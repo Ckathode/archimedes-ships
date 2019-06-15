@@ -5,9 +5,9 @@ import com.tridevmc.movingworld.api.IMovingTile;
 import com.tridevmc.movingworld.common.chunk.mobilechunk.MobileChunk;
 import com.tridevmc.movingworld.common.entity.EntityMovingWorld;
 import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
@@ -33,7 +33,7 @@ public class TileGauge extends TileEntity implements IMovingTile {
 
     @Override
     public void setParentMovingWorld(EntityMovingWorld entityMovingWorld) {
-        setParentMovingWorld(entityMovingWorld, new BlockPos(BlockPos.ORIGIN));
+        setParentMovingWorld(entityMovingWorld, new BlockPos(BlockPos.ZERO));
     }
 
     @Override
@@ -52,19 +52,19 @@ public class TileGauge extends TileEntity implements IMovingTile {
     }
 
     @Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        NBTTagCompound compound = new NBTTagCompound();
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        CompoundNBT compound = new CompoundNBT();
         write(compound);
-        return new SPacketUpdateTileEntity(pos, 1, compound);
+        return new SUpdateTileEntityPacket(pos, 1, compound);
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
         read(packet.getNbtCompound());
     }
 
     @Override
-    public void read(NBTTagCompound tag) {
+    public void read(CompoundNBT tag) {
         super.read(tag);
         if (tag.contains("vehicle") && world != null) {
             int id = tag.getInt("vehicle");
@@ -76,7 +76,7 @@ public class TileGauge extends TileEntity implements IMovingTile {
     }
 
     @Override
-    public NBTTagCompound write(NBTTagCompound tag) {
+    public CompoundNBT write(CompoundNBT tag) {
         return super.write(tag);
     }
 

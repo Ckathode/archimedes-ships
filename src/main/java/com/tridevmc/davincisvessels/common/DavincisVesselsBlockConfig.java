@@ -7,7 +7,7 @@ import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.davincisvessels.common.content.block.BlockBalloon;
 import com.tridevmc.davincisvessels.common.content.block.BlockSeat;
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraftforge.fml.config.ModConfig;
 
 import java.util.List;

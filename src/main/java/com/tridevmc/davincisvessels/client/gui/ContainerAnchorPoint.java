@@ -1,33 +1,34 @@
 package com.tridevmc.davincisvessels.client.gui;
 
 
+import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.davincisvessels.common.tileentity.TileAnchorPoint;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
 public class ContainerAnchorPoint extends Container {
-    public final TileAnchorPoint tileEntity;
-    public final EntityPlayer player;
+    public final TileAnchorPoint anchorPoint;
+    public final PlayerEntity player;
 
-    public ContainerAnchorPoint(TileAnchorPoint te, EntityPlayer entityplayer) {
-        super();
-        tileEntity = te;
-        player = entityplayer;
+    public ContainerAnchorPoint(int window, TileAnchorPoint anchorPoint, PlayerEntity player) {
+        super(DavincisVesselsMod.CONTENT.universalContainerType, window);
+        this.anchorPoint = anchorPoint;
+        this.player = player;
 
-        bindPlayerInventory(entityplayer.inventory);
-        addSlot(new SlotAnchor(tileEntity, 0, 32 + 16, 64 + 36));
+        bindPlayerInventory(player.inventory);
+        addSlot(new SlotAnchor(this.anchorPoint, 0, 32 + 16, 64 + 36));
     }
 
     @Override
-    public boolean canInteractWith(EntityPlayer player) {
-        return tileEntity.isUsableByPlayer(player);
+    public boolean canInteractWith(PlayerEntity player) {
+        return anchorPoint.isUsableByPlayer(player);
     }
 
-    protected void bindPlayerInventory(InventoryPlayer inventoryPlayer) {
+    protected void bindPlayerInventory(PlayerInventory inventoryPlayer) {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
                 addSlot(new Slot(inventoryPlayer, j + i * 9 + 9, 48 + j * 18, 138 + i * 18));
@@ -40,7 +41,7 @@ public class ContainerAnchorPoint extends Container {
     }
 
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int slotNum) {
+    public ItemStack transferStackInSlot(PlayerEntity player, int slotNum) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(slotNum);
 

@@ -4,9 +4,9 @@ import com.tridevmc.compound.network.message.Message;
 import com.tridevmc.compound.network.message.RegisteredMessage;
 import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.davincisvessels.common.entity.EntityShip;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.LogicalSide;
 
 /**
@@ -29,11 +29,11 @@ public class RequestSubmerseMessage extends Message {
     }
 
     @Override
-    public void handle(EntityPlayer sender) {
+    public void handle(PlayerEntity sender) {
         if (ship != null) {
             if (doSumberse && !ship.canSubmerge()) {
-                if (sender instanceof EntityPlayerMP) {
-                    ((EntityPlayerMP) sender).connection.disconnect(new TextComponentString("Invalid submerse request!" +
+                if (sender instanceof ServerPlayerEntity) {
+                    ((ServerPlayerEntity) sender).connection.disconnect(new StringTextComponent("Invalid submerse request!" +
                             "\nCheating to go underwater... reconsider your life choices."));
                     DavincisVesselsMod.LOG.warn("A user tried to submerse in a vessel that can't, user info: " + sender.getGameProfile().toString());
                 }

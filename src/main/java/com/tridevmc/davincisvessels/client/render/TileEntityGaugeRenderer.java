@@ -1,12 +1,12 @@
 package com.tridevmc.davincisvessels.client.render;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.davincisvessels.common.content.block.BlockGauge;
 import com.tridevmc.davincisvessels.common.tileentity.TileGauge;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
@@ -30,21 +30,21 @@ public class TileEntityGaugeRenderer extends TileEntityRenderer<TileGauge> {
         Vec3d dVec = new Vec3d(0, 0, 0);
         if (gauge.parentShip == null) {
             dVec.add(0.5F, 0, 0.5F);
-        } else if (gauge.parentShip.getControllingPassenger() instanceof EntityPlayerSP) {
+        } else if (gauge.parentShip.getControllingPassenger() instanceof ClientPlayerEntity) {
             dVec = new Vec3d(gauge.parentShip.riderDestination.getX() - gauge.getPos().getX(),
                     gauge.parentShip.riderDestination.getY() - gauge.getPos().getY(),
                     gauge.parentShip.riderDestination.getZ() - gauge.getPos().getZ());
         } else {
-            dVec = new Vec3d(gauge.parentShip.posX - Minecraft.getInstance().getRenderManager().viewerPosX,
-                    gauge.parentShip.posY - Minecraft.getInstance().getRenderManager().viewerPosY,
-                    gauge.parentShip.posZ - Minecraft.getInstance().getRenderManager().viewerPosZ);
+            dVec = new Vec3d(gauge.parentShip.posX - Minecraft.getInstance().getRenderManager().field_217783_c.getProjectedView().x,
+                    gauge.parentShip.posY - Minecraft.getInstance().getRenderManager().field_217783_c.getProjectedView().y,
+                    gauge.parentShip.posZ - Minecraft.getInstance().getRenderManager().field_217783_c.getProjectedView().z);
         }
         double d = dVec.x * dVec.x + dVec.y * dVec.y + dVec.z * dVec.z;
         if (d > 256D) return;
 
         GL11.glLineWidth(6);
 
-        GlStateManager.disableTexture2D();
+        GlStateManager.disableTexture();
 
         float northGaugeAngle;
         float velGaugeAngle;
@@ -96,7 +96,7 @@ public class TileEntityGaugeRenderer extends TileEntityRenderer<TileGauge> {
             if (gauge.parentShip == null) {
                 vertGaugeAng = 0F;
             } else {
-                vertGaugeAng = MathHelper.clamp(((float) gauge.parentShip.motionY * 3.6F * 20) / 40F * 360F, -90F, 90F);
+                vertGaugeAng = MathHelper.clamp(((float) gauge.parentShip.getMotion().y * 3.6F * 20) / 40F * 360F, -90F, 90F);
                 height += (float) gauge.parentShip.posY;
             }
             float heightGaugeLongAng = -height / 10F * 360F;
@@ -138,7 +138,7 @@ public class TileEntityGaugeRenderer extends TileEntityRenderer<TileGauge> {
             GlStateManager.popMatrix();
         }
 
-        GlStateManager.enableTexture2D();
+        GlStateManager.enableTexture();
         GlStateManager.popMatrix();
         RenderHelper.enableStandardItemLighting();
     }

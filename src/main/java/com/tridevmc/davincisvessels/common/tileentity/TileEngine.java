@@ -4,34 +4,31 @@ import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.davincisvessels.client.gui.ContainerEngine;
 import com.tridevmc.davincisvessels.client.gui.GuiEngine;
 import com.tridevmc.davincisvessels.common.IElementProvider;
-import com.tridevmc.davincisvessels.common.LanguageEntries;
 import com.tridevmc.davincisvessels.common.api.tileentity.ITileEngineModifier;
 import com.tridevmc.davincisvessels.common.entity.ShipCapabilities;
 import com.tridevmc.movingworld.common.chunk.mobilechunk.MobileChunk;
 import com.tridevmc.movingworld.common.entity.EntityMovingWorld;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.tileentity.FurnaceTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.FMLPlayMessages;
 
 
-public class TileEngine extends TileEntity implements IInventory, ITileEngineModifier, IElementProvider {
+public class TileEngine extends TileEntity implements IInventory, ITileEngineModifier, IElementProvider<ContainerEngine> {
     public float enginePower;
     public int engineFuelConsumption;
     ItemStack[] itemStacks;
@@ -57,7 +54,7 @@ public class TileEngine extends TileEntity implements IInventory, ITileEngineMod
     }
 
     @Override
-    public void read(NBTTagCompound tag) {
+    public void read(CompoundNBT tag) {
         super.read(tag);
         if (!tag.contains("fuelConsumption"))
             tag.putInt("fuelConsumption", DavincisVesselsMod.CONFIG.engineConsumptionRate);
@@ -65,24 +62,24 @@ public class TileEngine extends TileEntity implements IInventory, ITileEngineMod
         burnTime = tag.getInt("burn");
         engineFuelConsumption = tag.getInt("fuelConsumption");
         enginePower = tag.getFloat("power");
-        NBTTagList list = tag.getList("inv", 10);
+        ListNBT list = tag.getList("inv", 10);
         for (int i = 0; i < list.size(); i++) {
-            NBTTagCompound comp = list.getCompound(i);
+            CompoundNBT comp = list.getCompound(i);
             int j = comp.getByte("i");
             itemStacks[j] = ItemStack.read(comp);
         }
     }
 
     @Override
-    public NBTTagCompound write(NBTTagCompound tag) {
+    public CompoundNBT write(CompoundNBT tag) {
         tag = super.write(tag);
         tag.putInt("burn", burnTime);
         tag.putInt("fuelConsumption", (short) engineFuelConsumption);
         tag.putFloat("power", enginePower);
-        NBTTagList list = new NBTTagList();
+        ListNBT list = new ListNBT();
         for (int i = 0; i < getSizeInventory(); i++) {
             if (itemStacks[i] != ItemStack.EMPTY) {
-                NBTTagCompound comp = new NBTTagCompound();
+                CompoundNBT comp = new CompoundNBT();
                 comp.putByte("i", (byte) i);
                 itemStacks[i].write(comp);
                 list.add(comp);
@@ -97,19 +94,19 @@ public class TileEngine extends TileEntity implements IInventory, ITileEngineMod
     }
 
     @Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        NBTTagCompound compound = new NBTTagCompound();
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        CompoundNBT compound = new CompoundNBT();
         write(compound);
-        return new SPacketUpdateTileEntity(pos, 1, compound);
+        return new SUpdateTileEntityPacket(pos, 1, compound);
     }
 
     @Override
     public ITextComponent getDisplayName() {
-        return new TextComponentString("Engine Inventory");
+        return new StringTextComponent("Engine Inventory");
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
         read(packet.getNbtCompound());
     }
 
@@ -130,7 +127,7 @@ public class TileEngine extends TileEntity implements IInventory, ITileEngineMod
         for (int i = 0; i < getSizeInventory(); i++) {
             ItemStack is = decrStackSize(i, 1);
             if (is != ItemStack.EMPTY && is.getCount() > 0) {
-                burnTime += TileEntityFurnace.getBurnTimes().get(is);
+                burnTime += FurnaceTileEntity.getBurnTimes().get(is);
                 return consumeFuel(f);
             }
         }
@@ -201,54 +198,26 @@ public class TileEngine extends TileEntity implements IInventory, ITileEngineMod
     }
 
     @Override
-    public boolean isUsableByPlayer(EntityPlayer player) {
+    public boolean isUsableByPlayer(PlayerEntity player) {
         return world.getTileEntity(pos) == this && player.getDistanceSq(pos.getX() + 0.5d, pos.getY() + 0.5d, pos.getZ() + 0.5d) <= 64d;
     }
 
     @Override
-    public void openInventory(EntityPlayer player) {
+    public void openInventory(PlayerEntity player) {
     }
 
     @Override
-    public void closeInventory(EntityPlayer player) {
+    public void closeInventory(PlayerEntity player) {
     }
 
     @Override
     public boolean isItemValidForSlot(int i, ItemStack is) {
-        return i >= 0 && i < 4 && TileEntityFurnace.isItemFuel(is);
-    }
-
-    @Override
-    public int getField(int id) {
-        return 0;
-        // We have none.
-    }
-
-    @Override
-    public void setField(int id, int value) {
-        // We have none.
-    }
-
-    @Override
-    public int getFieldCount() {
-        return 0;
-        // We have none.
+        return i >= 0 && i < 4 && FurnaceTileEntity.func_213991_b(is);
     }
 
     @Override
     public void clear() {
         itemStacks = new ItemStack[getSizeInventory()];
-    }
-
-
-    @Override
-    public ITextComponent getName() {
-        return new TextComponentTranslation(LanguageEntries.CONTAINER_ENGINE);
-    }
-
-    @Override
-    public boolean hasCustomName() {
-        return false; //No custom names for this.
     }
 
     @Override
@@ -289,13 +258,13 @@ public class TileEngine extends TileEntity implements IInventory, ITileEngineMod
     }
 
     @Override
-    public Container createContainer(InventoryPlayer playerInventory, EntityPlayer player) {
-        return new ContainerEngine(this, player);
+    public Container createMenu(int window, PlayerInventory playerInventory, PlayerEntity player) {
+        return new ContainerEngine(window, this, player);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public GuiScreen createGui(FMLPlayMessages.OpenContainer openContainer) {
-        return new GuiEngine(this, Minecraft.getInstance().player);
+    public Screen createScreen(ContainerEngine container, PlayerEntity player) {
+        return new GuiEngine(container);
     }
 }

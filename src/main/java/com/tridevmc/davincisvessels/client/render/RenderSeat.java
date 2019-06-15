@@ -1,12 +1,12 @@
 package com.tridevmc.davincisvessels.client.render;
 
 import com.tridevmc.davincisvessels.common.entity.EntitySeat;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderSeat extends Render<EntitySeat> {
-    public RenderSeat(RenderManager renderManager) {
+public class RenderSeat extends EntityRenderer<EntitySeat> {
+    public RenderSeat(EntityRendererManager renderManager) {
         super(renderManager);
     }
 

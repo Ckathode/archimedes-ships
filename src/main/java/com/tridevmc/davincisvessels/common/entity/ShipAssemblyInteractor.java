@@ -14,10 +14,10 @@ import com.tridevmc.movingworld.common.chunk.MovingWorldAssemblyInteractor;
 import com.tridevmc.movingworld.common.chunk.assembly.CanAssemble;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.block.BlockState;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -56,7 +56,7 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
     }
 
     @Override
-    public MovingWorldAssemblyInteractor fromNBT(NBTTagCompound tag, World world) {
+    public MovingWorldAssemblyInteractor fromNBT(CompoundNBT tag, World world) {
         ShipAssemblyInteractor mov = new ShipAssemblyInteractor();
         mov.setBalloonCount(tag.getInt("balloonCount"));
         return mov;
@@ -110,7 +110,7 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
 
     @Override
     public CanAssemble isBlockAllowed(World world, LocatedBlock lb) {
-        IBlockState state = lb.state;
+        BlockState state = lb.state;
         CanAssemble canAssemble = super.isBlockAllowed(world, lb);
 
         if (DavincisVesselsMod.BLOCK_CONFIG.isSticky(state.getBlock()))
@@ -130,7 +130,7 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
     }
 
     @Override
-    public EnumFacing getFrontDirection(LocatedBlock marker) {
+    public Direction getFrontDirection(LocatedBlock marker) {
         return marker.state.get(BlockHelm.FACING).getOpposite();
     }
 
@@ -143,12 +143,12 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
     }
 
     @Override
-    public void writeNBTFully(NBTTagCompound tag) {
+    public void writeNBTFully(CompoundNBT tag) {
         writeNBTMetadata(tag);
     }
 
     @Override
-    public void writeNBTMetadata(NBTTagCompound tag) {
+    public void writeNBTMetadata(CompoundNBT tag) {
         tag.putInt("balloonCount", getBalloonCount());
     }
 }

@@ -1,12 +1,12 @@
 package com.tridevmc.davincisvessels.common.control;
 
 import com.tridevmc.davincisvessels.common.entity.EntityShip;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 
 public class ShipControllerCommon {
     private int shipControl = 0;
 
-    public void updateControl(EntityShip ship, EntityPlayer player, int i) {
+    public void updateControl(EntityShip ship, PlayerEntity player, int i) {
         shipControl = i;
     }
 

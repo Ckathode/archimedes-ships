@@ -6,11 +6,11 @@ import com.tridevmc.davincisvessels.common.tileentity.BlockLocation;
 import com.tridevmc.davincisvessels.common.tileentity.TileAnchorPoint;
 import com.tridevmc.compound.network.message.Message;
 import com.tridevmc.compound.network.message.RegisteredMessage;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.ServerWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.LogicalSide;
 
 import java.util.HashMap;
@@ -33,7 +33,7 @@ public class AnchorPointMessage extends Message {
     }
 
     @Override
-    public void handle(EntityPlayer sender) {
+    public void handle(PlayerEntity sender) {
         if (anchorPoint == null)
             return;
 
@@ -48,7 +48,7 @@ public class AnchorPointMessage extends Message {
             for (HashMap.Entry<UUID, BlockLocation> e : anchorPoint.getInstance().getRelatedAnchors().entrySet()) {
                 if (world.getTileEntity(e.getValue().getPos()) != null && world.getTileEntity(e.getValue().getPos()) instanceof TileAnchorPoint) {
                     TileAnchorPoint entryAnchorPoint = (TileAnchorPoint) world.getTileEntity(e.getValue().getPos());
-                    ((EntityPlayerMP) sender).connection.sendPacket(entryAnchorPoint.getUpdatePacket());
+                    ((ServerPlayerEntity) sender).connection.sendPacket(entryAnchorPoint.getUpdatePacket());
                 } else {
                     DavincisVesselsMod.LOG.error("Invalid entries in anchor tile: " + anchorPoint.toString() + ", cleaning.");
                 }
@@ -65,7 +65,7 @@ public class AnchorPointMessage extends Message {
              */
             if (anchorPoint.getInstance().getType() == AnchorInstance.InstanceType.LAND) {
                 if (anchorPoint.content.getTag() == null) {
-                    anchorPoint.content.setTag(new NBTTagCompound());
+                    anchorPoint.content.setTag(new CompoundNBT());
                 }
                 if (anchorPoint.content.getTag().contains("INSTANCE"))
                     anchorPoint.content.getTag().remove("INSTANCE");
@@ -78,7 +78,7 @@ public class AnchorPointMessage extends Message {
                 anchorPoint.content.getTag().put("INSTANCE", itemAnchorInstanceTag.serializeNBT());
             } else {
                 if (anchorPoint.content.getTag() == null) {
-                    anchorPoint.content.setTag(new NBTTagCompound());
+                    anchorPoint.content.setTag(new CompoundNBT());
                 }
                 if (anchorPoint.content.getTag().contains("INSTANCE"))
                     anchorPoint.content.getTag().remove("INSTANCE");
@@ -93,7 +93,7 @@ public class AnchorPointMessage extends Message {
             }
         }
         anchorPoint.markDirty();
-        if (world instanceof WorldServer)
-            ((WorldServer) world).getPlayerChunkMap().markBlockForUpdate(anchorPoint.getPos());
+        if (world instanceof ServerWorld)
+            world.getChunk(anchorPoint.getPos()).markDirty();
     }
 }

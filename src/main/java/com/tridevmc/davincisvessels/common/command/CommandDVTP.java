@@ -7,9 +7,9 @@ import com.tridevmc.davincisvessels.common.entity.EntityShip;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.Vec3Argument;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 
 
 public class CommandDVTP {
@@ -22,7 +22,7 @@ public class CommandDVTP {
     }
 
     private static int execute(CommandContext<CommandSource> d) throws CommandSyntaxException {
-        EntityPlayerMP player = d.getSource().asPlayer();
+        ServerPlayerEntity player = d.getSource().asPlayer();
         if (player.getRidingEntity() instanceof EntityShip) {
             EntityShip ship = (EntityShip) player.getRidingEntity();
             Vec3d location = Vec3Argument.getVec3(d, "location");
@@ -30,7 +30,7 @@ public class CommandDVTP {
             ship.alignToGrid(false);
             return 1;
         } else {
-            d.getSource().sendErrorMessage(new TextComponentString("Not steering a ship, unable to teleport."));
+            d.getSource().sendErrorMessage(new StringTextComponent("Not steering a ship, unable to teleport."));
             return -1;
         }
     }

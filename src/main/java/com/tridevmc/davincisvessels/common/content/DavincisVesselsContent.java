@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.types.Type;
 import com.tridevmc.davincisvessels.DavincisVesselsMod;
+import com.tridevmc.davincisvessels.common.DavincisUIHooks;
 import com.tridevmc.davincisvessels.common.content.block.*;
 import com.tridevmc.davincisvessels.common.content.item.ItemBlockAnchorPoint;
 import com.tridevmc.davincisvessels.common.content.item.ItemSecuredBed;
@@ -13,14 +14,17 @@ import com.tridevmc.davincisvessels.common.entity.EntitySeat;
 import com.tridevmc.davincisvessels.common.entity.EntityShip;
 import com.tridevmc.davincisvessels.common.tileentity.*;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockFire;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.FireBlock;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
+import net.minecraft.block.material.PushReaction;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
-import net.minecraft.init.Blocks;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.*;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -57,6 +61,8 @@ public class DavincisVesselsContent {
 
     public Item itemSecuredBed;
 
+    public ContainerType<? extends Container> universalContainerType;
+
     public ItemGroup itemGroup = new ItemGroup("davincisTab") {
         @Override
         public ItemStack createIcon() {
@@ -74,7 +80,7 @@ public class DavincisVesselsContent {
     private List<Item> itemBlocksToRegister;
 
     private void setFireInfo(Block block, int encouragement, int flammability) {
-        BlockFire fire = (BlockFire) Blocks.FIRE;
+        FireBlock fire = (FireBlock) Blocks.FIRE;
         fire.setFireInfo(block, encouragement, flammability);
     }
 
@@ -115,10 +121,10 @@ public class DavincisVesselsContent {
         IForgeRegistry<Block> registry = e.getRegistry();
         registeredBlocks = Maps.newHashMap();
         itemBlocksToRegister = Lists.newArrayList();
-        materialFloater = new Material(MaterialColor.WOOL, false, true, true, true, true, true, false, EnumPushReaction.NORMAL);
+        materialFloater = new Material(MaterialColor.WOOL, false, true, true, true, true, true, false, PushReaction.NORMAL);
 
         this.balloonBlocks = new ArrayList<>();
-        for (EnumDyeColor colour : EnumDyeColor.values()) {
+        for (DyeColor colour : DyeColor.values()) {
             BlockBalloon balloon = new BlockBalloon(colour);
             registerBlock(registry, colour.getTranslationKey() + "_balloon", balloon);
             balloonBlocks.add(balloon);
@@ -140,10 +146,10 @@ public class DavincisVesselsContent {
         blockSeat = new BlockSeat();
         registerBlock(registry, "seat", blockSeat);
 
-        blockBuffer = new BlockAS(Material.CLOTH, SoundType.WOOD);
+        blockBuffer = new BlockAS(Material.WOOL, SoundType.WOOD);
         registerBlock(registry, "buffer", blockBuffer);
 
-        blockStickyBuffer = new BlockAS(Material.CLOTH, SoundType.WOOD);
+        blockStickyBuffer = new BlockAS(Material.WOOL, SoundType.WOOD);
         registerBlock(registry, "sticky_buffer", blockStickyBuffer);
 
         blockEngine = new BlockEngine(1F, DavincisVesselsMod.CONFIG.engineConsumptionRate);
@@ -162,6 +168,11 @@ public class DavincisVesselsContent {
         this.setFireInfo(blockSeat, 30, 30);
     }
 
+    @SubscribeEvent
+    public void onContainerRegister(final RegistryEvent.Register<ContainerType<?>> e) {
+        universalContainerType = DavincisUIHooks.register(e.getRegistry());
+    }
+
     private void registerBlock(IForgeRegistry<Block> registry, String id, Block block) {
         registerBlock(registry, id, block, true);
     }
@@ -170,16 +181,16 @@ public class DavincisVesselsContent {
         block.setRegistryName(REGISTRY_PREFIX, id);
         registry.register(block);
         if (withItemBlock)
-            itemBlocksToRegister.add(new ItemBlock(block, new Item.Properties().group(itemGroup)).setRegistryName(block.getRegistryName()));
+            itemBlocksToRegister.add(new BlockItem(block, new Item.Properties().group(itemGroup)).setRegistryName(block.getRegistryName()));
         registeredBlocks.put(id, block);
     }
 
-    private void registerBlock(IForgeRegistry<Block> registry, String id, Block block, Class<? extends ItemBlock> itemBlockClass) {
+    private void registerBlock(IForgeRegistry<Block> registry, String id, Block block, Class<? extends BlockItem> itemBlockClass) {
         try {
             block.setRegistryName(REGISTRY_PREFIX, id);
             registry.register(block);
 
-            ItemBlock itemBlock = itemBlockClass.getDeclaredConstructor(Block.class).newInstance(block);
+            BlockItem itemBlock = itemBlockClass.getDeclaredConstructor(Block.class).newInstance(block);
             itemBlock.setRegistryName(REGISTRY_PREFIX, id);
             itemBlocksToRegister.add(itemBlock);
             registeredBlocks.put(id, block);
@@ -214,8 +225,10 @@ public class DavincisVesselsContent {
     private void registerEntity(IForgeRegistry<EntityType<?>> registry, ResourceLocation id,
                                 int range, int updateFrequency, boolean sendVelocityUpdates,
                                 Class<? extends Entity> clazz, Function<? super World, ? extends Entity> entityCreator) {
-        EntityType<Entity> entityType = EntityType.Builder.create(clazz, entityCreator)
-                .tracker(range, updateFrequency, sendVelocityUpdates)
+        EntityType<Entity> entityType = EntityType.Builder.create((t, world) -> entityCreator.apply(world), EntityClassification.MISC)
+                .setTrackingRange(range)
+                .setUpdateInterval(updateFrequency)
+                .setShouldReceiveVelocityUpdates(sendVelocityUpdates)
                 .disableSummoning()
                 .build(id.toString());
         entityType.setRegistryName(id);

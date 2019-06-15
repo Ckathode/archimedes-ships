@@ -5,38 +5,33 @@ import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.davincisvessels.client.gui.ContainerAnchorPoint;
 import com.tridevmc.davincisvessels.client.gui.GuiAnchorPoint;
 import com.tridevmc.davincisvessels.common.IElementProvider;
-import com.tridevmc.davincisvessels.common.LanguageEntries;
 import com.tridevmc.movingworld.api.IMovingTile;
 import com.tridevmc.movingworld.common.chunk.mobilechunk.MobileChunk;
 import com.tridevmc.movingworld.common.entity.EntityMovingWorld;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.fml.network.FMLPlayMessages;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
 
-public class TileAnchorPoint extends TileEntity implements IMovingTile, IInventory, ITickable, IElementProvider {
+public class TileAnchorPoint extends TileEntity implements IMovingTile, IInventory, ITickable, IElementProvider<ContainerAnchorPoint> {
 
     public ItemStack content;
     public BlockPos chunkPos;
@@ -56,32 +51,32 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
 
     @Nullable
     @Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        return new SPacketUpdateTileEntity(this.pos, 0, this.getUpdateTag());
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        return new SUpdateTileEntityPacket(this.pos, 0, this.getUpdateTag());
     }
 
     @Override
-    public NBTTagCompound getUpdateTag() {
-        return this.write(new NBTTagCompound());
+    public CompoundNBT getUpdateTag() {
+        return this.write(new CompoundNBT());
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
         read(packet.getNbtCompound());
-        world.markBlockRangeForRenderUpdate(pos, pos);
+        world.markForRerender(pos);
 
         if (FMLEnvironment.dist.isClient()) {
             if (Minecraft.getInstance().currentScreen instanceof GuiAnchorPoint) {
                 GuiAnchorPoint activeGUI = (GuiAnchorPoint) Minecraft.getInstance().currentScreen;
                 if (Objects.equals(activeGUI.anchorPoint.pos, this.pos)) {
-                    activeGUI.initGui();
+                    activeGUI.init();
                 }
             }
         }
     }
 
     @Override
-    public void read(NBTTagCompound tag) {
+    public void read(CompoundNBT tag) {
         super.read(tag);
         if (world != null && tag.contains("vehicle") && world != null) {
             int id = tag.getInt("vehicle");
@@ -91,7 +86,7 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
             }
         }
 
-        NBTTagCompound instanceCompound = tag.getCompound("INSTANCE");
+        CompoundNBT instanceCompound = tag.getCompound("INSTANCE");
         if (instanceCompound.getBoolean("INSTANCE")) {
             instance = new AnchorInstance();
             instance.deserializeNBT(instanceCompound);
@@ -105,14 +100,14 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
     }
 
     @Override
-    public NBTTagCompound write(NBTTagCompound tag) {
+    public CompoundNBT write(CompoundNBT tag) {
         tag = super.write(tag);
         if (activeShip != null && !activeShip.isAlive()) {
             tag.putInt("vehicle", activeShip.getEntityId());
         }
 
         if (instance != null) {
-            NBTTagCompound instanceCompound = instance.serializeNBT();
+            CompoundNBT instanceCompound = instance.serializeNBT();
             tag.put("INSTANCE", instanceCompound);
         }
 
@@ -138,7 +133,7 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
 
     @Override
     public void setParentMovingWorld(EntityMovingWorld entityMovingWorld) {
-        setParentMovingWorld(entityMovingWorld, new BlockPos(BlockPos.ORIGIN));
+        setParentMovingWorld(entityMovingWorld, new BlockPos(BlockPos.ZERO));
     }
 
     public AnchorInstance getInstance() {
@@ -162,22 +157,6 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
 
     @Override
     public void tick(MobileChunk mobileChunk) {
-    }
-
-    @Override
-    public ITextComponent getName() {
-        return new TextComponentTranslation(LanguageEntries.CONTAINER_ANCHOR);
-    }
-
-    @Override
-    public boolean hasCustomName() {
-        return false;
-    }
-
-    @Nullable
-    @Override
-    public ITextComponent getCustomName() {
-        return new TextComponentTranslation(LanguageEntries.CONTAINER_ANCHOR);
     }
 
     @Override
@@ -239,17 +218,17 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
     }
 
     @Override
-    public boolean isUsableByPlayer(EntityPlayer player) {
+    public boolean isUsableByPlayer(PlayerEntity player) {
         return this.world.getTileEntity(this.pos) != this ? false : player.getDistanceSq((double) this.pos.getX() + 0.5D, (double) this.pos.getY() + 0.5D, (double) this.pos.getZ() + 0.5D) <= 64.0D;
     }
 
     @Override
-    public void openInventory(EntityPlayer player) {
+    public void openInventory(PlayerEntity player) {
 
     }
 
     @Override
-    public void closeInventory(EntityPlayer player) {
+    public void closeInventory(PlayerEntity player) {
 
     }
 
@@ -258,20 +237,6 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
         boolean accepted = index == 0 &&
                 (stack == ItemStack.EMPTY || Objects.equals(stack.getItem(), Item.getItemFromBlock(DavincisVesselsMod.CONTENT.blockAnchorPoint)));
         return accepted;
-    }
-
-    @Override
-    public int getField(int id) {
-        return 0;
-    }
-
-    @Override
-    public void setField(int id, int value) {
-    }
-
-    @Override
-    public int getFieldCount() {
-        return 0;
     }
 
     @Override
@@ -284,22 +249,23 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
         if (instance != null && instance.hasChanged()) {
             instance.setChanged(false);
 
-            if (world instanceof WorldServer) {
-                ((WorldServer) world).getPlayerChunkMap().markBlockForUpdate(pos);
+            if (world instanceof ServerWorld) {
+                world.getChunk(pos).markDirty();
                 markDirty();
             }
         }
     }
 
     @Override
-    public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
-        return new ContainerAnchorPoint(this, playerIn);
+    @OnlyIn(Dist.CLIENT)
+    public Screen createScreen(ContainerAnchorPoint container, PlayerEntity player) {
+        return new GuiAnchorPoint(container);
     }
 
+    @Nullable
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public GuiScreen createGui(FMLPlayMessages.OpenContainer openContainer) {
-        return new GuiAnchorPoint(this, Minecraft.getInstance().player);
+    public ContainerAnchorPoint createMenu(int window, PlayerInventory playerInv, PlayerEntity player) {
+        return new ContainerAnchorPoint(window, this, player);
     }
 
     public enum AnchorPointAction {

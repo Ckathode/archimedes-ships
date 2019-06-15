@@ -5,12 +5,12 @@ import com.tridevmc.davincisvessels.common.entity.EntityShip;
 import com.tridevmc.movingworld.api.IMovingTile;
 import com.tridevmc.movingworld.common.chunk.mobilechunk.MobileChunk;
 import com.tridevmc.movingworld.common.entity.EntityMovingWorld;
+import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 
 public class TileCrate extends TileEntity implements IMovingTile, ITickable {
@@ -41,7 +41,7 @@ public class TileCrate extends TileEntity implements IMovingTile, ITickable {
 
     @Override
     public void setParentMovingWorld(EntityMovingWorld entityMovingWorld) {
-        setParentMovingWorld(entityMovingWorld, new BlockPos(BlockPos.ORIGIN));
+        setParentMovingWorld(entityMovingWorld, new BlockPos(BlockPos.ZERO));
     }
 
     @Override
@@ -64,7 +64,7 @@ public class TileCrate extends TileEntity implements IMovingTile, ITickable {
         } else if (!containedEntity.isAlive()) {
             setContainedEntity(null);
         } else {
-            containedEntity.motionX = containedEntity.motionY = containedEntity.motionZ = 0d;
+            containedEntity.setMotion(0, 0, 0);
             if (parentShip == null) {
                 containedEntity.setPosition(pos.getX() + 0.5d, pos.getY() + 0.15f + containedEntity.getYOffset(), pos.getZ() + 0.5d);
             } else {
@@ -98,19 +98,19 @@ public class TileCrate extends TileEntity implements IMovingTile, ITickable {
     }
 
     @Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        NBTTagCompound compound = new NBTTagCompound();
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        CompoundNBT compound = new CompoundNBT();
         write(compound);
-        return new SPacketUpdateTileEntity(pos, 0, compound);
+        return new SUpdateTileEntityPacket(pos, 0, compound);
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
         read(packet.getNbtCompound());
     }
 
     @Override
-    public void read(NBTTagCompound tag) {
+    public void read(CompoundNBT tag) {
         super.read(tag);
         if (tag.contains("contained")) {
             if (world == null) {
@@ -122,7 +122,7 @@ public class TileCrate extends TileEntity implements IMovingTile, ITickable {
     }
 
     @Override
-    public NBTTagCompound write(NBTTagCompound tag) {
+    public CompoundNBT write(CompoundNBT tag) {
         tag = super.write(tag);
         if (containedEntity != null) {
             tag.putInt("contained", containedEntity.getEntityId());
@@ -150,7 +150,7 @@ public class TileCrate extends TileEntity implements IMovingTile, ITickable {
         } else if (!containedEntity.isAlive()) {
             setContainedEntity(null);
         } else {
-            containedEntity.motionX = containedEntity.motionY = containedEntity.motionZ = 0d;
+            containedEntity.setMotion(0,0,0);
             if (parentShip == null) {
                 containedEntity.setPosition(pos.getX() + 0.5d, pos.getY() + 0.15f + containedEntity.getYOffset(), pos.getZ() + 0.5d);
             } else {

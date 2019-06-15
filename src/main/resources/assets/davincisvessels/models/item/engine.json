@@ -1,5 +1,5 @@
 {
-    "parent": "davincisvessels:block/ship_engine",
+    "parent": "davincisvessels:block/engine",
     "display": {
         "thirdperson": {
             "rotation": [

@@ -1,30 +1,31 @@
 package com.tridevmc.davincisvessels.client.gui;
 
+import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.davincisvessels.common.tileentity.TileHelm;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.Slot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
 public class ContainerHelm extends Container {
-    public final TileHelm tileEntity;
-    public final EntityPlayer player;
+    public final TileHelm helm;
+    public final PlayerEntity player;
 
-    public ContainerHelm(TileHelm te, EntityPlayer entityplayer) {
-        super();
-        tileEntity = te;
-        player = entityplayer;
+    public ContainerHelm(int window, TileHelm helm, PlayerEntity player) {
+        super(DavincisVesselsMod.CONTENT.universalContainerType, window);
+        this.helm = helm;
+        this.player = player;
 
-        bindPlayerInventory(entityplayer.inventory);
+        bindPlayerInventory(player.inventory);
     }
 
     @Override
-    public boolean canInteractWith(EntityPlayer player) {
-        return player.world.getTileEntity(tileEntity.getPos()) == tileEntity && player.getDistanceSq(tileEntity.getPos()) < 25D;
+    public boolean canInteractWith(PlayerEntity player) {
+        return player.world.getTileEntity(helm.getPos()) == helm && helm.getPos().distanceSq(player.getPosition()) < 25D;
     }
 
-    protected void bindPlayerInventory(InventoryPlayer inventoryPlayer) {
+    protected void bindPlayerInventory(PlayerInventory inventoryPlayer) {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
                 int xOff = 40;
@@ -41,7 +42,7 @@ public class ContainerHelm extends Container {
     }
 
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
+    public ItemStack transferStackInSlot(PlayerEntity player, int slot) {
         ItemStack stack = ItemStack.EMPTY;
         Slot slotObject = inventorySlots.get(slot);
 

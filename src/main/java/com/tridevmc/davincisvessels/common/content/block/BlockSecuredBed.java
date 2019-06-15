@@ -2,129 +2,108 @@ package com.tridevmc.davincisvessels.common.content.block;
 
 import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.davincisvessels.common.tileentity.TileEntitySecuredBed;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockBed;
-import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.EnumDyeColor;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.state.properties.BedPart;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.common.extensions.IForgeDimension;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraftforge.common.extensions.IForgeDimension.SleepResult;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
 
-public class BlockSecuredBed extends BlockBed implements ITileEntityProvider {
+public class BlockSecuredBed extends BedBlock implements ITileEntityProvider {
 
     public BlockSecuredBed() {
-        super(EnumDyeColor.RED, Block.Properties.create(Material.CLOTH).sound(SoundType.WOOD).hardnessAndResistance(0.2F));
+        super(DyeColor.RED, Block.Properties.create(Material.WOOL).sound(SoundType.WOOD).hardnessAndResistance(0.2F));
     }
 
-    private EntityPlayer getPlayerInBed(World world, BlockPos pos) {
-        return world.playerEntities.stream().filter((p) -> p.isPlayerSleeping() && p.bedLocation.equals(pos)).findAny().orElse(null);
+    private PlayerEntity getPlayerInBed(World world, BlockPos pos) {
+        return world.getPlayers().stream().filter((p) -> p.isSleeping() && p.getBedLocation().equals(pos)).findAny().orElse(null);
     }
 
     @Override
-    public boolean onBlockActivated(IBlockState state, World worldIn, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (worldIn.isRemote) {
+    public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+        if (world.isRemote) {
             return true;
         } else {
-            EntityPlayer bedUser = null;
-
             if (state.get(PART) != BedPart.HEAD) {
                 pos = pos.offset(state.get(HORIZONTAL_FACING));
-                state = worldIn.getBlockState(pos);
-
+                state = world.getBlockState(pos);
                 if (state.getBlock() != this) {
                     return true;
                 }
             }
 
-            if (worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos) instanceof TileEntitySecuredBed) {
-                TileEntitySecuredBed tile = (TileEntitySecuredBed) worldIn.getTileEntity(pos);
-                IForgeDimension.SleepResult sleepResult = worldIn.dimension.canSleepAt(player, pos);
-                if (sleepResult != IForgeDimension.SleepResult.BED_EXPLODES) {
-                    if (sleepResult == IForgeDimension.SleepResult.DENY)
-                        return true;
-                    if (tile.occupied) {
-                        bedUser = this.getPlayerInBed(worldIn, pos);
-
-                        if (bedUser != null) {
-                            player.sendStatusMessage(new TextComponentTranslation("block.minecraft.bed.occupied", new Object[0]), true);
-                        }
-                    }
-
-                    if (bedUser == null) {
-                        tile.occupied = false;
-                        EntityPlayer.SleepResult playerSleepResult = player.trySleep(pos);
-
-                        if (playerSleepResult == EntityPlayer.SleepResult.OK) {
-                            tile.occupied = true;
-                            bedUser = player;
-                        } else {
-                            if (playerSleepResult == EntityPlayer.SleepResult.NOT_POSSIBLE_NOW) {
-                                player.sendStatusMessage(new TextComponentTranslation("block.minecraft.bed.no_sleep", new Object[0]), true);
-                            } else if (playerSleepResult == EntityPlayer.SleepResult.NOT_SAFE) {
-                                player.sendStatusMessage(new TextComponentTranslation("block.minecraft.bed.not_safe", new Object[0]), true);
-                            } else if (playerSleepResult == EntityPlayer.SleepResult.TOO_FAR_AWAY) {
-                                player.sendStatusMessage(new TextComponentTranslation("block.minecraft.bed.too_far_away"), true);
-                            }
-                        }
-                    }
-
-                    if (bedUser != null) {
-                        tile.setPlayer(bedUser);
-                    }
+            TileEntitySecuredBed bed = world.getTileEntity(pos) instanceof TileEntitySecuredBed ? (TileEntitySecuredBed) world.getTileEntity(pos) : null;
+            SleepResult sleepResult = world.dimension.canSleepAt(player, pos);
+            if (sleepResult != SleepResult.BED_EXPLODES) {
+                if (sleepResult == SleepResult.DENY) return true;
+                if (bed.occupied) {
+                    player.sendStatusMessage(new TranslationTextComponent("block.minecraft.bed.occupied"), true);
+                    return true;
                 } else {
-                    worldIn.removeBlock(pos);
-                    BlockPos blockpos = pos.offset(state.get(HORIZONTAL_FACING).getOpposite());
-                    if (worldIn.getBlockState(blockpos).getBlock() == this) {
-                        worldIn.removeBlock(blockpos);
-                    }
-
-                    worldIn.createExplosion((Entity) null, DamageSource.netherBedExplosion(), (double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D, 5.0F, true, true);
+                    bed.setPlayer(player);
+                    player.func_213819_a(pos).ifLeft((result) -> {
+                        if (result != null) {
+                            // Mapped to getMessage in next MCP snapshot.
+                            player.sendStatusMessage(result.func_221259_a(), true);
+                        }
+                    });
                     return true;
                 }
+            } else {
+                world.removeBlock(pos, false);
+                BlockPos blockpos = pos.offset(state.get(HORIZONTAL_FACING).getOpposite());
+                if (world.getBlockState(blockpos).getBlock() == this) {
+                    world.removeBlock(blockpos, false);
+                }
+
+                world.createExplosion(null, DamageSource.netherBedExplosion(), (double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D, 5.0F, true, Explosion.Mode.DESTROY);
+                return true;
             }
         }
-
-        return true;
     }
 
+
     @Override
-    public ItemStack getItem(IBlockReader worldIn, BlockPos pos, IBlockState state) {
+    public ItemStack getItem(IBlockReader worldIn, BlockPos pos, BlockState state) {
         return DavincisVesselsMod.CONTENT.itemSecuredBed.getDefaultInstance();
     }
 
     @Override
-    public IItemProvider getItemDropped(IBlockState state, World worldIn, BlockPos pos, int fortune) {
-        return () -> state.get(PART) == BedPart.HEAD ? DavincisVesselsMod.CONTENT.itemSecuredBed : Items.AIR;
+    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+        return Collections.singletonList(state.get(PART) == BedPart.HEAD ? DavincisVesselsMod.CONTENT.itemSecuredBed.getDefaultInstance() : Items.AIR.getDefaultInstance());
     }
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(IBlockState state, IBlockReader world) {
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
         return state.get(PART) == BedPart.HEAD ? new TileEntitySecuredBed() : null;
     }
 
     @Override
-    public boolean isBed(IBlockState state, IBlockReader world, BlockPos pos, @Nullable Entity player) {
-        return state.getBlock() instanceof BlockBed;
+    public boolean isBed(BlockState state, IBlockReader world, BlockPos pos, @Nullable Entity player) {
+        return state.getBlock() instanceof BedBlock;
     }
 
     @Override
-    public EnumBlockRenderType getRenderType(IBlockState state) {
-        return EnumBlockRenderType.MODEL;
+    public BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.MODEL;
     }
 
 }

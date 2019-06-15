@@ -19,43 +19,41 @@ import com.tridevmc.movingworld.common.entity.MovingWorldHandlerCommon;
 import com.tridevmc.movingworld.common.util.MathHelperMod;
 import com.tridevmc.movingworld.common.util.Vec3dMod;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Particles;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.Effect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.thread.EffectiveSide;
-import net.minecraftforge.fml.network.FMLPlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.util.Set;
 
-public class EntityShip extends EntityMovingWorld implements IElementProvider {
+public class EntityShip extends EntityMovingWorld implements IElementProvider<ContainerShip> {
 
     public static final DataParameter<Float> ENGINE_POWER = EntityDataManager.createKey(EntityShip.class, DataSerializers.FLOAT);
     public static final DataParameter<Boolean> CAN_MOVE = EntityDataManager.createKey(EntityShip.class, DataSerializers.BOOLEAN);
@@ -71,7 +69,7 @@ public class EntityShip extends EntityMovingWorld implements IElementProvider {
     private boolean submerge;
 
     public EntityShip(World world) {
-        super(world);
+        super((EntityType<? extends EntityMovingWorld>) DavincisVesselsMod.CONTENT.entityTypes.get(EntityShip.class), world);
         capabilities = new ShipCapabilities(this, true);
     }
 
@@ -142,7 +140,7 @@ public class EntityShip extends EntityMovingWorld implements IElementProvider {
                 return entityMovingWorld.getBoundingBox();
             }
             if (entity instanceof EntitySeat || entity.getRidingEntity() instanceof EntitySeat
-                    || entity instanceof EntityLiving)
+                    || entity instanceof MobEntity)
                 return new AxisAlignedBB(0, 0, 0, 0, 0, 0);
         }
         return new AxisAlignedBB(0, 0, 0, 0, 0, 0);
@@ -243,12 +241,12 @@ public class EntityShip extends EntityMovingWorld implements IElementProvider {
     }
 
     @Override
-    public void writeMovingWorldNBT(NBTTagCompound tag) {
+    public void writeMovingWorldNBT(CompoundNBT tag) {
         tag.putBoolean("submerge", submerge);
     }
 
     @Override
-    public void readMovingWorldNBT(NBTTagCompound tag) {
+    public void readMovingWorldNBT(CompoundNBT tag) {
         setSubmerge(tag.getBoolean("submerge"));
     }
 
@@ -270,7 +268,7 @@ public class EntityShip extends EntityMovingWorld implements IElementProvider {
                     if (!world.isRemote && isFlying()) {
                         driftCooldown = 20 * 6;
                         EntityParachute parachute = new EntityParachute(world, this, riderDestination);
-                        if (world.spawnEntity(parachute)) {
+                        if (world.addEntity(parachute)) {
                             prevRiddenByEntity.startRiding(parachute);
                             prevRiddenByEntity.setSneaking(false);
                         }
@@ -282,7 +280,7 @@ public class EntityShip extends EntityMovingWorld implements IElementProvider {
 
         if (getControllingPassenger() == null || !capabilities.canMove()) {
             if (isFlying()) {
-                motionY -= BASE_LIFT_SPEED * 0.2F;
+                this.setMotion(this.getMotion().subtract(0, BASE_LIFT_SPEED * 0.2F, 0));
             }
         } else {
             handlePlayerControl();
@@ -294,19 +292,19 @@ public class EntityShip extends EntityMovingWorld implements IElementProvider {
     public void updatePassengerPosition(Entity passenger, BlockPos riderDestination, int flags) {
         super.updatePassengerPosition(passenger, riderDestination, flags);
 
-        if (submerge && passenger instanceof EntityLivingBase && world != null && !world.isRemote) {
+        if (submerge && passenger instanceof LivingEntity && world != null && !world.isRemote) {
             //Apply water breathing so we don't die and apply night vision so we're not blind.
 
-            EntityLivingBase livingPassenger = (EntityLivingBase) passenger;
-            IForgeRegistry<Potion> potions = ForgeRegistries.POTIONS;
-            Potion waterBreathing = potions.getValue(new ResourceLocation("water_breathing"));
+            LivingEntity livingPassenger = (LivingEntity) passenger;
+            IForgeRegistry<Effect> potions = ForgeRegistries.POTIONS;
+            Effect waterBreathing = potions.getValue(new ResourceLocation("water_breathing"));
             if (livingPassenger.getActivePotionEffect(waterBreathing) == null ||
                     livingPassenger.getActivePotionEffect(waterBreathing).getDuration() <= 20 * 11)
-                livingPassenger.addPotionEffect(new PotionEffect(waterBreathing, 20 * 12, 1));
-            Potion nightVision = potions.getValue(new ResourceLocation("night_vision"));
+                livingPassenger.addPotionEffect(new EffectInstance(waterBreathing, 20 * 12, 1));
+            Effect nightVision = potions.getValue(new ResourceLocation("night_vision"));
             if (livingPassenger.getActivePotionEffect(nightVision) == null ||
                     livingPassenger.getActivePotionEffect(nightVision).getDuration() <= 20 * 11)
-                livingPassenger.addPotionEffect(new PotionEffect(nightVision, 20 * 12, 1));
+                livingPassenger.addPotionEffect(new EffectInstance(nightVision, 20 * 12, 1));
         }
     }
 
@@ -336,7 +334,7 @@ public class EntityShip extends EntityMovingWorld implements IElementProvider {
                     vec = vec.setY(((TileEntity) engine).getPos().getY());
                     vec = vec.setZ(((TileEntity) engine).getPos().getZ() - getMobileChunk().getCenterZ() + 0.5f);
                     vec = vec.rotateAroundY(yaw);
-                    world.addParticle(Particles.LARGE_SMOKE,
+                    world.addParticle(ParticleTypes.LARGE_SMOKE,
                             posX + vec.x, posY + vec.y + 1d, posZ + vec.z, 0d, 0d, 0d);
                 }
             }
@@ -403,15 +401,15 @@ public class EntityShip extends EntityMovingWorld implements IElementProvider {
             setFlying(false);
             float buoyancyforce = 1F * waterVolume * gravity; //F = rho * V * g (Archimedes' principle)
             float mass = getMovingWorldCapabilities().getMass();
-            motionY += buoyancyforce / mass;
+            setMotion(getMotion().add(0, buoyancyforce / mass, 0));
         }
 
         if (DavincisVesselsMod.CONFIG.enableShipDownfall) {
             if (!isFlying() || (submergeMode && belowWater <= (getMobileChunk().maxY() * 5 / 3 * 2)))
-                motionY -= gravity;
+                setMotion(getMotion().subtract(0, gravity, 0));
         } else {
             if (!capabilities.canFly() && !capabilities.canSubmerge())
-                motionY -= gravity;
+                setMotion(getMotion().subtract(0, gravity, 0));
         }
 
         super.handleServerUpdate(horizontalVelocity);
@@ -452,9 +450,9 @@ public class EntityShip extends EntityMovingWorld implements IElementProvider {
         disassembler.overwrite = overwrite;
 
         if (!disassembler.canDisassemble(getNewAssemblyInteractor())) {
-            if (prevRiddenByEntity instanceof EntityPlayer) {
-                TextComponentString testMessage = new TextComponentString("Cannot disassemble ship here");
-                ((EntityPlayer) prevRiddenByEntity).sendStatusMessage(testMessage, true);
+            if (prevRiddenByEntity instanceof PlayerEntity) {
+                StringTextComponent testMessage = new StringTextComponent("Cannot disassemble ship here");
+                ((PlayerEntity) prevRiddenByEntity).sendStatusMessage(testMessage, true);
             }
             return false;
         }
@@ -472,37 +470,37 @@ public class EntityShip extends EntityMovingWorld implements IElementProvider {
     }
 
     private void handlePlayerControl() {
-        if (getControllingPassenger() instanceof EntityLivingBase && ((ShipCapabilities) getMovingWorldCapabilities()).canMove()) {
-            double throttle = ((EntityLivingBase) getControllingPassenger()).moveForward;
+        if (getControllingPassenger() instanceof LivingEntity && ((ShipCapabilities) getMovingWorldCapabilities()).canMove()) {
+            double throttle = ((LivingEntity) getControllingPassenger()).moveForward;
             if (isFlying()) {
                 throttle *= 0.5D;
             }
 
             if (DavincisVesselsMod.CONFIG.shipControlType == EnumShipControlType.DAVINCIS) {
-                Vec3dMod vec = new Vec3dMod(getControllingPassenger().motionX, 0D, getControllingPassenger().motionZ);
+                Vec3dMod vec = new Vec3dMod(getControllingPassenger().getMotion().x, 0D, getControllingPassenger().getMotion().z);
                 vec.rotateAroundY((float) Math.toRadians(getControllingPassenger().rotationYaw));
 
-                double steer = ((EntityLivingBase) getControllingPassenger()).moveStrafing;
+                double steer = ((LivingEntity) getControllingPassenger()).moveStrafing;
 
                 motionYaw += steer * BASE_TURN_SPEED * capabilities.getRotationMult()
                         * DavincisVesselsMod.CONFIG.turnSpeed;
 
                 float yaw = (float) Math.toRadians(180F - rotationYaw + frontDirection.getHorizontalIndex() * 90F);
-                vec = vec.setX(motionX);
-                vec = vec.setZ(motionZ);
+                vec = vec.setX(getMotion().x);
+                vec = vec.setZ(getMotion().z);
                 vec = vec.rotateAroundY(yaw);
                 vec = vec.setX(vec.x * 0.9D);
                 vec = vec.setZ(vec.z - throttle * BASE_FORWARD_SPEED * capabilities.getSpeedMult());
                 vec = vec.rotateAroundY(-yaw);
-
-                motionX = vec.x;
-                motionZ = vec.z;
+                vec = vec.setY(getMotion().y);
+                this.setMotion(vec);
             } else if (DavincisVesselsMod.CONFIG.shipControlType == EnumShipControlType.VANILLA) {
                 if (throttle > 0.0D) {
                     double dsin = -Math.sin(Math.toRadians(getControllingPassenger().rotationYaw));
                     double dcos = Math.cos(Math.toRadians(getControllingPassenger().rotationYaw));
-                    motionX += dsin * BASE_FORWARD_SPEED * capabilities.speedMultiplier;
-                    motionZ += dcos * BASE_FORWARD_SPEED * capabilities.speedMultiplier;
+
+                    this.setMotion(this.getMotion().add(dsin * BASE_FORWARD_SPEED * capabilities.speedMultiplier, 0,
+                            dcos * BASE_FORWARD_SPEED * capabilities.speedMultiplier));
                 }
             }
         }
@@ -511,11 +509,8 @@ public class EntityShip extends EntityMovingWorld implements IElementProvider {
             if (controller.getShipControl() == 4) {
                 alignToGrid(true);
             } else if (isBraking()) {
-                motionX *= capabilities.brakeMult;
-                motionZ *= capabilities.brakeMult;
-                if (isFlying()) {
-                    motionY *= capabilities.brakeMult;
-                }
+                float yMult = isFlying() ? capabilities.brakeMult : 1;
+                this.setMotion(this.getMotion().mul(capabilities.brakeMult, yMult, capabilities.brakeMult));
             } else if (controller.getShipControl() < 3 && capabilities.canFly()) {
                 int i;
                 if (controller.getShipControl() == 2) {
@@ -524,7 +519,7 @@ public class EntityShip extends EntityMovingWorld implements IElementProvider {
                 } else {
                     i = -1;
                 }
-                motionY += i * BASE_LIFT_SPEED * capabilities.getLiftMult();
+                this.setMotion(this.getMotion().add(0, i * BASE_LIFT_SPEED * capabilities.getLiftMult(), 0));
                 // TODO: Achievements are gone.
                 //if (getControllingPassenger() != null && getControllingPassenger() instanceof EntityPlayer
                 //        && !((EntityPlayer) getControllingPassenger()).hasAchievement(DavincisVesselsContent.achievementFlyShip))
@@ -597,12 +592,12 @@ public class EntityShip extends EntityMovingWorld implements IElementProvider {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public GuiScreen createGui(FMLPlayMessages.OpenContainer openContainer) {
-        return new GuiShip(this, Minecraft.getInstance().player);
+    public Screen createScreen(ContainerShip container, PlayerEntity player) {
+        return new GuiShip(container);
     }
 
     @Override
-    public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
-        return new ContainerShip(this, playerIn);
+    public Container createMenu(int window, PlayerInventory playerInventory, PlayerEntity playerIn) {
+        return new ContainerShip(window, this, playerIn);
     }
 }

@@ -1,25 +1,27 @@
 package com.tridevmc.davincisvessels.client.gui;
 
+import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.davincisvessels.common.entity.EntitySeat;
 import com.tridevmc.davincisvessels.common.entity.EntityShip;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.Slot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
 public class ContainerShip extends Container {
     public final EntityShip ship;
-    public final EntityPlayer player;
+    public final PlayerEntity player;
 
-    public ContainerShip(EntityShip entityship, EntityPlayer entityplayer) {
-        ship = entityship;
-        player = entityplayer;
+    public ContainerShip(int window, EntityShip ship, PlayerEntity player) {
+        super(DavincisVesselsMod.CONTENT.universalContainerType, window);
+        this.ship = ship;
+        this.player = player;
 
-        bindPlayerInventory(entityplayer.inventory);
+        bindPlayerInventory(player.inventory);
     }
 
-    protected void bindPlayerInventory(InventoryPlayer inventoryplayer) {
+    protected void bindPlayerInventory(PlayerInventory inventoryplayer) {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
                 addSlot(new Slot(inventoryplayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
@@ -32,12 +34,12 @@ public class ContainerShip extends Container {
     }
 
     @Override
-    public boolean canInteractWith(EntityPlayer entityplayer) {
+    public boolean canInteractWith(PlayerEntity entityplayer) {
         return entityplayer.getRidingEntity() == ship || entityplayer.getRidingEntity() instanceof EntitySeat && ((EntitySeat) entityplayer.getRidingEntity()).getShip() == ship;
     }
 
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
+    public ItemStack transferStackInSlot(PlayerEntity player, int slot) {
         ItemStack stack = ItemStack.EMPTY;
         Slot slotObject = inventorySlots.get(slot);
 

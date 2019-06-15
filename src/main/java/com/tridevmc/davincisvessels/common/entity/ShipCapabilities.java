@@ -15,11 +15,11 @@ import com.tridevmc.movingworld.common.entity.MovingWorldCapabilities;
 import com.tridevmc.movingworld.common.util.FloodFiller;
 import com.tridevmc.movingworld.common.util.LocatedBlockList;
 import com.tridevmc.movingworld.common.util.MaterialDensity;
+import net.minecraft.block.AirBlock;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockAir;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -196,8 +196,8 @@ public class ShipCapabilities extends MovingWorldCapabilities {
         if (player.isSneaking()) {
             return false;
         } else if (ship.isBeingRidden()) {
-            if (player instanceof EntityPlayer) {
-                tryMountSeat((EntityPlayer) player);
+            if (player instanceof PlayerEntity) {
+                tryMountSeat((PlayerEntity) player);
             }
             return true;
         } else {
@@ -208,7 +208,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
         }
     }
 
-    private void tryMountSeat(EntityPlayer player) {
+    private void tryMountSeat(PlayerEntity player) {
         EntitySeat seat = getAvailableSeat();
         if (seat != null) {
             player.startRiding(seat);
@@ -217,11 +217,11 @@ public class ShipCapabilities extends MovingWorldCapabilities {
 
     public void spawnSeatEntities() {
         if (seats != null)
-            seats.forEach(seat -> ship.world.spawnEntity(seat));
+            seats.forEach(seat -> ship.world.addEntity(seat));
     }
 
     @Override
-    public void onChunkBlockAdded(IBlockState state, BlockPos pos) {
+    public void onChunkBlockAdded(BlockState state, BlockPos pos) {
         mass += MaterialDensity.getDensity(state);
 
         blockCount++;
@@ -236,7 +236,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
             return;
         }
 
-        if (block instanceof BlockAir)
+        if (block instanceof AirBlock)
             nonAirBlockCount--;
 
         if (block instanceof IBlockCustomMass) {

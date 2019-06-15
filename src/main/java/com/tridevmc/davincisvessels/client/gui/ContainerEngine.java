@@ -1,31 +1,33 @@
 package com.tridevmc.davincisvessels.client.gui;
 
+import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.davincisvessels.common.tileentity.TileEngine;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.tileentity.FurnaceTileEntity;
 
 public class ContainerEngine extends Container {
-    public final TileEngine tileEntity;
-    public final EntityPlayer player;
+    public final TileEngine engine;
+    public final PlayerEntity player;
 
-    public ContainerEngine(TileEngine tileentityengine, EntityPlayer entityplayer) {
-        tileEntity = tileentityengine;
-        player = entityplayer;
+    public ContainerEngine(int window, TileEngine engine, PlayerEntity player) {
+        super(DavincisVesselsMod.CONTENT.universalContainerType, window);
+        this.engine = engine;
+        this.player = player;
 
-        addSlot(new SlotFuel(tileentityengine, 0, 26, 23));
-        addSlot(new SlotFuel(tileentityengine, 1, 44, 23));
-        addSlot(new SlotFuel(tileentityengine, 2, 26, 41));
-        addSlot(new SlotFuel(tileentityengine, 3, 44, 41));
+        addSlot(new SlotFuel(engine, 0, 26, 23));
+        addSlot(new SlotFuel(engine, 1, 44, 23));
+        addSlot(new SlotFuel(engine, 2, 26, 41));
+        addSlot(new SlotFuel(engine, 3, 44, 41));
 
-        bindPlayerInventory(entityplayer.inventory);
+        bindPlayerInventory(player.inventory);
     }
 
-    protected void bindPlayerInventory(InventoryPlayer inventoryplayer) {
+    protected void bindPlayerInventory(PlayerInventory inventoryplayer) {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
                 addSlot(new Slot(inventoryplayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
@@ -38,8 +40,8 @@ public class ContainerEngine extends Container {
     }
 
     @Override
-    public boolean canInteractWith(EntityPlayer player) {
-        return tileEntity.isUsableByPlayer(player);
+    public boolean canInteractWith(PlayerEntity player) {
+        return engine.isUsableByPlayer(player);
     }
 
     /**
@@ -47,7 +49,7 @@ public class ContainerEngine extends Container {
      * someone does that.
      */
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int slotNum) {
+    public ItemStack transferStackInSlot(PlayerEntity par1EntityPlayer, int slotNum) {
         ItemStack stackClone = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(slotNum);
 
@@ -55,11 +57,11 @@ public class ContainerEngine extends Container {
             ItemStack stack = slot.getStack();
             stackClone = stack.copy();
 
-            if (slotNum < this.tileEntity.getSizeInventory()) {
-                if (!this.mergeItemStack(stack, this.tileEntity.getSizeInventory(), this.inventorySlots.size(), true)) {
+            if (slotNum < this.engine.getSizeInventory()) {
+                if (!this.mergeItemStack(stack, this.engine.getSizeInventory(), this.inventorySlots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(stack, 0, this.tileEntity.getSizeInventory(), false)) {
+            } else if (!this.mergeItemStack(stack, 0, this.engine.getSizeInventory(), false)) {
                 return ItemStack.EMPTY;
             }
 
@@ -80,7 +82,7 @@ public class ContainerEngine extends Container {
 
         @Override
         public boolean isItemValid(ItemStack itemstack) {
-            return TileEntityFurnace.isItemFuel(itemstack);
+            return FurnaceTileEntity.func_213991_b(itemstack);
         }
     }
 }

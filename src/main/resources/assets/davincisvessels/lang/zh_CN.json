@@ -51,7 +51,7 @@
   "gui.davincisvessels.shipstatus.compile": "组装船身",
   "gui.davincisvessels.shipstatus.undo": "撤销操作",
   "gui.davincisvessels.shipstatus.mount": "驾驶船艇",
-  "gui.davincisvessels.shipstatus": "船名",
+  "gui.davincisvessels.shipstatus.name": "船名",
   "gui.davincisvessels.shipstatus.shiptype": "类型",
   "gui.davincisvessels.shipstatus.type.unknown": "未知类型",
   "gui.davincisvessels.shipstatus.type.airship": "飞船",

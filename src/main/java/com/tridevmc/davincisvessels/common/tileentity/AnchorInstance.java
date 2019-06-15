@@ -3,8 +3,8 @@ package com.tridevmc.davincisvessels.common.tileentity;
 import com.tridevmc.davincisvessels.common.LanguageEntries;
 import com.tridevmc.davincisvessels.common.util.NBTTagUtils;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-public class AnchorInstance implements INBTSerializable<NBTTagCompound> {
+public class AnchorInstance implements INBTSerializable<CompoundNBT> {
     /**
      * A unique identifier for this anchor, essentially a verification check for dimensions.
      */
@@ -111,18 +111,18 @@ public class AnchorInstance implements INBTSerializable<NBTTagCompound> {
     }
 
     @Override
-    public NBTTagCompound serializeNBT() {
-        NBTTagCompound tag = new NBTTagCompound();
+    public CompoundNBT serializeNBT() {
+        CompoundNBT tag = new CompoundNBT();
 
         tag.putBoolean("INSTANCE", true);
         tag.putBoolean("type", type == InstanceType.SHIP);
         tag.putUniqueId("identifier", identifier);
 
         if (!relatedAnchors.isEmpty()) {
-            NBTTagList relatedAnchorsTagList = tag.getList("relatedAnchorsTagList", 10);
+            ListNBT relatedAnchorsTagList = tag.getList("relatedAnchorsTagList", 10);
 
             for (HashMap.Entry<UUID, BlockLocation> e : relatedAnchors.entrySet()) {
-                NBTTagCompound entry = new NBTTagCompound();
+                CompoundNBT entry = new CompoundNBT();
                 entry.putUniqueId("identifier", e.getKey());
                 entry.putInt("dim", e.getValue().getDim().getId());
                 NBTTagUtils.writeVec3iToNBT(entry, "related", e.getValue().getPos());
@@ -136,7 +136,7 @@ public class AnchorInstance implements INBTSerializable<NBTTagCompound> {
     }
 
     @Override
-    public void deserializeNBT(NBTTagCompound tag) {
+    public void deserializeNBT(CompoundNBT tag) {
         if (!tag.contains("INSTANCE"))
             throw new IllegalArgumentException("NBT provided for deserialization is not valid for an anchor point! " + tag.toString());
 
@@ -144,11 +144,11 @@ public class AnchorInstance implements INBTSerializable<NBTTagCompound> {
         this.identifier = tag.getUniqueId("identifier");
 
         if (tag.contains("relatedAnchorsTagList")) {
-            NBTTagList relatedAnchorsTagList = tag.getList("relatedAnchorsTagList", 10);
+            ListNBT relatedAnchorsTagList = tag.getList("relatedAnchorsTagList", 10);
             int size = relatedAnchorsTagList.size();
 
             for (int entry = 0; entry < size; entry++) {
-                NBTTagCompound entryCompound = relatedAnchorsTagList.getCompound(entry);
+                CompoundNBT entryCompound = relatedAnchorsTagList.getCompound(entry);
                 int entryDimID = entryCompound.getInt("dim");
                 BlockPos entryPos = new BlockPos(NBTTagUtils.readVec3iFromNBT(entryCompound, "related"));
                 UUID entryIdentifier = entryCompound.getUniqueId("identifier");

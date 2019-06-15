@@ -22,25 +22,25 @@
             "model": "davincisvessels:block/helm"
         },
         "facing=north,wheel=true": {
-            "model": "davincisvessels:block/helmwheel",
+            "model": "davincisvessels:block/helm_wheel",
             "y": 90
         },
         "facing=south,wheel=true": {
-            "model": "davincisvessels:block/helmwheel",
+            "model": "davincisvessels:block/helm_wheel",
             "y": 270
         },
         "facing=west,wheel=true": {
-            "model": "davincisvessels:block/helmwheel"
+            "model": "davincisvessels:block/helm_wheel"
         },
         "facing=east,wheel=true": {
-            "model": "davincisvessels:block/helmwheel",
+            "model": "davincisvessels:block/helm_wheel",
             "y": 180
         },
         "facing=up,wheel=true": {
-            "model": "davincisvessels:block/helmwheel"
+            "model": "davincisvessels:block/helm_wheel"
         },
         "facing=down,wheel=true": {
-            "model": "davincisvessels:block/helmwheel"
+            "model": "davincisvessels:block/helm_wheel"
         }
     }
 }

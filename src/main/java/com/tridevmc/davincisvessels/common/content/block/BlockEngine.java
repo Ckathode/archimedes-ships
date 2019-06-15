@@ -1,29 +1,30 @@
 package com.tridevmc.davincisvessels.common.content.block;
 
+import com.tridevmc.davincisvessels.common.DavincisUIHooks;
 import com.tridevmc.davincisvessels.common.tileentity.TileEngine;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
+import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.block.BlockRenderType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockEngine extends BlockContainer {
+public class BlockEngine extends ContainerBlock {
 
-    public static final DirectionProperty FACING = DirectionProperty.create("facing", EnumFacing.Plane.HORIZONTAL);
+    public static final DirectionProperty FACING = DirectionProperty.create("facing", Direction.Plane.HORIZONTAL);
 
     public float enginePower;
     public int engineFuelConsumption;
@@ -35,8 +36,8 @@ public class BlockEngine extends BlockContainer {
     }
 
     @Override
-    public EnumBlockRenderType getRenderType(IBlockState state) {
-        return EnumBlockRenderType.MODEL;
+    public BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.MODEL;
     }
 
     @Override
@@ -45,11 +46,11 @@ public class BlockEngine extends BlockContainer {
     }
 
     @Override
-    public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
         if (!player.isSneaking()) {
-            TileEngine tile = world.getTileEntity(pos) instanceof TileEngine ? (TileEngine) world.getTileEntity(pos) : null;
-            if (tile != null && player instanceof EntityPlayerMP) {
-                NetworkHooks.openGui((EntityPlayerMP) player, tile, pos);
+            TileEngine engine = world.getTileEntity(pos) instanceof TileEngine ? (TileEngine) world.getTileEntity(pos) : null;
+            if (engine != null && player instanceof ServerPlayerEntity) {
+                DavincisUIHooks.openGui(player, engine);
                 return true;
             }
         }
@@ -58,12 +59,12 @@ public class BlockEngine extends BlockContainer {
     }
 
     @Override
-    public IBlockState getStateForPlacement(BlockItemUseContext context) {
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
         return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
     }
 
     @Override
-    public void onReplaced(IBlockState state, World worldIn, BlockPos pos, IBlockState newState, boolean isMoving) {
+    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         TileEngine engine = (TileEngine) worldIn.getTileEntity(pos);
 
         if (engine != null) {
@@ -74,7 +75,7 @@ public class BlockEngine extends BlockContainer {
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, IBlockState> builder) {
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(FACING);
     }
 }

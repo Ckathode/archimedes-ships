@@ -2,12 +2,14 @@ package com.tridevmc.davincisvessels.common.entity;
 
 import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.EnumHand;
+import net.minecraft.network.play.server.SSpawnObjectPacket;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -38,15 +40,15 @@ public class EntitySeat extends Entity {
     }
 
     @Override
-    protected void readAdditional(NBTTagCompound compound) {
+    protected void readAdditional(CompoundNBT compound) {
     }
 
     @Override
-    protected void writeAdditional(NBTTagCompound compound) {
+    protected void writeAdditional(CompoundNBT compound) {
     }
 
     @Override
-    public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
+    public boolean processInitialInteract(PlayerEntity player, Hand hand) {
         if (player.isSneaking()) {
             return false;
         } else if (this.isBeingRidden()) {
@@ -62,7 +64,7 @@ public class EntitySeat extends Entity {
 
     @Override
     public void registerData() {
-        this.dataManager.register(CHUNK_POS, BlockPos.ORIGIN);
+        this.dataManager.register(CHUNK_POS, BlockPos.ZERO);
         this.dataManager.register(SHIP_ID, 0);
     }
 
@@ -112,6 +114,11 @@ public class EntitySeat extends Entity {
     @Override
     public boolean canPassengerSteer() {
         return false;
+    }
+
+    @Override
+    public IPacket<?> createSpawnPacket() {
+        return new SSpawnObjectPacket(this);
     }
 
     @Override
