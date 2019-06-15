@@ -1,11 +1,11 @@
 package com.tridevmc.davincisvessels.common.network.message;
 
+import com.tridevmc.compound.network.message.Message;
+import com.tridevmc.compound.network.message.RegisteredMessage;
 import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.davincisvessels.common.tileentity.AnchorInstance;
 import com.tridevmc.davincisvessels.common.tileentity.BlockLocation;
 import com.tridevmc.davincisvessels.common.tileentity.TileAnchorPoint;
-import com.tridevmc.compound.network.message.Message;
-import com.tridevmc.compound.network.message.RegisteredMessage;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;

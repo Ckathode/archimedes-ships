@@ -3,9 +3,9 @@ package com.tridevmc.davincisvessels.common.content.item;
 
 import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import net.minecraft.block.BlockState;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.Item;
-import net.minecraft.item.BlockItem;
 
 public class ItemSecuredBed extends BlockItem {
 

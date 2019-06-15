@@ -2,7 +2,6 @@ package com.tridevmc.davincisvessels.common.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.command.CommandSource;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 
 public class DavincisCommands {

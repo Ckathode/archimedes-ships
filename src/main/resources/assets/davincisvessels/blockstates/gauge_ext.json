@@ -1,19 +1,19 @@
 {
-  "variants": {
-    "facing=north": {
-      "model": "davincisvessels:block/gauge_ext"
-    },
-    "facing=south": {
-      "model": "davincisvessels:block/gauge_ext",
-      "y": 180
-    },
-    "facing=west": {
-      "model": "davincisvessels:block/gauge_ext",
-      "y": 270
-    },
-    "facing=east": {
-      "model": "davincisvessels:block/gauge_ext",
-      "y": 90
+    "variants": {
+        "facing=north": {
+            "model": "davincisvessels:block/gauge_ext"
+        },
+        "facing=south": {
+            "model": "davincisvessels:block/gauge_ext",
+            "y": 180
+        },
+        "facing=west": {
+            "model": "davincisvessels:block/gauge_ext",
+            "y": 270
+        },
+        "facing=east": {
+            "model": "davincisvessels:block/gauge_ext",
+            "y": 90
+        }
     }
-  }
 }

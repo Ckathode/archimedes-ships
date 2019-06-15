@@ -1,14 +1,14 @@
 {
-  "type": "crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "minecraft:pink_wool"
-    },
-    {
-      "item": "minecraft:string"
+    "type": "crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "minecraft:pink_wool"
+        },
+        {
+            "item": "minecraft:string"
+        }
+    ],
+    "result": {
+        "item": "davincisvessels:pink_balloon"
     }
-  ],
-  "result": {
-    "item": "davincisvessels:pink_balloon"
-  }
 }

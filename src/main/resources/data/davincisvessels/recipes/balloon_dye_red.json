@@ -1,14 +1,14 @@
 {
-  "type": "crafting_shapeless",
-  "ingredients": [
-    {
-      "tag": "forge:dyes/red"
-    },
-    {
-      "tag": "davincisvessels:balloon"
+    "type": "crafting_shapeless",
+    "ingredients": [
+        {
+            "tag": "forge:dyes/red"
+        },
+        {
+            "tag": "davincisvessels:balloon"
+        }
+    ],
+    "result": {
+        "item": "davincisvessels:red_balloon"
     }
-  ],
-  "result": {
-    "item": "davincisvessels:red_balloon"
-  }
 }

@@ -2,11 +2,8 @@ package com.tridevmc.davincisvessels.common;
 
 import com.tridevmc.compound.config.ConfigType;
 import com.tridevmc.compound.config.ConfigValue;
-import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.davincisvessels.common.control.EnumShipControlType;
-import com.tridevmc.movingworld.MovingWorldMod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.registries.ForgeRegistries;
 
 @ConfigType(ModConfig.Type.SERVER)
 public class DavincisVesselsConfig {

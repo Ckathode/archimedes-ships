@@ -1,22 +1,22 @@
 {
-  "type": "crafting_shaped",
-  "pattern": [
-    " X ",
-    "XXX",
-    "ZYZ"
-  ],
-  "key": {
-    "X": {
-      "tag": "forge:ingots/iron"
+    "type": "crafting_shaped",
+    "pattern": [
+        " X ",
+        "XXX",
+        "ZYZ"
+    ],
+    "key": {
+        "X": {
+            "tag": "forge:ingots/iron"
+        },
+        "Y": {
+            "tag": "forge:storage_blocks/iron"
+        },
+        "Z": {
+            "tag": "forge:dusts/redstone"
+        }
     },
-    "Y": {
-      "tag": "forge:storage_blocks/iron"
-    },
-    "Z": {
-      "tag": "forge:dusts/redstone"
+    "result": {
+        "item": "davincisvessels:anchor_point"
     }
-  },
-  "result": {
-    "item": "davincisvessels:anchor_point"
-  }
 }

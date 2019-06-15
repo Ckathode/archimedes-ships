@@ -1,15 +1,15 @@
 {
-  "type": "crafting_shaped",
-  "pattern": [
-    "X ",
-    "XX"
-  ],
-  "key": {
-    "X": {
-      "tag": "minecraft:wool"
+    "type": "crafting_shaped",
+    "pattern": [
+        "X ",
+        "XX"
+    ],
+    "key": {
+        "X": {
+            "tag": "minecraft:wool"
+        }
+    },
+    "result": {
+        "item": "davincisvessels:seat"
     }
-  },
-  "result": {
-    "item": "davincisvessels:seat"
-  }
 }

@@ -1,14 +1,14 @@
 {
-  "type": "crafting_shapeless",
-  "ingredients": [
-    {
-      "tag": "forge:dyes/blue"
-    },
-    {
-      "tag": "davincisvessels:balloon"
+    "type": "crafting_shapeless",
+    "ingredients": [
+        {
+            "tag": "forge:dyes/blue"
+        },
+        {
+            "tag": "davincisvessels:balloon"
+        }
+    ],
+    "result": {
+        "item": "davincisvessels:blue_balloon"
     }
-  ],
-  "result": {
-    "item": "davincisvessels:blue_balloon"
-  }
 }

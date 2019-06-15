@@ -1,14 +1,14 @@
 {
-  "type": "crafting_shapeless",
-  "ingredients": [
-    {
-      "tag": "forge:ingots/iron"
-    },
-    {
-      "tag": "davincisvessels:bed"
+    "type": "crafting_shapeless",
+    "ingredients": [
+        {
+            "tag": "forge:ingots/iron"
+        },
+        {
+            "tag": "davincisvessels:bed"
+        }
+    ],
+    "result": {
+        "item": "davincisvessels:secured_bed"
     }
-  ],
-  "result": {
-    "item": "davincisvessels:secured_bed"
-  }
 }

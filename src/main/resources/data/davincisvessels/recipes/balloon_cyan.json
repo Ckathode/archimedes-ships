@@ -1,17 +1,17 @@
 {
-  "type": "crafting_shapeless",
-  "ingredients": [
-    {
-      "tag": "forge:dyes/cyan"
-    },
-    {
-      "tag": "minecraft:wool"
-    },
-    {
-      "item": "minecraft:string"
+    "type": "crafting_shapeless",
+    "ingredients": [
+        {
+            "tag": "forge:dyes/cyan"
+        },
+        {
+            "tag": "minecraft:wool"
+        },
+        {
+            "item": "minecraft:string"
+        }
+    ],
+    "result": {
+        "item": "davincisvessels:cyan_balloon"
     }
-  ],
-  "result": {
-    "item": "davincisvessels:cyan_balloon"
-  }
 }

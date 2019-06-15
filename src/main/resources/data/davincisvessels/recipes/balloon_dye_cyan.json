@@ -1,14 +1,14 @@
 {
-  "type": "crafting_shapeless",
-  "ingredients": [
-    {
-      "tag": "forge:dyes/cyan"
-    },
-    {
-      "tag": "davincisvessels:balloon"
+    "type": "crafting_shapeless",
+    "ingredients": [
+        {
+            "tag": "forge:dyes/cyan"
+        },
+        {
+            "tag": "davincisvessels:balloon"
+        }
+    ],
+    "result": {
+        "item": "davincisvessels:cyan_balloon"
     }
-  ],
-  "result": {
-    "item": "davincisvessels:cyan_balloon"
-  }
 }

@@ -9,8 +9,8 @@ import com.tridevmc.davincisvessels.common.network.message.RenameShipMessage;
 import com.tridevmc.davincisvessels.common.tileentity.TileHelm;
 import com.tridevmc.movingworld.common.chunk.assembly.AssembleResult;
 import com.tridevmc.movingworld.common.chunk.assembly.AssembleResult.ResultType;
-import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
@@ -32,7 +32,7 @@ public class GuiHelm extends ContainerScreen {
     private boolean busyCompiling;
 
     public GuiHelm(ContainerHelm container) {
-        super(container,container.player.inventory, new StringTextComponent(""));
+        super(container, container.player.inventory, new StringTextComponent(""));
         helm = container.helm;
         player = container.player;
 
@@ -72,12 +72,12 @@ public class GuiHelm extends ContainerScreen {
         }));
         addButton(btnAssemble);
 
-        btnUndo = new GuiButtonHooked( btnx, btny += 20, 100, 20, I18n.format(LanguageEntries.GUI_STATUS_UNDO));
+        btnUndo = new GuiButtonHooked(btnx, btny += 20, 100, 20, I18n.format(LanguageEntries.GUI_STATUS_UNDO));
         btnUndo.active = helm.getPrevAssembleResult() != null && helm.getPrevAssembleResult().getType() != RESULT_NONE;
         btnUndo.addHook((mX, mY) -> new HelmActionMessage(helm, HelmClientAction.UNDOCOMPILE).sendToServer());
         addButton(btnUndo);
 
-        btnMount = new GuiButtonHooked( btnx, btny += 20, 100, 20, I18n.format(LanguageEntries.GUI_STATUS_MOUNT));
+        btnMount = new GuiButtonHooked(btnx, btny += 20, 100, 20, I18n.format(LanguageEntries.GUI_STATUS_MOUNT));
         btnMount.active = helm.getAssembleResult() != null && helm.getAssembleResult().getType() == RESULT_OK;
         btnMount.addHook((mX, mY) -> new HelmActionMessage(helm, HelmClientAction.MOUNT).sendToServer());
         addButton(btnMount);
@@ -90,7 +90,7 @@ public class GuiHelm extends ContainerScreen {
         txtShipName.setTextColor(0xFFFFFF);
         txtShipName.setText(helm.getInfo().getName());
     }
-    
+
 
     @Override
     public void tick() {

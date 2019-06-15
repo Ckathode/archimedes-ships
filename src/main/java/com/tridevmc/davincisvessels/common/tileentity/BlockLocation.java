@@ -1,7 +1,6 @@
 package com.tridevmc.davincisvessels.common.tileentity;
 
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.dimension.Dimension;
 import net.minecraft.world.dimension.DimensionType;
 
 public class BlockLocation {

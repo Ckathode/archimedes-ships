@@ -2,10 +2,9 @@ package com.tridevmc.davincisvessels.common.handler;
 
 
 import com.tridevmc.davincisvessels.DavincisVesselsMod;
-import com.tridevmc.davincisvessels.common.content.DavincisVesselsContent;
+import com.tridevmc.davincisvessels.common.content.block.BlockHelm;
 import com.tridevmc.davincisvessels.common.entity.EntitySeat;
 import com.tridevmc.davincisvessels.common.entity.EntityShip;
-import com.tridevmc.davincisvessels.common.content.block.BlockHelm;
 import com.tridevmc.davincisvessels.common.tileentity.TileCrate;
 import com.tridevmc.davincisvessels.common.tileentity.TileEntitySecuredBed;
 import com.tridevmc.movingworld.common.chunk.LocatedBlock;
@@ -68,7 +67,6 @@ public class CommonHookContainer {
                     BlockPos position = lb.pos.offset(lb.state.get(BlockHelm.FACING));
                     passenger.stopRiding();
                     passenger.setPositionAndUpdate(position.getX() + 0.5D, position.getY() + 0.5D, position.getZ() + 0.5D);
-                    System.out.println(passenger.getPositionVector().toString());
                 }
             } else if (DavincisVesselsMod.BLOCK_CONFIG.isSeat(lb.state.getBlock())) {
                 Optional<EntitySeat> matchingSeatEntity = ship.capabilities.getSeats().stream().filter(s -> s.getChunkPos().equals(lb.posNoOffset)).findFirst();

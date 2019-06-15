@@ -1,22 +1,22 @@
 {
-  "type": "crafting_shaped",
-  "pattern": [
-    "#O#",
-    "#X#",
-    "###"
-  ],
-  "key": {
-    "#": {
-      "tag": "forge:ingots/iron"
+    "type": "crafting_shaped",
+    "pattern": [
+        "#O#",
+        "#X#",
+        "###"
+    ],
+    "key": {
+        "#": {
+            "tag": "forge:ingots/iron"
+        },
+        "X": {
+            "item": "minecraft:furnace"
+        },
+        "O": {
+            "item": "minecraft:water_bucket"
+        }
     },
-    "X": {
-      "item": "minecraft:furnace"
-    },
-    "O": {
-      "item": "minecraft:water_bucket"
+    "result": {
+        "item": "davincisvessels:engine"
     }
-  },
-  "result": {
-    "item": "davincisvessels:engine"
-  }
 }

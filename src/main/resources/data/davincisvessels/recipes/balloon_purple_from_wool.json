@@ -1,14 +1,14 @@
 {
-  "type": "crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "minecraft:purple_wool"
-    },
-    {
-      "item": "minecraft:string"
+    "type": "crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "minecraft:purple_wool"
+        },
+        {
+            "item": "minecraft:string"
+        }
+    ],
+    "result": {
+        "item": "davincisvessels:purple_balloon"
     }
-  ],
-  "result": {
-    "item": "davincisvessels:purple_balloon"
-  }
 }

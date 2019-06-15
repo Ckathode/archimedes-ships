@@ -16,6 +16,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
@@ -44,35 +45,31 @@ public class BlockHelm extends DirectionalBlock implements ITileEntityProvider {
     }
 
     @Override
-    public VoxelShape getRenderShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
-        VoxelShape selectedShape = super.getRenderShape(state, worldIn, pos);
+    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+        VoxelShape selectedShape = super.getShape(state, worldIn, pos, context);
         if (state == null || state.get(FACING) == null)
-            return super.getRenderShape(state, worldIn, pos);
+            return super.getShape(state, worldIn, pos, context);
 
         double pixelSize = 1D / 16D;
         Direction facing = state.get(FACING);
         switch (facing) {
             case NORTH: {
                 selectedShape = VoxelShapes.create(1 - (pixelSize * 1), 1, 1 - (pixelSize * 3), pixelSize * 1, 0, pixelSize * 2);
-                selectedShape = selectedShape.withOffset(pos.getX(), pos.getY(), pos.getZ());
 
                 return selectedShape;
             }
             case SOUTH: {
                 selectedShape = VoxelShapes.create(1 - (pixelSize * 1), 1, 1 - (pixelSize * 2), pixelSize * 1, 0, pixelSize * 3);
-                selectedShape = selectedShape.withOffset(pos.getX(), pos.getY(), pos.getZ());
 
                 return selectedShape;
             }
             case WEST: {
                 selectedShape = VoxelShapes.create(pixelSize * 2, 0, pixelSize * 1, 1 - (pixelSize * 3), 1, 1 - (pixelSize * 1));
-                selectedShape = selectedShape.withOffset(pos.getX(), pos.getY(), pos.getZ());
 
                 return selectedShape;
             }
             case EAST: {
                 selectedShape = VoxelShapes.create(1 - (pixelSize * 2), 1, 1 - (pixelSize * 1), pixelSize * 3, 0, pixelSize * 1);
-                selectedShape = selectedShape.withOffset(pos.getX(), pos.getY(), pos.getZ());
 
                 return selectedShape;
             }
@@ -88,8 +85,8 @@ public class BlockHelm extends DirectionalBlock implements ITileEntityProvider {
             TileHelm helm = world.getTileEntity(pos) instanceof TileHelm ? (TileHelm) world.getTileEntity(pos) : null;
             if (helm != null && player instanceof ServerPlayerEntity) {
                 DavincisUIHooks.openGui(player, helm);
-                return true;
             }
+            return true;
         }
         return false;
     }

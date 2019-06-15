@@ -1,17 +1,17 @@
 {
-  "type": "crafting_shapeless",
-  "ingredients": [
-    {
-      "tag": "forge:dyes/light_blue"
-    },
-    {
-      "tag": "minecraft:wool"
-    },
-    {
-      "item": "minecraft:string"
+    "type": "crafting_shapeless",
+    "ingredients": [
+        {
+            "tag": "forge:dyes/light_blue"
+        },
+        {
+            "tag": "minecraft:wool"
+        },
+        {
+            "item": "minecraft:string"
+        }
+    ],
+    "result": {
+        "item": "davincisvessels:light_blue_balloon"
     }
-  ],
-  "result": {
-    "item": "davincisvessels:light_blue_balloon"
-  }
 }

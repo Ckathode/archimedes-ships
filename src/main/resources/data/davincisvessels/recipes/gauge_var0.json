@@ -1,25 +1,25 @@
 {
-  "type": "crafting_shaped",
-  "pattern": [
-    "VXV",
-    "XO#",
-    " # "
-  ],
-  "key": {
-    "#": {
-      "tag": "forge:ingots/gold"
+    "type": "crafting_shaped",
+    "pattern": [
+        "VXV",
+        "XO#",
+        " # "
+    ],
+    "key": {
+        "#": {
+            "tag": "forge:ingots/gold"
+        },
+        "X": {
+            "tag": "forge:ingots/iron"
+        },
+        "V": {
+            "item": "minecraft:glass_pane"
+        },
+        "O": {
+            "tag": "forge:dusts/redstone"
+        }
     },
-    "X": {
-      "tag": "forge:ingots/iron"
-    },
-    "V": {
-      "item": "minecraft:glass_pane"
-    },
-    "O": {
-      "tag": "forge:dusts/redstone"
+    "result": {
+        "item": "davincisvessels:gauge"
     }
-  },
-  "result": {
-    "item": "davincisvessels:gauge"
-  }
 }

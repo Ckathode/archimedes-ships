@@ -1,14 +1,14 @@
 {
-  "type": "crafting_shapeless",
-  "ingredients": [
-    {
-      "tag": "minecraft:wool"
-    },
-    {
-      "tag": "minecraft:logs"
+    "type": "crafting_shapeless",
+    "ingredients": [
+        {
+            "tag": "minecraft:wool"
+        },
+        {
+            "tag": "minecraft:logs"
+        }
+    ],
+    "result": {
+        "item": "davincisvessels:floater"
     }
-  ],
-  "result": {
-    "item": "davincisvessels:floater"
-  }
 }

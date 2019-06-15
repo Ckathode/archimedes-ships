@@ -1,14 +1,14 @@
 {
-  "type": "crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "minecraft:orange_wool"
-    },
-    {
-      "item": "minecraft:string"
+    "type": "crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "minecraft:orange_wool"
+        },
+        {
+            "item": "minecraft:string"
+        }
+    ],
+    "result": {
+        "item": "davincisvessels:orange_balloon"
     }
-  ],
-  "result": {
-    "item": "davincisvessels:orange_balloon"
-  }
 }

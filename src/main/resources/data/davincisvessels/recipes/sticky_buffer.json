@@ -1,14 +1,14 @@
 {
-  "type": "crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "davincisvessels:buffer"
-    },
-    {
-      "item": "minecraft:slime_ball"
+    "type": "crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "davincisvessels:buffer"
+        },
+        {
+            "item": "minecraft:slime_ball"
+        }
+    ],
+    "result": {
+        "item": "davincisvessels:sticky_buffer"
     }
-  ],
-  "result": {
-    "item": "davincisvessels:sticky_buffer"
-  }
 }

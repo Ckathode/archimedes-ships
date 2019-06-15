@@ -21,34 +21,9 @@ import java.util.Optional;
 
 public class DavincisUIHooks {
 
-    private enum UIType {
-        TILE(0),
-        ENTITY(1),
-        OTHER(2);
-
-        static {
-            TYPES = new UIType[]{TILE, ENTITY, OTHER};
-        }
-
-        private static final UIType[] TYPES;
-        private final int id;
-
-        UIType(int id) {
-            this.id = id;
-        }
-
-        public int getId() {
-            return this.id;
-        }
-
-        public static UIType byId(int id) {
-            return TYPES[id];
-        }
-    }
-
     private static Optional<IElementProvider> lastProvider = Optional.empty();
 
-    public static  <C extends Container> ContainerType<C> register(IForgeRegistry<ContainerType<?>> registry) {
+    public static <C extends Container> ContainerType<C> register(IForgeRegistry<ContainerType<?>> registry) {
         ContainerType<C> containerType = IForgeContainerType.create(getFactory());
         containerType.setRegistryName("davincisvessels", "containers");
         registry.register(containerType);
@@ -66,12 +41,14 @@ public class DavincisUIHooks {
                     BlockPos pos = data.readBlockPos();
                     TileEntity tile = world.getTileEntity(pos);
                     if (tile instanceof IElementProvider) {
+                        lastProvider = Optional.of((IElementProvider) tile);
                         return (C) ((IElementProvider) tile).createMenu(windowId, inv, inv.player);
                     }
                 case ENTITY:
                     int entityId = data.readVarInt();
                     Entity entity = world.getEntityByID(entityId);
                     if (entity instanceof IElementProvider) {
+                        lastProvider = Optional.of((IElementProvider) entity);
                         return (C) ((IElementProvider) entity).createMenu(windowId, inv, inv.player);
                     }
                 default:
@@ -110,6 +87,32 @@ public class DavincisUIHooks {
             packetBuffer.writeByte(UIType.TILE.id);
             packetBuffer.writeVarInt(entity);
         });
+    }
+
+    private enum UIType {
+        TILE(0),
+        ENTITY(1),
+        OTHER(2);
+
+        private static final UIType[] TYPES;
+
+        static {
+            TYPES = new UIType[]{TILE, ENTITY, OTHER};
+        }
+
+        private final int id;
+
+        UIType(int id) {
+            this.id = id;
+        }
+
+        public static UIType byId(int id) {
+            return TYPES[id];
+        }
+
+        public int getId() {
+            return this.id;
+        }
     }
 
 }

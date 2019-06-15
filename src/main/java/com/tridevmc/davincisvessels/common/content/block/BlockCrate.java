@@ -28,10 +28,9 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
 public class BlockCrate extends ContainerBlock {
-    private static final VoxelShape SHAPE = VoxelShapes.create(0F, 0F, 0F, 1F, 0.1F, 1F);
-
     public static final EnumProperty AXIS = EnumProperty.create("axis", Direction.Axis.class, Direction.Axis.X, Direction.Axis.Z);
     public static final BooleanProperty POWERED = BooleanProperty.create("powered");
+    private static final VoxelShape SHAPE = VoxelShapes.create(0F, 0F, 0F, 1F, 0.1F, 1F);
 
     public BlockCrate() {
         super(Block.Properties.create(Material.WOOD).hardnessAndResistance(1F));

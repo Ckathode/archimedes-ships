@@ -1,14 +1,14 @@
 {
-  "type": "crafting_shapeless",
-  "ingredients": [
-    {
-      "tag": "forge:dyes/magenta"
-    },
-    {
-      "tag": "davincisvessels:balloon"
+    "type": "crafting_shapeless",
+    "ingredients": [
+        {
+            "tag": "forge:dyes/magenta"
+        },
+        {
+            "tag": "davincisvessels:balloon"
+        }
+    ],
+    "result": {
+        "item": "davincisvessels:magenta_balloon"
     }
-  ],
-  "result": {
-    "item": "davincisvessels:magenta_balloon"
-  }
 }

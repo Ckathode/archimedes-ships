@@ -1,17 +1,17 @@
 {
-  "type": "crafting_shapeless",
-  "ingredients": [
-    {
-      "tag": "forge:dyes/green"
-    },
-    {
-      "tag": "minecraft:wool"
-    },
-    {
-      "item": "minecraft:string"
+    "type": "crafting_shapeless",
+    "ingredients": [
+        {
+            "tag": "forge:dyes/green"
+        },
+        {
+            "tag": "minecraft:wool"
+        },
+        {
+            "item": "minecraft:string"
+        }
+    ],
+    "result": {
+        "item": "davincisvessels:green_balloon"
     }
-  ],
-  "result": {
-    "item": "davincisvessels:green_balloon"
-  }
 }

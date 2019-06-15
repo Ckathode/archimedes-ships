@@ -1,19 +1,19 @@
 {
-  "type": "crafting_shaped",
-  "pattern": [
-    " # ",
-    "# #",
-    "XXX"
-  ],
-  "key": {
-    "X": {
-      "tag": "minecraft:planks"
+    "type": "crafting_shaped",
+    "pattern": [
+        " # ",
+        "# #",
+        "XXX"
+    ],
+    "key": {
+        "X": {
+            "tag": "minecraft:planks"
+        },
+        "#": {
+            "item": "minecraft:leather"
+        }
     },
-    "#": {
-      "item": "minecraft:leather"
+    "result": {
+        "item": "davincisvessels:crate_wood"
     }
-  },
-  "result": {
-    "item": "davincisvessels:crate_wood"
-  }
 }

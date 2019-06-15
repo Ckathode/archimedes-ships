@@ -16,7 +16,7 @@ import java.util.List;
 public class CommandDisassembleNear {
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        dispatcher.register(Commands.literal("dvtp")
+        dispatcher.register(Commands.literal("dvdisassemblenear")
                 .requires(p -> p.hasPermissionLevel(3))
                 .then(Commands.argument("range", DoubleArgumentType.doubleArg(1D, 64D))
                         .executes((c) -> execute(c, DoubleArgumentType.getDouble(c, "range"))))

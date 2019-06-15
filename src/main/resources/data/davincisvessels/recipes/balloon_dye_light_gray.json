@@ -1,14 +1,14 @@
 {
-  "type": "crafting_shapeless",
-  "ingredients": [
-    {
-      "tag": "forge:dyes/light_gray"
-    },
-    {
-      "tag": "davincisvessels:balloon"
+    "type": "crafting_shapeless",
+    "ingredients": [
+        {
+            "tag": "forge:dyes/light_gray"
+        },
+        {
+            "tag": "davincisvessels:balloon"
+        }
+    ],
+    "result": {
+        "item": "davincisvessels:light_gray_balloon"
     }
-  ],
-  "result": {
-    "item": "davincisvessels:light_gray_balloon"
-  }
 }

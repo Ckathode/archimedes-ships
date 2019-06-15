@@ -20,12 +20,10 @@ import org.apache.logging.log4j.Logger;
 public class DavincisVesselsMod {
     public static final String MOD_ID = "davincisvessels";
     public static final String RESOURCE_DOMAIN = "davincisvessels:";
-
+    public static final Logger LOG = LogManager.getLogger("DavincisVessels");
+    public static final DavincisVesselsContent CONTENT = new DavincisVesselsContent();
     public static DavincisVesselsMod INSTANCE;
     public static CommonProxy PROXY;
-    public static final Logger LOG = LogManager.getLogger("DavincisVessels");
-
-    public static final DavincisVesselsContent CONTENT = new DavincisVesselsContent();
     public static DavincisVesselsConfig CONFIG;
     public static DavincisVesselsBlockConfig BLOCK_CONFIG;
 

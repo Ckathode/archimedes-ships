@@ -150,7 +150,7 @@ public class TileCrate extends TileEntity implements IMovingTile, ITickable {
         } else if (!containedEntity.isAlive()) {
             setContainedEntity(null);
         } else {
-            containedEntity.setMotion(0,0,0);
+            containedEntity.setMotion(0, 0, 0);
             if (parentShip == null) {
                 containedEntity.setPosition(pos.getX() + 0.5d, pos.getY() + 0.15f + containedEntity.getYOffset(), pos.getZ() + 0.5d);
             } else {

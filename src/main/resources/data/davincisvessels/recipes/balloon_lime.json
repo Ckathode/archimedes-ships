@@ -1,17 +1,17 @@
 {
-  "type": "crafting_shapeless",
-  "ingredients": [
-    {
-      "tag": "forge:dyes/lime"
-    },
-    {
-      "tag": "minecraft:wool"
-    },
-    {
-      "item": "minecraft:string"
+    "type": "crafting_shapeless",
+    "ingredients": [
+        {
+            "tag": "forge:dyes/lime"
+        },
+        {
+            "tag": "minecraft:wool"
+        },
+        {
+            "item": "minecraft:string"
+        }
+    ],
+    "result": {
+        "item": "davincisvessels:lime_balloon"
     }
-  ],
-  "result": {
-    "item": "davincisvessels:lime_balloon"
-  }
 }

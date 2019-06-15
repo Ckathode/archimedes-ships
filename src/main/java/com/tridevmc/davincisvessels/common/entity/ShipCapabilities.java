@@ -246,7 +246,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
 
         if (block instanceof IBlockBalloon) {
             balloonCount += ((IBlockBalloon) block).getBalloonWorth(tile);
-        }else if (DavincisVesselsMod.BLOCK_CONFIG.isBalloon(block)) {
+        } else if (DavincisVesselsMod.BLOCK_CONFIG.isBalloon(block)) {
             balloonCount++;
         } else if (block == DavincisVesselsMod.CONTENT.blockFloater) {
             floaters++;

@@ -230,6 +230,7 @@ public class DavincisVesselsContent {
                 .setUpdateInterval(updateFrequency)
                 .setShouldReceiveVelocityUpdates(sendVelocityUpdates)
                 .disableSummoning()
+                .setCustomClientFactory((spawnEntity, world) -> entityCreator.apply(world))
                 .build(id.toString());
         entityType.setRegistryName(id);
         registry.register(entityType);

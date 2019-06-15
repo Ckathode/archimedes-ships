@@ -114,7 +114,7 @@ public class GuiShip extends ContainerScreen<ContainerShip> {
         public boolean canDo = true;
 
         public GuiButtonSubmersible(int x, int y) {
-            super( x, y, 32, 32, "");
+            super(x, y, 32, 32, "");
         }
 
         @Override
