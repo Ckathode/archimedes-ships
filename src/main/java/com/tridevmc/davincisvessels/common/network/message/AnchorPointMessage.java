@@ -71,7 +71,7 @@ public class AnchorPointMessage extends Message {
                     anchorPoint.content.getTag().remove("INSTANCE");
                 AnchorInstance itemAnchorInstanceTag = new AnchorInstance();
 
-                itemAnchorInstanceTag.setType(AnchorInstance.InstanceType.SHIP);
+                itemAnchorInstanceTag.setType(AnchorInstance.InstanceType.VESSEL);
                 itemAnchorInstanceTag.setIdentifier(UUID.randomUUID());
                 itemAnchorInstanceTag.addRelation(anchorPoint.getInstance().getIdentifier(),
                         new BlockLocation(anchorPoint.getPos(), sender.world.getDimension().getType()));

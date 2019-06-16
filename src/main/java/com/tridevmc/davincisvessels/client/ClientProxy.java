@@ -2,7 +2,7 @@ package com.tridevmc.davincisvessels.client;
 
 import com.tridevmc.compound.config.CompoundConfig;
 import com.tridevmc.davincisvessels.client.control.DavincisKeybinds;
-import com.tridevmc.davincisvessels.client.control.ShipKeyHandler;
+import com.tridevmc.davincisvessels.client.control.VesselKeyHandler;
 import com.tridevmc.davincisvessels.client.handler.ClientHookContainer;
 import com.tridevmc.davincisvessels.client.render.RenderParachute;
 import com.tridevmc.davincisvessels.client.render.RenderSeat;
@@ -11,7 +11,7 @@ import com.tridevmc.davincisvessels.client.render.TileEntityHelmRenderer;
 import com.tridevmc.davincisvessels.common.CommonProxy;
 import com.tridevmc.davincisvessels.common.entity.EntityParachute;
 import com.tridevmc.davincisvessels.common.entity.EntitySeat;
-import com.tridevmc.davincisvessels.common.entity.EntityShip;
+import com.tridevmc.davincisvessels.common.entity.EntityVessel;
 import com.tridevmc.davincisvessels.common.tileentity.TileGauge;
 import com.tridevmc.davincisvessels.common.tileentity.TileHelm;
 import com.tridevmc.movingworld.client.render.RenderMovingWorld;
@@ -36,7 +36,7 @@ public class ClientProxy extends CommonProxy {
     private void registerKeyHandlers() {
         keybinds = CompoundConfig.of(DavincisKeybinds.class, ModLoadingContext.get().getActiveContainer());
         keybinds.addToControlsMenu();
-        MinecraftForge.EVENT_BUS.register(new ShipKeyHandler(keybinds));
+        MinecraftForge.EVENT_BUS.register(new VesselKeyHandler(keybinds));
     }
 
     private void registerRenderers() {
@@ -45,7 +45,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     private void registerEntityRenderers() {
-        RenderingRegistry.registerEntityRenderingHandler(EntityShip.class, RenderMovingWorld::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityVessel.class, RenderMovingWorld::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, RenderParachute::new);
         RenderingRegistry.registerEntityRenderingHandler(EntitySeat.class, RenderSeat::new);
     }

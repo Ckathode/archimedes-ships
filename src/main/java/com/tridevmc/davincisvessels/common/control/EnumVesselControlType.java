@@ -1,5 +1,5 @@
 package com.tridevmc.davincisvessels.common.control;
 
-public enum EnumShipControlType {
+public enum EnumVesselControlType {
     VANILLA, DAVINCIS
 }

@@ -26,9 +26,9 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.util.*;
 
-public class ShipCapabilities extends MovingWorldCapabilities {
+public class VesselCapabilities extends MovingWorldCapabilities {
 
-    private final EntityShip ship;
+    private final EntityVessel vessel;
     public float speedMultiplier, rotationMultiplier, liftMultiplier;
     public float brakeMult;
     private float mass;
@@ -43,9 +43,9 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     private boolean canSubmerge = false;
     private boolean submerseFound = false;
 
-    public ShipCapabilities(EntityMovingWorld movingWorld, boolean autoCalcMass) {
+    public VesselCapabilities(EntityMovingWorld movingWorld, boolean autoCalcMass) {
         super(movingWorld, autoCalcMass);
-        ship = (EntityShip) movingWorld;
+        vessel = (EntityVessel) movingWorld;
         seats = new ArrayList<>();
     }
 
@@ -72,12 +72,12 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     }
 
     public float getEnginePower() {
-        return ship.getDataManager().get(EntityShip.ENGINE_POWER);
+        return vessel.getDataManager().get(EntityVessel.ENGINE_POWER);
     }
 
     public ImmutablePair<LocatedBlock, LocatedBlock> findClosestValidAnchor(int radius) {
         LocatedBlock closest = LocatedBlock.AIR;
-        LocatedBlock shipAnchor = LocatedBlock.AIR;
+        LocatedBlock vesselAnchor = LocatedBlock.AIR;
         int smallestOverallDistance = Integer.MAX_VALUE;
 
         if (anchorPoints != null) {
@@ -90,21 +90,21 @@ public class ShipCapabilities extends MovingWorldCapabilities {
                 Iterator<Map.Entry<UUID, BlockLocation>> relationIterator = anchor.getRelatedAnchors().entrySet().iterator();
                 while (relationIterator.hasNext()) {
                     Map.Entry<UUID, BlockLocation> relation = relationIterator.next();
-                    if (relation.getValue().getDim() == ship.world.getDimension().getType()) {
-                        TileEntity relatedTile = ship.world.getTileEntity(relation.getValue().getPos());
+                    if (relation.getValue().getDim() == vessel.world.getDimension().getType()) {
+                        TileEntity relatedTile = vessel.world.getTileEntity(relation.getValue().getPos());
                         if (relatedTile instanceof TileAnchorPoint) {
                             TileAnchorPoint relatedAnchor = (TileAnchorPoint) relatedTile;
                             if (relatedAnchor.getInstance().getRelatedAnchors().containsKey(anchor.getIdentifier())
                                     && relatedAnchor.getInstance().getType().equals(AnchorInstance.InstanceType.LAND)) {
-                                int xDist = (int) Math.abs(Math.round(ship.posX) - relatedAnchor.getPos().getX());
-                                int yDist = (int) Math.abs(Math.round(ship.posY) - relatedAnchor.getPos().getY());
-                                int zDist = (int) Math.abs(Math.round(ship.posZ) - relatedAnchor.getPos().getZ());
+                                int xDist = (int) Math.abs(Math.round(vessel.posX) - relatedAnchor.getPos().getX());
+                                int yDist = (int) Math.abs(Math.round(vessel.posY) - relatedAnchor.getPos().getY());
+                                int zDist = (int) Math.abs(Math.round(vessel.posZ) - relatedAnchor.getPos().getZ());
                                 if (!(xDist > radius || yDist > radius || zDist > radius)) {
                                     int collectiveDist = xDist + yDist + zDist;
                                     if (collectiveDist < smallestOverallDistance) {
                                         smallestOverallDistance = collectiveDist;
-                                        closest = new LocatedBlock(ship.getEntityWorld().getBlockState(relatedTile.getPos()), relatedTile, relatedTile.getPos());
-                                        shipAnchor = anchorLB;
+                                        closest = new LocatedBlock(vessel.getEntityWorld().getBlockState(relatedTile.getPos()), relatedTile, relatedTile.getPos());
+                                        vesselAnchor = anchorLB;
                                     }
                                 }
                                 continue;
@@ -116,7 +116,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
                 }
             }
         }
-        return new ImmutablePair<>(shipAnchor, closest);
+        return new ImmutablePair<>(vesselAnchor, closest);
     }
 
     public void updateEngines() {
@@ -126,20 +126,20 @@ public class ShipCapabilities extends MovingWorldCapabilities {
                 ePower += te.getPowerIncrement(this);
             }
         }
-        if (!ship.world.isRemote)
-            ship.getDataManager().set(EntityShip.ENGINE_POWER, ePower);
+        if (!vessel.world.isRemote)
+            vessel.getDataManager().set(EntityVessel.ENGINE_POWER, ePower);
     }
 
     @Override
     public boolean canFly() {
-        return (DavincisVesselsMod.CONFIG.enableAirShips && getBalloonCount() >= blockCount * DavincisVesselsMod.CONFIG.flyBalloonRatio)
-                || ship.areSubmerged();
+        return (DavincisVesselsMod.CONFIG.enableAirVessels && getBalloonCount() >= blockCount * DavincisVesselsMod.CONFIG.flyBalloonRatio)
+                || vessel.areSubmerged();
     }
 
     public boolean canSubmerge() {
         if (!submerseFound) {
             FloodFiller floodFiller = new FloodFiller();
-            LocatedBlockList filledBlocks = floodFiller.floodFillMobileChunk(ship.getMobileChunk());
+            LocatedBlockList filledBlocks = floodFiller.floodFillMobileChunk(vessel.getMobileChunk());
             int filledBlockCount = filledBlocks.size();
 
             canSubmerge = false;
@@ -170,7 +170,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     }
 
     public boolean canMove() {
-        return ship.getDataManager().get(EntityShip.CAN_MOVE);
+        return vessel.getDataManager().get(EntityVessel.CAN_MOVE);
     }
 
     public List<ITileEngineModifier> getEngines() {
@@ -195,14 +195,14 @@ public class ShipCapabilities extends MovingWorldCapabilities {
     public boolean mountEntity(Entity player) {
         if (player.isSneaking()) {
             return false;
-        } else if (ship.isBeingRidden()) {
+        } else if (vessel.isBeingRidden()) {
             if (player instanceof PlayerEntity) {
                 tryMountSeat((PlayerEntity) player);
             }
             return true;
         } else {
-            if (!ship.world.isRemote) {
-                player.startRiding(ship);
+            if (!vessel.world.isRemote) {
+                player.startRiding(vessel);
             }
             return true;
         }
@@ -217,7 +217,7 @@ public class ShipCapabilities extends MovingWorldCapabilities {
 
     public void spawnSeatEntities() {
         if (seats != null)
-            seats.forEach(seat -> ship.world.addEntity(seat));
+            seats.forEach(seat -> vessel.world.addEntity(seat));
     }
 
     @Override
@@ -227,8 +227,8 @@ public class ShipCapabilities extends MovingWorldCapabilities {
         blockCount++;
         nonAirBlockCount++;
         TileEntity tile = null;
-        if (ship != null && ship.getMobileChunk() != null)
-            tile = ship.getMobileChunk().getTileEntity(pos);
+        if (vessel != null && vessel.getMobileChunk() != null)
+            tile = vessel.getMobileChunk().getTileEntity(pos);
 
         Block block = state.getBlock();
         if (block == null) {
@@ -251,16 +251,16 @@ public class ShipCapabilities extends MovingWorldCapabilities {
         } else if (block == DavincisVesselsMod.CONTENT.blockFloater) {
             floaters++;
         } else if (block == DavincisVesselsMod.CONTENT.blockAnchorPoint) {
-            TileEntity te = ship.getMobileChunk().getTileEntity(pos);
+            TileEntity te = vessel.getMobileChunk().getTileEntity(pos);
             if (te instanceof TileAnchorPoint && ((TileAnchorPoint) te).getInstance() != null
-                    && ((TileAnchorPoint) te).getInstance().getType().equals(AnchorInstance.InstanceType.SHIP)) {
+                    && ((TileAnchorPoint) te).getInstance().getType().equals(AnchorInstance.InstanceType.VESSEL)) {
                 if (anchorPoints == null) {
                     anchorPoints = new ArrayList<>();
                 }
                 anchorPoints.add(new LocatedBlock(state, te, pos));
             }
         } else if (block == DavincisVesselsMod.CONTENT.blockEngine) {
-            TileEntity te = ship.getMobileChunk().getTileEntity(pos);
+            TileEntity te = vessel.getMobileChunk().getTileEntity(pos);
             if (te instanceof ITileEngineModifier) {
                 if (engines == null) {
                     engines = new ArrayList<>(4);
@@ -268,8 +268,8 @@ public class ShipCapabilities extends MovingWorldCapabilities {
                 engines.add((ITileEngineModifier) te);
             }
         } else if (block == DavincisVesselsMod.CONTENT.blockSeat || DavincisVesselsMod.BLOCK_CONFIG.isSeat(block)) {
-            int x1 = ship.riderDestination.getX(), y1 = ship.riderDestination.getY(), z1 = ship.riderDestination.getZ();
-            switch (ship.frontDirection) {
+            int x1 = vessel.riderDestination.getX(), y1 = vessel.riderDestination.getY(), z1 = vessel.riderDestination.getZ();
+            switch (vessel.frontDirection) {
                 case SOUTH: {
                     z1 -= 1;
                     break;
@@ -289,8 +289,8 @@ public class ShipCapabilities extends MovingWorldCapabilities {
             }
 
             if (pos.getX() != x1 || pos.getY() != y1 || pos.getZ() != z1) {
-                EntitySeat seat = new EntitySeat(ship.world);
-                seat.setupShip(ship, pos);
+                EntitySeat seat = new EntitySeat(vessel.world);
+                seat.setupVessel(vessel, pos);
                 addSeat(seat);
             }
         }
@@ -298,10 +298,10 @@ public class ShipCapabilities extends MovingWorldCapabilities {
 
     @Override
     public void postBlockAdding() {
-        if (ship.getMobileChunk() != null && ship.getMobileChunk().marker != null
-                && ship.getMobileChunk().marker.tile instanceof TileHelm) {
-            if (((TileHelm) ship.getMobileChunk().marker.tile).submerge && canSubmerge()) {
-                ship.setSubmerge(true);
+        if (vessel.getMobileChunk() != null && vessel.getMobileChunk().marker != null
+                && vessel.getMobileChunk().marker.tile instanceof TileHelm) {
+            if (((TileHelm) vessel.getMobileChunk().marker.tile).submerge && canSubmerge()) {
+                vessel.setSubmerge(true);
             }
         }
     }

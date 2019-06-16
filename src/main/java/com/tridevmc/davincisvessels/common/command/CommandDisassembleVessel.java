@@ -4,13 +4,13 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.tridevmc.davincisvessels.common.entity.EntityShip;
+import com.tridevmc.davincisvessels.common.entity.EntityVessel;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.StringTextComponent;
 
-public class CommandDisassembleShip {
+public class CommandDisassembleVessel {
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
         dispatcher.register(Commands.literal("dvdisassemble")
@@ -24,22 +24,22 @@ public class CommandDisassembleShip {
     private static int execute(CommandContext<CommandSource> d, boolean force, boolean drop) throws CommandSyntaxException {
         ServerPlayerEntity player = d.getSource().asPlayer();
 
-        if (player.getRidingEntity() instanceof EntityShip) {
-            EntityShip ship = (EntityShip) player.getRidingEntity();
+        if (player.getRidingEntity() instanceof EntityVessel) {
+            EntityVessel vessel = (EntityVessel) player.getRidingEntity();
 
-            if (!ship.disassemble(force)) {
+            if (!vessel.disassemble(force)) {
                 if (drop) {
-                    ship.dropAsItems();
-                    d.getSource().sendFeedback(new StringTextComponent("Unable to disassemble ship, dropped as items."), true);
+                    vessel.dropAsItems();
+                    d.getSource().sendFeedback(new StringTextComponent("Unable to disassemble vessel, dropped as items."), true);
                 } else {
-                    d.getSource().sendErrorMessage(new StringTextComponent("Failed to disassemble ship, have you tried using force?"));
+                    d.getSource().sendErrorMessage(new StringTextComponent("Failed to disassemble vessel, have you tried using force?"));
                 }
             } else {
-                d.getSource().sendFeedback(new StringTextComponent("Disassembled ship."), true);
+                d.getSource().sendFeedback(new StringTextComponent("Disassembled vessel."), true);
             }
             return 1;
         } else {
-            d.getSource().sendErrorMessage(new StringTextComponent("Not steering a ship, no disassembly possible."));
+            d.getSource().sendErrorMessage(new StringTextComponent("Not steering a vessel, no disassembly possible."));
             return -1;
         }
     }

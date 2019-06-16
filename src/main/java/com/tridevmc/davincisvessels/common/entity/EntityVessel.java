@@ -1,13 +1,13 @@
 package com.tridevmc.davincisvessels.common.entity;
 
 import com.tridevmc.davincisvessels.DavincisVesselsMod;
-import com.tridevmc.davincisvessels.client.control.ShipControllerClient;
-import com.tridevmc.davincisvessels.client.gui.ContainerShip;
-import com.tridevmc.davincisvessels.client.gui.GuiShip;
+import com.tridevmc.davincisvessels.client.control.VesselControllerClient;
+import com.tridevmc.davincisvessels.client.gui.ContainerVessel;
+import com.tridevmc.davincisvessels.client.gui.GuiVessel;
 import com.tridevmc.davincisvessels.common.IElementProvider;
 import com.tridevmc.davincisvessels.common.api.tileentity.ITileEngineModifier;
-import com.tridevmc.davincisvessels.common.control.EnumShipControlType;
-import com.tridevmc.davincisvessels.common.control.ShipControllerCommon;
+import com.tridevmc.davincisvessels.common.control.EnumVesselControlType;
+import com.tridevmc.davincisvessels.common.control.VesselControllerCommon;
 import com.tridevmc.davincisvessels.common.tileentity.TileHelm;
 import com.tridevmc.movingworld.common.chunk.LocatedBlock;
 import com.tridevmc.movingworld.common.chunk.MovingWorldAssemblyInteractor;
@@ -55,29 +55,29 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.util.Set;
 
-public class EntityShip extends EntityMovingWorld implements IElementProvider<ContainerShip> {
+public class EntityVessel extends EntityMovingWorld implements IElementProvider<ContainerVessel> {
 
-    public static final DataParameter<Float> ENGINE_POWER = EntityDataManager.createKey(EntityShip.class, DataSerializers.FLOAT);
-    public static final DataParameter<Boolean> CAN_MOVE = EntityDataManager.createKey(EntityShip.class, DataSerializers.BOOLEAN);
-    public static final DataParameter<Boolean> CAN_SUBMERGE = EntityDataManager.createKey(EntityShip.class, DataSerializers.BOOLEAN);
-    public static final DataParameter<Byte> IS_SUBMERGED = EntityDataManager.createKey(EntityShip.class, DataSerializers.BYTE);
+    public static final DataParameter<Float> ENGINE_POWER = EntityDataManager.createKey(EntityVessel.class, DataSerializers.FLOAT);
+    public static final DataParameter<Boolean> CAN_MOVE = EntityDataManager.createKey(EntityVessel.class, DataSerializers.BOOLEAN);
+    public static final DataParameter<Boolean> CAN_SUBMERGE = EntityDataManager.createKey(EntityVessel.class, DataSerializers.BOOLEAN);
+    public static final DataParameter<Byte> IS_SUBMERGED = EntityDataManager.createKey(EntityVessel.class, DataSerializers.BYTE);
 
     public static final float BASE_FORWARD_SPEED = 0.005F, BASE_TURN_SPEED = 0.5F, BASE_LIFT_SPEED = 0.004F;
-    public ShipCapabilities capabilities;
-    private ShipControllerCommon controller;
+    public VesselCapabilities capabilities;
+    private VesselControllerCommon controller;
     private MovingWorldHandlerCommon handler;
-    private ShipAssemblyInteractor shipAssemblyInteractor;
+    private VesselAssemblyInteractor vesselAssemblyInteractor;
     private int driftCooldown = 0;
     private boolean submerge;
 
-    public EntityShip(World world) {
-        super((EntityType<? extends EntityMovingWorld>) DavincisVesselsMod.CONTENT.entityTypes.get(EntityShip.class), world);
-        capabilities = new ShipCapabilities(this, true);
+    public EntityVessel(World world) {
+        super((EntityType<? extends EntityMovingWorld>) DavincisVesselsMod.CONTENT.entityTypes.get(EntityVessel.class), world);
+        capabilities = new VesselCapabilities(this, true);
     }
 
     @Override
     public EntityType<?> getType() {
-        return DavincisVesselsMod.CONTENT.entityTypes.get(EntityShip.class);
+        return DavincisVesselsMod.CONTENT.entityTypes.get(EntityVessel.class);
     }
 
     @Override
@@ -152,10 +152,10 @@ public class EntityShip extends EntityMovingWorld implements IElementProvider<Co
     public MovingWorldHandlerCommon getHandler() {
         if (handler == null) {
             if (EffectiveSide.get() == LogicalSide.CLIENT) {
-                handler = new ShipHandlerClient(this);
+                handler = new VesselHandlerClient(this);
                 handler.setMovingWorld(this);
             } else {
-                handler = new ShipHandlerServer(this);
+                handler = new VesselHandlerServer(this);
                 handler.setMovingWorld(this);
             }
         }
@@ -173,25 +173,25 @@ public class EntityShip extends EntityMovingWorld implements IElementProvider<Co
     @Override
     @OnlyIn(Dist.CLIENT)
     public void initMovingWorldClient() {
-        handler = new ShipHandlerClient(this);
-        controller = new ShipControllerClient();
+        handler = new VesselHandlerClient(this);
+        controller = new VesselControllerClient();
     }
 
     @Override
     public void initMovingWorldCommon() {
-        handler = new ShipHandlerServer(this);
-        controller = new ShipControllerCommon();
+        handler = new VesselHandlerServer(this);
+        controller = new VesselControllerCommon();
     }
 
     @Override
     public MovingWorldCapabilities getMovingWorldCapabilities() {
-        return this.capabilities == null ? new ShipCapabilities(this, true) : this.capabilities;
+        return this.capabilities == null ? new VesselCapabilities(this, true) : this.capabilities;
     }
 
     @Override
     public void setCapabilities(MovingWorldCapabilities capabilities) {
-        if (capabilities instanceof ShipCapabilities) {
-            this.capabilities = (ShipCapabilities) capabilities;
+        if (capabilities instanceof VesselCapabilities) {
+            this.capabilities = (VesselCapabilities) capabilities;
         }
     }
 
@@ -234,12 +234,12 @@ public class EntityShip extends EntityMovingWorld implements IElementProvider<Co
 
     @Override
     public boolean isBraking() {
-        return controller.getShipControl() == 3;
+        return controller.getVesselControl() == 3;
     }
 
     @Override
     public MovingWorldAssemblyInteractor getNewAssemblyInteractor() {
-        return new ShipAssemblyInteractor();
+        return new VesselAssemblyInteractor();
     }
 
     @Override
@@ -406,7 +406,7 @@ public class EntityShip extends EntityMovingWorld implements IElementProvider<Co
             setMotion(getMotion().add(0, buoyancyforce / mass, 0));
         }
 
-        if (DavincisVesselsMod.CONFIG.enableShipDownfall) {
+        if (DavincisVesselsMod.CONFIG.enableVesselDownfall) {
             if (!isFlying() || (submergeMode && belowWater <= (getMobileChunk().maxY() * 5 / 3 * 2)))
                 setMotion(getMotion().subtract(0, gravity, 0));
         } else {
@@ -419,7 +419,7 @@ public class EntityShip extends EntityMovingWorld implements IElementProvider<Co
 
     @Override
     public void handleServerUpdatePreRotation() {
-        if (DavincisVesselsMod.CONFIG.shipControlType == EnumShipControlType.VANILLA) {
+        if (DavincisVesselsMod.CONFIG.vesselControlType == EnumVesselControlType.VANILLA) {
             double newYaw = rotationYaw;
             double dx = prevPosX - posX;
             double dz = prevPosZ - posZ;
@@ -453,15 +453,15 @@ public class EntityShip extends EntityMovingWorld implements IElementProvider<Co
 
         if (!disassembler.canDisassemble(getNewAssemblyInteractor())) {
             if (prevRiddenByEntity instanceof PlayerEntity) {
-                StringTextComponent testMessage = new StringTextComponent("Cannot disassemble ship here");
+                StringTextComponent testMessage = new StringTextComponent("Cannot disassemble vessel here");
                 ((PlayerEntity) prevRiddenByEntity).sendStatusMessage(testMessage, true);
             }
             return false;
         }
 
         AssembleResult result = disassembler.doDisassemble(getNewAssemblyInteractor());
-        if (result.getShipMarker() != null) {
-            TileEntity te = result.getShipMarker().tile;
+        if (result.getMovingWorldMarker() != null) {
+            TileEntity te = result.getMovingWorldMarker().tile;
             if (te instanceof TileHelm) {
                 ((TileHelm) te).setAssembleResult(result);
                 ((TileHelm) te).setInfo(getInfo());
@@ -472,18 +472,17 @@ public class EntityShip extends EntityMovingWorld implements IElementProvider<Co
     }
 
     private void handlePlayerControl() {
-        if (getControllingPassenger() instanceof LivingEntity && ((ShipCapabilities) getMovingWorldCapabilities()).canMove()) {
+        if (getControllingPassenger() instanceof LivingEntity && ((VesselCapabilities) getMovingWorldCapabilities()).canMove()) {
             double throttle = ((LivingEntity) getControllingPassenger()).moveForward;
             if (isFlying()) {
                 throttle *= 0.5D;
             }
 
-            if (DavincisVesselsMod.CONFIG.shipControlType == EnumShipControlType.DAVINCIS) {
+            if (DavincisVesselsMod.CONFIG.vesselControlType == EnumVesselControlType.DAVINCIS) {
                 Vec3dMod vec = new Vec3dMod(getControllingPassenger().getMotion().x, 0D, getControllingPassenger().getMotion().z);
                 vec.rotateAroundY((float) Math.toRadians(getControllingPassenger().rotationYaw));
 
                 double steer = ((LivingEntity) getControllingPassenger()).moveStrafing;
-
                 motionYaw += steer * BASE_TURN_SPEED * capabilities.getRotationMult()
                         * DavincisVesselsMod.CONFIG.turnSpeed;
 
@@ -496,7 +495,7 @@ public class EntityShip extends EntityMovingWorld implements IElementProvider<Co
                 vec = vec.rotateAroundY(-yaw);
                 vec = vec.setY(getMotion().y);
                 this.setMotion(vec);
-            } else if (DavincisVesselsMod.CONFIG.shipControlType == EnumShipControlType.VANILLA) {
+            } else if (DavincisVesselsMod.CONFIG.vesselControlType == EnumVesselControlType.VANILLA) {
                 if (throttle > 0.0D) {
                     double dsin = -Math.sin(Math.toRadians(getControllingPassenger().rotationYaw));
                     double dcos = Math.cos(Math.toRadians(getControllingPassenger().rotationYaw));
@@ -507,15 +506,15 @@ public class EntityShip extends EntityMovingWorld implements IElementProvider<Co
             }
         }
 
-        if (controller.getShipControl() != 0) {
-            if (controller.getShipControl() == 4) {
+        if (controller.getVesselControl() != 0) {
+            if (controller.getVesselControl() == 4) {
                 alignToGrid(true);
             } else if (isBraking()) {
                 float yMult = isFlying() ? capabilities.brakeMult : 1;
                 this.setMotion(this.getMotion().mul(capabilities.brakeMult, yMult, capabilities.brakeMult));
-            } else if (controller.getShipControl() < 3 && capabilities.canFly()) {
+            } else if (controller.getVesselControl() < 3 && capabilities.canFly()) {
                 int i;
-                if (controller.getShipControl() == 2) {
+                if (controller.getVesselControl() == 2) {
                     setFlying(true);
                     i = 1;
                 } else {
@@ -524,8 +523,8 @@ public class EntityShip extends EntityMovingWorld implements IElementProvider<Co
                 this.setMotion(this.getMotion().add(0, i * BASE_LIFT_SPEED * capabilities.getLiftMult(), 0));
                 // TODO: Achievements are gone.
                 //if (getControllingPassenger() != null && getControllingPassenger() instanceof EntityPlayer
-                //        && !((EntityPlayer) getControllingPassenger()).hasAchievement(DavincisVesselsContent.achievementFlyShip))
-                //    ((EntityPlayer) getControllingPassenger()).addStat(DavincisVesselsContent.achievementFlyShip);
+                //        && !((EntityPlayer) getControllingPassenger()).hasAchievement(DavincisVesselsContent.achievementFlyVessel))
+                //    ((EntityPlayer) getControllingPassenger()).addStat(DavincisVesselsContent.achievementFlyVessel);
             }
         }
     }
@@ -537,7 +536,7 @@ public class EntityShip extends EntityMovingWorld implements IElementProvider<Co
 
     @Override
     public boolean isFlying() {
-        return (capabilities.canFly() && (super.isFlying() || controller.getShipControl() == 2)) || getSubmerge();
+        return (capabilities.canFly() && (super.isFlying() || controller.getVesselControl() == 2)) || getSubmerge();
     }
 
     public boolean areSubmerged() {
@@ -567,15 +566,15 @@ public class EntityShip extends EntityMovingWorld implements IElementProvider<Co
 
     @Override
     public MovingWorldAssemblyInteractor getAssemblyInteractor() {
-        if (shipAssemblyInteractor == null)
-            shipAssemblyInteractor = (ShipAssemblyInteractor) getNewAssemblyInteractor();
+        if (vesselAssemblyInteractor == null)
+            vesselAssemblyInteractor = (VesselAssemblyInteractor) getNewAssemblyInteractor();
 
-        return shipAssemblyInteractor;
+        return vesselAssemblyInteractor;
     }
 
     @Override
     public void setAssemblyInteractor(MovingWorldAssemblyInteractor interactor) {
-        //shipAssemblyInteractor = (ShipAssemblyInteractor) interactor;
+        //vesselAssemblyInteractor = (VesselAssemblyInteractor) interactor;
         //interactor.transferToCapabilities(getMovingWorldCapabilities());
     }
 
@@ -584,7 +583,7 @@ public class EntityShip extends EntityMovingWorld implements IElementProvider<Co
         super.fillAirBlocks(set, pos);
     }
 
-    public ShipControllerCommon getController() {
+    public VesselControllerCommon getController() {
         return controller;
     }
 
@@ -594,13 +593,13 @@ public class EntityShip extends EntityMovingWorld implements IElementProvider<Co
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public Screen createScreen(ContainerShip container, PlayerEntity player) {
-        return new GuiShip(container);
+    public Screen createScreen(ContainerVessel container, PlayerEntity player) {
+        return new GuiVessel(container);
     }
 
     @Override
     public Container createMenu(int window, PlayerInventory playerInventory, PlayerEntity playerIn) {
-        return new ContainerShip(window, this, playerIn);
+        return new ContainerVessel(window, this, playerIn);
     }
 
     @Override

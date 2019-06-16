@@ -7,11 +7,11 @@ import net.minecraft.tileentity.FurnaceTileEntity;
 
 public class FuelInventory implements IInventory {
 
-    private EntityShip ship;
+    private EntityVessel vessel;
     private ItemStack[] contents;
 
-    public FuelInventory(EntityShip entityship) {
-        ship = entityship;
+    public FuelInventory(EntityVessel entityvessel) {
+        vessel = entityvessel;
         contents = new ItemStack[getSizeInventory()];
     }
 
@@ -85,7 +85,7 @@ public class FuelInventory implements IInventory {
 
     @Override
     public boolean isUsableByPlayer(PlayerEntity player) {
-        return player.getRidingEntity() == ship;
+        return player.getRidingEntity() == vessel;
     }
 
     @Override

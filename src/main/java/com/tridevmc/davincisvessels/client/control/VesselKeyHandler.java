@@ -1,6 +1,6 @@
 package com.tridevmc.davincisvessels.client.control;
 
-import com.tridevmc.davincisvessels.common.entity.EntityShip;
+import com.tridevmc.davincisvessels.common.entity.EntityVessel;
 import com.tridevmc.davincisvessels.common.network.message.OpenGuiMessage;
 import com.tridevmc.movingworld.common.network.MovingWorldClientAction;
 import net.minecraft.client.Minecraft;
@@ -12,13 +12,13 @@ import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 @OnlyIn(Dist.CLIENT)
-public class ShipKeyHandler {
+public class VesselKeyHandler {
     private DavincisKeybinds keybinds;
-    private boolean kbShipGuiPrevState, kbDisassemblePrevState, kbAlignPrevState;
+    private boolean kbVesselGuiPrevState, kbDisassemblePrevState, kbAlignPrevState;
 
-    public ShipKeyHandler(DavincisKeybinds cfg) {
+    public VesselKeyHandler(DavincisKeybinds cfg) {
         keybinds = cfg;
-        kbShipGuiPrevState = kbDisassemblePrevState = false;
+        kbVesselGuiPrevState = kbDisassemblePrevState = false;
 
     }
 
@@ -30,26 +30,26 @@ public class ShipKeyHandler {
     public void updateControl(TickEvent.PlayerTickEvent e) {
         if (e.phase == TickEvent.Phase.START && e.side == LogicalSide.CLIENT
                 && e.player == Minecraft.getInstance().player
-                && e.player.getRidingEntity() instanceof EntityShip) {
-            EntityShip ship = (EntityShip) e.player.getRidingEntity();
-            if (keybinds.kbShipInv.isKeyDown() && !kbShipGuiPrevState) {
-                new OpenGuiMessage(ship.getEntityId()).sendToServer();
+                && e.player.getRidingEntity() instanceof EntityVessel) {
+            EntityVessel vessel = (EntityVessel) e.player.getRidingEntity();
+            if (keybinds.kbVesselInv.isKeyDown() && !kbVesselGuiPrevState) {
+                new OpenGuiMessage(vessel.getEntityId()).sendToServer();
             }
-            kbShipGuiPrevState = keybinds.kbShipInv.isKeyDown();
+            kbVesselGuiPrevState = keybinds.kbVesselInv.isKeyDown();
 
             if (keybinds.kbDisassemble.isKeyDown() && !kbDisassemblePrevState) {
-                MovingWorldClientAction.DISASSEMBLE.sendToServer(ship);
+                MovingWorldClientAction.DISASSEMBLE.sendToServer(vessel);
             }
             kbDisassemblePrevState = keybinds.kbDisassemble.isKeyDown();
 
             if (keybinds.kbAlign.isKeyDown() && !kbAlignPrevState) {
-                MovingWorldClientAction.ALIGN.sendToServer(ship);
+                MovingWorldClientAction.ALIGN.sendToServer(vessel);
             }
             kbAlignPrevState = keybinds.kbAlign.isKeyDown();
 
             int c = getControlCode();
-            if (c != ship.getController().getShipControl()) {
-                ship.getController().updateControl(ship, e.player, c);
+            if (c != vessel.getController().getVesselControl()) {
+                vessel.getController().updateControl(vessel, e.player, c);
             }
         }
     }

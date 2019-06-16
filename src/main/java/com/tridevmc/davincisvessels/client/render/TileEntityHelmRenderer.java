@@ -3,7 +3,7 @@ package com.tridevmc.davincisvessels.client.render;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.davincisvessels.common.content.block.BlockHelm;
-import com.tridevmc.davincisvessels.common.entity.EntityShip;
+import com.tridevmc.davincisvessels.common.entity.EntityVessel;
 import com.tridevmc.davincisvessels.common.tileentity.TileHelm;
 import com.tridevmc.movingworld.api.IMovingTile;
 import net.minecraft.block.BlockState;
@@ -30,22 +30,22 @@ public class TileEntityHelmRenderer extends TileEntityRenderer<TileHelm> {
     }
 
     private void renderHelm(TileHelm helm, double x, double y, double z, float partialTicks) throws Exception {
-        EntityShip ship = null;
+        EntityVessel vessel = null;
         BlockState blockState = getWorld().getBlockState(helm.getPos());
         Direction blockStateFacing = Direction.UP;
 
         if (blockState.getBlock() instanceof BlockHelm)
             blockStateFacing = blockState.get(BlockHelm.FACING);
-        if (((IMovingTile) helm).getParentMovingWorld() != null && ((IMovingTile) helm).getParentMovingWorld() instanceof EntityShip) {
-            ship = (EntityShip) ((IMovingTile) helm).getParentMovingWorld();
+        if (((IMovingTile) helm).getParentMovingWorld() != null && ((IMovingTile) helm).getParentMovingWorld() instanceof EntityVessel) {
+            vessel = (EntityVessel) ((IMovingTile) helm).getParentMovingWorld();
         }
 
-        float shipPitch = 0;
-        if (ship != null)
-            shipPitch = ship.prevRotationPitch + (ship.rotationPitch - ship.prevRotationPitch) * partialTicks;
+        float vesselPitch = 0;
+        if (vessel != null)
+            vesselPitch = vessel.prevRotationPitch + (vessel.rotationPitch - vessel.prevRotationPitch) * partialTicks;
 
         if (blockStateFacing == Direction.NORTH || blockStateFacing == Direction.WEST) {
-            shipPitch *= -1;
+            vesselPitch *= -1;
         }
         boolean onZAxis = blockStateFacing.getAxis() == Direction.Axis.Z;
 
@@ -77,7 +77,7 @@ public class TileEntityHelmRenderer extends TileEntityRenderer<TileHelm> {
         GlStateManager.translated(x, y, z + 1);
 
         GlStateManager.translatef(translateX, translateY, translateZ);
-        GlStateManager.rotatef(shipPitch * 10, onZAxis ? 0 : 1, 0, onZAxis ? 1 : 0);
+        GlStateManager.rotatef(vesselPitch * 10, onZAxis ? 0 : 1, 0, onZAxis ? 1 : 0);
         GlStateManager.translatef(-translateX, -translateY, -translateZ);
 
         BlockState wheelState = blockState.with(BlockHelm.IS_WHEEL, true);

@@ -2,20 +2,20 @@ package com.tridevmc.davincisvessels.client.gui;
 
 import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.davincisvessels.common.entity.EntitySeat;
-import com.tridevmc.davincisvessels.common.entity.EntityShip;
+import com.tridevmc.davincisvessels.common.entity.EntityVessel;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
-public class ContainerShip extends Container {
-    public final EntityShip ship;
+public class ContainerVessel extends Container {
+    public final EntityVessel vessel;
     public final PlayerEntity player;
 
-    public ContainerShip(int window, EntityShip ship, PlayerEntity player) {
+    public ContainerVessel(int window, EntityVessel vessel, PlayerEntity player) {
         super(DavincisVesselsMod.CONTENT.universalContainerType, window);
-        this.ship = ship;
+        this.vessel = vessel;
         this.player = player;
 
         bindPlayerInventory(player.inventory);
@@ -35,7 +35,7 @@ public class ContainerShip extends Container {
 
     @Override
     public boolean canInteractWith(PlayerEntity entityplayer) {
-        return entityplayer.getRidingEntity() == ship || entityplayer.getRidingEntity() instanceof EntitySeat && ((EntitySeat) entityplayer.getRidingEntity()).getShip() == ship;
+        return entityplayer.getRidingEntity() == vessel || entityplayer.getRidingEntity() instanceof EntitySeat && ((EntitySeat) entityplayer.getRidingEntity()).getVessel() == vessel;
     }
 
     @Override

@@ -8,8 +8,8 @@ public class DavincisCommands {
     public static void register(FMLServerStartingEvent e) {
         CommandDispatcher<CommandSource> dispatcher = e.getCommandDispatcher();
         CommandDisassembleNear.register(dispatcher);
-        CommandDisassembleShip.register(dispatcher);
+        CommandDisassembleVessel.register(dispatcher);
         CommandDVTP.register(dispatcher);
-        CommandShipInfo.register(dispatcher);
+        CommandVesselInfo.register(dispatcher);
     }
 }

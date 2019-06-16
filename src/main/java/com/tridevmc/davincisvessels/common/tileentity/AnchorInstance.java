@@ -115,7 +115,7 @@ public class AnchorInstance implements INBTSerializable<CompoundNBT> {
         CompoundNBT tag = new CompoundNBT();
 
         tag.putBoolean("INSTANCE", true);
-        tag.putBoolean("type", type == InstanceType.SHIP);
+        tag.putBoolean("type", type == InstanceType.VESSEL);
         tag.putUniqueId("identifier", identifier);
 
         if (!relatedAnchors.isEmpty()) {
@@ -140,7 +140,7 @@ public class AnchorInstance implements INBTSerializable<CompoundNBT> {
         if (!tag.contains("INSTANCE"))
             throw new IllegalArgumentException("NBT provided for deserialization is not valid for an anchor point! " + tag.toString());
 
-        this.type = tag.getBoolean("type") ? InstanceType.SHIP : InstanceType.LAND;
+        this.type = tag.getBoolean("type") ? InstanceType.VESSEL : InstanceType.LAND;
         this.identifier = tag.getUniqueId("identifier");
 
         if (tag.contains("relatedAnchorsTagList")) {
@@ -160,21 +160,21 @@ public class AnchorInstance implements INBTSerializable<CompoundNBT> {
 
 
     public enum InstanceType {
-        SHIP, LAND;
+        VESSEL, LAND;
 
         @Override
         public String toString() {
             if (EffectiveSide.get() == LogicalSide.CLIENT)
-                return this == SHIP ? I18n.format(LanguageEntries.GUI_ANCHOR_MODE_SHIP) : I18n.format(LanguageEntries.GUI_ANCHOR_MODE_WORLD);
+                return this == VESSEL ? I18n.format(LanguageEntries.GUI_ANCHOR_MODE_VESSEL) : I18n.format(LanguageEntries.GUI_ANCHOR_MODE_WORLD);
             else return super.toString();
         }
 
         public InstanceType opposite() {
             switch (this) {
                 case LAND: {
-                    return SHIP;
+                    return VESSEL;
                 }
-                case SHIP: {
+                case VESSEL: {
                     return LAND;
                 }
             }

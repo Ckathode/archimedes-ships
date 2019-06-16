@@ -3,7 +3,7 @@ package com.tridevmc.davincisvessels.common.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.tridevmc.davincisvessels.common.entity.EntityShip;
+import com.tridevmc.davincisvessels.common.entity.EntityVessel;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.Vec3Argument;
@@ -23,14 +23,14 @@ public class CommandDVTP {
 
     private static int execute(CommandContext<CommandSource> d) throws CommandSyntaxException {
         ServerPlayerEntity player = d.getSource().asPlayer();
-        if (player.getRidingEntity() instanceof EntityShip) {
-            EntityShip ship = (EntityShip) player.getRidingEntity();
+        if (player.getRidingEntity() instanceof EntityVessel) {
+            EntityVessel vessel = (EntityVessel) player.getRidingEntity();
             Vec3d location = Vec3Argument.getVec3(d, "location");
-            ship.setPosition(location.x, location.y, location.z);
-            ship.alignToGrid(false);
+            vessel.setPosition(location.x, location.y, location.z);
+            vessel.alignToGrid(false);
             return 1;
         } else {
-            d.getSource().sendErrorMessage(new StringTextComponent("Not steering a ship, unable to teleport."));
+            d.getSource().sendErrorMessage(new StringTextComponent("Not steering a vessel, unable to teleport."));
             return -1;
         }
     }

@@ -2,7 +2,7 @@ package com.tridevmc.davincisvessels.common.network.marshallers;
 
 import com.tridevmc.compound.network.marshallers.Marshaller;
 import com.tridevmc.compound.network.marshallers.RegisteredMarshaller;
-import com.tridevmc.davincisvessels.common.entity.ShipAssemblyInteractor;
+import com.tridevmc.davincisvessels.common.entity.VesselAssemblyInteractor;
 import com.tridevmc.movingworld.common.chunk.assembly.AssembleResult;
 import io.netty.buffer.ByteBuf;
 
@@ -13,7 +13,7 @@ public class AssembleResultMarshaller extends Marshaller<AssembleResult> {
     public AssembleResult readFrom(ByteBuf in) {
         byte resultCode = in.readByte();
         AssembleResult result = new AssembleResult(AssembleResult.ResultType.fromByte(resultCode), in);
-        result.assemblyInteractor = new ShipAssemblyInteractor().fromByteBuf(resultCode, in);
+        result.assemblyInteractor = new VesselAssemblyInteractor().fromByteBuf(resultCode, in);
 
         return result;
     }

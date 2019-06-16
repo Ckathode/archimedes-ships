@@ -19,7 +19,7 @@ import java.util.List;
 public class DavincisKeybinds {
 
     @ConfigValue(comment = "Keybindings should be managed in game.")
-    public KeyBinding kbUp, kbDown, kbBrake, kbAlign, kbDisassemble, kbShipInv;
+    public KeyBinding kbUp, kbDown, kbBrake, kbAlign, kbDisassemble, kbVesselInv;
 
     public DavincisKeybinds() {
         loadKeybindings();
@@ -31,14 +31,14 @@ public class DavincisKeybinds {
         kbBrake = new KeyBinding(LanguageEntries.KEY_BRAKE, 0x2E, "Davincis Vessels");
         kbAlign = new KeyBinding(LanguageEntries.KEY_ALIGN, 0x0D, "Davincis Vessels");
         kbDisassemble = new KeyBinding(LanguageEntries.KEY_DISASSEMBLE, 0x2B, "Davincis Vessels");
-        kbShipInv = new KeyBinding(LanguageEntries.KEY_INV, 0x25, "Davincis Vessels");
+        kbVesselInv = new KeyBinding(LanguageEntries.KEY_INV, 0x25, "Davincis Vessels");
     }
 
     public void addToControlsMenu() {
         Minecraft mc = Minecraft.getInstance();
         List<KeyBinding> keyBindings = new ArrayList<>(Arrays.asList(mc.gameSettings.keyBindings));
-        keyBindings.removeAll(Lists.newArrayList(kbUp, kbDown, kbBrake, kbAlign, kbDisassemble, kbShipInv));
-        keyBindings.addAll(Lists.newArrayList(kbUp, kbDown, kbBrake, kbAlign, kbDisassemble, kbShipInv));
+        keyBindings.removeAll(Lists.newArrayList(kbUp, kbDown, kbBrake, kbAlign, kbDisassemble, kbVesselInv));
+        keyBindings.addAll(Lists.newArrayList(kbUp, kbDown, kbBrake, kbAlign, kbDisassemble, kbVesselInv));
         KeyBinding[] binds = new KeyBinding[keyBindings.size()];
         mc.gameSettings.keyBindings = keyBindings.toArray(binds);
     }

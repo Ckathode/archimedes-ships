@@ -4,8 +4,8 @@ import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.davincisvessels.client.gui.ContainerHelm;
 import com.tridevmc.davincisvessels.client.gui.GuiHelm;
 import com.tridevmc.davincisvessels.common.IElementProvider;
-import com.tridevmc.davincisvessels.common.entity.EntityShip;
-import com.tridevmc.davincisvessels.common.entity.ShipAssemblyInteractor;
+import com.tridevmc.davincisvessels.common.entity.EntityVessel;
+import com.tridevmc.davincisvessels.common.entity.VesselAssemblyInteractor;
 import com.tridevmc.davincisvessels.common.network.message.AssembleResultMessage;
 import com.tridevmc.movingworld.common.chunk.MovingWorldAssemblyInteractor;
 import com.tridevmc.movingworld.common.chunk.assembly.AssembleResult;
@@ -26,14 +26,14 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class TileHelm extends TileMovingMarkingBlock implements IElementProvider<ContainerHelm> {
 
     public boolean submerge;
-    private ShipAssemblyInteractor interactor;
-    private EntityShip activeShip;
+    private VesselAssemblyInteractor interactor;
+    private EntityVessel activeVessel;
     private MovingWorldInfo info;
     private BlockPos chunkPos;
 
     public TileHelm() {
         super(DavincisVesselsMod.CONTENT.tileTypes.get(TileHelm.class));
-        activeShip = null;
+        activeVessel = null;
     }
 
     @Override
@@ -48,12 +48,12 @@ public class TileHelm extends TileMovingMarkingBlock implements IElementProvider
     @Override
     public void setParentMovingWorld(EntityMovingWorld movingWorld, BlockPos chunkPos) {
         chunkPos = pos;
-        activeShip = (EntityShip) movingWorld;
+        activeVessel = (EntityVessel) movingWorld;
     }
 
     @Override
-    public EntityShip getParentMovingWorld() {
-        return activeShip;
+    public EntityVessel getParentMovingWorld() {
+        return activeVessel;
     }
 
     @Override
@@ -79,14 +79,14 @@ public class TileHelm extends TileMovingMarkingBlock implements IElementProvider
     @Override
     public MovingWorldAssemblyInteractor getInteractor() {
         if (interactor == null) {
-            interactor = new ShipAssemblyInteractor();
+            interactor = new VesselAssemblyInteractor();
         }
         return interactor;
     }
 
     @Override
     public void setInteractor(MovingWorldAssemblyInteractor interactor) {
-        this.interactor = (ShipAssemblyInteractor) interactor;
+        this.interactor = (VesselAssemblyInteractor) interactor;
     }
 
     @Override
@@ -103,12 +103,12 @@ public class TileHelm extends TileMovingMarkingBlock implements IElementProvider
 
     @Override
     public int getMaxBlocks() {
-        return DavincisVesselsMod.CONFIG.maxShipChunkBlocks;
+        return DavincisVesselsMod.CONFIG.maxVesselChunkBlocks;
     }
 
     @Override
     public EntityMovingWorld getMovingWorld(World worldObj) {
-        return new EntityShip(worldObj);
+        return new EntityVessel(worldObj);
     }
 
     @Override
@@ -135,7 +135,7 @@ public class TileHelm extends TileMovingMarkingBlock implements IElementProvider
 
     @Override
     public MovingWorldAssemblyInteractor getNewAssemblyInteractor() {
-        return new ShipAssemblyInteractor();
+        return new VesselAssemblyInteractor();
     }
 
     public void sendAssembleResult(PlayerEntity player, boolean sendPrev) {
@@ -159,14 +159,14 @@ public class TileHelm extends TileMovingMarkingBlock implements IElementProvider
     @Override
     public CompoundNBT write(CompoundNBT tag) {
         tag = super.write(tag);
-        tag.putBoolean("submergeShipOnAssemble", submerge);
+        tag.putBoolean("submergeVesselOnAssemble", submerge);
         return tag;
     }
 
     @Override
     public void read(CompoundNBT tag) {
         super.read(tag);
-        submerge = tag.getBoolean("submergeShipOnAssemble");
+        submerge = tag.getBoolean("submergeVesselOnAssemble");
     }
 
     @Override

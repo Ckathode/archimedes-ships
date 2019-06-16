@@ -1,6 +1,6 @@
 package com.tridevmc.davincisvessels.client.handler;
 
-import com.tridevmc.davincisvessels.common.entity.EntityShip;
+import com.tridevmc.davincisvessels.common.entity.EntityVessel;
 import com.tridevmc.davincisvessels.common.handler.CommonHookContainer;
 import com.tridevmc.movingworld.common.entity.EntityMovingWorld;
 import com.tridevmc.movingworld.common.network.message.MovingWorldDataRequestMessage;
@@ -14,8 +14,8 @@ public class ClientHookContainer extends CommonHookContainer {
 
     @SubscribeEvent
     public void onEntitySpawn(EntityJoinWorldEvent event) {
-        if (event.getWorld().isRemote && event.getEntity() instanceof EntityShip) {
-            if (((EntityShip) event.getEntity()).getMobileChunk().chunkTileEntityMap.isEmpty()) {
+        if (event.getWorld().isRemote && event.getEntity() instanceof EntityVessel) {
+            if (((EntityVessel) event.getEntity()).getMobileChunk().chunkTileEntityMap.isEmpty()) {
                 return;
             }
 

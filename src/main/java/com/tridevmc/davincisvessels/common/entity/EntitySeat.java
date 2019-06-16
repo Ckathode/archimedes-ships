@@ -18,23 +18,23 @@ import java.util.Objects;
 public class EntitySeat extends Entity {
 
     private static final DataParameter<BlockPos> CHUNK_POS = EntityDataManager.createKey(EntitySeat.class, DataSerializers.BLOCK_POS);
-    private static final DataParameter<Integer> SHIP_ID = EntityDataManager.createKey(EntitySeat.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> VESSEL_ID = EntityDataManager.createKey(EntitySeat.class, DataSerializers.VARINT);
 
     public EntitySeat(World worldIn) {
         super(DavincisVesselsMod.CONTENT.entityTypes.get(EntitySeat.class), worldIn);
     }
 
-    public void setupShip(EntityShip ship, BlockPos chunkPos) {
-        setPosition(ship.posX, ship.posY, ship.posZ);
-        setShip(ship);
+    public void setupVessel(EntityVessel vessel, BlockPos chunkPos) {
+        setPosition(vessel.posX, vessel.posY, vessel.posZ);
+        setVessel(vessel);
         setChunkPos(chunkPos);
     }
 
     @Override
     public void tick() {
-        EntityShip ship = getShip();
-        if (ship != null) {
-            ship.updatePassengerPosition(this, getChunkPos(), 0);
+        EntityVessel vessel = getVessel();
+        if (vessel != null) {
+            vessel.updatePassengerPosition(this, getChunkPos(), 0);
         }
         super.tick();
     }
@@ -65,7 +65,7 @@ public class EntitySeat extends Entity {
     @Override
     public void registerData() {
         this.dataManager.register(CHUNK_POS, BlockPos.ZERO);
-        this.dataManager.register(SHIP_ID, 0);
+        this.dataManager.register(VESSEL_ID, 0);
     }
 
     public boolean setChunkPos(BlockPos chunkPos) {
@@ -80,18 +80,18 @@ public class EntitySeat extends Entity {
         return dataManager.get(CHUNK_POS);
     }
 
-    public EntityShip getShip() {
-        Entity foundEntity = world.getEntityByID(dataManager.get(SHIP_ID));
-        EntityShip ship = null;
+    public EntityVessel getVessel() {
+        Entity foundEntity = world.getEntityByID(dataManager.get(VESSEL_ID));
+        EntityVessel vessel = null;
 
-        if (foundEntity instanceof EntityShip)
-            ship = (EntityShip) foundEntity;
+        if (foundEntity instanceof EntityVessel)
+            vessel = (EntityVessel) foundEntity;
 
-        return ship;
+        return vessel;
     }
 
-    public int getShipId() {
-        return dataManager.get(SHIP_ID);
+    public int getVesselId() {
+        return dataManager.get(VESSEL_ID);
     }
 
     // Passenger code below.
@@ -126,9 +126,9 @@ public class EntitySeat extends Entity {
         return this.getPassengers().size() < 1;
     }
 
-    public boolean setShip(EntityShip ship) {
-        if (ship != null && !Objects.equals(getShipId(), ship.getEntityId())) {
-            dataManager.set(SHIP_ID, ship.getEntityId());
+    public boolean setVessel(EntityVessel vessel) {
+        if (vessel != null && !Objects.equals(getVesselId(), vessel.getEntityId())) {
+            dataManager.set(VESSEL_ID, vessel.getEntityId());
             return true;
         }
         return false;

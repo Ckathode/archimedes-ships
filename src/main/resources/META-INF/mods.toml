@@ -5,7 +5,7 @@ modId="davincisvessels"
 version="${file.jarVersion}"
 displayName="Davincis Vessels"
 description='''
-Craft and create your own ship...
+Craft and create your own vessel...
 And sail it across the seven seas!
 '''
 

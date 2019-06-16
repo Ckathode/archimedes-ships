@@ -28,16 +28,16 @@ public class TileEntityGaugeRenderer extends TileEntityRenderer<TileGauge> {
         BufferBuilder buffer = tess.getBuffer();
 
         Vec3d dVec = new Vec3d(0, 0, 0);
-        if (gauge.parentShip == null) {
+        if (gauge.parentVessel == null) {
             dVec.add(0.5F, 0, 0.5F);
-        } else if (gauge.parentShip.getControllingPassenger() instanceof ClientPlayerEntity) {
-            dVec = new Vec3d(gauge.parentShip.riderDestination.getX() - gauge.getPos().getX(),
-                    gauge.parentShip.riderDestination.getY() - gauge.getPos().getY(),
-                    gauge.parentShip.riderDestination.getZ() - gauge.getPos().getZ());
+        } else if (gauge.parentVessel.getControllingPassenger() instanceof ClientPlayerEntity) {
+            dVec = new Vec3d(gauge.parentVessel.riderDestination.getX() - gauge.getPos().getX(),
+                    gauge.parentVessel.riderDestination.getY() - gauge.getPos().getY(),
+                    gauge.parentVessel.riderDestination.getZ() - gauge.getPos().getZ());
         } else {
-            dVec = new Vec3d(gauge.parentShip.posX - Minecraft.getInstance().getRenderManager().field_217783_c.getProjectedView().x,
-                    gauge.parentShip.posY - Minecraft.getInstance().getRenderManager().field_217783_c.getProjectedView().y,
-                    gauge.parentShip.posZ - Minecraft.getInstance().getRenderManager().field_217783_c.getProjectedView().z);
+            dVec = new Vec3d(gauge.parentVessel.posX - Minecraft.getInstance().getRenderManager().field_217783_c.getProjectedView().x,
+                    gauge.parentVessel.posY - Minecraft.getInstance().getRenderManager().field_217783_c.getProjectedView().y,
+                    gauge.parentVessel.posZ - Minecraft.getInstance().getRenderManager().field_217783_c.getProjectedView().z);
         }
         double d = dVec.x * dVec.x + dVec.y * dVec.y + dVec.z * dVec.z;
         if (d > 256D) return;
@@ -48,15 +48,15 @@ public class TileEntityGaugeRenderer extends TileEntityRenderer<TileGauge> {
 
         float northGaugeAngle;
         float velGaugeAngle;
-        if (gauge.parentShip == null) {
+        if (gauge.parentVessel == null) {
             northGaugeAngle = meta * 90F;
             velGaugeAngle = 0F;
         } else {
-            velGaugeAngle = -(gauge.parentShip.getHorizontalVelocity() * 3.6F * 20) / 60F * 270F; //vel in m/s * Tick rate (20 Hz) * 3.6 (conversion to km/h) with 60 km/h being 270 degrees.
-            if (gauge.parentShip.dimension == DimensionType.OVERWORLD) {
-                northGaugeAngle = -gauge.parentShip.rotationYaw + meta * 90F;
+            velGaugeAngle = -(gauge.parentVessel.getHorizontalVelocity() * 3.6F * 20) / 60F * 270F; //vel in m/s * Tick rate (20 Hz) * 3.6 (conversion to km/h) with 60 km/h being 270 degrees.
+            if (gauge.parentVessel.dimension == DimensionType.OVERWORLD) {
+                northGaugeAngle = -gauge.parentVessel.rotationYaw + meta * 90F;
             } else {
-                northGaugeAngle = (gauge.parentShip.ticksExisted + partialTicks) * 42F + gauge.parentShip.rotationYaw / 3F;
+                northGaugeAngle = (gauge.parentVessel.ticksExisted + partialTicks) * 42F + gauge.parentVessel.rotationYaw / 3F;
             }
         }
         GlStateManager.pushMatrix();
@@ -93,11 +93,11 @@ public class TileEntityGaugeRenderer extends TileEntityRenderer<TileGauge> {
         if (extended) {
             float vertGaugeAng;
             float height = gauge.getPos().getY();
-            if (gauge.parentShip == null) {
+            if (gauge.parentVessel == null) {
                 vertGaugeAng = 0F;
             } else {
-                vertGaugeAng = MathHelper.clamp(((float) gauge.parentShip.getMotion().y * 3.6F * 20) / 40F * 360F, -90F, 90F);
-                height += (float) gauge.parentShip.posY;
+                vertGaugeAng = MathHelper.clamp(((float) gauge.parentVessel.getMotion().y * 3.6F * 20) / 40F * 360F, -90F, 90F);
+                height += (float) gauge.parentVessel.posY;
             }
             float heightGaugeLongAng = -height / 10F * 360F;
             float heightGaugeShortAng = heightGaugeLongAng / 10F;

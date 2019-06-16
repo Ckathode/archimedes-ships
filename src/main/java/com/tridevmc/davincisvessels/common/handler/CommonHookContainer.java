@@ -4,7 +4,7 @@ package com.tridevmc.davincisvessels.common.handler;
 import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.davincisvessels.common.content.block.BlockHelm;
 import com.tridevmc.davincisvessels.common.entity.EntitySeat;
-import com.tridevmc.davincisvessels.common.entity.EntityShip;
+import com.tridevmc.davincisvessels.common.entity.EntityVessel;
 import com.tridevmc.davincisvessels.common.tileentity.TileCrate;
 import com.tridevmc.davincisvessels.common.tileentity.TileEntitySecuredBed;
 import com.tridevmc.movingworld.common.chunk.LocatedBlock;
@@ -56,12 +56,12 @@ public class CommonHookContainer {
 
     @SubscribeEvent
     public void onDisassembleBlock(DisassembleBlockEvent event) {
-        // Used to transform user position when a ship is disassembled.
-        if (event.movingWorld instanceof EntityShip) {
-            EntityShip ship = (EntityShip) event.movingWorld;
+        // Used to transform user position when a vessel is disassembled.
+        if (event.movingWorld instanceof EntityVessel) {
+            EntityVessel vessel = (EntityVessel) event.movingWorld;
             LocatedBlock lb = event.block;
             if (lb.state.getBlock() == DavincisVesselsMod.CONTENT.blockHelm) {
-                Entity passenger = ship.controllingPassenger != null ? ship.controllingPassenger : ship.prevRiddenByEntity;
+                Entity passenger = vessel.controllingPassenger != null ? vessel.controllingPassenger : vessel.prevRiddenByEntity;
 
                 if (passenger != null) {
                     BlockPos position = lb.pos.offset(lb.state.get(BlockHelm.FACING));
@@ -69,7 +69,7 @@ public class CommonHookContainer {
                     passenger.setPositionAndUpdate(position.getX() + 0.5D, position.getY() + 0.5D, position.getZ() + 0.5D);
                 }
             } else if (DavincisVesselsMod.BLOCK_CONFIG.isSeat(lb.state.getBlock())) {
-                Optional<EntitySeat> matchingSeatEntity = ship.capabilities.getSeats().stream().filter(s -> s.getChunkPos().equals(lb.posNoOffset)).findFirst();
+                Optional<EntitySeat> matchingSeatEntity = vessel.capabilities.getSeats().stream().filter(s -> s.getChunkPos().equals(lb.posNoOffset)).findFirst();
 
                 if (matchingSeatEntity.isPresent()) {
                     EntitySeat matchingSeat = matchingSeatEntity.get();

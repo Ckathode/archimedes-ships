@@ -3,7 +3,7 @@ package com.tridevmc.davincisvessels.client.gui;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.tridevmc.davincisvessels.common.LanguageEntries;
-import com.tridevmc.davincisvessels.common.entity.EntityShip;
+import com.tridevmc.davincisvessels.common.entity.EntityVessel;
 import com.tridevmc.davincisvessels.common.network.message.RequestSubmerseMessage;
 import com.tridevmc.movingworld.common.network.MovingWorldClientAction;
 import net.minecraft.client.Minecraft;
@@ -19,17 +19,17 @@ import org.lwjgl.opengl.GL11;
 import java.util.Iterator;
 import java.util.List;
 
-public class GuiShip extends ContainerScreen<ContainerShip> {
-    public static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("davincisvessels", "textures/gui/shipinv.png");
+public class GuiVessel extends ContainerScreen<ContainerVessel> {
+    public static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("davincisvessels", "textures/gui/vesselinv.png");
 
-    public final EntityShip ship;
+    public final EntityVessel vessel;
     public final PlayerEntity player;
 
     private GuiButtonHooked btnDisassemble, btnAlign, btnSubmersible;
 
-    public GuiShip(ContainerShip container) {
+    public GuiVessel(ContainerVessel container) {
         super(container, container.player.inventory, new StringTextComponent(""));
-        ship = container.ship;
+        vessel = container.vessel;
         player = container.player;
     }
 
@@ -38,18 +38,18 @@ public class GuiShip extends ContainerScreen<ContainerShip> {
         super.init();
         buttons.clear();
 
-        btnDisassemble = new GuiButtonHooked(guiLeft + 4, guiTop + 20, 100, 20, I18n.format(LanguageEntries.GUI_SHIPINV_DECOMPILE));
+        btnDisassemble = new GuiButtonHooked(guiLeft + 4, guiTop + 20, 100, 20, I18n.format(LanguageEntries.GUI_VESSELINV_DECOMPILE));
         btnDisassemble.addHook(((mX, mY) -> {
-            MovingWorldClientAction.DISASSEMBLE.sendToServer(ship);
+            MovingWorldClientAction.DISASSEMBLE.sendToServer(vessel);
             minecraft.displayGuiScreen(null);
         }));
-        btnDisassemble.active = ship.getDisassembler().canDisassemble(ship.getAssemblyInteractor());
+        btnDisassemble.active = vessel.getDisassembler().canDisassemble(vessel.getAssemblyInteractor());
         addButton(btnDisassemble);
 
-        btnAlign = new GuiButtonHooked(guiLeft + 4, guiTop + 40, 100, 20, I18n.format(LanguageEntries.GUI_SHIPINV_ALIGN));
+        btnAlign = new GuiButtonHooked(guiLeft + 4, guiTop + 40, 100, 20, I18n.format(LanguageEntries.GUI_VESSELINV_ALIGN));
         btnAlign.addHook(((mX, mY) -> {
-            MovingWorldClientAction.ALIGN.sendToServer(ship);
-            ship.alignToGrid(true);
+            MovingWorldClientAction.ALIGN.sendToServer(vessel);
+            vessel.alignToGrid(true);
         }));
         addButton(btnAlign);
 
@@ -57,13 +57,13 @@ public class GuiShip extends ContainerScreen<ContainerShip> {
         btnSubmersible.addHook(((mX, mY) -> {
             if (((GuiButtonSubmersible) btnSubmersible).canDo) {
                 GuiButtonSubmersible subButton = (GuiButtonSubmersible) btnSubmersible;
-                new RequestSubmerseMessage(ship, !subButton.submerse).sendToServer();
+                new RequestSubmerseMessage(vessel, !subButton.submerse).sendToServer();
                 subButton.submerse = !subButton.submerse;
             }
         }));
-        ((GuiButtonSubmersible) btnSubmersible).canDo = ship.canSubmerge();
-        if (ship.canSubmerge())
-            ((GuiButtonSubmersible) btnSubmersible).submerse = ship.getSubmerge();
+        ((GuiButtonSubmersible) btnSubmersible).canDo = vessel.canSubmerge();
+        if (vessel.canSubmerge())
+            ((GuiButtonSubmersible) btnSubmersible).submerse = vessel.getSubmerge();
         else
             ((GuiButtonSubmersible) btnSubmersible).submerse = false;
         addButton(btnSubmersible);
@@ -90,7 +90,7 @@ public class GuiShip extends ContainerScreen<ContainerShip> {
         int row = 8;
         int col0 = 8;
 
-        font.drawString(I18n.format(LanguageEntries.GUI_SHIPINV_TITLE) + " - " + ship.getInfo().getName(), col0, row, color);
+        font.drawString(I18n.format(LanguageEntries.GUI_VESSELINV_TITLE) + " - " + vessel.getInfo().getName(), col0, row, color);
         row += 5;
 
         font.drawString(I18n.format("container.inventory"), 8, ySize - 96 + 2, color);
@@ -143,7 +143,7 @@ public class GuiShip extends ContainerScreen<ContainerShip> {
                 this.blit(this.x, this.y, xOffset, yOffset, this.width, this.height);
 
                 if (mouseOver) {
-                    String message = !canDo ? "Can't Submerse" : (submerse ? "Submerse Ship" : "Don't Submerse Ship");
+                    String message = !canDo ? "Can't Submerse" : (submerse ? "Submerse Vessel" : "Don't Submerse Vessel");
                     int stringWidth = Minecraft.getInstance().fontRenderer.getStringWidth(message);
                     drawHoveringText(Lists.newArrayList(message),
                             mouseX + (stringWidth / 2) + 32, mouseY - 12, Minecraft.getInstance().fontRenderer);

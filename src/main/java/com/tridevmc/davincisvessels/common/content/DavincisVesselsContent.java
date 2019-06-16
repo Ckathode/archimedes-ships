@@ -11,7 +11,7 @@ import com.tridevmc.davincisvessels.common.content.item.ItemBlockAnchorPoint;
 import com.tridevmc.davincisvessels.common.content.item.ItemSecuredBed;
 import com.tridevmc.davincisvessels.common.entity.EntityParachute;
 import com.tridevmc.davincisvessels.common.entity.EntitySeat;
-import com.tridevmc.davincisvessels.common.entity.EntityShip;
+import com.tridevmc.davincisvessels.common.entity.EntityVessel;
 import com.tridevmc.davincisvessels.common.tileentity.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -98,9 +98,9 @@ public class DavincisVesselsContent {
     @SubscribeEvent
     public void onEntityRegister(final RegistryEvent.Register<EntityType<?>> e) {
         IForgeRegistry<EntityType<?>> registry = e.getRegistry();
-        registerEntity(registry, new ResourceLocation(REGISTRY_PREFIX, "shipmod"), 64, DavincisVesselsMod.CONFIG.shipEntitySyncRate, true, EntityShip.class, EntityShip::new);
+        registerEntity(registry, new ResourceLocation(REGISTRY_PREFIX, "vesselmod"), 64, DavincisVesselsMod.CONFIG.vesselEntitySyncRate, true, EntityVessel.class, EntityVessel::new);
         registerEntity(registry, new ResourceLocation(REGISTRY_PREFIX, "attachment_seat"), 64, 20, false, EntitySeat.class, EntitySeat::new);
-        registerEntity(registry, new ResourceLocation(REGISTRY_PREFIX, "parachute"), 32, DavincisVesselsMod.CONFIG.shipEntitySyncRate, true, EntityParachute.class, EntityParachute::new);
+        registerEntity(registry, new ResourceLocation(REGISTRY_PREFIX, "parachute"), 32, DavincisVesselsMod.CONFIG.vesselEntitySyncRate, true, EntityParachute.class, EntityParachute::new);
     }
 
     @SubscribeEvent

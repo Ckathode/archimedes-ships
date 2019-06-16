@@ -5,7 +5,7 @@ import com.tridevmc.davincisvessels.client.gui.ContainerEngine;
 import com.tridevmc.davincisvessels.client.gui.GuiEngine;
 import com.tridevmc.davincisvessels.common.IElementProvider;
 import com.tridevmc.davincisvessels.common.api.tileentity.ITileEngineModifier;
-import com.tridevmc.davincisvessels.common.entity.ShipCapabilities;
+import com.tridevmc.davincisvessels.common.entity.VesselCapabilities;
 import com.tridevmc.movingworld.common.chunk.mobilechunk.MobileChunk;
 import com.tridevmc.movingworld.common.entity.EntityMovingWorld;
 import net.minecraft.client.gui.screen.Screen;
@@ -220,7 +220,7 @@ public class TileEngine extends TileEntity implements IInventory, ITileEngineMod
     }
 
     @Override
-    public float getPowerIncrement(ShipCapabilities shipCapabilities) {
+    public float getPowerIncrement(VesselCapabilities vesselCapabilities) {
         return isRunning() ? enginePower : 0;
     }
 

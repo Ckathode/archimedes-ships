@@ -2,10 +2,10 @@ package com.tridevmc.davincisvessels.client.gui;
 
 import com.tridevmc.davincisvessels.DavincisVesselsMod;
 import com.tridevmc.davincisvessels.common.LanguageEntries;
-import com.tridevmc.davincisvessels.common.entity.ShipAssemblyInteractor;
+import com.tridevmc.davincisvessels.common.entity.VesselAssemblyInteractor;
 import com.tridevmc.davincisvessels.common.network.HelmClientAction;
 import com.tridevmc.davincisvessels.common.network.message.HelmActionMessage;
-import com.tridevmc.davincisvessels.common.network.message.RenameShipMessage;
+import com.tridevmc.davincisvessels.common.network.message.RenameVesselMessage;
 import com.tridevmc.davincisvessels.common.tileentity.TileHelm;
 import com.tridevmc.movingworld.common.chunk.assembly.AssembleResult;
 import com.tridevmc.movingworld.common.chunk.assembly.AssembleResult.ResultType;
@@ -22,13 +22,13 @@ import java.util.Locale;
 import static com.tridevmc.movingworld.common.chunk.assembly.AssembleResult.ResultType.*;
 
 public class GuiHelm extends ContainerScreen {
-    public static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("davincisvessels", "textures/gui/shipstatus.png");
+    public static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("davincisvessels", "textures/gui/vesselstatus.png");
 
     public final TileHelm helm;
     public final PlayerEntity player;
 
     private GuiButtonHooked btnRename, btnAssemble, btnUndo, btnMount;
-    private TextFieldWidget txtShipName;
+    private TextFieldWidget txtVesselName;
     private boolean busyCompiling;
 
     public GuiHelm(ContainerHelm container) {
@@ -52,14 +52,14 @@ public class GuiHelm extends ContainerScreen {
 
         btnRename = new GuiButtonHooked(btnx, btny, 100, 20, I18n.format(LanguageEntries.GUI_STATUS_RENAME));
         btnRename.addHook((mX, mY) -> {
-            if (txtShipName.isFocused()) {
+            if (txtVesselName.isFocused()) {
                 btnRename.setMessage(I18n.format(LanguageEntries.GUI_STATUS_RENAME));
-                helm.getInfo().setName(txtShipName.getText());
-                txtShipName.changeFocus(false);
-                new RenameShipMessage(helm, helm.getInfo().getName()).sendToServer();
+                helm.getInfo().setName(txtVesselName.getText());
+                txtVesselName.changeFocus(false);
+                new RenameVesselMessage(helm, helm.getInfo().getName()).sendToServer();
             } else {
                 btnRename.setMessage(I18n.format(LanguageEntries.GUI_STATUS_DONE));
-                txtShipName.changeFocus(true);
+                txtVesselName.changeFocus(true);
             }
         });
         addButton(btnRename);
@@ -82,13 +82,13 @@ public class GuiHelm extends ContainerScreen {
         btnMount.addHook((mX, mY) -> new HelmActionMessage(helm, HelmClientAction.MOUNT).sendToServer());
         addButton(btnMount);
 
-        txtShipName = new TextFieldWidget(font, guiLeft + 8 + xSize / 2, guiTop + 21, 120, 10, "");
-        txtShipName.setMaxStringLength(127);
-        txtShipName.setEnableBackgroundDrawing(false);
-        txtShipName.setVisible(true);
-        txtShipName.setCanLoseFocus(false);
-        txtShipName.setTextColor(0xFFFFFF);
-        txtShipName.setText(helm.getInfo().getName());
+        txtVesselName = new TextFieldWidget(font, guiLeft + 8 + xSize / 2, guiTop + 21, 120, 10, "");
+        txtVesselName.setMaxStringLength(127);
+        txtVesselName.setEnableBackgroundDrawing(false);
+        txtVesselName.setVisible(true);
+        txtVesselName.setCanLoseFocus(false);
+        txtVesselName.setTextColor(0xFFFFFF);
+        txtVesselName.setText(helm.getInfo().getName());
     }
 
 
@@ -126,14 +126,14 @@ public class GuiHelm extends ContainerScreen {
         int rtes;
         float rmass;
 
-        if (result == null || (result != null && result.assemblyInteractor == null) || (result != null && result.assemblyInteractor != null && !(result.assemblyInteractor instanceof ShipAssemblyInteractor))) {
+        if (result == null || (result != null && result.assemblyInteractor == null) || (result != null && result.assemblyInteractor != null && !(result.assemblyInteractor instanceof VesselAssemblyInteractor))) {
             rType = busyCompiling ? RESULT_BUSY_COMPILING : RESULT_NONE;
             rblocks = rballoons = rtes = 0;
             rmass = 0f;
         } else {
             rType = result.getType();
             rblocks = result.getBlockCount();
-            rballoons = ((ShipAssemblyInteractor) result.assemblyInteractor).getBalloonCount();
+            rballoons = ((VesselAssemblyInteractor) result.assemblyInteractor).getBalloonCount();
             rtes = result.getTileEntityCount();
             rmass = result.getMass();
             if (rType != RESULT_NONE) {
@@ -186,11 +186,11 @@ public class GuiHelm extends ContainerScreen {
         font.drawString(I18n.format(resultName), col1, row, valueColor);
 
         float balloonratio = (float) rballoons / rblocks;
-        font.drawString(I18n.format(LanguageEntries.GUI_STATUS_SHIPTYPE), col0, row += 10, colorTitle);
+        font.drawString(I18n.format(LanguageEntries.GUI_STATUS_VESSELTYPE), col0, row += 10, colorTitle);
         if (rblocks == 0) {
             font.drawString(I18n.format(LanguageEntries.GUI_STATUS_TYPEUNKNOWN), col1, row, colorTitle);
         } else {
-            font.drawString(I18n.format(balloonratio > DavincisVesselsMod.CONFIG.flyBalloonRatio ? LanguageEntries.GUI_STATUS_TYPEAIRSHIP : LanguageEntries.GUI_STATUS_TYPEBOAT), col1, row, colorTitle);
+            font.drawString(I18n.format(balloonratio > DavincisVesselsMod.CONFIG.flyBalloonRatio ? LanguageEntries.GUI_STATUS_TYPEAIRVESSEL : LanguageEntries.GUI_STATUS_TYPEBOAT), col1, row, colorTitle);
         }
 
         font.drawString(I18n.format(LanguageEntries.GUI_STATUS_COUNTBLOCK), col0, row += 10, colorTitle);
@@ -214,13 +214,13 @@ public class GuiHelm extends ContainerScreen {
         int y = (height - ySize) / 2;
         blit(x, y, 0, 0, xSize, ySize);
 
-        txtShipName.render(mX, mY, partialTicks);
+        txtVesselName.render(mX, mY, partialTicks);
     }
 
     @Override
     public boolean charTyped(char c, int k) {
         if (!super.charTyped(c, k)) {
-            if (k == 28 && txtShipName.isFocused()) {
+            if (k == 28 && txtVesselName.isFocused()) {
                 btnRename.onClick(0, 0);
                 return true;
             }

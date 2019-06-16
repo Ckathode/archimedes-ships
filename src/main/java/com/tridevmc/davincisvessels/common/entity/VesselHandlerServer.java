@@ -5,13 +5,13 @@ import com.tridevmc.movingworld.common.entity.MovingWorldHandlerServer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Hand;
 
-public class ShipHandlerServer extends MovingWorldHandlerServer {
+public class VesselHandlerServer extends MovingWorldHandlerServer {
 
     private EntityMovingWorld movingWorld;
     private boolean firstChunkUpdate;
 
-    public ShipHandlerServer(EntityShip entityship) {
-        super(entityship);
+    public VesselHandlerServer(EntityVessel entityvessel) {
+        super(entityvessel);
         firstChunkUpdate = true;
     }
 
@@ -34,8 +34,8 @@ public class ShipHandlerServer extends MovingWorldHandlerServer {
     public void onChunkUpdate() {
         super.onChunkUpdate();
         if (firstChunkUpdate) {
-            ((ShipCapabilities) movingWorld.getMovingWorldCapabilities()).spawnSeatEntities();
-            movingWorld.getDataManager().set(EntityShip.CAN_SUBMERGE, ((ShipCapabilities) movingWorld.getMovingWorldCapabilities()).canSubmerge());
+            ((VesselCapabilities) movingWorld.getMovingWorldCapabilities()).spawnSeatEntities();
+            movingWorld.getDataManager().set(EntityVessel.CAN_SUBMERGE, ((VesselCapabilities) movingWorld.getMovingWorldCapabilities()).canSubmerge());
         }
     }
 }

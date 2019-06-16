@@ -12,23 +12,23 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
 public class TileGauge extends TileEntity implements IMovingTile {
-    public EntityMovingWorld parentShip;
+    public EntityMovingWorld parentVessel;
     private BlockPos chunkPos;
 
     public TileGauge() {
         super(DavincisVesselsMod.CONTENT.tileTypes.get(TileHelm.class));
-        parentShip = null;
+        parentVessel = null;
     }
 
     @Override
     public void setParentMovingWorld(EntityMovingWorld movingWorld, BlockPos pos) {
         this.chunkPos = pos;
-        parentShip = movingWorld;
+        parentVessel = movingWorld;
     }
 
     @Override
     public EntityMovingWorld getParentMovingWorld() {
-        return parentShip;
+        return parentVessel;
     }
 
     @Override
@@ -70,7 +70,7 @@ public class TileGauge extends TileEntity implements IMovingTile {
             int id = tag.getInt("vehicle");
             Entity entity = world.getEntityByID(id);
             if (entity instanceof EntityMovingWorld) {
-                parentShip = (EntityMovingWorld) entity;
+                parentVessel = (EntityMovingWorld) entity;
             }
         }
     }

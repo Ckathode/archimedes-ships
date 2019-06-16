@@ -4,7 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.tridevmc.davincisvessels.common.entity.EntityShip;
+import com.tridevmc.davincisvessels.common.entity.EntityVessel;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -26,21 +26,21 @@ public class CommandDisassembleNear {
     private static int execute(CommandContext<CommandSource> d, double range) throws CommandSyntaxException {
         ServerWorld world = d.getSource().getWorld();
         AxisAlignedBB area = new AxisAlignedBB(d.getSource().getPos(), d.getSource().getPos()).expand(range, 256, range);
-        List<EntityShip> ships = world.getEntitiesWithinAABB(EntityShip.class, area);
+        List<EntityVessel> vessels = world.getEntitiesWithinAABB(EntityVessel.class, area);
 
-        if (ships.isEmpty()) {
-            d.getSource().sendErrorMessage(new StringTextComponent("Found no ships within range to disassemble."));
+        if (vessels.isEmpty()) {
+            d.getSource().sendErrorMessage(new StringTextComponent("Found no vessels within range to disassemble."));
         } else {
-            for (EntityShip ship : ships) {
-                if (!ship.disassemble(false)) {
-                    d.getSource().sendErrorMessage(new StringTextComponent("Failed to disassemble ship, dropping as items."));
-                    ship.dropAsItems();
+            for (EntityVessel vessel : vessels) {
+                if (!vessel.disassemble(false)) {
+                    d.getSource().sendErrorMessage(new StringTextComponent("Failed to disassemble vessel, dropping as items."));
+                    vessel.dropAsItems();
                 }
             }
-            d.getSource().sendFeedback(new StringTextComponent(String.format("Disassembled %s ships.", ships.size())), true);
+            d.getSource().sendFeedback(new StringTextComponent(String.format("Disassembled %s vessels.", vessels.size())), true);
         }
 
-        return ships.size();
+        return vessels.size();
     }
 
 }

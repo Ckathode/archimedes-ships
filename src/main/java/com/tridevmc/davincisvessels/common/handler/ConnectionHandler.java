@@ -2,7 +2,7 @@ package com.tridevmc.davincisvessels.common.handler;
 
 import com.tridevmc.davincisvessels.common.entity.EntityParachute;
 import com.tridevmc.davincisvessels.common.entity.EntitySeat;
-import com.tridevmc.davincisvessels.common.entity.EntityShip;
+import com.tridevmc.davincisvessels.common.entity.EntityVessel;
 import com.tridevmc.davincisvessels.common.tileentity.TileEntitySecuredBed;
 import com.tridevmc.movingworld.common.util.Vec3dMod;
 import net.minecraft.entity.player.PlayerEntity;
@@ -25,9 +25,9 @@ public class ConnectionHandler {
         if (event.getPlayer() != null && event.getPlayer().world != null && !event.getPlayer().world.isRemote) {
             handleParachuteLogout(event);
 
-            if (event.getPlayer().getRidingEntity() != null && event.getPlayer().getRidingEntity() instanceof EntityShip
+            if (event.getPlayer().getRidingEntity() != null && event.getPlayer().getRidingEntity() instanceof EntityVessel
                     && !event.getPlayer().world.getServer().isSinglePlayer()) {
-                ((EntityShip) event.getPlayer().getRidingEntity()).disassemble(true);
+                ((EntityVessel) event.getPlayer().getRidingEntity()).disassemble(true);
             }
         }
     }
@@ -59,17 +59,17 @@ public class ConnectionHandler {
             double vecX = nbt.getDouble("vecX");
             double vecY = nbt.getDouble("vecY");
             double vecZ = nbt.getDouble("vecZ");
-            double shipX = nbt.getDouble("shipX");
-            double shipY = nbt.getDouble("shipY");
-            double shipZ = nbt.getDouble("shipZ");
+            double vesselX = nbt.getDouble("vesselX");
+            double vesselY = nbt.getDouble("vesselY");
+            double vesselZ = nbt.getDouble("vesselZ");
             double motionX = nbt.getDouble("motionX");
             double motionY = nbt.getDouble("motionY");
             double motionZ = nbt.getDouble("motionZ");
             Vec3dMod vec = new Vec3dMod(vecX, vecY, vecZ);
-            Vec3dMod shipVec = new Vec3dMod(shipX, shipY, shipZ);
+            Vec3dMod vesselVec = new Vec3dMod(vesselX, vesselY, vesselZ);
             Vec3dMod motionVec = new Vec3dMod(motionX, motionY, motionZ);
 
-            EntityParachute parachute = new EntityParachute(worldObj, player, vec, shipVec, motionVec);
+            EntityParachute parachute = new EntityParachute(worldObj, player, vec, vesselVec, motionVec);
             worldObj.addEntity(parachute);
 
             player.getEntityData().remove("parachuteInfo");
@@ -81,26 +81,26 @@ public class ConnectionHandler {
         if (event.getPlayer().getRidingEntity() != null && event.getPlayer().getRidingEntity() instanceof EntitySeat) {
             PlayerEntity player = event.getPlayer();
             EntitySeat seat = (EntitySeat) player.getRidingEntity();
-            EntityShip ship = seat.getShip();
+            EntityVessel vessel = seat.getVessel();
 
             player.stopRiding();
-            if (ship != null && seat.getChunkPos() != null) {
+            if (vessel != null && seat.getChunkPos() != null) {
                 CompoundNBT nbt = new CompoundNBT();
 
-                Vec3dMod vec = new Vec3dMod(seat.getChunkPos().getX() - ship.getMobileChunk().getCenterX(),
-                        seat.getChunkPos().getY() - ship.getMobileChunk().minY(),
-                        seat.getChunkPos().getZ() - ship.getMobileChunk().getCenterZ());
-                vec = vec.rotateAroundY((float) Math.toRadians(ship.rotationYaw));
+                Vec3dMod vec = new Vec3dMod(seat.getChunkPos().getX() - vessel.getMobileChunk().getCenterX(),
+                        seat.getChunkPos().getY() - vessel.getMobileChunk().minY(),
+                        seat.getChunkPos().getZ() - vessel.getMobileChunk().getCenterZ());
+                vec = vec.rotateAroundY((float) Math.toRadians(vessel.rotationYaw));
 
                 nbt.putDouble("vecX", vec.x);
                 nbt.putDouble("vecY", vec.y);
                 nbt.putDouble("vecZ", vec.z);
-                nbt.putDouble("shipX", ship.posX);
-                nbt.putDouble("shipY", ship.posY);
-                nbt.putDouble("shipZ", ship.posZ);
-                nbt.putDouble("motionX", ship.getMotion().x);
-                nbt.putDouble("motionY", ship.getMotion().y);
-                nbt.putDouble("motionZ", ship.getMotion().z);
+                nbt.putDouble("vesselX", vessel.posX);
+                nbt.putDouble("vesselY", vessel.posY);
+                nbt.putDouble("vesselZ", vessel.posZ);
+                nbt.putDouble("motionX", vessel.getMotion().x);
+                nbt.putDouble("motionY", vessel.getMotion().y);
+                nbt.putDouble("motionZ", vessel.getMotion().z);
                 player.getEntityData().put("parachuteInfo", nbt);
                 player.getEntityData().putBoolean("reqParachute", true);
             }

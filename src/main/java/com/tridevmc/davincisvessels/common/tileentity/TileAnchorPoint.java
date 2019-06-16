@@ -36,11 +36,11 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
     public ItemStack content;
     public BlockPos chunkPos;
     private AnchorInstance instance;
-    private EntityMovingWorld activeShip;
+    private EntityMovingWorld activeVessel;
 
     public TileAnchorPoint() {
         super(DavincisVesselsMod.CONTENT.tileTypes.get(TileAnchorPoint.class));
-        activeShip = null;
+        activeVessel = null;
         instance = new AnchorInstance();
         content = ItemStack.EMPTY;
     }
@@ -82,7 +82,7 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
             int id = tag.getInt("vehicle");
             Entity entity = world.getEntityByID(id);
             if (entity instanceof EntityMovingWorld) {
-                activeShip = (EntityMovingWorld) entity;
+                activeVessel = (EntityMovingWorld) entity;
             }
         }
 
@@ -102,8 +102,8 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
     @Override
     public CompoundNBT write(CompoundNBT tag) {
         tag = super.write(tag);
-        if (activeShip != null && !activeShip.isAlive()) {
-            tag.putInt("vehicle", activeShip.getEntityId());
+        if (activeVessel != null && !activeVessel.isAlive()) {
+            tag.putInt("vehicle", activeVessel.getEntityId());
         }
 
         if (instance != null) {
@@ -123,12 +123,12 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
     @Override
     public void setParentMovingWorld(EntityMovingWorld movingWorld, BlockPos chunkPos) {
         chunkPos = pos;
-        activeShip = movingWorld;
+        activeVessel = movingWorld;
     }
 
     @Override
     public EntityMovingWorld getParentMovingWorld() {
-        return activeShip;
+        return activeVessel;
     }
 
     @Override

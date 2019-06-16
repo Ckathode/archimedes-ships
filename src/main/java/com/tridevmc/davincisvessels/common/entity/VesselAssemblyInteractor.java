@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 import static com.tridevmc.movingworld.common.chunk.assembly.AssembleResult.ResultType.RESULT_NONE;
 
-public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
+public class VesselAssemblyInteractor extends MovingWorldAssemblyInteractor {
 
     private static List allowedBlocks = ForgeRegistries.BLOCKS.getEntries().stream()
             .filter(e -> e.getKey().getNamespace().equals(DavincisVesselsMod.MOD_ID) && !e.getKey().getPath().equals("buffer"))
@@ -34,7 +34,7 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
 
     private int balloonCount;
 
-    public ShipAssemblyInteractor() {
+    public VesselAssemblyInteractor() {
     }
 
     @Override
@@ -45,11 +45,11 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
     @Override
     public MovingWorldAssemblyInteractor fromByteBuf(byte resultCode, ByteBuf buf) {
         if (resultCode == RESULT_NONE.toByte()) {
-            return new ShipAssemblyInteractor();
+            return new VesselAssemblyInteractor();
         }
         int balloons = buf.readInt();
 
-        ShipAssemblyInteractor assemblyInteractor = new ShipAssemblyInteractor();
+        VesselAssemblyInteractor assemblyInteractor = new VesselAssemblyInteractor();
         assemblyInteractor.setBalloonCount(balloons);
 
         return assemblyInteractor;
@@ -57,7 +57,7 @@ public class ShipAssemblyInteractor extends MovingWorldAssemblyInteractor {
 
     @Override
     public MovingWorldAssemblyInteractor fromNBT(CompoundNBT tag, World world) {
-        ShipAssemblyInteractor mov = new ShipAssemblyInteractor();
+        VesselAssemblyInteractor mov = new VesselAssemblyInteractor();
         mov.setBalloonCount(tag.getInt("balloonCount"));
         return mov;
     }

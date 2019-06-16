@@ -23,19 +23,19 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
         super(DavincisVesselsMod.CONTENT.entityTypes.get(EntityParachute.class), world);
     }
 
-    public EntityParachute(World world, EntityShip ship, BlockPos pos) {
+    public EntityParachute(World world, EntityVessel vessel, BlockPos pos) {
         this(world);
-        Vec3dMod vec = new Vec3dMod(pos.getX() - ship.getMobileChunk().getCenterX(), pos.getY() - ship.getMobileChunk().minY(), pos.getZ() - ship.getMobileChunk().getCenterZ());
-        vec = vec.rotateAroundY((float) Math.toRadians(ship.rotationYaw));
+        Vec3dMod vec = new Vec3dMod(pos.getX() - vessel.getMobileChunk().getCenterX(), pos.getY() - vessel.getMobileChunk().minY(), pos.getZ() - vessel.getMobileChunk().getCenterZ());
+        vec = vec.rotateAroundY((float) Math.toRadians(vessel.rotationYaw));
 
-        setLocationAndAngles(ship.posX + vec.x, ship.posY + vec.y - 2D, ship.posZ + vec.z, 0F, 0F);
-        this.setMotion(ship.getMotion());
+        setLocationAndAngles(vessel.posX + vec.x, vessel.posY + vec.y - 2D, vessel.posZ + vec.z, 0F, 0F);
+        this.setMotion(vessel.getMotion());
     }
 
-    public EntityParachute(World world, Entity mounter, Vec3dMod vec, Vec3dMod shipPos, Vec3dMod motion) {
+    public EntityParachute(World world, Entity mounter, Vec3dMod vec, Vec3dMod vesselPos, Vec3dMod motion) {
         this(world);
 
-        setLocationAndAngles(shipPos.x + vec.x, shipPos.y + vec.y - 2D, shipPos.z + vec.z, 0F, 0F);
+        setLocationAndAngles(vesselPos.x + vec.x, vesselPos.y + vec.y - 2D, vesselPos.z + vec.z, 0F, 0F);
         this.setMotion(motion);
 
         mounter.stopRiding();

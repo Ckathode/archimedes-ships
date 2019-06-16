@@ -10,18 +10,18 @@ import net.minecraftforge.fml.LogicalSide;
  * Created by darkevilmac on 2/2/2017.
  */
 @RegisteredMessage(channel = "davincisvessels", destination = LogicalSide.SERVER)
-public class RenameShipMessage extends Message {
+public class RenameVesselMessage extends Message {
 
     public TileHelm helm;
-    public String newShipName;
+    public String newVesselName;
 
-    public RenameShipMessage(TileHelm helm, String newShipName) {
+    public RenameVesselMessage(TileHelm helm, String newVesselName) {
         super();
-        this.newShipName = newShipName;
+        this.newVesselName = newVesselName;
         this.helm = helm;
     }
 
-    public RenameShipMessage() {
+    public RenameVesselMessage() {
         super();
     }
 
@@ -30,6 +30,6 @@ public class RenameShipMessage extends Message {
         if (helm == null)
             return;
 
-        helm.getInfo().setName(newShipName);
+        helm.getInfo().setName(newVesselName);
     }
 }

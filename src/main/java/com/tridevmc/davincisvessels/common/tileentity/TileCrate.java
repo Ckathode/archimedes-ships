@@ -1,7 +1,7 @@
 package com.tridevmc.davincisvessels.common.tileentity;
 
 import com.tridevmc.davincisvessels.DavincisVesselsMod;
-import com.tridevmc.davincisvessels.common.entity.EntityShip;
+import com.tridevmc.davincisvessels.common.entity.EntityVessel;
 import com.tridevmc.movingworld.api.IMovingTile;
 import com.tridevmc.movingworld.common.chunk.mobilechunk.MobileChunk;
 import com.tridevmc.movingworld.common.entity.EntityMovingWorld;
@@ -14,7 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
 public class TileCrate extends TileEntity implements IMovingTile, ITickable {
-    private EntityShip parentShip;
+    private EntityVessel parentVessel;
     private int containedEntityId;
     private Entity containedEntity;
     private int refreshTime;
@@ -22,7 +22,7 @@ public class TileCrate extends TileEntity implements IMovingTile, ITickable {
 
     public TileCrate() {
         super(DavincisVesselsMod.CONTENT.tileTypes.get(TileCrate.class));
-        parentShip = null;
+        parentVessel = null;
         containedEntityId = 0;
         containedEntity = null;
         refreshTime = 0;
@@ -31,12 +31,12 @@ public class TileCrate extends TileEntity implements IMovingTile, ITickable {
     @Override
     public void setParentMovingWorld(EntityMovingWorld movingWorld, BlockPos pos) {
         chunkPos = pos;
-        parentShip = (EntityShip) movingWorld;
+        parentVessel = (EntityVessel) movingWorld;
     }
 
     @Override
-    public EntityShip getParentMovingWorld() {
-        return parentShip;
+    public EntityVessel getParentMovingWorld() {
+        return parentVessel;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class TileCrate extends TileEntity implements IMovingTile, ITickable {
 
     @Override
     public void tick(MobileChunk mobileChunk) {
-        // We'll try using this experimental tick function (sort of experimental) to keep the entity on the ship...?
+        // We'll try using this experimental tick function (sort of experimental) to keep the entity on the vessel...?
         if (containedEntity == null) {
             if (refreshTime > 0) {
                 refreshTime--;
@@ -65,10 +65,10 @@ public class TileCrate extends TileEntity implements IMovingTile, ITickable {
             setContainedEntity(null);
         } else {
             containedEntity.setMotion(0, 0, 0);
-            if (parentShip == null) {
+            if (parentVessel == null) {
                 containedEntity.setPosition(pos.getX() + 0.5d, pos.getY() + 0.15f + containedEntity.getYOffset(), pos.getZ() + 0.5d);
             } else {
-                parentShip.updatePassengerPosition(containedEntity, pos, 2);
+                parentVessel.updatePassengerPosition(containedEntity, pos, 2);
             }
 
             if (containedEntity.hurtResistantTime > 0 || containedEntity.isSneaking()) {
@@ -133,8 +133,8 @@ public class TileCrate extends TileEntity implements IMovingTile, ITickable {
     @Override
     public void tick() {
         if (world.isRemote) {
-            if (parentShip != null && !parentShip.isAlive()) {
-                parentShip = null;
+            if (parentVessel != null && !parentVessel.isAlive()) {
+                parentVessel = null;
             }
             if (containedEntity == null) {
                 if (containedEntityId != 0) {
@@ -151,10 +151,10 @@ public class TileCrate extends TileEntity implements IMovingTile, ITickable {
             setContainedEntity(null);
         } else {
             containedEntity.setMotion(0, 0, 0);
-            if (parentShip == null) {
+            if (parentVessel == null) {
                 containedEntity.setPosition(pos.getX() + 0.5d, pos.getY() + 0.15f + containedEntity.getYOffset(), pos.getZ() + 0.5d);
             } else {
-                parentShip.updatePassengerPosition(containedEntity, pos, 2);
+                parentVessel.updatePassengerPosition(containedEntity, pos, 2);
             }
 
             if (containedEntity.hurtResistantTime > 0 || containedEntity.isSneaking()) {

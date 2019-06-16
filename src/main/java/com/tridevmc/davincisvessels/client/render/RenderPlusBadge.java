@@ -4,7 +4,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderPlusBadge {
 
-    public static final ResourceLocation PLUS_TEXTURE = new ResourceLocation("archimedesshipsplus", "textures/gui/parachute.png");
+    public static final ResourceLocation PLUS_TEXTURE = new ResourceLocation("archimedesvesselsplus", "textures/gui/parachute.png");
 
 
 }
