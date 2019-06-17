@@ -82,7 +82,7 @@ public class ContainerEngine extends Container {
 
         @Override
         public boolean isItemValid(ItemStack itemstack) {
-            return FurnaceTileEntity.func_213991_b(itemstack);
+            return FurnaceTileEntity.isFuel(itemstack);
         }
     }
 }

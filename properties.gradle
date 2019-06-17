@@ -4,8 +4,8 @@ ext {
     modBaseName = "davincisvessels"
 
     //Forge Stuff
-    forgeVersion = "1.14.2-26.0.25"
-    mappingsVersion = "20190614-1.14.2"
+    forgeVersion = "1.14.2-26.0.32"
+    mappingsVersion = "20190616-1.14.2"
 
     //Trident Stuff
     compoundVersion = "1.3.0-SNAPSHOT"

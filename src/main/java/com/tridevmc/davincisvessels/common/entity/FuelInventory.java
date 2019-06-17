@@ -98,7 +98,7 @@ public class FuelInventory implements IInventory {
 
     @Override
     public boolean isItemValidForSlot(int i, ItemStack is) {
-        return i >= 0 && i < 4 && FurnaceTileEntity.func_213991_b(is);
+        return i >= 0 && i < 4 && FurnaceTileEntity.isFuel(is);
     }
 
     @Override

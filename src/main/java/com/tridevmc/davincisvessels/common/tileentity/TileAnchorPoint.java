@@ -250,7 +250,7 @@ public class TileAnchorPoint extends TileEntity implements IMovingTile, IInvento
             instance.setChanged(false);
 
             if (world instanceof ServerWorld) {
-                world.getChunk(pos).markDirty();
+                world.getChunk(pos).setModified(true);
                 markDirty();
             }
         }

@@ -94,6 +94,6 @@ public class AnchorPointMessage extends Message {
         }
         anchorPoint.markDirty();
         if (world instanceof ServerWorld)
-            world.getChunk(anchorPoint.getPos()).markDirty();
+            world.getChunk(anchorPoint.getPos()).setModified(true);
     }
 }

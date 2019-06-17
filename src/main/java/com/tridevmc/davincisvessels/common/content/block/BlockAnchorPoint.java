@@ -85,7 +85,7 @@ public class BlockAnchorPoint extends ContainerBlock {
                                     relationAnchor.getInstance().addRelation(anchorPoint.getInstance().getIdentifier(), new BlockLocation(pos, worldIn.getDimension().getType()));
                                     relationAnchor.markDirty();
                                     if (worldIn instanceof ServerWorld)
-                                        worldIn.getChunk(relationAnchor.getChunkPos()).markDirty();
+                                        worldIn.getChunk(relationAnchor.getChunkPos()).setModified(true);
 
                                     continue;
                                 }

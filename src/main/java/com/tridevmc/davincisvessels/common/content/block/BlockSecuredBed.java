@@ -58,10 +58,9 @@ public class BlockSecuredBed extends BedBlock implements ITileEntityProvider {
                     return true;
                 } else {
                     bed.setPlayer(player);
-                    player.func_213819_a(pos).ifLeft((result) -> {
+                    player.trySleep(pos).ifLeft((result) -> {
                         if (result != null) {
-                            // Mapped to getMessage in next MCP snapshot.
-                            player.sendStatusMessage(result.func_221259_a(), true);
+                            player.sendStatusMessage(result.getMessage(), true);
                         }
                     });
                     return true;

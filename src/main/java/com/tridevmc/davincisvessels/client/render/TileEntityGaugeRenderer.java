@@ -35,9 +35,9 @@ public class TileEntityGaugeRenderer extends TileEntityRenderer<TileGauge> {
                     gauge.parentVessel.riderDestination.getY() - gauge.getPos().getY(),
                     gauge.parentVessel.riderDestination.getZ() - gauge.getPos().getZ());
         } else {
-            dVec = new Vec3d(gauge.parentVessel.posX - Minecraft.getInstance().getRenderManager().field_217783_c.getProjectedView().x,
-                    gauge.parentVessel.posY - Minecraft.getInstance().getRenderManager().field_217783_c.getProjectedView().y,
-                    gauge.parentVessel.posZ - Minecraft.getInstance().getRenderManager().field_217783_c.getProjectedView().z);
+            dVec = new Vec3d(gauge.parentVessel.posX - Minecraft.getInstance().getRenderManager().info.getProjectedView().x,
+                    gauge.parentVessel.posY - Minecraft.getInstance().getRenderManager().info.getProjectedView().y,
+                    gauge.parentVessel.posZ - Minecraft.getInstance().getRenderManager().info.getProjectedView().z);
         }
         double d = dVec.x * dVec.x + dVec.y * dVec.y + dVec.z * dVec.z;
         if (d > 256D) return;
